@@ -41,7 +41,7 @@ export function createMission({ definition = DEMO, vitals, coords, api, apiBase 
   };
   const goal = world(def.goal), radius = def.goal.radius_m ?? 2;
   const events = (def.events ?? []).map((e, i) => ({ ...e, id: e.id ?? `event-${i}`, world: world(e), radius_m: e.radius_m ?? 0 }));
-  if (!nonnegative(radius) || !nonnegative(def.sample_kg ?? 0) || events.some(e => !nonnegative(e.radius_m)) || new Set(events.map(e => e.id)).size !== events.length)
+  if (!nonnegative(radius) || !nonnegative(def.sample_kg ?? 0) || events.some(e => !nonnegative(e.radius_m) || (e.trigger_m != null && !nonnegative(e.trigger_m))) || new Set(events.map(e => e.id)).size !== events.length)
     throw new TypeError('Geçersiz görev yarıçapı, yükü veya olay kimliği');
   let state = 'briefing', currentEvent = null, sampled = false, previous = null, planned = null, summary = null, finishing = null;
   const emit = (name, data) => { for (const cb of listeners.get(name) ?? []) cb(structuredClone(data)); };
@@ -62,7 +62,7 @@ export function createMission({ definition = DEMO, vitals, coords, api, apiBase 
       if (!p.every(Number.isFinite)) throw new TypeError('Geçersiz konum');
       const a = previous ?? p;
       for (const e of events) {
-        if (!triggered.has(e.id) && distToTrace(e.world, a, p) <= e.radius_m) {
+        if (!triggered.has(e.id) && distToTrace(e.world, a, p) <= (e.trigger_m ?? e.radius_m)) {
           triggered.add(e.id); currentEvent = e; // önceki konum korunur: aynı karedeki diğer olayları kaçırma
           move('event'); emit('event', e); return snapshot();
         }

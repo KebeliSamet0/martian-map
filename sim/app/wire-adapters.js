@@ -7,7 +7,7 @@ export function hudSnapshot(s, limits = {}) {
 }
 export function missionDefinition(m, route) {
   return { ...m, goal: { world: route.dense.at(-1), radius_m: 10 },
-    events: m?.sand ? [{ id: `${m.id}-sand`, type: 'sand', grid_px: m.sand.px, radius_m: m.sand.radius_m }] : [] };
+    events: m?.sand ? [{ id: `${m.id}-sand`, type: 'sand', grid_px: m.sand.px, radius_m: m.sand.radius_m, trigger_m: m.sand.radius_m + 40 }] : [] };
 }
 export function walkPlan(total) {
   // total.o2_L gidiş-dönüş, dose_uGy EVA süresi içindir. Karne tek yön yürüyüşü karşılaştırır.
