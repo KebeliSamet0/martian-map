@@ -1,0 +1,295 @@
+{
+ "tag": "entegre",
+ "url": "http://127.0.0.1:8017/sim/",
+ "date": "2026-11-14T22:55:37.277Z",
+ "results": [
+  {
+   "mission": "S1",
+   "steps": [
+    {
+     "name": "load",
+     "ok": true,
+     "ms": 3142,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_load.png"
+    },
+    {
+     "name": "intro",
+     "ok": true,
+     "ms": 4034,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_intro.png"
+    },
+    {
+     "name": "mission-select",
+     "ok": true,
+     "ms": 1332,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_mission-select.png"
+    },
+    {
+     "name": "briefing",
+     "ok": true,
+     "ms": 1316,
+     "fps": 61,
+     "errors": [],
+     "note": "S1 GÖREV BRİFİNGİ Boxwork'ten Atacama sondajına Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yürüyeceksin. Bütçen rahat; rotanı seç ve ",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_briefing.png"
+    },
+    {
+     "name": "routes",
+     "ok": true,
+     "ms": 1650,
+     "fps": 61,
+     "errors": [],
+     "note": "[{\"kind\":\"shortest\",\"source\":\"api\"},{\"kind\":\"balanced\",\"source\":\"api\"},{\"kind\":\"safest\",\"source\":\"api\"}]",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_routes.png"
+    },
+    {
+     "name": "route-pick",
+     "ok": true,
+     "ms": 2134,
+     "fps": 60,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_route-pick.png"
+    },
+    {
+     "name": "walk-start",
+     "ok": true,
+     "ms": 3750,
+     "fps": 61,
+     "errors": [],
+     "note": "toplam 610 m",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_walk-start.png"
+    },
+    {
+     "name": "scan-L",
+     "ok": true,
+     "ms": 3733,
+     "fps": 61,
+     "errors": [],
+     "note": "tarayıcı kaynağı: API scan_class (alan dışında eğim)",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_scan-L.png"
+    },
+    {
+     "name": "sand-replan",
+     "ok": true,
+     "ms": 8797,
+     "fps": 61,
+     "errors": [],
+     "note": "{\"s\":[\"S1-sand\"],\"replanned\":true}",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_sand-replan.png"
+    },
+    {
+     "name": "arrive-debrief",
+     "ok": true,
+     "ms": 2236,
+     "fps": 61,
+     "errors": [],
+     "note": "karne derecesi: C",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S1_arrive-debrief.png"
+    }
+   ],
+   "errors": []
+  },
+  {
+   "mission": "S2",
+   "steps": [
+    {
+     "name": "load",
+     "ok": true,
+     "ms": 3132,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_load.png"
+    },
+    {
+     "name": "intro",
+     "ok": true,
+     "ms": 3919,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_intro.png"
+    },
+    {
+     "name": "mission-select",
+     "ok": true,
+     "ms": 1365,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_mission-select.png"
+    },
+    {
+     "name": "briefing",
+     "ok": true,
+     "ms": 1316,
+     "fps": 61,
+     "errors": [],
+     "note": "S2 GÖREV BRİFİNGİ Kumlu kestirme Son boxwork durağından Atacama sondaj alanına yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni ",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_briefing.png"
+    },
+    {
+     "name": "routes",
+     "ok": true,
+     "ms": 1652,
+     "fps": 61,
+     "errors": [],
+     "note": "[{\"kind\":\"shortest\",\"source\":\"api\"},{\"kind\":\"balanced\",\"source\":\"api\"},{\"kind\":\"safest\",\"source\":\"api\"}]",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_routes.png"
+    },
+    {
+     "name": "route-pick",
+     "ok": true,
+     "ms": 2117,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_route-pick.png"
+    },
+    {
+     "name": "walk-start",
+     "ok": true,
+     "ms": 3733,
+     "fps": 61,
+     "errors": [],
+     "note": "toplam 453 m",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_walk-start.png"
+    },
+    {
+     "name": "scan-L",
+     "ok": true,
+     "ms": 3749,
+     "fps": 61,
+     "errors": [],
+     "note": "tarayıcı kaynağı: API scan_class (alan dışında eğim)",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_scan-L.png"
+    },
+    {
+     "name": "sand-replan",
+     "ok": true,
+     "ms": 6966,
+     "fps": 61,
+     "errors": [],
+     "note": "{\"s\":[\"S2-sand\"],\"replanned\":true}",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_sand-replan.png"
+    },
+    {
+     "name": "arrive-debrief",
+     "ok": true,
+     "ms": 2217,
+     "fps": 61,
+     "errors": [],
+     "note": "karne derecesi: C",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S2_arrive-debrief.png"
+    }
+   ],
+   "errors": []
+  },
+  {
+   "mission": "S3",
+   "steps": [
+    {
+     "name": "load",
+     "ok": true,
+     "ms": 3143,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_load.png"
+    },
+    {
+     "name": "intro",
+     "ok": true,
+     "ms": 3917,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_intro.png"
+    },
+    {
+     "name": "mission-select",
+     "ok": true,
+     "ms": 1367,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_mission-select.png"
+    },
+    {
+     "name": "briefing",
+     "ok": true,
+     "ms": 1317,
+     "fps": 61,
+     "errors": [],
+     "note": "S3 GÖREV BRİFİNGİ Yarım O₂ tüpü Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedefe varmak garanti değil. Oksijeni izle; dönüş noktasını kaçır",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_briefing.png"
+    },
+    {
+     "name": "routes",
+     "ok": true,
+     "ms": 1665,
+     "fps": 61,
+     "errors": [],
+     "note": "[{\"kind\":\"shortest\",\"source\":\"api\"},{\"kind\":\"balanced\",\"source\":\"api\"},{\"kind\":\"safest\",\"source\":\"api\"}]",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_routes.png"
+    },
+    {
+     "name": "route-pick",
+     "ok": true,
+     "ms": 2101,
+     "fps": 61,
+     "errors": [],
+     "note": "",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_route-pick.png"
+    },
+    {
+     "name": "walk-start",
+     "ok": true,
+     "ms": 3734,
+     "fps": 61,
+     "errors": [],
+     "note": "toplam 576 m",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_walk-start.png"
+    },
+    {
+     "name": "scan-L",
+     "ok": true,
+     "ms": 3749,
+     "fps": 61,
+     "errors": [],
+     "note": "tarayıcı kaynağı: API scan_class (alan dışında eğim)",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_scan-L.png"
+    },
+    {
+     "name": "sand-replan",
+     "ok": true,
+     "ms": 7850,
+     "fps": 61,
+     "errors": [],
+     "note": "{\"s\":[\"S3-sand\"],\"replanned\":true}",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_sand-replan.png"
+    },
+    {
+     "name": "arrive-debrief",
+     "ok": true,
+     "ms": 2232,
+     "fps": 61,
+     "errors": [],
+     "note": "karne derecesi: C",
+     "frame": "/Users/samet/Desktop/Spaceapp/qa-shared/out/entegre_S3_arrive-debrief.png"
+    }
+   ],
+   "errors": []
+  }
+ ]
+}
