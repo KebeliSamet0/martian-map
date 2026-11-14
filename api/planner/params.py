@@ -34,6 +34,10 @@ TERRAIN_SPEED = {"bedrock": 1.0, "soil": 0.95, "sand": 0.6, "bigrock": 0.5}  # V
 # Eğim sınırları (derece)
 SLOPE_RISKY_DEG = 15.0  # VARSAYIM (rakip projelerle aynı eşik; kaynak aranacak)
 SLOPE_NOGO_DEG = 25.0  # VARSAYIM
+# Başlangıç/hedef NOGO hücresindeyse bu yarıçaptaki en yakın geçilebilir hücreye bağlanır.
+# VARSAYIM: 2 m DEM boxwork sırt kenarında eğimi tek hücrede abartıyor; rover tilt ≤17,5°,
+# DEM'in ≥25° gösterdiği 4 waypoint'in hepsinde 10 m içinde <25° hücre var (issue #19).
+SNAP_RADIUS_M = 10.0
 
 # EVA bütçesi
 EVA_MAX_H = 6.0  # VARSAYIM: toplam yürüyüş + durak süresi
@@ -79,6 +83,7 @@ def assumptions():
         {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": TERRAIN_SOURCE},
         {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "VARSAYIM"},
         {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "VARSAYIM"},
+        {"name": "Geçilmez hücreden bağlanma yarıçapı", "value": SNAP_RADIUS_M, "unit": "m", "source": "VARSAYIM: 2 m DEM sırt kenarında eğimi abartıyor (rover tilt karşılaştırması)"},
         {"name": "Maksimum EVA süresi", "value": EVA_MAX_H, "unit": "saat", "source": "VARSAYIM"},
         {"name": "Yüzey doz hızı", "value": round(DOSE_UGY_PER_H, 2), "unit": "µGy/saat", "source": "Curiosity RAD, Hassler et al. 2014"},
         {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir"},

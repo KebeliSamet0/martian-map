@@ -12,7 +12,7 @@ def _cells(layers, points):
     if p.ndim != 2 or p.shape[1] != 2 or not len(p) or not np.isfinite(p).all() or np.any(p != np.floor(p)):
         raise PlanError('Yol boş olamaz; sonlu tam sayı [x,y] hücreleri gerekli')
     for px in p:
-        _check(layers, px)
+        _check(layers, px, snap=False)  # referans yol: geçilmez hücre reddedilir
     # Seyrek polyline düğümlerini en fazla bir hücre aralığıyla örnekle.
     cells = [p[0].astype(int)]
     for a, b in zip(p[:-1], p[1:]):
@@ -21,7 +21,7 @@ def _cells(layers, points):
             cells.extend(np.rint(np.linspace(a, b, n + 1)[1:]).astype(int))
     cells = np.asarray(cells)
     for px in cells:
-        _check(layers, px)
+        _check(layers, px, snap=False)  # referans yol: geçilmez hücre reddedilir
     return cells
 
 

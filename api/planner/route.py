@@ -1,6 +1,8 @@
 """Rota planlama, segmentleme, açıklama ve EVA bütçesi."""
 from __future__ import annotations
 
+import math
+
 import numpy as np
 from skimage.graph import MCP_Geometric
 
@@ -13,12 +15,22 @@ class PlanError(ValueError):
     pass
 
 
-def _check(L: Layers, px):
-    x, y = int(px[0]), int(px[1])
+def _check(L: Layers, px, snap: bool = True):
+    x, y = math.floor(px[0]), math.floor(px[1])
     if not (0 <= x < L.width and 0 <= y < L.height):
         raise PlanError(f"Nokta ızgara dışında: {px} (genişlik {L.width}, yükseklik {L.height})")
-    if L.slope[y, x] >= P.SLOPE_NOGO_DEG:
+    if L.slope[y, x] >= P.SLOPE_NOGO_DEG and not snap:
         raise PlanError(f"Nokta geçilmez eğimde ({L.slope[y, x]:.0f}°): {px}")
+    if L.slope[y, x] >= P.SLOPE_NOGO_DEG:
+        # Tek hücrelik DEM abartısı noktayı kilitlemesin: SNAP_RADIUS_M içindeki en yakın geçilebilir hücre
+        r = int(P.SNAP_RADIUS_M // L.res_m)
+        r0, c0 = max(y - r, 0), max(x - r, 0)
+        rr, cc = np.nonzero(L.slope[r0:y + r + 1, c0:x + r + 1] < P.SLOPE_NOGO_DEG)
+        d = np.hypot(rr + r0 - y, cc + c0 - x) * L.res_m
+        if not (d <= P.SNAP_RADIUS_M).any():
+            raise PlanError(f"Nokta geçilmez eğimde ({L.slope[y, x]:.0f}°), {P.SNAP_RADIUS_M:.0f} m içinde geçilebilir hücre yok: {px}")
+        i = int(np.argmin(np.where(d <= P.SNAP_RADIUS_M, d, np.inf)))
+        return int(rr[i] + r0), int(cc[i] + c0)
     return y, x
 
 
