@@ -1,3 +1,4 @@
+import { createStepAdapter } from './wire-step.js';
 import { API_BASE, API_OFF } from './api.js';
 import { createGridGeo } from './gridgeo.js';
 import { createVitals } from './vitals.js';
@@ -25,6 +26,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const api = { missions: () => available('/missions') ? call('/missions') : Promise.reject(new Error('Görev API yok')),
     debrief: data => available('/debrief') ? call('/debrief', data) : Promise.reject(new Error('Özet API yok')) };
   const catalog = await loadMissions({ api });
+  let observations = [];
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false;
   const sourceLabel = document.getElementById('vitals-source');
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
@@ -68,22 +70,23 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   }
   let lastPosition;
   function start(route, position) {
-    clearRun(); running = true; const id = generation;
+    clearRun(); observations = []; running = true; const id = generation;
     planned = structuredClone(route?.raw?.total ?? route?.total ?? {}); limits = planned.budget?.limits ?? selected?.limits ?? {};
-    vitals = createVitals({ assumptions, route, arrivalRadiusM: 10 });
+    vitals = createVitals({ assumptions, route, arrivalRadiusM: 10, api: available('/step') && route?.source === 'api' ? createStepAdapter({ call, coords, assumptions, observations: () => observations }) : undefined });
     if (route) {
       machine = createMission({ definition: missionDefinition(selected ?? { id: 'free', sample_kg: 0 }, route), vitals, coords, api, source: selected ? catalog.source : 'free' });
       machine.plan(); machine.start(route);
       machine.on('event', async event => {
         pause(true);
+        observations.push({ px: selected.sand.px, radius_m: event.radius_m, cls: 'sand' });
         void showAlert(root, 'sand', { timeoutMs: 5000 });
         try { await replan({ ...event, px: selected.sand.px }); }
         finally { if (id === generation && running) { machine.resume(); pause(false); } }
       });
       machine.on('arrived', () => { void finish(id); });
     }
-    vitals.on('warning', s => alertLimit(s.returnPossible === false ? texts.alerts?.turn_back : 'Kaynak verisi eksik veya limit yaklaşıyor.'));
-    vitals.on('limit', e => alertLimit(`Sınır aşıldı: ${e.resource}`));
+    vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? texts.alerts?.turn_back : 'Kaynak verisi eksik veya limit yaklaşıyor.'); });
+    vitals.on('limit', e => { if (id === generation && running) alertLimit(`Sınır aşıldı: ${e.resource}`); });
     hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) });
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
@@ -95,6 +98,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     root.querySelectorAll('.mm-alert').forEach(e => e.remove());
     machine.collectSample(); await machine.finish();
     if (id !== generation) return;
+    sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Görev tamamlandı`;
     const actual = hudSnapshot(vitals.snapshot(), limits);
     const report = showReport(root, { planned: walkPlan(planned), actual });
     // Eksik tüketim varsa ekranın varsayılan A derecesi gösterilmez.
@@ -106,7 +110,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto'); else enterMap();
   }
-  return { coords, call, available, texts, selectMission, pickRoute,
+  return { coords, grid, call, available, texts, selectMission, pickRoute,
     get vitals() { return vitals; }, get machine() { return machine; }, get selected() { return selected; },
     start, stop: clearRun,
     setRoute(route) { vitals?.setRoute(route); },
