@@ -48,7 +48,7 @@ def _profile(L: Layers, path: np.ndarray, terms: dict):
         "slope": L.slope[r, c],
         "rock": L.rock_cfa[r, c],
         "ent": L.entropy[r, c],
-        "dom": L.dominant[r, c],
+        "dom": np.argmax(np.stack([L.probs[k][r, c] for k in P.CLASSES]), axis=0),
         "p": {k: L.probs[k][r, c] for k in P.CLASSES},
         "sec": terms["s_per_m"][r, c] * step,
         "kcal": terms["kcal_per_m"][r, c] * step,
@@ -67,14 +67,11 @@ def _segment_bounds(prof) -> list[tuple[int, int]]:
     bounds, start = [], 0
     for i in range(1, n):
         seg_len = prof["cum_m"][i] - prof["cum_m"][start]
-        if (keys[i] != keys[start] and seg_len >= P.SEG_MIN_M) or seg_len >= P.SEG_MAX_M:
+        if keys[i] != keys[i - 1] or seg_len >= P.SEG_MAX_M:
             bounds.append((start, i))
             start = i
-    bounds.append((start, n - 1))
-    # son segment çok kısaysa öncekiyle birleştir
-    if len(bounds) > 1 and prof["cum_m"][bounds[-1][1]] - prof["cum_m"][bounds[-1][0]] < P.SEG_MIN_M / 2:
-        a, _ = bounds[-2]
-        bounds[-2:] = [(a, n - 1)]
+    if start < n - 1 or not bounds:
+        bounds.append((start, n - 1))
     return bounds
 
 
@@ -135,19 +132,28 @@ def _segments(L: Layers, path: np.ndarray, prof) -> list[dict]:
     return segs
 
 
-def _budget(prof, segs) -> dict:
+def _budget(prof, segs, path, limits=None) -> dict:
     out_min = float(prof["sec"].sum()) / 60
     kcal_out = float(prof["kcal"].sum())
     # Dönüş aynı yoldan; iniş/çıkış simetrik kabul (|eğim| modeli)
     eva_min = 2 * out_min + P.SCIENCE_STOP_MIN
     limit_min = P.EVA_MAX_H * 60
-    walkback_ok = eva_min + P.RESERVE_MIN <= limit_min
-    exceeded_at = None
-    if not walkback_ok:
-        # Gidişte hangi noktadan sonra geri dönüş + durak + yedek sığmıyor
-        cum = np.cumsum(prof["sec"]) / 60
-        over = np.where(2 * cum + P.SCIENCE_STOP_MIN + P.RESERVE_MIN > limit_min)[0]
-        exceeded_at = round(float(prof["cum_m"][over[0]]), 0) if len(over) else None
+    limits = {**{"time_min": limit_min, "kcal": P.EVA_MAX_KCAL,
+                 "o2_L": P.EVA_MAX_O2_L, "dose_uGy": P.EVA_MAX_DOSE_UGY,
+                 "reserve_min": P.RESERVE_MIN}, **(limits or {})}
+    limit_min = limits["time_min"]
+    cum = np.cumsum(prof["sec"]) / 60
+    committed_min = 2 * cum + P.SCIENCE_STOP_MIN + limits["reserve_min"]
+    committed_kcal = (2 * np.cumsum(prof["kcal"]) +
+                      (P.SCIENCE_STOP_MIN + limits["reserve_min"]) * 60 * P.STOP_METABOLIC_W / 4184)
+    usage = {"time_min": committed_min, "kcal": committed_kcal,
+             "o2_L": committed_kcal / P.KCAL_PER_L_O2,
+             "dose_uGy": committed_min / 60 * P.DOSE_UGY_PER_H}
+    exceeded = {k: v > limits[k] for k, v in usage.items()}
+    over = np.flatnonzero(np.logical_or.reduce(list(exceeded.values())))
+    first = int(over[0]) if len(over) else None
+    walkback_ok = not bool(exceeded["time_min"][-1])
+    exceeded_at = round(float(prof["cum_m"][first]), 1) if first is not None else None
     total_kcal = 2 * kcal_out
     return {
         "km": round(float(prof["cum_m"][-1]) / 1000, 2),
@@ -162,11 +168,18 @@ def _budget(prof, segs) -> dict:
         "low_conf_m": round(sum(s["len_m"] for s in segs if s["conf"] == "low"), 0),
         "walkback_ok": bool(walkback_ok),
         "limit_exceeded_at_m": exceeded_at,
-        "go": bool(walkback_ok and prof["slope"].max() < P.SLOPE_NOGO_DEG),
+        "go": bool(first is None and prof["slope"].max() < P.SLOPE_NOGO_DEG),
+        "status": "GO" if first is None else "NO-GO",
+        "limit_exceeded_at_px": path[first][::-1].tolist() if first is not None else None,
+        "limit_exceeded_at_index": first,
+        "budget": {"limits": limits, "used": {k: round(float(v[-1]), 3) for k, v in usage.items()},
+                   "exceeded": [k for k, v in exceeded.items() if v[-1]],
+                   "first_exceeded": [k for k, v in exceeded.items() if first is not None and v[first]],
+                   "return_min": round(out_min, 3), "return_kcal": round(kcal_out, 3)},
     }
 
 
-def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None) -> dict:
+def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None) -> dict:
     w = dict(P.PRESETS.get(kind, P.PRESETS["balanced"]))
     if weights:
         w.update(weights)
@@ -179,7 +192,7 @@ def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | Non
         "weights": {k: w[k] for k in ("t", "k", "r")},
         "start": {"px": [int(start[0]), int(start[1])]},
         "goal": {"px": [int(goal[0]), int(goal[1])]},
-        "total": _budget(prof, segs),
+        "total": _budget(prof, segs, path, budget),
         "segments": segs,
         "_path": path,
         "_prof": prof,
@@ -250,8 +263,8 @@ def _contrast(chosen: dict, alt: dict, res_m: float, min_dev_m: float = 40.0):
         seg["rejected_alt"] = (seg["rejected_alt"] + " " if seg["rejected_alt"] else "") + txt
 
 
-def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None) -> list[dict]:
-    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None) for k in kinds]
+def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None) -> list[dict]:
+    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget) for k in kinds]
     for r in routes:
         for alt in routes:
             if alt is not r:

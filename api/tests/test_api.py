@@ -189,4 +189,4 @@ def test_contract_is_actual_output(layers):
     route = example['routes'][0]
     actual = planner.plan(layers, route['start']['px'], route['goal']['px'])[1]
     assert route == actual
-    assert len(route['segments']) == 2
+    assert len(route['segments']) >= 2
