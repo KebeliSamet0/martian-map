@@ -11,5 +11,5 @@ Kural: 60–90 dakika. Bitmeyen her şey "Karar" bölümüne bilinmeyen olarak y
 | Curiosity konum/rota + Navcam ham görüntüler | Veysel | `msl_traverse_navcam.md` | |
 | HiRISE kaya yoğunluğu kaynakları (Golombek haritaları, MBARS, BoulderNet) | Bora | `rock_abundance.md` | |
 | THEMIS termal atalet + CTX/MOLA bağlam | Batu | `themis_ctx.md` | |
-| CRISM mineraloji + Gale jeoloji haritaları | Elif Nisa | `crism_geology.md` | |
+| CRISM mineraloji + Gale jeoloji haritaları | Elif Nisa | `crism_geology.md` | KULLAN (sınırlı: yalnız bilim durakları) |
 | RAD radyasyon + REMS hava + Mount Sharp önerilen rota | Samet | `rad_rems_route.md` | |
