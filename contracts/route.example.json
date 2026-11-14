@@ -1,0 +1,22 @@
+{
+  "kind": "balanced",
+  "start": {"px": [120, 860], "name": "Habitat"},
+  "goal": {"px": [640, 210], "name": "Boxwork durağı"},
+  "total": {"km": 4.1, "min": 170, "kcal": 610, "dose_uGy": 25, "walkback_ok": true, "go": true},
+  "segments": [
+    {
+      "id": 4,
+      "path_px": [[300, 600], [330, 570]],
+      "len_m": 340,
+      "slope_max": 9.0,
+      "p_sand": 0.62,
+      "rock_cfa": 0.04,
+      "conf": "low",
+      "nearest_evidence_m": 410,
+      "kcal": 58,
+      "min": 11,
+      "reason": "Kum ağırlıklı, +%18 kcal",
+      "rejected_alt": "Kuzey: 18° eğim + kum, +40 dk, dönüş payı aşılıyor"
+    }
+  ]
+}

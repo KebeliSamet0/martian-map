@@ -1,0 +1,10 @@
+[
+  {
+    "stop_id": "msl_sol_XXXX_01",
+    "sol": 0,
+    "px": [410, 520],
+    "images": ["data/navcam/msl_sol_XXXX_01_a.png"],
+    "class_frac": {"soil": 0.30, "bedrock": 0.45, "sand": 0.15, "bigrock": 0.10},
+    "entropy": 0.22
+  }
+]

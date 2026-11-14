@@ -1,0 +1,22 @@
+# Veri ve model ağırlıkları git'e girmez
+data/raw/
+data/interim/
+*.tif
+*.tiff
+*.img
+*.zip
+*.pt
+*.pth
+*.ckpt
+*.onnx
+models/
+# Python
+__pycache__/
+.venv/
+*.pyc
+.ipynb_checkpoints/
+# Node
+node_modules/
+dist/
+.env*
+.DS_Store

@@ -1,0 +1,20 @@
+{
+  "region": "Gale / Mount Sharp — bölge kesinleşince güncellenecek",
+  "width": 1000,
+  "height": 1000,
+  "res_m": 2.0,
+  "origin_xy_m": [0.0, 0.0],
+  "crs_note": "Kaynak DTM'nin yerel metrik projeksiyonu; frontend piksel uzayında (Leaflet CRS.Simple) çalışır",
+  "layers": {
+    "elevation": "layers/elevation.npy  float32, metre",
+    "slope": "layers/slope.npy  float32, derece",
+    "rock_cfa": "layers/rock_cfa.npy  float32, 0-1 (kayaların kapladığı alan oranı)",
+    "thermal_inertia": "layers/thermal_inertia.npy  float32, TIU (opsiyonel)",
+    "p_soil": "layers/p_soil.npy  float32, 0-1",
+    "p_bedrock": "layers/p_bedrock.npy  float32, 0-1",
+    "p_sand": "layers/p_sand.npy  float32, 0-1",
+    "p_bigrock": "layers/p_bigrock.npy  float32, 0-1",
+    "entropy": "layers/entropy.npy  float32, 0-1 (model belirsizliği, 1 = hiç emin değil)",
+    "science": "layers/science_stops.json  bilim durakları listesi"
+  }
+}
