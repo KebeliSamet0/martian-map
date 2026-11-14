@@ -104,7 +104,7 @@ export function createAstronaut(options = {}) {
 
   // Pelvis / Kalça Merkezi (Zemin seviyesinden ~0.96 m yukarıda)
   const pelvis = new THREE.Group();
-  pelvis.position.y = 0.80;   // [sim] ayak tabanı y=0 (orijinal 0.96 → ayaklar 16 cm havada kalıyordu)
+  pelvis.position.y = 0.83;   // [sim] ayak tabanı y≈0 (orijinal 0.96 → ayaklar ~15 cm havada; +0.03 yürürken burun/topuk dönüşünü karşılar)
   motionRoot.add(pelvis);
 
   // Pelvis / LTA gövde parçası
