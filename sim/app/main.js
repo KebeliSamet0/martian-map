@@ -19,6 +19,7 @@ import { initFx } from './fx.js';
 import { initAudio } from './audio.js';
 import { initFlow } from './wire-flow.js';   // tur4:akis
 import { t } from './i18n.js';   // tur4:akis
+import './insight-ui.js';   // tur4:veri
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
