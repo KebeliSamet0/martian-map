@@ -1,8 +1,10 @@
-// astronaut.js — Prosedürel Three.js Astronot Modülü
-// Martian Map projesi için gerçekçi skafandr ve eklemli yürüme/idle kinematik motoru.
-// Dış model dosyası gerektirmez; standart Three.js geometrileri ile 1.75 m boyunda üretilir.
+// astronaut.js — Astronot modülü
+// Varsayılan: iskeletli, animasyonlu glTF astronot (sim/assets/characters/astronaut.glb; Quaternius, CC0 — bkz. sim/ASSETS.md).
+// Model yüklenene kadar ya da yüklenemezse prosedürel yedek astronot (aşağıda, eski sürüm) görünür.
+// Dışa açık arayüz değişmedi: createAstronaut(opts) → { group, update(dt, speedMps, grounded), height, setMarsGravity }.
 
 import * as THREE from 'three';
+import { GLTFLoader } from '../lib/addons/loaders/GLTFLoader.js';
 
 /**
  * Prosedürel skafandrlı astronot oluşturur.
@@ -13,7 +15,7 @@ import * as THREE from 'three';
  * @param {boolean} [options.receiveShadow=true]
  * @returns {{group: THREE.Group, update: Function, height: number, setMarsGravity: Function}}
  */
-export function createAstronaut(options = {}) {
+function createProceduralAstronaut(options = {}) {
   const marsGravityEnabled = options.marsGravity ?? false;
   const castShadow = options.castShadow ?? true;
   const receiveShadow = options.receiveShadow ?? true;
@@ -467,5 +469,115 @@ export function createAstronaut(options = {}) {
     update,
     height: totalHeight,
     setMarsGravity
+  };
+}
+
+// =====================================================================
+// glTF astronot (iskeletli): Idle / Walk / Run animasyonları hızla karışır.
+// Mars 0,38 g: adım frekansı Dünya'ya göre düşük, gövde dikey salınımı belirgin (görsel yaklaşım; hız sim'den gelir).
+// =====================================================================
+const MODEL_URL = new URL('../assets/characters/astronaut.glb', import.meta.url).href;
+const CLIP = { idle: 'CharacterArmature|Idle_Neutral', walk: 'CharacterArmature|Walk', run: 'CharacterArmature|Run', interact: 'CharacterArmature|Interact' };
+// Klipteki doğal hızlar (m/s; model 1,75 m'ye ölçeklendikten sonra görsel eşleştirme). Ayak kaymasını azaltmak için klip hızı = gerçek hız / doğal hız.
+const CLIP_NATURAL_MPS = { walk: 1.25, run: 3.2 };
+// Malzeme adı → skafandr rengi (sRGB), pürüzlülük, metaliklik
+const SUIT_PALETTE = {
+  SciFi_Main: { c: [0.86, 0.85, 0.82], r: 0.82, m: 0.0 },        // ana kumaş: kirli beyaz
+  SciFi_MainDark: { c: [0.66, 0.66, 0.64], r: 0.7, m: 0.1 },      // eklem/körük: orta gri
+  SciFi_Light: { c: [0.80, 0.79, 0.76], r: 0.6, m: 0.15 },        // sert parçalar: açık gri
+  SciFi_Light_Accent: { c: [0.78, 0.45, 0.22], r: 0.5, m: 0.0 },  // vurgu şeritleri: turuncu
+  Grey: { c: [0.16, 0.17, 0.18], r: 0.35, m: 0.4 },               // vizör/ekipman: koyu
+};
+
+export function createAstronaut(options = {}) {
+  const totalHeight = 1.75;
+  const castShadow = options.castShadow ?? true;
+  const receiveShadow = options.receiveShadow ?? true;
+  const fallback = createProceduralAstronaut(options);
+  const group = new THREE.Group();
+  group.name = 'AstronautRoot';
+  group.add(fallback.group);
+
+  let mixer = null, actions = null, current = null, model = null, bob = null;
+  let smooth = 0, phase = 0, marsGravity = options.marsGravity ?? false;
+
+  if (options.useModel !== false) {
+    new GLTFLoader().load(MODEL_URL, (gltf) => {
+      model = gltf.scene;
+      // Ölçek: iskelet uygulanmış (skinned) gerçek boy → 1,75 m; ayak tabanı y=0; yüz +Z.
+      // FBX kaynaklı modelde armatür düğümü ×100 ölçekli; skinning'siz kutu yanıltır, bu yüzden "precise" kutu kullanılır.
+      model.updateMatrixWorld(true);
+      model.traverse((o) => { if (o.isSkinnedMesh) o.skeleton.update(); });
+      const box = new THREE.Box3().setFromObject(model, true);
+      const h = box.max.y - box.min.y || 1;
+      const s = totalHeight / h;
+      model.scale.multiplyScalar(s);
+      model.position.y = -box.min.y * s;
+      model.traverse((o) => {
+        if (o.isMesh) {
+          o.castShadow = castShadow; o.receiveShadow = receiveShadow; o.frustumCulled = false;
+          const m = o.material;
+          if (m && m.isMeshStandardMaterial) {
+            // Modelin özgün paleti koyu bilimkurgu tonları; EVA skafandrına yakın beyaz/gri paletle yeniden renklendirilir
+            const tint = SUIT_PALETTE[m.name];
+            if (tint) { m.color.setRGB(...tint.c, THREE.SRGBColorSpace); m.roughness = tint.r; m.metalness = tint.m; }
+            m.envMapIntensity = 0.6;
+          }
+        }
+      });
+      bob = new THREE.Group(); bob.add(model);
+      group.add(bob);
+      mixer = new THREE.AnimationMixer(model);
+      const byName = Object.fromEntries(gltf.animations.map((c) => [c.name, c]));
+      actions = {};
+      for (const [k, name] of Object.entries(CLIP)) {
+        const clip = byName[name] || gltf.animations.find((c) => c.name.toLowerCase().endsWith(k));
+        if (clip) { actions[k] = mixer.clipAction(clip); actions[k].enabled = true; }
+      }
+      if (!actions.idle || !actions.walk) { console.warn('astronaut.glb: Idle/Walk klibi bulunamadı, prosedürel yedek kalıyor'); group.remove(bob); return; }
+      for (const a of Object.values(actions)) { a.play(); a.setEffectiveWeight(0); }
+      actions.idle.setEffectiveWeight(1); current = 'idle';
+      fallback.group.visible = false;
+    }, undefined, (err) => console.warn('astronaut.glb yüklenemedi, prosedürel yedek kullanılıyor:', err?.message || err));
+  }
+
+  function update(dt, speedMps = 0, grounded = true) {
+    if (!mixer) return fallback.update(dt, speedMps, grounded);
+    if (dt <= 0 || dt > 0.5) dt = 0.016;
+    smooth += (Math.max(0, speedMps) - smooth) * (1 - Math.exp(-8 * dt));
+    const v = smooth;
+    // Ağırlıklar: 0–0,08 m/s idle; 0,08–1,6 yürüyüş; 1,6–2,4 yürüyüş→koşu geçişi
+    const wWalk = THREE.MathUtils.smoothstep(v, 0.03, 0.25) * (1 - THREE.MathUtils.smoothstep(v, 1.6, 2.4));
+    const wRun = actions.run ? THREE.MathUtils.smoothstep(v, 1.6, 2.4) : 0;
+    const wIdle = Math.max(0, 1 - wWalk - wRun);
+    actions.idle.setEffectiveWeight(wIdle);
+    actions.walk.setEffectiveWeight(actions.run ? wWalk : wWalk + wRun);
+    if (actions.run) actions.run.setEffectiveWeight(wRun);
+    // Mars: daha uzun, daha yavaş adım → klip hızı gerçek hız/doğal hız, düşük yerçekiminde biraz daha yavaş
+    const g = marsGravity ? 0.85 : 1;
+    actions.walk.timeScale = THREE.MathUtils.clamp(v / CLIP_NATURAL_MPS.walk, 0.35, 2.2) * g;
+    if (actions.run) actions.run.timeScale = THREE.MathUtils.clamp(v / CLIP_NATURAL_MPS.run, 0.5, 1.8) * g;
+    mixer.update(dt);
+    // Düşük yerçekimi: adım başına hafif yukarı kalkış (görsel)
+    if (bob) {
+      phase += dt * (0.5 + 0.45 * (v / 0.67)) * Math.PI * 2;
+      const amp = (marsGravity ? 0.045 : 0.015) * Math.min(1.4, v / 0.8) * (1 - wIdle);
+      bob.position.y = Math.abs(Math.sin(phase)) * amp;
+    }
+  }
+
+  /** Örnek alma gibi tek seferlik hareket (varsa Interact klibi). */
+  function playInteract() {
+    if (!actions?.interact) return;
+    const a = actions.interact; a.reset(); a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = false; a.setEffectiveWeight(1); a.fadeOut(1.2);
+  }
+
+  return {
+    group,
+    update,
+    height: totalHeight,
+    setMarsGravity(enabled) { marsGravity = !!enabled; fallback.setMarsGravity(enabled); },
+    playInteract,
+    get usingModel() { return !!mixer; },
   };
 }
