@@ -157,6 +157,7 @@ Not: Altyazı seslendirme metniyle aynı. Render: Batu. Ekran kaydı 21:00 prova
 - EVA limits used by the app: 6 h, 2000 kcal, 420 L O₂, 30 min science stop, 30 min reserve.
 - Sourced alternatives in `docs/eva_parameters.md`: 7 h and 1800 kcal (Apollo 15–17 life support), walk-back distance ≤ 3.5 km (NASA Mars suit study, Ogilvie et al. 2026).
 - Radiation dose budget per EVA: demo value; not a NASA limit (`docs/data/rad_rems_route.md`).
+- Slope thresholds (15° caution, 25° no-go; 12° no-go on sand) and scanner thresholds are planning assumptions, not validated human limits for Mars (`api/planner/params.py`).
 - Rock cover counts only rocks ≥ 1 m (HiRISE resolution), so it is a lower bound.
 - Terrain model: trained on AI4Mars (Curiosity Navcam, 2012–2019), applied to 391 Navcam frames at 128 rover stops in our area. About 65% of the area has no nearby Navcam evidence; there the scanner shows "model not sure" instead of guessing. The model under-reports sand (2 of 7 checked stops).
 
