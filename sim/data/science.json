@@ -1,0 +1,121 @@
+{
+ "_about": "Bilim desk'i (tur 4): CRISM saha notları, RAD doz parametreleri, veri katmanları kaynakları. Metinler texts.json > bilim altında. Her değer docs/data/crism_geology.md ya da docs/data/rad_rems_route.md'den.",
+ "crism": {
+  "label_key": "bilim.badge_crism",
+  "product_id": "FRT0000B6F1",
+  "report": "docs/data/crism_geology.md",
+  "stops": {
+   "sci_1_sol4617": {
+    "unit": "LSu",
+    "sources": [
+     {
+      "label": "NASA/JPL 2025 (boxwork)",
+      "url": null
+     },
+     {
+      "label": "GSA 2025 özeti",
+      "url": null
+     },
+     {
+      "label": "CRISM FRT0000B6F1 (PDS MTRDR)",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/"
+     }
+    ]
+   },
+   "sci_2_sol4635": {
+    "unit": "LSu",
+    "sources": [
+     {
+      "label": "NASA/JPL 2025 (boxwork)",
+      "url": null
+     },
+     {
+      "label": "CRISM FRT0000B6F1 (PDS MTRDR)",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/"
+     }
+    ]
+   },
+   "sci_3_sol4668": {
+    "unit": "LSu",
+    "sources": [
+     {
+      "label": "NASA/JPL 2025 (boxwork)",
+      "url": null
+     },
+     {
+      "label": "GSA 2025 özeti",
+      "url": null
+     },
+     {
+      "label": "CRISM FRT0000B6F1 (PDS MTRDR)",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/"
+     }
+    ]
+   },
+   "sci_4_sol4869": {
+    "unit": "LSu",
+    "sources": [
+     {
+      "label": "NASA Curiosity blogları, Nisan–Mayıs 2026 (Atacama)",
+      "url": null
+     },
+     {
+      "label": "CRISM FRT0000B6F1 (PDS MTRDR)",
+      "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/"
+     }
+    ]
+   }
+  },
+  "citations": [
+   "Viviano-Beck vd. 2014 (CRISM spektral parametreleri)",
+   "Fraeman vd. 2016 (alt Mount Sharp birim haritası)"
+  ]
+ },
+ "radiation": {
+  "report": "docs/data/rad_rems_route.md",
+  "source": "Hassler vd. 2014, Science, doi:10.1126/science.1244797 (MSL RAD, Ağustos 2012–Haziran 2013)",
+  "source_url": "https://doi.org/10.1126/science.1244797",
+  "absorbed_mGy_per_day": 0.21,
+  "absorbed_unc_mGy_per_day": 0.04,
+  "equivalent_mSv_per_day": 0.64,
+  "equivalent_unc_mSv_per_day": 0.12,
+  "solar_min_mGy_per_day": 0.314,
+  "solar_min_source": "Ehresmann vd. 2023, Icarus, doi:10.1016/j.icarus.2022.115035",
+  "budget_name": "EVA_MAX_DOSE_UGY",
+  "budget_fallback_uGy": 60,
+  "budget_status": "varsayım",
+  "sep_source": "Zeitlin vd. 2018, doi:10.1029/2018GL077760"
+ },
+ "layers": [
+  {
+   "id": "dtm",
+   "toggle": "always",
+   "url": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m",
+   "doc": "docs/data/gale_dtm_ortho.md"
+  },
+  {
+   "id": "optic",
+   "toggle": "overview",
+   "url": "https://astrogeology.usgs.gov/search/map/mars_msl_gale_merged_orthophoto_mosaic_25cm",
+   "doc": "docs/data/msl_traverse_navcam.md"
+  },
+  {
+   "id": "crism",
+   "toggle": "crism",
+   "url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/",
+   "doc": "docs/data/crism_geology.md"
+  },
+  {
+   "id": "rad",
+   "toggle": "rad",
+   "url": "https://doi.org/10.1126/science.1244797",
+   "doc": "docs/data/rad_rems_route.md"
+  },
+  {
+   "id": "model",
+   "toggle": "info",
+   "url": "https://zenodo.org/records/15995036",
+   "doc": "docs/data/ai4mars.md"
+  }
+ ]
+}

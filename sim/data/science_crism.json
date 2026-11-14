@@ -1,0 +1,88 @@
+{
+ "_about": "Uretildi: sim/tools/crism_stops.py. Degerler PDS browse PNG'sinden okunan 8-bit goreli indeks (mutlak degil).",
+ "product": {
+  "id": "FRT0000B6F1",
+  "date": "2008-07-09",
+  "dataset": "MRO-M-CRISM-5-RDR-MPTARGETED-V1.0 (MTRDR, mrocr_4001, _MTR3)",
+  "composite": "HYD",
+  "bands": {
+   "R": "SINDEX2",
+   "G": "BD2100_2",
+   "B": "BD1900_2"
+  },
+  "px_m": 18.0,
+  "size": [
+   775,
+   714
+  ],
+  "file": "data/crism/frt0000b6f1_hyd.png",
+  "source_url": "https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/mrocr_4001/browse/2008/2008_191/frt0000b6f1/frt0000b6f1_07_brhydj_mtr3.png"
+ },
+ "map_info": {
+  "x0": 8138478.6,
+  "y0": -278195.96,
+  "px_m": 18.0,
+  "w": 775,
+  "h": 714
+ },
+ "footprint_latlon": {
+  "west": 137.30105660682673,
+  "east": 137.53640154459742,
+  "north": -4.693334114284028,
+  "south": -4.9101551279205236
+ },
+ "grid_crop": {
+  "col": [
+   210.99,
+   322.11
+  ],
+  "row": [
+   312.17,
+   423.28
+  ]
+ },
+ "stops": {
+  "sci_1_sol4617": {
+   "crism_px": [
+    259.16,
+    370.53
+   ],
+   "valid": true,
+   "SINDEX2": 52,
+   "BD2100_2": 124,
+   "BD1900_2": 6
+  },
+  "sci_2_sol4635": {
+   "crism_px": [
+    257.79,
+    372.76
+   ],
+   "valid": true,
+   "SINDEX2": 16,
+   "BD2100_2": 79,
+   "BD1900_2": 0
+  },
+  "sci_3_sol4668": {
+   "crism_px": [
+    263.27,
+    377.63
+   ],
+   "valid": true,
+   "SINDEX2": 84,
+   "BD2100_2": 94,
+   "BD1900_2": 40
+  },
+  "sci_4_sol4869": {
+   "crism_px": [
+    265.58,
+    398.24
+   ],
+   "valid": true,
+   "SINDEX2": 164,
+   "BD2100_2": 15,
+   "BD1900_2": 0
+  }
+ },
+ "grid_valid_fraction": 1.0,
+ "grid_crism_pixels": 12656
+}
