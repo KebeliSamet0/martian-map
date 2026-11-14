@@ -67,3 +67,17 @@ Analizi yapan: Elif Rana · Tarih: Cmt 14 Kasım 2026, sabah
 
 ## 7. Karar
 **KULLAN (Gale ile devam)**: DEM ve ortofoto boxwork bölgesini kapsıyor, kesitte nodata yok, iki ürün aynı projeksiyonda ve tam indirme gerekmeden pencereyle okunabiliyor. Jezero B planına gerek görünmüyor.
+
+Neden Jezero değil (B planı yedekte kalıyor, kötü olduğu için değil; geçiş koşulu oluşmadı):
+
+| | Gale | Jezero (B planı) |
+|---|---|---|
+| Veri erişimi | Büyük dosyalar (DEM 7,6 GB, ortofoto 50 GB), pencereyle okunarak çözüldü | Hazır ~1,8 GB USGS paketi, daha kolay |
+| Zemin modeli (AI4Mars) | Etiketlerin çoğu Curiosity'den, model kendi alanında | Perseverance etiketi yok, model alan dışı → belirsizlik katmanı zayıflar |
+| Radyasyon (RAD) | Doğrudan bu bölgede ölçülmüş | Perseverance'ta RAD yok, Gale'den varsayım gerekir |
+| NASA kaynak listesi | Challenge metnindeki örnek bölge; rover görüntüleri listede yok | Perseverance ham görüntüleri listede var |
+| Bilim durakları | Kil/sülfat katmanları, boxwork | Delta, karbonat, kil; güçlü |
+| Rekabet | Az ekip | Rakiplerin çoğu burada |
+| Arazi | Dik (%11,5'i >30°), koridorlar dar olabilir | Krater tabanı, muhtemelen daha düz (ölçülmedi) |
+
+Özet: Jezero veride daha kolay ama projeyi ayıran iki şeyi (zemin modeli güveni, ölçülmüş radyasyon) zayıflatıyor. Gale çalıştığı sürece Gale.
