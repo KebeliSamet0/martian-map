@@ -142,7 +142,7 @@ function parseNpyFloat32(buf) {
   return new Float32Array(buf);
 }
 
-async function fetchLayerFloat32(name) {
+export async function fetchLayerFloat32(name) {
   // 1) Önce API (/layers/<name>.bin) dene
   if (!API_OFF) {
     try {
@@ -373,6 +373,21 @@ float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance
     varying vec3 vWP;
     varying vec3 vWN;
 
+    // Karo tekrarını kıran stokastik örnekleme: her hücreye rastgele öteleme, 4 komşu hücre ağırlıklı karışır (tur4:gorsel).
+    vec4 nt_hash4(vec2 p) { return fract(sin(vec4(1.0 + dot(p, vec2(37.0, 17.0)), 2.0 + dot(p, vec2(11.0, 47.0)), 3.0 + dot(p, vec2(41.0, 29.0)), 4.0 + dot(p, vec2(23.0, 31.0)))) * 103.0); }
+    vec4 texNoTile(sampler2D s, vec2 x) {
+      vec2 p = floor(x), f = fract(x), dx = dFdx(x), dy = dFdy(x);
+      vec4 acc = vec4(0.0); float tw = 0.0;
+      for (int j = 0; j < 2; j++) for (int i = 0; i < 2; i++) {
+        vec2 g = vec2(float(i), float(j));
+        vec4 o = nt_hash4(p + g);
+        vec2 r = g - f + o.xy;
+        float w = exp(-4.0 * dot(r, r));
+        acc += w * textureGrad(s, x + o.zw, dx, dy); tw += w;
+      }
+      return acc / tw;
+    }
+
     // Karo tekrarını (tiling) kırmak için hafif döndürülmüş ikinci örnekleme
     vec2 rotUv(vec2 uv) {
       return vec2(uv.x * 0.866 - uv.y * 0.5, uv.x * 0.5 + uv.y * 0.866);
@@ -441,15 +456,18 @@ float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance
 
             // Regolit/çakıl yüksek frekanslı mikro-albedo farkı (ortalama = 0, ortofoto rengini değiştirmez)
             float regFine = dot(texture2D(uRegDiff, uvFine).rgb, vec3(0.333)) - 0.48;
-            float regHi = dot(texture2D(uRegDiff, uv1).rgb, vec3(0.333)) - 0.48;
+            float regHi = dot(texNoTile(uRegDiff, uv1).rgb, vec3(0.333)) - 0.48;
             float regMid = dot(texture2D(uRegDiff, uv2).rgb, vec3(0.333)) - 0.48;
-            float regDet = (regFine * 0.62 + regHi * 0.85) * nearFade + regMid * 0.48 * midFade;
+            float closeFade = 1.0 - smoothstep(2.5, 10.0, camDist);   // en ince ölçek: ayak dibi (24 cm karo)
+            float regVF = dot(texture2D(uRegDiff, rotUv(vWP.xz / 0.24 + vec2(7.7, 2.9))).rgb, vec3(0.333)) - 0.48;
+            float regDet = (regFine * 0.62 + regHi * 0.85) * nearFade + regMid * 0.48 * midFade + regVF * 0.75 * closeFade;
 
             // Kum dalgacıkları mikro-albedo farkı
             float sandFine = dot(texture2D(uSandDiff, vWP.xz / 0.75).rgb, vec3(0.333)) - 0.52;
-            float sandHi = dot(texture2D(uSandDiff, vWP.xz / 1.6).rgb, vec3(0.333)) - 0.52;
+            float sandHi = dot(texNoTile(uSandDiff, vWP.xz / 1.6).rgb, vec3(0.333)) - 0.52;
             float sandMid = dot(texture2D(uSandDiff, rotUv(vWP.xz / 5.0)).rgb, vec3(0.333)) - 0.52;
-            float sandDet = (sandFine * 0.48 + sandHi * 0.68) * nearFade + sandMid * 0.38 * midFade;
+            float sandVF = dot(texture2D(uSandDiff, rotUv(vWP.xz / 0.3 + vec2(1.3, 5.1))).rgb, vec3(0.333)) - 0.52;
+            float sandDet = (sandFine * 0.48 + sandHi * 0.68) * nearFade + sandMid * 0.38 * midFade + sandVF * 0.5 * closeFade;
 
             // Ana kaya mikro-çatlak ve yüzey dokusu (triplanar + düzlemsel karışım)
             vec3 rockTri = sampleTriplanar(uRockDiff, vWP, normalize(vWN), 0.52);
@@ -460,7 +478,7 @@ float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance
 
             float blendedPbr = mix(regDet, sandDet, wSand);
             blendedPbr = mix(blendedPbr, rockDet, wRock);
-            microMod = clamp(blendedPbr * 1.38, -0.38, 0.38);
+            microMod = clamp(blendedPbr * 1.8, -0.48, 0.48);
           } else {
             float peb = (a.r - 0.5) * 0.48 * nearFade + (b.r - 0.5) * 0.35 * nearFade;
             microMod = peb + (c.r - 0.5) * 0.28 * midFade;
@@ -574,14 +592,21 @@ float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance
             vec2 uv1 = vWP.xz / 1.65;
             vec2 uv2 = rotUv(vWP.xz / 5.8 + vec2(4.1, 7.3));
 
-            vec2 nReg = ((texture2D(uRegNor, uvFine).xy * 2.0 - 1.0) * 0.75 + (texture2D(uRegNor, uv1).xy * 2.0 - 1.0) * 1.15) * nearFadeN
+            vec2 nReg = ((texture2D(uRegNor, uvFine).xy * 2.0 - 1.0) * 0.75 + (texNoTile(uRegNor, uv1).xy * 2.0 - 1.0) * 1.45) * nearFadeN
                       + (texture2D(uRegNor, uv2).xy * 2.0 - 1.0) * 0.65 * midFadeN;
-            vec2 nSand = ((texture2D(uSandNor, vWP.xz / 0.75).xy * 2.0 - 1.0) * 0.65 + (texture2D(uSandNor, vWP.xz / 1.6).xy * 2.0 - 1.0) * 0.95) * nearFadeN
+            vec2 nSand = ((texture2D(uSandNor, vWP.xz / 0.75).xy * 2.0 - 1.0) * 0.65 + (texNoTile(uSandNor, vWP.xz / 1.6).xy * 2.0 - 1.0) * 1.2) * nearFadeN
                        + (texture2D(uSandNor, rotUv(vWP.xz / 5.0)).xy * 2.0 - 1.0) * 0.55 * midFadeN;
             vec3 triN = sampleTriplanar(uRockNor, vWP, normalize(vWN), 0.52) * 2.0 - 1.0;
             vec3 triNFine = sampleTriplanar(uRockNor, vWP, normalize(vWN), 1.35) * 2.0 - 1.0;
             vec2 nRock = (triN.xy * 1.15 + triNFine.xy * 0.70) * nearFadeN + (texture2D(uRockNor, uv2).xy * 2.0 - 1.0) * 0.75 * midFadeN;
 
+            // Kumda rüzgâr dalgacığı (sentetik): iki yönlü sinüs, kum ağırlığıyla; yalnız yakında
+            float rp = dot(vWP.xz, vec2(0.94, 0.34)) * 5.2 + sin(dot(vWP.xz, vec2(-0.34, 0.94)) * 0.9) * 1.6;
+            vec2 nRip = vec2(0.94, 0.34) * cos(rp) * 0.55 * nearFadeN;
+            nSand += nRip * smoothstep(0.25, 0.7, twN.x);
+            float closeFadeN = 1.0 - smoothstep(2.5, 10.0, camDistN);
+            nReg += (texture2D(uRegNor, rotUv(vWP.xz / 0.24 + vec2(7.7, 2.9))).xy * 2.0 - 1.0) * 1.0 * closeFadeN;
+            nSand += (texture2D(uSandNor, rotUv(vWP.xz / 0.3 + vec2(1.3, 5.1))).xy * 2.0 - 1.0) * 0.7 * closeFadeN;
             vec2 pbrGr = mix(nReg * 1.15, nSand * 0.85, twN.x);
             pbrGr = mix(pbrGr, nRock * 1.35, max(twN.y, twN.z));
             gr = mix(gr, pbrGr, 0.90);
