@@ -1,0 +1,488 @@
+[
+  {
+    "stop_id": "msl_s117_d0384",
+    "sol": 4580,
+    "px": [
+      479.8,
+      419.38
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04580/opgs/edr/ncam/NLB_804091074EDR_F1170384NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04580/opgs/edr/ncam/NLB_804091042EDR_F1170384NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 384,
+    "lat": -4.802282222481294,
+    "lon": 137.3813156805549,
+    "easting": 8143236.0992,
+    "northing": -284653.8264,
+    "loc_source": "origin+xyz",
+    "slope_deg": 8.2,
+    "images_mast_el": [
+      -30.0241,
+      -30.0166
+    ]
+  },
+  {
+    "stop_id": "msl_s117_d1434",
+    "sol": 4594,
+    "px": [
+      453.53,
+      439.55
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04594/opgs/edr/ncam/NLB_805326949EDR_F1171434NCAM00346M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04594/opgs/edr/ncam/NLB_805327863EDR_F1171434NCAM00354M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04594/opgs/edr/ncam/NLB_805327887EDR_F1171434NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1434,
+    "lat": -4.802963,
+    "lon": 137.3804319,
+    "easting": 8143183.545,
+    "northing": -284694.179,
+    "loc_source": "waypoint",
+    "slope_deg": 9.2,
+    "images_mast_el": [
+      -52.7384,
+      -47.0466,
+      -47.0312
+    ]
+  },
+  {
+    "stop_id": "msl_s117_d1890",
+    "sol": 4596,
+    "px": [
+      442.93,
+      458.6
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04596/opgs/edr/ncam/NLB_805502446EDR_F1171890NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04596/opgs/edr/ncam/NLB_805502477EDR_F1171890NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04596/opgs/edr/ncam/NLB_805503597EDR_F1171890NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1890,
+    "lat": -4.80360579,
+    "lon": 137.3800743,
+    "easting": 8143162.349,
+    "northing": -284732.28,
+    "loc_source": "waypoint",
+    "slope_deg": 3.3,
+    "images_mast_el": [
+      -52.7773,
+      -52.7411,
+      -47.1873
+    ]
+  },
+  {
+    "stop_id": "msl_s117_d2490",
+    "sol": 4602,
+    "px": [
+      429.58,
+      481.16
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04602/opgs/edr/ncam/NLB_806046352EDR_F1172490NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04602/opgs/edr/ncam/NLB_806046384EDR_F1172490NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04602/opgs/edr/ncam/NLB_806042961EDR_F1172490NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2490,
+    "lat": -4.80436679,
+    "lon": 137.3796237,
+    "easting": 8143135.643,
+    "northing": -284777.388,
+    "loc_source": "waypoint",
+    "slope_deg": 9.6,
+    "images_mast_el": [
+      -52.741,
+      -52.7358,
+      -47.048
+    ]
+  },
+  {
+    "stop_id": "msl_s117_d3024",
+    "sol": 4614,
+    "px": [
+      422.89,
+      506.61
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04614/opgs/edr/ncam/NLB_807108989EDR_F1173024NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04614/opgs/edr/ncam/NLB_807109021EDR_F1173024NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 3024,
+    "lat": -4.805225562680227,
+    "lon": 137.37938875216696,
+    "easting": 8143122.282000001,
+    "northing": -284828.292,
+    "loc_source": "origin+xyz",
+    "slope_deg": 11.4,
+    "images_mast_el": [
+      -30.0675,
+      -30.033
+    ]
+  },
+  {
+    "stop_id": "msl_s118_d0726",
+    "sol": 4625,
+    "px": [
+      434.64,
+      522.99
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04625/opgs/edr/ncam/NLB_808082935EDR_F1180726NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04625/opgs/edr/ncam/NLB_808082903EDR_F1180726NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 726,
+    "lat": -4.8057782994744525,
+    "lon": 137.3797957187257,
+    "easting": 8143145.7652,
+    "northing": -284861.0551,
+    "loc_source": "origin+xyz",
+    "slope_deg": 22.8,
+    "images_mast_el": [
+      -30.0345,
+      -30.0329
+    ]
+  },
+  {
+    "stop_id": "msl_s118_d1314",
+    "sol": 4633,
+    "px": [
+      431.34,
+      540.57
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04633/opgs/edr/ncam/NLB_808786779EDR_F1181314NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04633/opgs/edr/ncam/NLB_808786747EDR_F1181314NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1314,
+    "lat": -4.806371441261236,
+    "lon": 137.3796839850792,
+    "easting": 8143139.1655,
+    "northing": -284896.2134,
+    "loc_source": "origin+xyz",
+    "slope_deg": 9.4,
+    "images_mast_el": [
+      -30.0331,
+      -30.0247
+    ]
+  },
+  {
+    "stop_id": "msl_s118_d1608",
+    "sol": 4634,
+    "px": [
+      414.55,
+      540.12
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04634/opgs/edr/ncam/NLB_808882774EDR_F1181608NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04634/opgs/edr/ncam/NLB_808882742EDR_F1181608NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04634/opgs/edr/ncam/NLB_808884436EDR_F1181608NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1608,
+    "lat": -4.80635617,
+    "lon": 137.3791167,
+    "easting": 8143105.591,
+    "northing": -284895.308,
+    "loc_source": "waypoint",
+    "slope_deg": 14.8,
+    "images_mast_el": [
+      -52.7493,
+      -52.7416,
+      -47.0447
+    ]
+  },
+  {
+    "stop_id": "msl_s118_d2406",
+    "sol": 4653,
+    "px": [
+      438.92,
+      559.34
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04653/opgs/edr/ncam/NLB_810567116EDR_F1182406NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04653/opgs/edr/ncam/NLB_810567084EDR_F1182406NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2406,
+    "lat": -4.807004655795738,
+    "lon": 137.37994077082854,
+    "easting": 8143154.3329,
+    "northing": -284933.74700000003,
+    "loc_source": "origin+xyz",
+    "slope_deg": 21.8,
+    "images_mast_el": [
+      -30.0414,
+      -30.0371
+    ]
+  },
+  {
+    "stop_id": "msl_s118_d3156",
+    "sol": 4664,
+    "px": [
+      448.1,
+      586.62
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04664/opgs/edr/ncam/NLB_811538777EDR_F1183156NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04664/opgs/edr/ncam/NLB_811538801EDR_F1183156NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04664/opgs/edr/ncam/NLB_811540387EDR_F1183156NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 3156,
+    "lat": -4.8079252,
+    "lon": 137.3802489,
+    "easting": 8143172.697,
+    "northing": -284988.312,
+    "loc_source": "waypoint",
+    "slope_deg": 11.0,
+    "images_mast_el": [
+      -52.7508,
+      -52.7503,
+      -47.045
+    ]
+  },
+  {
+    "stop_id": "msl_s119_d0426",
+    "sol": 4671,
+    "px": [
+      475.61,
+      596.5
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04671/opgs/edr/ncam/NLB_812158106EDR_F1190426NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04671/opgs/edr/ncam/NLB_812158081EDR_F1190426NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 426,
+    "lat": -4.808258500217657,
+    "lon": 137.38117938592967,
+    "easting": 8143227.712599999,
+    "northing": -285008.0682,
+    "loc_source": "origin+xyz",
+    "slope_deg": 12.6,
+    "images_mast_el": [
+      -30.0392,
+      -30.0364
+    ]
+  },
+  {
+    "stop_id": "msl_s120_d1492",
+    "sol": 4816,
+    "px": [
+      498.71,
+      573.68
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04816/opgs/edr/ncam/NLB_825027121EDR_F1201492NCAM00294M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04816/opgs/edr/ncam/NLB_825027097EDR_F1201492NCAM00294M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04816/opgs/edr/ncam/NLB_825027072EDR_F1201492NCAM00294M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1492,
+    "lat": -4.807488506887287,
+    "lon": 137.3819595580878,
+    "easting": 8143273.909600001,
+    "northing": -284962.42730000004,
+    "loc_source": "origin+xyz",
+    "slope_deg": 14.5,
+    "images_mast_el": [
+      -28.4422,
+      -27.31,
+      -24.8708
+    ]
+  },
+  {
+    "stop_id": "msl_s120_d2366",
+    "sol": 4827,
+    "px": [
+      525.31,
+      592.78
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04827/opgs/edr/ncam/NLB_826009236EDR_F1202366NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04827/opgs/edr/ncam/NLB_826009205EDR_F1202366NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04827/opgs/edr/ncam/NLB_826012520EDR_F1202366CCAM08825M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2366,
+    "lat": -4.80813306,
+    "lon": 137.3828539,
+    "easting": 8143327.108,
+    "northing": -285000.633,
+    "loc_source": "waypoint",
+    "slope_deg": 8.9,
+    "images_mast_el": [
+      -52.7687,
+      -52.7679,
+      -47.117
+    ]
+  },
+  {
+    "stop_id": "msl_s120_d2690",
+    "sol": 4830,
+    "px": [
+      519.73,
+      610.61
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04830/opgs/edr/ncam/NLB_826274579EDR_F1202690NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04830/opgs/edr/ncam/NLB_826274548EDR_F1202690NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2690,
+    "lat": -4.808734848127088,
+    "lon": 137.38267122664115,
+    "easting": 8143315.9451,
+    "northing": -285036.3038,
+    "loc_source": "origin+xyz",
+    "slope_deg": 15.8,
+    "images_mast_el": [
+      -30.0539,
+      -30.0505
+    ]
+  },
+  {
+    "stop_id": "msl_s120_d3056",
+    "sol": 4834,
+    "px": [
+      520.91,
+      631.73
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04834/opgs/edr/ncam/NLB_826625369EDR_F1203056NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04834/opgs/edr/ncam/NLB_826625338EDR_F1203056NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 3056,
+    "lat": -4.8094472347231285,
+    "lon": 137.382711239427,
+    "easting": 8143318.3085,
+    "northing": -285078.53030000004,
+    "loc_source": "origin+xyz",
+    "slope_deg": 8.2,
+    "images_mast_el": [
+      -30.0429,
+      -30.0368
+    ]
+  },
+  {
+    "stop_id": "msl_s121_d0360",
+    "sol": 4839,
+    "px": [
+      497.7,
+      644.16
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04839/opgs/edr/ncam/NLB_827075826EDR_F1210360NCAM00385M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04839/opgs/edr/ncam/NLB_827075801EDR_F1210360NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 360,
+    "lat": -4.809866633848154,
+    "lon": 137.38191980695171,
+    "easting": 8143271.9027,
+    "northing": -285103.39,
+    "loc_source": "origin+xyz",
+    "slope_deg": 16.6,
+    "images_mast_el": [
+      -30.0542,
+      -30.047
+    ]
+  },
+  {
+    "stop_id": "msl_s121_d0948",
+    "sol": 4845,
+    "px": [
+      488.27,
+      667.97
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04845/opgs/edr/ncam/NLB_827607594EDR_F1210948NCAM00276M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04845/opgs/edr/ncam/NLB_827607625EDR_F1210948NCAM00276M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04845/opgs/edr/ncam/NLB_827607570EDR_F1210948NCAM00276M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 948,
+    "lat": -4.810670206063453,
+    "lon": 137.38160025925058,
+    "easting": 8143253.0283,
+    "northing": -285151.02150000003,
+    "loc_source": "origin+xyz",
+    "slope_deg": 4.1,
+    "images_mast_el": [
+      -22.6697,
+      -22.3299,
+      -21.4208
+    ]
+  },
+  {
+    "stop_id": "msl_s121_d1446",
+    "sol": 4848,
+    "px": [
+      494.42,
+      694.12
+    ],
+    "images": [
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04848/opgs/edr/ncam/NLB_827874591EDR_F1211446NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04848/opgs/edr/ncam/NLB_827874566EDR_F1211446NCAM00353M_.JPG",
+      "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/04848/opgs/edr/ncam/NLB_827876004EDR_F1211446NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 1446,
+    "lat": -4.81155245,
+    "lon": 137.3818117,
+    "easting": 8143265.333,
+    "northing": -285203.316,
+    "loc_source": "waypoint",
+    "slope_deg": 5.8,
+    "images_mast_el": [
+      -52.7659,
+      -52.7628,
+      -47.065
+    ]
+  }
+]
