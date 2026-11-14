@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState, type ReactNode } from 'react'
 import MapView, { CONF_COLOR, ROVER_COLOR, SCI_COLOR } from './MapView'
+import ApiRoutesView from './components/ApiRoutesView'
 import type { GridInfo, RouteResponse, RoverStop, ScienceStop, Segment, Total } from './types'
 
 const CLASS_TR: Record<string, string> = { soil: 'Toprak', bedrock: 'Ana kaya', sand: 'Kum', bigrock: 'Büyük kaya' }
@@ -122,11 +123,14 @@ function RoverCard({ r }: { r: RoverStop }) {
   )
 }
 
+type View = 'real' | 'demo' | 'live'
+const VIEW_LABEL: Record<View, string> = { real: 'Gerçek bölge', demo: 'Örnek (sahte)', live: 'Canlı rota' }
+
 type Sel = { kind: 'sci'; item: ScienceStop } | { kind: 'rov'; item: RoverStop } | null
 interface RealData { grid: GridInfo; science: ScienceStop[]; rovers: RoverStop[] }
 
 export default function App() {
-  const [view, setView] = useState<'real' | 'demo'>('real')
+  const [view, setView] = useState<View>('real')
   const [real, setReal] = useState<RealData | null>(null)
   const [demo, setDemo] = useState<RouteResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -151,6 +155,28 @@ export default function App() {
   const route = demo?.routes[routeIdx] ?? null
   const seg = route?.segments.find((s) => s.id === segId) ?? null
   const selId = sel ? (sel.kind === 'sci' ? sel.item.id : sel.item.stop_id) : null
+
+  const header = (
+    <>
+      <h1 className="text-lg font-bold">Martian Map</h1>
+      <div className="flex gap-2">
+        {(['real', 'demo', 'live'] as const).map((v) => (
+          <button key={v} onClick={() => setView(v)} className={`flex-1 whitespace-nowrap rounded-md px-2 py-1 text-sm ${view === v ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}>
+            {VIEW_LABEL[v]}
+          </button>
+        ))}
+      </div>
+    </>
+  )
+
+  // Canlı rota: harita + panel tamamen planlayıcı API'sinden (#48)
+  if (view === 'live') {
+    return (
+      <div className="h-full bg-slate-900 text-slate-100">
+        <ApiRoutesView header={header} />
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-full bg-slate-900 text-slate-100">
@@ -178,14 +204,7 @@ export default function App() {
       </main>
 
       <aside className="flex w-96 flex-col gap-3 overflow-y-auto border-l border-slate-700 p-4">
-        <h1 className="text-lg font-bold">Martian Map</h1>
-        <div className="flex gap-2">
-          {(['real', 'demo'] as const).map((v) => (
-            <button key={v} onClick={() => setView(v)} className={`flex-1 rounded-md px-2 py-1 text-sm ${view === v ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}`}>
-              {v === 'real' ? 'Gerçek bölge' : 'Örnek rota (sahte)'}
-            </button>
-          ))}
-        </div>
+        {header}
         {error && <p className="text-sm text-red-400">{error}</p>}
 
         {view === 'real' && real && (
