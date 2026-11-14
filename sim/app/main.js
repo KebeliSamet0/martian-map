@@ -4,8 +4,9 @@ import { Geo } from './geo.js';
 import { Terrain } from './terrain.js';
 import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
+import { RocksRich } from './rocks_rich.js';
 import { Nav } from './nav.js';
-import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
+import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM, MICRO } from './detail.js';
 import { MissionMap as MapView } from './wire-map.js';
 import { initWire } from './wire.js';
 import { initExtras } from './wire-extras.js';
@@ -20,6 +21,7 @@ import { initAudio } from './audio.js';
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
 const quality = Q.get('q') || 'high';
+MICRO.value = Q.get('ground') === 'rich' && Q.get('micro') !== '0' ? 1 : 0;   // ?ground=rich: tas serpintisi + mikro rolyef
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const EYE = 1.75;   // skafandrlı astronot göz yüksekliği (varsayım)
@@ -133,7 +135,7 @@ function initThree() {
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.35;
   scene.add(sun, sun.target);
   const terrain = new Terrain(scene, man, geo, { base: BASE, shadows: quality !== 'low', anisotropy: renderer.capabilities.getMaxAnisotropy(), splitFactor: quality === 'ultra' ? 1.0 : quality === 'low' ? 0.45 : 0.65, renderer });
-  const rocks = new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
+  const rocks = Q.get('ground') === 'rich' ? new RocksRich(scene, terrain, { shadows: quality !== 'low' }) : new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
   rocks.userOff = pure || !$('rocks-on').checked;
   T = { renderer, scene, sky, camera, hemi, sun, terrain, rocks, sunEl: Number($('sun-el').value), sunAz: Number($('sun-az').value), shadowExtent: 0, shadowMap: smap,
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
