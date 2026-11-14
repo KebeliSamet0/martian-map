@@ -67,6 +67,7 @@ export const DETAIL = { value: null };
 export const SYNTH = { value: 1 };   // 1: sentetik görünüm ayrıntısı açık; 0: SAF VERİ (yalnız DTM + ortofoto, aydınlatma hariç hiçbir ekleme yok)
 // Terrain Scanner (DS2 tarzı): merkez xz, yarıçap, görünürlük (0..1); eğim eşikleri (derece). Eşikler BİZİM arayüz ayarıdır (DS2'nin eşikleri kaynakta yok).
 export const SCAN = { value: new THREE.Vector4(0, 0, 0, 0) };
+export const SCAN_E = { value: 0 };   // silme yarıçapı: bu yarıçapın içindeki işaretler söner (merkezden dışa süpürme)
 export const SCAN_TEX = { value: null };   // R: eğim/64 (derece), G: geçerli (nav 4 m ızgara; rota eğimiyle aynı taban)
 export const SCAN_DIM = { value: new THREE.Vector2(1, 1) };   // ızgara dünya boyu (m)
 export const SCAN_TH = { value: new THREE.Vector2(10, 20) };
@@ -74,10 +75,10 @@ export function ensureDetail(anisotropy) { if (!DETAIL.value) DETAIL.value = mak
 
 // MeshStandardMaterial gölgelendiricisine eklenir: albedo çeşitliliği + normal bozulması + dik yüzeylerde tabakalı kaya dokusu.
 export function patchMaterial(shader) {
-  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH; shader.uniforms.uScan = SCAN; shader.uniforms.uScanTh = SCAN_TH; shader.uniforms.uScanTex = SCAN_TEX; shader.uniforms.uScanDim = SCAN_DIM;
+  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH; shader.uniforms.uScan = SCAN; shader.uniforms.uScanTh = SCAN_TH; shader.uniforms.uScanE = SCAN_E; shader.uniforms.uScanTex = SCAN_TEX; shader.uniforms.uScanDim = SCAN_DIM;
   shader.vertexShader = 'varying vec3 vWP;\nvarying vec3 vWN;\n' + shader.vertexShader.replace(
     '#include <begin_vertex>', '#include <begin_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;\n vWN = normalize(mat3(modelMatrix) * objectNormal);');
-  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nuniform vec4 uScan;\nuniform vec2 uScanTh;\nuniform sampler2D uScanTex;\nuniform vec2 uScanDim;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
+  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nuniform vec4 uScan;\nuniform vec2 uScanTh;\nuniform float uScanE;\nuniform sampler2D uScanTex;\nuniform vec2 uScanDim;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
     .replace('#include <map_fragment>', `#include <map_fragment>
       {
         vec4 a = texture2D(uDetail, vWP.xz / 2.4), b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.81), c = texture2D(uDetail, (vWP.xz + vec2(3.3, 9.9)) / 19.0);
@@ -97,14 +98,26 @@ export function patchMaterial(shader) {
     .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
       if (uScan.w > 0.001) {
         float sd = distance(vWP.xz, uScan.xy);
-        if (sd < uScan.z) {
-          vec4 st = texture2D(uScanTex, vWP.xz / uScanDim);
+        if (sd < uScan.z + 3.0) {
+          // DS tarzı ayrı zemin işaretleri: 3 m ızgara, hücre merkezindeki eğim sınıfı → ○ (geçiş adayı) / △ (dikkat) / ✕ (kaçın) / ■ gri (veri yok)
+          float G = 3.0;
+          vec2 cell = floor(vWP.xz / G), ctr = (cell + 0.5) * G, q = vWP.xz - ctr;
+          vec4 st = texture2D(uScanTex, ctr / uScanDim);
           float sl = st.r * 64.0;
-          vec3 sc = st.g < 0.5 ? vec3(0.45, 0.45, 0.5) : (sl < uScanTh.x ? vec3(0.08, 0.50, 1.0) : (sl < uScanTh.y ? vec3(1.0, 0.80, 0.05) : vec3(1.0, 0.12, 0.08)));
-          float hatch = (st.g >= 0.5 && sl >= uScanTh.y) ? 0.55 + 0.45 * step(0.5, fract((vWP.x + vWP.z) * 0.9)) : 1.0;   // kırmızı bölgede çizgili desen (renk dışı ipucu)
-          float front = smoothstep(uScan.z - 5.0, uScan.z, sd);
-          totalEmissiveRadiance += (sc * 0.62 * hatch + vec3(0.6, 0.95, 1.0) * front * 1.4) * uScan.w;
-          diffuseColor.rgb = mix(diffuseColor.rgb, sc * 0.5, 0.25 * uScan.w);
+          float R0 = 0.55, d;
+          vec3 sc;
+          if (st.g < 0.5) { sc = vec3(0.6, 0.6, 0.66); d = max(abs(q.x), abs(q.y)) - R0 * 0.55; }
+          else if (sl < uScanTh.x) { sc = vec3(0.10, 0.55, 1.0); d = length(q) - R0 * 0.7; }
+          else if (sl < uScanTh.y) { sc = vec3(1.0, 0.82, 0.05); vec2 p = q / R0; p.y += 0.22; d = (max(abs(p.x) * 0.866 + p.y * 0.5, -p.y) - 0.55) * R0; }
+          else { sc = vec3(1.0, 0.13, 0.08); vec2 p = q / R0; d = max(min(abs(p.x - p.y), abs(p.x + p.y)) * 0.7071 - 0.16, max(abs(p.x), abs(p.y)) - 0.85) * R0; }
+          float born = smoothstep(0.0, 7.0, uScan.z - sd);                 // işaret, dalga geçtikçe belirir
+          float alive = smoothstep(uScanE, uScanE + 7.0, sd);              // sonra merkezden dışa süpürülerek söner
+          float vis = born * alive * uScan.w;
+          float mask = (1.0 - smoothstep(0.0, 0.07, d)) * vis;
+          float ring = exp(-pow((sd - uScan.z) / 1.4, 2.0)) * uScan.w;     // ilerleyen dalga cephesi
+          float ring2 = uScanE > 0.5 ? exp(-pow((sd - uScanE) / 1.1, 2.0)) * 0.45 * uScan.w : 0.0;   // silme cephesi
+          totalEmissiveRadiance += sc * (0.03 * vis + 1.9 * mask) + vec3(0.55, 0.95, 1.0) * (ring * 1.5 + ring2);
+          diffuseColor.rgb = mix(diffuseColor.rgb, sc * 0.45, (0.02 * vis + 0.5 * mask));
         }
       }`)
     .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
