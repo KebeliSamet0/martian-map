@@ -4,6 +4,7 @@ import { Geo } from './geo.js';
 import { Terrain } from './terrain.js';
 import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
+import { RocksRich } from './rocks_rich.js';
 import { Nav } from './nav.js';
 import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
 import { MissionMap as MapView } from './wire-map.js';
@@ -133,7 +134,7 @@ function initThree() {
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.35;
   scene.add(sun, sun.target);
   const terrain = new Terrain(scene, man, geo, { base: BASE, shadows: quality !== 'low', anisotropy: renderer.capabilities.getMaxAnisotropy(), splitFactor: quality === 'ultra' ? 1.0 : quality === 'low' ? 0.45 : 0.65, renderer });
-  const rocks = new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
+  const rocks = Q.get('ground') === 'rich' ? new RocksRich(scene, terrain, { shadows: quality !== 'low' }) : new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
   rocks.userOff = pure || !$('rocks-on').checked;
   T = { renderer, scene, sky, camera, hemi, sun, terrain, rocks, sunEl: Number($('sun-el').value), sunAz: Number($('sun-az').value), shadowExtent: 0, shadowMap: smap,
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
