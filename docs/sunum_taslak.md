@@ -27,14 +27,14 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
 ### Slayt 2: Bir segment kartı (çözümü tek karede göster)
 - **Başlık:** [PROJECT NAME]: every step explained
 - **Ana mesaj:** For each route segment we show the cost, the reason and the model's confidence.
-- **Maddeler (kartın içeriği):**
+- **Maddeler (kartın içeriği; ÖRNEK değerler, gerçek çıktıyla değiştirilecek):**
   - Segment 7 · 84 m · bedrock · slope 9° · 3.6 min · 21 kcal · confidence: high
   - "Chosen because it stays on bedrock; the alternative crosses sand (+40% energy)."
   - Budget: time, energy, O₂, radiation dose → **GO**
 - **Görsel:** Web arayüzünden tek bir segment kartı ekran görüntüsü. `[Samet'ten istenecek: S1 dengeli rota, segment kartı ekran görüntüsü; kart değerleri gerçek çıktıyla değiştirilecek]`
 
 ### Slayt 3: Veri
-- **Başlık:** Built on real NASA data from where Curiosity is driving now
+- **Başlık:** Built on real NASA data from where Curiosity drove in 2025–2026
 - **Ana mesaj:** Our region is the 2×2 km boxwork area that Curiosity explored in 2025–2026.
 - **Maddeler:**
   - Terrain: USGS MSL Gale merged HiRISE DTM (1 m) + orthophoto (25 cm), resampled to a 2 m grid.
@@ -88,7 +88,7 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
 |---|---|---|
 | **Impact** | 1, 7 | "A suited astronaut on Mars has a fixed oxygen and energy budget, and every wrong step costs both." / "Safer EVAs, less wasted oxygen, decisions astronauts and mission control can check." |
 | **Creativity** | 2, 4 | "For each route segment we show the cost, the reason and the model's confidence." Zemin modeli + insan fizyolojisi + açıklanabilir karar zinciri bir arada. |
-| **Validity** | 3, 6 | "Built on real NASA data from where Curiosity is driving now." / "Our balanced route stays on average 29 m from Curiosity's real track." / "We separate measurements from assumptions, and show both." |
+| **Validity** | 3, 6 | "Built on real NASA data from where Curiosity drove in 2025–2026." / "Our balanced route stays on average 29 m from Curiosity's real track." / "We separate measurements from assumptions, and show both." |
 | **Relevance** | 1, 3, 5 | Challenge "Interplanetary Survival Guide: Martian Map": Mars yüzeyinde insanlı yürüyüş rotası, gerçek Curiosity bölgesinde, NASA verisiyle. |
 | **Presentation** | 2, 5 | Tek segment kartı ile hızlı anlatım; canlı demo; 30 sn video (bölüm 3). |
 
@@ -98,7 +98,7 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
 
 | # | Süre | Ekranda | Seslendirme (EN) |
 |---|---|---|---|
-| 1 | 0–4 sn | Gale Krateri'nden boxwork bölgesine yakınlaşma (ortofoto) | "This is Gale Crater, where Curiosity is driving today." |
+| 1 | 0–4 sn | Gale Krateri'nden boxwork bölgesine yakınlaşma (ortofoto) | "This is Gale Crater, where Curiosity explored in 2025–2026." |
 | 2 | 4–9 sn | Eğim, kaya ve zemin katmanları sırayla açılıyor | "We turn NASA orbital data into slope, rocks and terrain type." |
 | 3 | 9–15 sn | Üç rota çiziliyor; bir segment kartı açılıyor | "Three routes: shortest, balanced, safest. Every segment explains why, and how sure we are." |
 | 4 | 15–20 sn | Bütçe paneli: süre, enerji, O₂, doz → GO | "Time, energy, oxygen and radiation decide: go or no-go." |
