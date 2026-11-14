@@ -7,6 +7,8 @@ import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
 import { SYNTH } from './detail.js';
 import { MapView } from './mapview.js';
+import { worldToPx, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
+import { RouteLine, Beacon, HazardDisc } from './routeline.js';
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -45,8 +47,13 @@ function onRouteChange(r) {
     `<div><b>${t.slope_max}°</b><span>maks. eğim</span></div><div><b>+${t.ascent_m} / −${t.descent_m} m</b><span>tırmanış / iniş</span></div>`;
   const sh = [r.start.shift_m > 1 ? `A ${r.start.shift_m} m` : '', r.goal.shift_m > 1 ? `B ${r.goal.shift_m} m` : ''].filter(Boolean).join(', ');
   $('route-shift').textContent = sh ? `⚠ ${sh} kaydırıldı (işaretlenen nokta DTM NoData boşluğundaydı; en yakın geçerli hücre kullanıldı).` : '';
-  $('route-note').title = `Dünya yürüyüşü (Tobler): ${t.min} dk. Skafandr hızı NASA APACHE (Mark III, Mars yerçekimi simülasyonu, tek katılımcı, 1,5 mph); eğim etkisi Mars için doğrulanmadı.`;
-  $('route-note').textContent = `Tobler (Dünya yürüyüşü): ${t.min} dk · ${r.segments.length} segment · hesap ${r.computeMs} ms (${r.expanded.toLocaleString('tr')} düğüm) · eğim ${man.nav.k ? '4 m' : ''} ızgarada · zemin sınıfı, kalori ve radyasyon planlayıcıdan gelecek`;
+  if (r.source === 'api') {
+    $('route-note').title = 'Rota planlayıcı API üzerinden (/route). Süre, kcal, zemin sınıfı ve güven planlayıcı modelidir (varsayımlar /assumptions; doğrulanmamış).';
+    $('route-note').textContent = `PLANLAYICI API · ${t.status} · ${t.min} dk · ${t.kcal} kcal · O₂ ${t.o2_L} L · ${r.segments.length} segment · ${r.computeMs} ms · ızgara 2 m`;
+  } else {
+    $('route-note').title = `Dünya yürüyüşü (Tobler): ${t.min} dk. Skafandr hızı NASA APACHE (Mark III, Mars yerçekimi simülasyonu, tek katılımcı, 1,5 mph); eğim etkisi Mars için doğrulanmadı.`;
+    $('route-note').textContent = `YEDEK yerel A* (${r.fallbackWhy || 'API yok'}) · Tobler (Dünya yürüyüşü): ${t.min} dk · ${r.segments.length} segment · hesap ${r.computeMs} ms (${r.expanded.toLocaleString('tr')} düğüm) · zemin sınıfı, kalori ve radyasyon yok`;
+  }
   const c = $('profile'), g = c.getContext('2d'), ys = r.heights.map((v) => (v == null ? NaN : v)), n = ys.length;
   const lo = Math.min(...ys.filter((v) => !isNaN(v))), hi = Math.max(...ys.filter((v) => !isNaN(v)));
   g.clearRect(0, 0, c.width, c.height); g.strokeStyle = '#ffb27a'; g.lineWidth = 2; g.beginPath();
@@ -98,6 +105,8 @@ function initThree() {
   rocks.userOff = pure || !$('rocks-on').checked;
   T = { renderer, scene, sky, camera, hemi, sun, terrain, rocks, sunEl: Number($('sun-el').value), sunAz: Number($('sun-az').value), shadowExtent: 0, shadowMap: smap,
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
+  const gY = (x, z) => groundY(x, z);
+  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY);
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); });
@@ -146,6 +155,13 @@ function enter3D(kind) {
     const c = nav.nearestValid(...nav.cellOf(...a), 400) || [0, 0];
     P.x = (c[0] + 0.5) * nav.cx; P.z = (c[1] + 0.5) * nav.cz; P.yaw = 0; P.pitch = -0.1; state = 'walk';
   }
+  T.oldLine.clear(); T.hazard.hide();
+  if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); } else { T.line.clear(); T.beacon.hide(); }
+  if (routeRun && r?.source === 'api') {   // sürpriz kum anı: rotanın ~%45'inde, 80 m önceden "algılanır" → /replan
+    const R = routeRun, at = R.total * 0.45; let i = 1; while (i < R.cum.length - 1 && R.cum[i] < at) i++;
+    const w = R.r.dense[i], px = worldToPx(geo, w[0], w[1]).map(Math.floor);
+    R.sand = { world: w, px, radius_m: 20, s: R.cum[i], fired: false };
+  }
   const gy = groundY(P.x, P.z); P.y = (gy ?? 0) + EYE; T.snap = true;
   toast(state === 'auto' ? 'Rota yürüyüşü başladı. Fareyle etrafa bak, W/A/S/D ile rotadan çık (R: rotaya dön).' : 'Serbest yürüyüş: W/A/S/D, Shift koş, F uçuş, M harita.');
 }
@@ -185,6 +201,24 @@ addEventListener('mousemove', (e) => {
   }
 });
 
+async function fireReplan() {
+  const R = routeRun, S = R.sand; S.fired = true;
+  T.hazard.set(S.world[0], S.world[1], S.radius_m);
+  toast('⚠ Kum tespit edildi (kırmızı bölge) — rota yeniden planlanıyor (POST /replan)…');
+  try {
+    const cur = worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
+    const t0 = performance.now();
+    const res = await apiReplan(cur, R.r.goalPx, [{ px: S.px, radius_m: S.radius_m, cls: 'sand' }]);
+    const rt = res.routes.find((x) => x.kind === R.r.kind) || res.routes[0];
+    const nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind }); nr.goalPx = R.r.goalPx; nr.startPx = cur; nr.start = R.r.start; nr.goal = R.r.goal; nr.computeMs = Math.round(performance.now() - t0);
+    const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
+    const oldLeft = (R.total - R.s) / 1000;
+    T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments);
+    routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, replanned: true, prev: { km: R.r.total.km, min: R.r.total.min } };
+    toast(`Yeni rota (${nr.computeMs} ms): ${nr.total.km} km · ${nr.total.min} dk · ${nr.total.status} — eski kalan ${oldLeft.toFixed(2)} km (gri). Kum bölgesi kaçınıldı.`);
+  } catch (e) { toast(`Yeniden planlama başarısız (${e.message}) — mevcut rotaya devam edilir.`); }
+}
+
 function stepPlayer(dt, t) {
   let moving = false;
   if (state === 'auto' && routeRun) {
@@ -198,6 +232,7 @@ function stepPlayer(dt, t) {
       const step = d * Math.min(1, dt * 1.6), lim = dt * 0.7;          // yumuşak takip + en çok ~40°/sn dönüş: rota köşelerinde sarsıntı yok
       P.yaw += Math.max(-lim, Math.min(lim, step));
     }
+    if (R.sand && !R.sand.fired && R.s >= R.sand.s - 80) fireReplan();
     moving = R.s < R.total;
     if (!moving && !R.done) { R.done = true; toast('Hedefe ulaşıldı. M: haritaya dön.'); }
   } else {
@@ -248,6 +283,7 @@ function frame(now) {
   const nearGround = gy != null && P.y - gy < 80;
   T.rocks.setEnabled(nearGround && !T.rocks.userOff);
   T.rocks.update(T.camera.position, T.terrain.version);
+  T.line.update(dt, T.terrain.version); T.oldLine.update(dt, T.terrain.version); T.beacon.update(now / 1000);
   // Gölge kamerası oyuncuyu izler; merkez IŞIK UZAYINDA gölge-haritası texel'ine yakalanır (dünya eksenine yakalamak gölgeyi titretirdi)
   const ext = state === 'fly' ? 420 : 130;
   if (T.shadowExtent !== ext) { const c = T.sun.shadow.camera; c.left = c.bottom = -ext; c.right = c.top = ext; c.near = 10; c.far = 1400; c.updateProjectionMatrix(); T.shadowExtent = ext; }
@@ -309,5 +345,6 @@ window.__mm = {
   },
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
   stats: () => ({ ...T.terrain.stats, fps, state }),
+  get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
 };
 if (Q.get('mod') === '3d') enter3D('walk');

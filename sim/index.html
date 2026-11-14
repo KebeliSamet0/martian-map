@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Martian Map — Prova</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="./lib/leaflet/leaflet.css">
 <style>
   :root { --bg:#14100d; --panel:rgba(24,17,13,.92); --line:rgba(255,178,122,.18); --ink:#f3e3d3; --dim:#bfa793; --accent:#ff9a5c; --accent2:#c1440e; }
   * { box-sizing: border-box; }
@@ -49,7 +49,7 @@
     <div class="step"><b>2</b><span>Tekrar tıkla: <b style="color:#ff3b30">B</b> (hedef). Rota otomatik hesaplanır; işaretleri sürükleyebilirsin.</span></div>
     <div class="step"><b>3</b><span><b>3B yürüyüş</b> ile rotayı astronot gözüyle yürü.</span></div>
     <label for="mode">Rota ölçütü</label>
-    <select id="mode"><option value="shortest">En kısa mesafe</option><option value="balanced">Dengeli (en kısa süre, Tobler)</option></select>
+    <select id="mode"><option value="shortest">En kısa mesafe</option><option value="balanced">Dengeli</option><option value="safest">En güvenli</option></select>
     <label for="maxslope">Azami eğim: <b id="maxslope-v">25°</b></label>
     <input id="maxslope" type="range" min="10" max="35" value="25">
     <div id="route-info" hidden>
@@ -80,8 +80,8 @@
   <button id="btn-map" style="width:100%;margin-top:8px">Haritaya dön (M)</button>
 </div>
 <div id="toast" hidden></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
+<script src="./lib/leaflet/leaflet.js"></script>
+<script type="importmap">{ "imports": { "three": "./lib/three.module.js" } }</script>
 <script type="module" src="./app/main.js"></script>
 </body>
 </html>

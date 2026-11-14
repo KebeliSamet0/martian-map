@@ -61,3 +61,13 @@ doğu-batı ölçeği cos(lat₀) ile düzeltilir.
 - Süre Tobler yürüme fonksiyonundan (Dünya'da yürüyüş için); Mars'ta skafandrlı yürüme için doğrulanmış model değildir.
 - Güneş yönü/yüksekliği ve gökyüzü rengi görsel yaklaşımdır; ortofotodaki gölgeler çekim anının güneşidir ve ışıkla çelişebilir.
 - Gerçek rover panoramaları (Curiosity Mastcam/Navcam) henüz bağlı değil.
+
+## Planlayıcı API ile çalıştırma (Sprint 2, issue #49)
+Rotanın tek kaynağı planlayıcı API'sidir (`POST /route`, `POST /replan`); `sim/app/api.js` bunu kullanır. API yoksa ya da A/B API bölgesi (`contracts/grid.json`, 2×2 km, haritada cyan kutu) dışındaysa yerel A* yedeği çalışır ve arayüzde **"YEDEK"** diye etiketlenir (`?api=off` ile zorla yedek).
+```sh
+# API (repo kökünden):  MARTIAN_LAYERS_DIR=$PWD uvicorn api.main:app --port 8000
+# sim (devserver 8001):  python sim/tools/devserver.py 8001      →  http://127.0.0.1:8001/sim/
+# başka API adresi:      http://127.0.0.1:8001/sim/?api=http://HOST:8000
+```
+Akış: haritada A ve B (cyan kutunun içi) → rota API'den gelir → **3B yürüyüş** → rotanın ~%45'ine 80 m kala "kum algılandı" → `POST /replan` → yeni rota çizilir (eski rota gri), kırmızı disk kum bölgesidir. Üç.js ve Leaflet `sim/lib/` altında yereldir (internetsiz çalışır; yalnız Trek/CTX taban haritaları çevrimiçidir, yerel renkli HiRISE katmanı çevrimdışı da görünür).
+Koordinat: ızgara px = [sütun, satır], hücre merkezi = idx+0.5; x = ox + px·2, y = oy − px·2 (eqc, R=3396190) → enlem/boylam → sim dünya (`Geo`). Sabitler `contracts/grid.json`'dan kopyadır (`api.js`).
