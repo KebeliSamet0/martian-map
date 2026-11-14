@@ -71,3 +71,11 @@ Rotanın tek kaynağı planlayıcı API'sidir (`POST /route`, `POST /replan`); `
 ```
 Akış: haritada A ve B (cyan kutunun içi) → rota API'den gelir → **3B yürüyüş** → rotanın ~%45'ine 80 m kala "kum algılandı" → `POST /replan` → yeni rota çizilir (eski rota gri), kırmızı disk kum bölgesidir. Üç.js ve Leaflet `sim/lib/` altında yereldir (internetsiz çalışır; yalnız Trek/CTX taban haritaları çevrimiçidir, yerel renkli HiRISE katmanı çevrimdışı da görünür).
 Koordinat: ızgara px = [sütun, satır], hücre merkezi = idx+0.5; x = ox + px·2, y = oy − px·2 (eqc, R=3396190) → enlem/boylam → sim dünya (`Geo`). Sabitler `contracts/grid.json`'dan kopyadır (`api.js`).
+
+## Karoların demo cihazına getirilmesi (sim/data/tiles; git dışı)
+Üç yol (en hızlısı USB):
+1. **USB/zip (önerilen, internetsiz):** `sim-tiles.zip` (277 MB, 7271 dosya, içinde `tiles/` klasörü) → `sim/data/` altına aç; sonuç `sim/data/tiles/manifest.json`. Doğrulama: `python -c "import json;print(json.load(open('sim/data/tiles/manifest.json'))['W'])"` → 6574.
+2. **Yeniden üret (internet + rasterio/numpy/pillow gerekir):** `python -I sim/tools/build_tiles.py` — girdiler USGS'de COG olarak (yalnız gereken bloklar HTTP aralık okumasıyla alınır, tam dosya inmez): HiRISE DTM `DTEEC_019698_1750_019988_1750_U01` ve `MSL_Gale_HiRISE-LRGB_78quads_sharp_cog` (URL'ler `manifest.json > sources`). Çıktı ≈356 MB (yükseklik 129 MB, doku 221 MB, nav 7 MB). Süre: bu makinede ölçülü bir kayıt tutulmadı (ağ hızına bağlı; var olan dosyalar atlandığı için yarıda kesilirse devam eder).
+3. Karo yokken sim açılır ama 3B arazi görünmez; harita ve rota (API) yine çalışır.
+
+Bölge uyumu: API ızgarası (`contracts/grid.json`, 2×2 km) sim alanının (6,6×8,7 km) tam içinde; ızgaranın 4 köşesi ve 4 bilim durağı sim yükseklik verisinde geçerli (NoData yok). **Bilinen fark:** planlayıcı DEM'i (USGS merged DEM v3, 2×2 ortalama) ile sim DTM'i (HiRISE T3) aynı px'te eşdeğer değil: ort. +7,2 m, RMSE 9,7 m; ampirik eşleme ≈ +30,7 m doğu / +33,5 m güney kayma ve −15,1 m düşey (RMSE 1,2 m). Sim rotanın X/Z'sini sözleşmeden, Y'sini kendi yüzeyinden alır; kayma **uygulanmadı** (bkz. #49 yorumu).
