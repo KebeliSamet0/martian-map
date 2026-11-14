@@ -47,8 +47,14 @@
   #hud { width:248px; max-height:170px; overflow:auto; font-size:11px; opacity:.8; }
   #hint { max-width:calc(100% - 560px); }
   @media(max-height:650px) { #hud { left:275px; width:250px; max-height:130px; } }
-  #stop-photo { position:fixed; z-index:2050; right:280px; bottom:18px; width:min(360px,40vw); margin:0; padding:8px; background:#14100df2; border:1px solid var(--line); }
-  #stop-photo img { display:block; width:100%; max-height:240px; object-fit:contain; } #stop-photo figcaption { font-size:11px; margin-top:5px; } #stop-photo button { float:right; }
+  /* Navcam kartı: küçükken sol kenarda, üst görev HUD'u ile alttaki #hud arasında; büyükken ortada (G / tıkla) */
+  #stop-photo { position:fixed; z-index:2050; left:14px; bottom:200px; width:240px; margin:0; padding:6px; background:#14100df2; border:1px solid var(--line); border-radius:6px; }
+  #stop-photo img { display:block; width:100%; height:135px; object-fit:cover; cursor:zoom-in; border-radius:3px; }
+  #stop-photo figcaption { font-size:11px; margin-top:4px; color:var(--dim); }
+  #stop-photo button { position:absolute; top:4px; right:4px; padding:0 6px; font-size:12px; line-height:18px; }
+  #stop-photo.big { left:50%; top:50%; bottom:auto; transform:translate(-50%,-50%); width:min(640px,80vw); padding:8px; }
+  #stop-photo.big img { height:auto; max-height:70vh; object-fit:contain; cursor:zoom-out; }
+  #stop-photo.big figcaption { font-size:12px; color:var(--ink); }
 </style>
 </head>
 <body>
@@ -81,7 +87,7 @@
 </div>
 <canvas id="gl" hidden></canvas>
 <div id="vig"></div>
-<figure id="stop-photo" hidden><button type="button">Kapat · Esc</button><img alt=""><figcaption></figcaption></figure>
+<figure id="stop-photo" hidden><button type="button" title="Kapat · Esc" aria-label="Kapat">×</button><img alt=""><figcaption></figcaption></figure>
 <div id="mission-ui"></div><div id="vitals-source" hidden></div>
 <div id="hud" class="card" hidden></div>
 <div id="hint" class="card" hidden><kbd>W A S D</kbd> yürü · <kbd>Shift</kbd> koş · <kbd>Fare</kbd> bak (tıkla) · <kbd>R</kbd> rotaya dön · <kbd>[</kbd><kbd>]</kbd> hız · <kbd>F</kbd> uçuş · <kbd>K</kbd> taş · <kbd>H</kbd> HUD · <kbd>B</kbd> baş sallama · <kbd>N</kbd> ses · <kbd>P</kbd> ard işlem · <kbd>V</kbd> saf veri · <kbd>L</kbd> Terrain Scanner (<kbd>Shift</kbd>+<kbd>L</kbd> geniş) · <kbd>T</kbd> 3. şahıs/FPS · <kbd>M</kbd> harita</div>
