@@ -3,11 +3,11 @@
     "id": "sci_1_sol4617",
     "name": "Boxwork inceleme alanı (sol 4617–4634)",
     "px": [
-      433,
-      525
+      433.5,
+      525.2
     ],
     "why": "Curiosity burada sol 4617–4634 arasında yakın inceleme yaptı: 644 MAHLI + 257 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %7'i). Boxwork: yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleştiği düşünülen sırt ağı; katmanlı sülfat birimi (LSu) içinde, kuru sülfat dönemindeki daha ıslak bir ara evreye işaret ediyor (NASA/JPL 2025; GSA 2025 — Elif Nisa, PR #32).",
-    "lat": -4.805863,
+    "lat": -4.805853,
     "lon": 137.379756,
     "evidence": {
       "sol_range": [
@@ -19,7 +19,7 @@
       "n_stops": 8,
       "score_share_pct": 6.5,
       "slope_deg": 11.1,
-      "anchor_stop": "site 118 drive 762"
+      "anchor_stop": "site 118 drive 762 (kumenin en yogun duragi)"
     },
     "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
   },
@@ -27,12 +27,12 @@
     "id": "sci_2_sol4635",
     "name": "Boxwork inceleme alanı (sol 4635–4653)",
     "px": [
-      435,
-      555
+      421.2,
+      545.3
     ],
     "why": "Curiosity burada sol 4635–4653 arasında yakın inceleme yaptı: 464 MAHLI + 388 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %6'i). Boxwork: yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleştiği düşünülen sırt ağı; katmanlı sülfat birimi (LSu) içinde, kuru sülfat dönemindeki daha ıslak bir ara evreye işaret ediyor (NASA/JPL 2025; GSA 2025 — Elif Nisa, PR #32).",
-    "lat": -4.806875,
-    "lon": 137.379824,
+    "lat": -4.806531,
+    "lon": 137.379341,
     "evidence": {
       "sol_range": [
         4635,
@@ -42,8 +42,9 @@
       "chemcam_images": 388,
       "n_stops": 7,
       "score_share_pct": 6.2,
-      "slope_deg": 13.4,
-      "anchor_stop": "site 118 drive 2268"
+      "slope_deg": 41.8,
+      "anchor_stop": "site 118 drive 1752 (kumenin en yogun duragi)",
+      "note": "2 m DEM egimi bu hucrede >=25 derece; rover bu bolgede en fazla ~15 derece egik gecti (MMGIS tilt). DEM sirt kenarinda egimi abartiyor; planlayici NOGO esigi bu noktayi hedef olarak reddedebilir."
     },
     "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
   },
@@ -51,11 +52,11 @@
     "id": "sci_3_sol4668",
     "name": "Boxwork inceleme alanı (sol 4668–4803)",
     "px": [
-      470,
-      589
+      470.5,
+      589.1
     ],
     "why": "Curiosity burada sol 4668–4803 arasında yakın inceleme yaptı: 1502 MAHLI + 1143 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %19'i). Boxwork: yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleştiği düşünülen sırt ağı; katmanlı sülfat birimi (LSu) içinde, kuru sülfat dönemindeki daha ıslak bir ara evreye işaret ediyor (NASA/JPL 2025; GSA 2025 — Elif Nisa, PR #32).",
-    "lat": -4.808022,
+    "lat": -4.808009,
     "lon": 137.381005,
     "evidence": {
       "sol_range": [
@@ -67,7 +68,7 @@
       "n_stops": 12,
       "score_share_pct": 19.2,
       "slope_deg": 13.6,
-      "anchor_stop": "site 120 drive 82"
+      "anchor_stop": "site 120 drive 82 (kumenin en yogun duragi)"
     },
     "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
   },
@@ -75,12 +76,12 @@
     "id": "sci_4_sol4869",
     "name": "Katmanlı sülfat inceleme alanı (sol 4869–4914)",
     "px": [
-      491,
-      774
+      491.3,
+      774.6
     ],
     "why": "Curiosity burada sol 4869–4914 arasında yakın inceleme yaptı: 563 MAHLI + 675 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %9'i). Boxwork kampanyası (sol ~4600–4844) sonrasında, aynı katmanlı sülfat biriminde ikinci büyük inceleme alanı; bilimsel bağlam Elif Nisa tarafından kaynakla tamamlanacak.",
-    "lat": -4.814265,
-    "lon": 137.381713,
+    "lat": -4.814268,
+    "lon": 137.381706,
     "evidence": {
       "sol_range": [
         4869,
@@ -91,7 +92,7 @@
       "n_stops": 5,
       "score_share_pct": 9.0,
       "slope_deg": 14.9,
-      "anchor_stop": "site 122 drive 0"
+      "anchor_stop": "site 122 drive 0 (kumenin en yogun duragi)"
     },
     "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
   }
