@@ -55,14 +55,14 @@
           },
           "used": {
             "time_min": 65.148,
-            "kcal": 259.597,
-            "o2_L": 54.083,
+            "kcal": 259.721,
+            "o2_L": 54.109,
             "dose_uGy": 9.501
           },
           "exceeded": [],
           "first_exceeded": [],
           "return_min": 2.574,
-          "return_kcal": 12.781
+          "return_kcal": 12.844
         }
       },
       "segments": [
@@ -195,14 +195,14 @@
           },
           "used": {
             "time_min": 65.148,
-            "kcal": 259.597,
-            "o2_L": 54.083,
+            "kcal": 259.721,
+            "o2_L": 54.109,
             "dose_uGy": 9.501
           },
           "exceeded": [],
           "first_exceeded": [],
           "return_min": 2.574,
-          "return_kcal": 12.781
+          "return_kcal": 12.844
         }
       },
       "segments": [
@@ -335,14 +335,14 @@
           },
           "used": {
             "time_min": 65.148,
-            "kcal": 259.597,
-            "o2_L": 54.083,
+            "kcal": 259.721,
+            "o2_L": 54.109,
             "dose_uGy": 9.501
           },
           "exceeded": [],
           "first_exceeded": [],
           "return_min": 2.574,
-          "return_kcal": 12.781
+          "return_kcal": 12.844
         }
       },
       "segments": [
