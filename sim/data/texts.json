@@ -744,5 +744,8 @@
     "layers_fallback": "Zemin katmanları alınamadı; yürüyüş hissi yalnız eğimden hesaplanıyor.",
     "source_layers": "Zemin: API katmanları (model tahmini)",
     "source_fallback": "Zemin: yedek (yalnız eğim)"
+  },
+  "offline": {
+    "badge": "Çevrimdışı yedek: önceden hesaplanmış rota (planlayıcı canlı değil)."
   }
 }
