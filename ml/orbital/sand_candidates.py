@@ -25,6 +25,9 @@ ap.add_argument("cmd", choices=["find", "write"])
 ap.add_argument("--tif", default="data/raw/gale_2x2km_25cm.tif")
 ap.add_argument("--path", default="layers/msl_proposed_path.json")
 ap.add_argument("--accept", default="", help="onaylanan aday numaralari, ornek 1,4,7")
+ap.add_argument("--csv", default=OUT_CSV, help="write: onay sutunu olan aday CSV'si")
+ap.add_argument("--append", action="store_true", help="write: layers/sand_hint.json'a ekle (id'ler devam eder)")
+ap.add_argument("--note", default="", help="write: gerekceye eklenecek ek not")
 ap.add_argument("--n-near", type=int, default=8)
 ap.add_argument("--n-far", type=int, default=7)
 a = ap.parse_args()
@@ -115,9 +118,11 @@ if a.cmd == "find":
     print("yazildi:", OUT_CSV, "docs/data/img/sand_sheet_*.png")
 
 else:  # write
-    rows = list(csv.DictReader(open(OUT_CSV, encoding="utf-8")))
+    rows = list(csv.DictReader(open(a.csv, encoding="utf-8")))
     acc = {int(x) for x in a.accept.split(",") if x.strip()}
-    out = []
+    old = json.load(open("layers/sand_hint.json", encoding="utf-8")) if a.append else None
+    out = list(old["points"]) if old else []
+    n0 = len(out)
     for r in rows:
         if int(r["no"]) not in acc:
             continue
@@ -127,10 +132,12 @@ else:  # write
             "px": [float(r["col"]), float(r["row"])],
             "radius_m": float(r["radius_m"]),
             "reason": ("Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. "
-                       "Ortofotodan aday, gozle dogrulandi." + (f" Curiosity rotasina ~{float(r['rota_uzaklik_m']):.0f} m." if near else "")),
+                       "Ortofotodan aday, gozle dogrulandi." + (f" Curiosity rotasina ~{float(r['rota_uzaklik_m']):.0f} m." if near else "")
+                       + (" " + a.note if a.note else "")),
             "route_dist_m": float(r["rota_uzaklik_m"]),
         })
-    doc = {"description": "Ortofotoda kum olma ihtimali yuksek adaylar (kesin degil). px = [sutun, satir], contracts/grid.json izgarasinda (2 m hucre, ondalikli).",
-           "source": "ml/orbital/sand_candidates.py, Bora gozle dogruladi", "points": out}
+    doc = old if old else {"description": "Ortofotoda kum olma ihtimali yuksek adaylar (kesin degil). px = [sutun, satir], contracts/grid.json izgarasinda (2 m hucre, ondalikli).",
+           "source": "ml/orbital/sand_candidates.py, Bora gozle dogruladi"}
+    doc["points"] = out
     json.dump(doc, open("layers/sand_hint.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-    print(f"{len(out)} nokta yazildi: layers/sand_hint.json")
+    print(f"{len(out)-n0} nokta eklendi, toplam {len(out)}: layers/sand_hint.json")
