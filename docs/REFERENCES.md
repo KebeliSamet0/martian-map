@@ -10,4 +10,5 @@
 (eklenecek)
 
 ## Makaleler
+- Hassler et al. (2014), Mars’ Surface Radiation Environment Measured with the Mars Science Laboratory’s Curiosity Rover. Science 343, 1244797. https://doi.org/10.1126/science.1244797 — Gale yüzeyi GCR soğurulan doz ortalaması 0.210 ± 0.040 mGy/gün; EVA modeli sabit 0.21 kullanır. [Tam metin](https://www.scienceintheclassroom.org/sites/default/files/research-papers/1244797.full_.pdf).
 - Swan, R. M. et al. (2021). AI4MARS: A Dataset for Terrain-Aware Autonomous Driving on Mars. CVPR Workshops (AI4Space).

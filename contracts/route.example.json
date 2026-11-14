@@ -1,22 +1,152 @@
 {
-  "kind": "balanced",
-  "start": {"px": [120, 860], "name": "Habitat"},
-  "goal": {"px": [640, 210], "name": "Boxwork durağı"},
-  "total": {"km": 4.1, "min": 170, "kcal": 610, "dose_uGy": 25, "walkback_ok": true, "go": true},
-  "segments": [
+  "grid": {
+    "region": "SAHTE VERİ — Gale benzeri sentetik arazi",
+    "width": 250,
+    "height": 250,
+    "res_m": 8.0,
+    "synthetic": true,
+    "px_note": "Koordinatlar [x, y] = [sütun, satır]; (0,0) sol üst köşe"
+  },
+  "routes": [
     {
-      "id": 4,
-      "path_px": [[300, 600], [330, 570]],
-      "len_m": 340,
-      "slope_max": 9.0,
-      "p_sand": 0.62,
-      "rock_cfa": 0.04,
-      "conf": "low",
-      "nearest_evidence_m": 410,
-      "kcal": 58,
-      "min": 11,
-      "reason": "Kum ağırlıklı, +%18 kcal",
-      "rejected_alt": "Kuzey: 18° eğim + kum, +40 dk, dönüş payı aşılıyor"
+      "kind": "balanced",
+      "label": "Dengeli",
+      "weights": {
+        "t": 1.0,
+        "k": 10.0,
+        "r": 4.0
+      },
+      "start": {
+        "px": [
+          110,
+          235
+        ]
+      },
+      "goal": {
+        "px": [
+          110,
+          227
+        ]
+      },
+      "total": {
+        "km": 0.06,
+        "min": 2.6,
+        "eva_min": 35.1,
+        "eva_limit_min": 360.0,
+        "kcal": 13.0,
+        "eva_kcal": 26.0,
+        "o2_L": 5.0,
+        "dose_uGy": 5.1,
+        "slope_max": 7.4,
+        "low_conf_m": 64.0,
+        "walkback_ok": true,
+        "limit_exceeded_at_m": null,
+        "go": true,
+        "status": "GO",
+        "limit_exceeded_at_px": null,
+        "limit_exceeded_at_index": null,
+        "budget": {
+          "limits": {
+            "time_min": 360.0,
+            "kcal": 2000.0,
+            "o2_L": 420.0,
+            "dose_uGy": 60.0,
+            "reserve_min": 30.0
+          },
+          "used": {
+            "time_min": 65.148,
+            "kcal": 259.721,
+            "o2_L": 54.109,
+            "dose_uGy": 9.501
+          },
+          "exceeded": [],
+          "first_exceeded": [],
+          "return_min": 2.574,
+          "return_kcal": 12.844
+        }
+      },
+      "segments": [
+        {
+          "id": 1,
+          "path_px": [
+            [
+              110,
+              235
+            ],
+            [
+              110,
+              234
+            ],
+            [
+              110,
+              233
+            ],
+            [
+              110,
+              232
+            ]
+          ],
+          "len_m": 24.0,
+          "slope_max": 7.3,
+          "slope_mean": 6.8,
+          "class": "bedrock",
+          "p_sand": 0.24,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.041,
+          "entropy": 0.63,
+          "conf": "low",
+          "nearest_evidence_m": 97.0,
+          "kcal": 4.2,
+          "min": 0.9,
+          "risk": 4.82,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%115 kcal. Model emin değil: en yakın rover kanıtı 97 m uzakta."
+        },
+        {
+          "id": 2,
+          "path_px": [
+            [
+              110,
+              232
+            ],
+            [
+              110,
+              231
+            ],
+            [
+              110,
+              230
+            ],
+            [
+              110,
+              229
+            ],
+            [
+              110,
+              228
+            ],
+            [
+              110,
+              227
+            ]
+          ],
+          "len_m": 40.0,
+          "slope_max": 7.4,
+          "slope_mean": 6.6,
+          "class": "sand",
+          "p_sand": 0.59,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.029,
+          "entropy": 0.63,
+          "conf": "low",
+          "nearest_evidence_m": 58.0,
+          "kcal": 8.6,
+          "min": 1.7,
+          "risk": 6.51,
+          "rejected_alt": null,
+          "reason": "Kum ağırlıklı (%59); düz ana kayaya göre +%165 kcal. Model emin değil: en yakın rover kanıtı 58 m uzakta."
+        }
+      ]
     }
   ]
 }
