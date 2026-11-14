@@ -49,7 +49,9 @@
     "grade_C": "Plandan belirgin sapma (%25'ten fazla); rota gözden geçirilmeli.",
     "grade_D": "Bir sınır aşıldı: oksijen, enerji, süre ya da doz.",
     "grade_F": "Görev tamamlanmadı. Bütçe yetmiyorsa geri dönmek doğru karardır.",
-    "planned": "Planlanan",
-    "actual": "Gerçekleşen"
+    "planned": "Planlanan (tek yön)",
+    "actual": "Gerçekleşen",
+    "retry": "Görevi tekrarla",
+    "close": "Haritaya dön"
   }
 }
