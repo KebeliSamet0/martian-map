@@ -269,9 +269,15 @@ export class Sky {
     this._shadowUpgraded = false;
   }
 
+  /** Açılış/menü turu için daha berrak hava (pus yoğunluğu ~yarı): uzak katmanlı Mount Sharp okunur. Oyunda setTour(false). */
+  setTour(on) {
+    this.tour = !!on;
+    this.fog.density = this.enabled ? (on ? 0.00034 : 0.00072) : 0.00018;
+  }
+
   setEnabled(on) {
     this.enabled = !!on;
-    this.fog.density = on ? 0.00072 : 0.00018;
+    this.fog.density = on ? (this.tour ? 0.00034 : 0.00072) : 0.00018;
     this.bounceLight.visible = !!on;
   }
 
