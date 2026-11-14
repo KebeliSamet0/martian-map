@@ -1,0 +1,80 @@
+"""Planlayıcı parametreleri.
+
+Her değerin yanında kaynağı ya da VARSAYIM etiketi var. VARSAYIM etiketli değerler
+Elif Nisa'nın docs/metabolic_model.md doğrulamasıyla güncellenecek; arayüz bu
+listeyi /assumptions uç noktasından okuyup ekranda gösterir.
+"""
+
+G_EARTH = 9.81
+G_MARS = 3.71  # m/s²
+G_RATIO = G_MARS / G_EARTH
+
+# Kütleler (kg)
+BODY_KG = 80.0  # VARSAYIM: astronot
+SUIT_KG = 120.0  # VARSAYIM: skafandr + yaşam destek ünitesi (xEMU mertebesi, doğrulanacak)
+TOOLS_KG = 10.0  # VARSAYIM: taşınan bilim ekipmanı
+
+# Yürüme hızı
+BASE_SPEED_MS = 0.8  # VARSAYIM: düz, sıkı zeminde skafandrlı yürüyüş (Apollo mertebesi, doğrulanacak)
+
+# Metabolik kalibrasyon: Pandolf göreli yapıyı verir, mutlak düzey düz ana kayada
+# bu değere eşitlenir. Apollo ay EVA'larının ortalaması ~234 kcal/saat ≈ 272 W
+# (Waligora & Horrigan 1975; DOĞRULANACAK).
+FLAT_REFERENCE_W = 272.0
+
+# Zemin sınıfları: AI4Mars sırası
+CLASSES = ("soil", "bedrock", "sand", "bigrock")
+CLASS_TR = {"soil": "toprak", "bedrock": "ana kaya", "sand": "kum", "bigrock": "büyük kaya"}
+
+# Pandolf arazi katsayısı η (Pandolf 1977 tablosu; DOĞRULANACAK)
+TERRAIN_ETA = {"bedrock": 1.0, "soil": 1.2, "sand": 2.1, "bigrock": 1.5}
+# Zemine göre hız çarpanı
+TERRAIN_SPEED = {"bedrock": 1.0, "soil": 0.95, "sand": 0.6, "bigrock": 0.5}  # VARSAYIM
+
+# Eğim sınırları (derece)
+SLOPE_RISKY_DEG = 15.0  # VARSAYIM (rakip projelerle aynı eşik; kaynak aranacak)
+SLOPE_NOGO_DEG = 25.0  # VARSAYIM
+
+# EVA bütçesi
+EVA_MAX_H = 6.0  # VARSAYIM: toplam yürüyüş + durak süresi
+SCIENCE_STOP_MIN = 30.0  # VARSAYIM: hedefte bilim çalışması
+RESERVE_MIN = 30.0  # VARSAYIM: eve dönüş için yedek pay
+
+# Radyasyon: Curiosity RAD yüzey dozu ~180–225 µGy/gün (Hassler et al. 2014)
+DOSE_UGY_PER_H = 210.0 / 24.0
+
+# Oksijen: 1 L O₂ ≈ 4.8 kcal (dolaylı kalorimetri kalorik eşdeğeri)
+KCAL_PER_L_O2 = 4.8
+
+# Rota ön ayarları: hücre maliyeti = t·süre + k·kcal + r·risk (hepsi metre başına)
+PRESETS = {
+    "shortest": {"t": 1.0, "k": 0.0, "r": 0.0, "label": "En kısa"},
+    "balanced": {"t": 1.0, "k": 10.0, "r": 4.0, "label": "Dengeli"},
+    "safest": {"t": 1.0, "k": 10.0, "r": 25.0, "label": "En güvenli"},
+}
+
+# Segmentleme
+SEG_MIN_M = 40.0
+SEG_MAX_M = 150.0
+SLOPE_BANDS = (8.0, 15.0, 25.0)
+
+# Güven sınıfları (normalize entropi)
+CONF_LOW = 0.6
+CONF_MID = 0.35
+
+
+def assumptions():
+    """Arayüzde gösterilecek varsayım tablosu."""
+    return [
+        {"name": "Astronot kütlesi", "value": BODY_KG, "unit": "kg", "source": "VARSAYIM"},
+        {"name": "Skafandr + yaşam destek", "value": SUIT_KG, "unit": "kg", "source": "VARSAYIM (doğrulanacak)"},
+        {"name": "Ekipman", "value": TOOLS_KG, "unit": "kg", "source": "VARSAYIM"},
+        {"name": "Temel yürüme hızı", "value": BASE_SPEED_MS, "unit": "m/s", "source": "VARSAYIM (doğrulanacak)"},
+        {"name": "Düz zemin metabolik düzeyi", "value": FLAT_REFERENCE_W, "unit": "W", "source": "Apollo EVA ortalaması, Waligora & Horrigan 1975 (doğrulanacak)"},
+        {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": "Pandolf 1977 (doğrulanacak)"},
+        {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "VARSAYIM"},
+        {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "VARSAYIM"},
+        {"name": "Maksimum EVA süresi", "value": EVA_MAX_H, "unit": "saat", "source": "VARSAYIM"},
+        {"name": "Yüzey doz hızı", "value": round(DOSE_UGY_PER_H, 2), "unit": "µGy/saat", "source": "Curiosity RAD, Hassler et al. 2014"},
+        {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir"},
+    ]
