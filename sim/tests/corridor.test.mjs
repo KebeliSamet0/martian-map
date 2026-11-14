@@ -2,7 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 globalThis.location ??= { search: '' };  // api.js tarayıcıda location okur
-const { createStopWatcher, createStopCard, toWorld, NEAR_M, REARM_M } = await import('../app/corridor.js');
+import { register } from 'node:module';
+// 'three' tarayıcıda importmap ile çözülür; testte sim/lib kopyasına yönlendir
+register('data:text/javascript,' + encodeURIComponent(`export async function resolve(s, c, next) {
+  return s === 'three' ? { url: ${JSON.stringify(new URL('../lib/three.module.js', import.meta.url).href)}, shortCircuit: true } : next(s, c); }`));
+const { createStopWatcher, createStopCard, toWorld, markerEmphasis, initCorridor, NEAR_M, REARM_M, NOTICE_M, MARKER_GROW } = await import('../app/corridor.js');
 const { GRID } = await import('../app/api.js');
 
 // Basit Geo: eqc metre → dünya (x doğu, z güney), ızgaranın KB köşesi orijin
@@ -62,4 +66,31 @@ test('modal açıkken kart açılmaz', () => {
   const card = createStopCard({ show() { throw new Error('açılmamalı'); }, expand() {}, hide() {} });
   card.update({ entered: [{ id: 'a' }], exited: [] }, { blocked: true });
   assert.equal(card.current, null);
+});
+
+test('işaretçi vurgusu: 40 m ötesi 0, 15 m içi sabit 1, arada artar', () => {
+  assert.equal(markerEmphasis(NOTICE_M + 10), 0);
+  assert.equal(markerEmphasis(NOTICE_M), 0);
+  assert.equal(markerEmphasis(NEAR_M), 1);
+  assert.equal(markerEmphasis(3), 1);
+  const seq = [38, 32, 26, 20, 16].map(d => markerEmphasis(d));
+  assert.ok(seq.every((v, i) => i === 0 || v > seq[i - 1]) && seq.every(v => v > 0 && v < 1));
+});
+
+test('3B: yaklaşırken yalnız o durağın işaretçisi büyür ve parlar, uzaklaşınca söner', async () => {
+  const THREE = await import('three');
+  const data = JSON.parse(await readFile(new URL('../data/curiosity.json', import.meta.url), 'utf8'));
+  const scene = new THREE.Scene();
+  const c = await initCorridor(scene, { heightAt: () => 0, version: 1 }, geo, { data });
+  const marks = scene.getObjectByName('curiosity-corridor').children.slice(1);
+  assert.equal(marks.length, c.stops.length);
+  const s = c.stops[5], m = marks[5], other = marks[15], col0 = m.userData.mat.color.getHex();
+  const at = d => c.update({ x: s.world[0] + d, z: s.world[1] });
+  at(80); assert.equal(m.scale.x, 1);
+  at(30); assert.ok(m.scale.x > 1 && m.scale.x < 1 + MARKER_GROW);
+  at(10); assert.ok(Math.abs(m.scale.x - (1 + MARKER_GROW)) < 1e-9); assert.notEqual(m.userData.mat.color.getHex(), col0);
+  at(2); assert.ok(Math.abs(m.scale.x - (1 + MARKER_GROW)) < 1e-9);       // içeride sabit
+  assert.equal(other.scale.x, 1); assert.notEqual(m.userData.mat, other.userData.mat);
+  at(80); assert.equal(m.scale.x, 1); assert.equal(m.userData.mat.color.getHex(), col0);
+  c.dispose();
 });

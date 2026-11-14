@@ -6,6 +6,14 @@ import { pxToWorld } from './api.js';
 
 export const NEAR_M = 15;    // olay yarıçapı (brif)
 export const REARM_M = 25;   // bu kadar uzaklaşınca aynı durak yeniden tetiklenebilir (sınırda titreşmesin)
+export const NOTICE_M = 40;  // işaretçi bu mesafeden itibaren belirginleşir (kart açılmadan önce fark edilsin)
+export const MARKER_GROW = 0.6;  // en yakında boy +%60
+
+/** İşaretçi vurgusu 0..1: NOTICE_M ve ötesi 0, NEAR_M ve içi 1 (sabit), arada yumuşak geçiş (smoothstep). */
+export function markerEmphasis(d, { far = NOTICE_M, near = NEAR_M } = {}) {
+  const t = Math.min(1, Math.max(0, (far - d) / (far - near)));
+  return t * t * (3 - 2 * t);
+}
 
 /** curiosity.json → dünya koordinatları; durağa fotoğrafın tam adresi eklenir. */
 export function toWorld(data, geo, { dataBase } = {}) {
@@ -76,10 +84,20 @@ export async function initCorridor(scene, terrain, geo, { groundY, data, url, li
 
   const poleGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.1, 6), headGeo = new THREE.OctahedronGeometry(0.11);
   const markMat = new THREE.MeshBasicMaterial({ color: 0xe0a23a, toneMapped: false, transparent: true, opacity: 0.85 });
+  const baseCol = new THREE.Color(0xe0a23a), nearCol = new THREE.Color(0xffd98a);
   const markers = stops.map(s => {
-    const m = new THREE.Group(), pole = new THREE.Mesh(poleGeo, markMat), head = new THREE.Mesh(headGeo, markMat);
-    pole.position.y = 0.55; head.position.y = 1.22; m.add(pole, head); m.userData.stop = s; group.add(m); return m;
+    const mat = markMat.clone();  // durak başına: yakınlıkta yalnız o işaretçi parlar
+    const m = new THREE.Group(), pole = new THREE.Mesh(poleGeo, mat), head = new THREE.Mesh(headGeo, mat);
+    pole.position.y = 0.55; head.position.y = 1.22; m.add(pole, head); m.userData = { stop: s, mat, e: 0 }; group.add(m); return m;
   });
+  function emphasize(pos) {  // NOTICE_M içinde boy ve parlaklık artar, NEAR_M içinde en üstte sabit
+    const x = Array.isArray(pos) ? pos[0] : pos.x, z = Array.isArray(pos) ? pos[1] : pos.z;
+    for (const m of markers) {
+      const u = m.userData, e = markerEmphasis(Math.hypot(u.stop.world[0] - x, u.stop.world[1] - z));
+      if (Math.abs(e - u.e) < 0.01) continue;
+      u.e = e; m.scale.setScalar(1 + MARKER_GROW * e); u.mat.color.copy(baseCol).lerp(nearCol, e); u.mat.opacity = 0.85 + 0.15 * e;
+    }
+  }
 
   function build() {  // Curiosity'nin iki tekerlek izi: yol ekseninin ±track/2 yanında, her biri `width` genişlikte ince şerit (temsili; iz genişliği ≈ 2,8 m)
     const n = trail.length, w = width / 2, pos = new Float32Array(n * 12), idx = [];
@@ -111,6 +129,7 @@ export async function initCorridor(scene, terrain, geo, { groundY, data, url, li
       const v = terrain?.version ?? 0, now = performance.now();
       if (v !== built && now - lastBuild > 900) { build(); built = v; lastBuild = now; }
       if (!pos || !group.visible) return { entered: [], exited: [] };
+      emphasize(pos);
       const r = watcher.step(pos);
       for (const s of r.entered) globalThis.dispatchEvent?.(new CustomEvent('corridor:stop', { detail: s }));
       for (const s of r.exited) globalThis.dispatchEvent?.(new CustomEvent('corridor:leave', { detail: s }));
@@ -119,6 +138,7 @@ export async function initCorridor(scene, terrain, geo, { groundY, data, url, li
     setVisible(on) { group.visible = !!on; if (!on) watcher.reset(); },
     dispose() {
       scene.remove(group); line.geometry.dispose(); lineMat.dispose(); poleGeo.dispose(); headGeo.dispose(); markMat.dispose();
+      for (const m of markers) m.userData.mat.dispose();
     },
   };
 }
