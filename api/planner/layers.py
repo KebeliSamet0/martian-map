@@ -140,28 +140,80 @@ def synthetic(width: int = 250, height: int = 250, res_m: float = 8.0, seed: int
     )
 
 
-def load(layers_dir: Path = LAYERS_DIR) -> Layers:
-    grid_path = layers_dir / "grid.json"
-    if not grid_path.exists():
+class LayerError(ValueError):
+    """Gerçek katman paketi yüklenemedi; sentetiğe sessiz geçiş yapılmaz."""
+
+
+def load(layers_dir: Path | None = None) -> Layers:
+    selected = layers_dir or os.environ.get("MARTIAN_LAYERS_DIR") or os.environ.get("MM_LAYERS_DIR")
+    if selected is None:
         return synthetic()
-    g = json.loads(grid_path.read_text(encoding="utf-8"))
-    ld = lambda name: np.load(layers_dir / f"{name}.npy").astype(np.float32)
-    elev = ld("elevation")
-    slope = ld("slope") if (layers_dir / "slope.npy").exists() else slope_deg(elev, g["res_m"])
-    h, w = elev.shape
-    rock = ld("rock_cfa") if (layers_dir / "rock_cfa.npy").exists() else np.zeros_like(elev)
-    probs = {}
-    for c in P.CLASSES:
-        f = layers_dir / f"p_{c}.npy"
-        probs[c] = ld(f"p_{c}") if f.exists() else np.full_like(elev, 0.25)
-    ent = ld("entropy") if (layers_dir / "entropy.npy").exists() else np.ones_like(elev)
-    stops = []
-    rs = layers_dir / "rover_stops.json"
-    if rs.exists():
-        stops = [{"stop_id": s["stop_id"], "px": s["px"]} for s in json.loads(rs.read_text(encoding="utf-8"))]
-    sci = []
-    ss = layers_dir / "science_stops.json"
-    if ss.exists():
-        sci = json.loads(ss.read_text(encoding="utf-8"))
-    return Layers(w, h, float(g["res_m"]), elev, slope, rock, probs, ent, stops, sci,
-                  synthetic=False, region=g.get("region", ""))
+    root = Path(selected)
+    try:
+        g = json.loads((root / "grid.json").read_text(encoding="utf-8"))
+        w, h, res = g["width"], g["height"], g["res_m"]
+        if type(w) is not int or type(h) is not int or min(w, h) <= 0:
+            raise LayerError("grid.json: width/height pozitif tam sayı olmalı")
+        if isinstance(res, bool) or not isinstance(res, (int, float)) or not np.isfinite(res) or res <= 0:
+            raise LayerError("grid.json: res_m pozitif sonlu metre değeri olmalı")
+        crs = g.get("crs", g.get("crs_note"))
+        if not isinstance(crs, str) or not crs.strip():
+            raise LayerError("grid.json: crs veya crs_note metrik projeksiyon açıklaması gerekli")
+        if g.get("units", "m") != "m" or crs.upper() in ("EPSG:4326", "EPSG:49900"):
+            raise LayerError("grid.json: açısal değil metrik CRS ve metre birimi gerekli")
+        origin = np.asarray(g["origin_xy_m"], dtype=float)
+        if origin.shape != (2,) or not np.isfinite(origin).all():
+            raise LayerError("grid.json: origin_xy_m iki sonlu sayı olmalı")
+
+        def path_for(name):
+            entry = g["layers"][name]
+            if isinstance(entry, dict):
+                for key, expected in (("crs", crs), ("res_m", res), ("origin_xy_m", g["origin_xy_m"])):
+                    if key in entry and entry[key] != expected:
+                        raise LayerError(f"{name}: {key} metadata ızgarayla uyumsuz")
+                rel = entry["path"]
+            else:
+                # Eski örneğin 'dosya.npy  float32, birim' açıklamasını da kabul et.
+                rel = entry.split("  ", 1)[0]
+            path = (root / rel).resolve()
+            if not path.is_relative_to(root.resolve()):
+                raise LayerError(f"{name}: dosya katman klasörü dışında olamaz")
+            return path, entry
+
+        def ld(name):
+            path, entry = path_for(name)
+            a = np.load(path, allow_pickle=False)
+            if a.shape != (h, w) or a.dtype.kind not in "fiu":
+                raise LayerError(f"{name}: beklenen şekil {(h, w)} ve sayısal dizi; gelen {a.shape}")
+            nodata = entry.get("nodata", g.get("nodata")) if isinstance(entry, dict) else g.get("nodata")
+            if not np.isfinite(a).all() or (nodata is not None and np.any(a == nodata)):
+                raise LayerError(f"{name}: NaN/sonsuz/no-data hücre var; paketi doldurun veya geçerli bölgeye kırpın")
+            if name == "slope" and (np.any(a < 0) or np.any(a > 90)):
+                raise LayerError("slope: eğim 0–90 derece aralığında olmalı")
+            if name.startswith("p_") or name in ("rock_cfa", "entropy"):
+                if np.any(a < 0) or np.any(a > 1):
+                    raise LayerError(f"{name}: değerler 0–1 aralığında olmalı")
+            a = a.astype(np.float32)
+            if not np.isfinite(a).all():
+                raise LayerError(f"{name}: float32 aralığı aşıldı")
+            return a
+
+        elev, slope, rock, ent = (ld(n) for n in ("elevation", "slope", "rock_cfa", "entropy"))
+        probs = {c: ld(f"p_{c}") for c in P.CLASSES}
+        if not np.allclose(sum(probs.values()), 1, atol=1e-3, rtol=0):
+            raise LayerError("Sınıf olasılıkları her hücrede toplam 1 olmalı")
+        def stops(name, fallback):
+            path = path_for(name)[0] if name in g["layers"] else root / fallback
+            values = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+            for item in values:
+                px = item["px"]
+                if len(px) != 2 or any(type(v) is not int for v in px) or not (0 <= px[0] < w and 0 <= px[1] < h):
+                    raise LayerError(f"{name}: durak px ızgara içinde tam sayı [x,y] olmalı")
+            return values
+        return Layers(w, h, float(res), elev, slope, rock, probs, ent,
+                      stops("rover_stops", "rover_stops.json"), stops("science", "science_stops.json"),
+                      synthetic=False, region=g.get("region", ""))
+    except LayerError:
+        raise
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        raise LayerError(f"Katman paketi okunamadı ({root}): {exc}") from exc

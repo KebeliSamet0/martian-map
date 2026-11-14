@@ -7,7 +7,7 @@ katman adlarını ve durakları içerir. Koordinatlar her yerde `[x,y]` =
 
 `route.example.json`, sentetik arazi üzerinde `[110,235]` başlangıcından üretilmiş
 **gerçek API yanıt biçimidir**. Kısaltma amacıyla yalnız `balanced` rota tutuldu;
-bu kısa yolun iki segmenti ve tüm yol noktaları korunmuştur. Normal `/route`
+bu kısa yolun tüm segmentleri ve yol noktaları korunmuştur. Normal `/route`
 ve `/replan` yanıtlarında üç rota bulunur.
 
 | Alan | Anlam |
@@ -67,3 +67,61 @@ Yuvarlama nedeniyle segment toplamıyla `total.km * 1000` arasında en fazla
 ayrı yuvarlanır. Dahili NumPy `_path` ve `_prof` alanları API'ye çıkmaz.
 
 PNG/BIN biçimleri ve istek örnekleri: [API README](../api/README.md).
+
+## Kapı 2 ekleri (2026-11-14)
+
+Mevcut alanlar korunur. Segmentler sınıf/eğim bandı değişiminde veya 100 m'ye
+ulaşan ilk hücrede bölünür (en çok bir adım taşması); kısa parçalar birleştirilmez.
+Sınır noktası paylaşılır; her kenarın süre/kcal/risk değeri yalnız bir kez sayılır.
+
+`/route` ve `/replan` isteğinde isteğe bağlı `budget` nesnesi:
+`{"time_min":360,"kcal":2000,"o2_L":420,"dose_uGy":60,"reserve_min":30}`.
+Eksik anahtarlar varsayılanı kullanır; sonlu, sıfır veya pozitif değer gerekir.
+Bu limitler doğrulanmış insan güvenlik eşikleri değil, görev planlama varsayımlarıdır.
+
+| Yeni `total` alanı | Anlam |
+|---|---|
+| `status` | `GO` veya `NO-GO`; `go` boolean ile aynı karar |
+| `limit_exceeded_at_px` | İlk bütçe aşımının `[x,y]` hücresi; yoksa null |
+| `limit_exceeded_at_index` | Birleştirilmiş, sınırları tekilleştirilmiş yolun 0 tabanlı indeksi |
+| `budget.limits` | Uygulanan dört limit ve `reserve_min` |
+| `budget.used` | Dönüş, 30 dk bilim durağı ve yedek dahil süre/kcal/O₂/doz |
+| `budget.exceeded` | Hedefte aşılan limitlerin adları |
+| `budget.first_exceeded` | İlk aşım noktasında aşılan limitlerin adları |
+| `budget.return_min`, `return_kcal` | Aynı yoldan eve dönüş için ayrılan yürüyüş tüketimi |
+
+`limit_exceeded_at_m` artık herhangi bir bütçenin ilk aşım mesafesidir.
+Eşitlik geçerlidir; yalnız `>` aşım sayılır. Başlangıçta durak/yedek bile
+sığmıyorsa ilk nokta `[start]`, indeks ve mesafe 0 olur. `walkback_ok` eskisi gibi
+süre kontrolüdür; `go` ayrıca kcal/O₂/doz kontrolünü içerir. Eski `eva_min`,
+`eva_kcal`, `o2_L`, `dose_uGy` alanlarının tüketim kapsamı korunur.
+Yeni `budget.used` tüm durak/yedek tüketimini de içerir: bunların metabolizması
+`STOP_METABOLIC_W` varsayımıyla hesaplanır. Doz yalnız süre × yüzey doz hızıdır;
+hücre maliyetinde/riskte radyasyon terimi yoktur. Doz µGy, eşdeğer doz µSv değildir.
+
+### Gerçek katman paketi
+
+`MARTIAN_LAYERS_DIR` (öncelikli) veya eski `MM_LAYERS_DIR`, içinde `grid.json`
+bulunan klasörü gösterir. İkisi de yoksa sentetik veri üretilir. Açıkça seçilmiş
+paket hatalı/eksikse başlangıç Türkçe hata ile durur; sentetiğe dönmez.
+`grid.example.json` örnek manifesttir; dosya adları manifest klasörüne görelidir.
+Sekiz sayısal katmanın tümü zorunludur; şekil `(height,width)`, değerler sonlu,
+olasılıkların toplamı hücre başına 1 (tolerans 0.001) olmalıdır.
+NaN/Inf ve manifestteki `nodata` değeri reddedilir; önce doldurun veya kırpın.
+`res_m` pozitif sonlu metre, `origin_xy_m` iki sonlu sayı, `crs` veya eski
+`crs_note` dolu metrik projeksiyon tanımı gerekir; `units` verilirse `m` olmalı.
+NPY kendi CRS'sini taşımaz; metadata doğrulaması manifest beyanına dayanır,
+yeniden projeksiyon yapılmaz. Katman değeri bir dosya yolu veya
+`{"path":"slope.npy","crs":"LOCAL:MARS_METRIC","res_m":2,"nodata":-9999}`
+nesnesi olabilir. Katman nesnesinde CRS/çözünürlük/origin verilirse grid ile aynı
+olmalıdır. Eski örnekteki çift boşluk sonrası açıklama yazıları da kabul edilir.
+
+### Mount Sharp karşılaştırması
+
+`api.planner.comparison.compare_reference(layers, route_px, reference_px)` aynı
+ızgarada tam sayı `[x,y]` hücre listesi veya seyrek polyline alır. Seyrek çizgiler
+hücrelere örneklenir; aradaki geçilmez hücreler reddedilir. `mean_deviation_m`
+iki yönlü nokta→polyline mesafelerinin birleşik aritmetik ortalaması,
+`max_deviation_m` maksimumudur (sürekli Hausdorff değil, örneklenmiş metrik).
+`delta_min`, `delta_kcal` bizim rota eksi referans, aynı modelde tek yön farkıdır;
+`route` ve `reference` ham min/kcal toplamları da döner. Gerçek referans henüz yok.
