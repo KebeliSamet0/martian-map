@@ -2,10 +2,13 @@
 
 Makine okunur sürüm: `layers/demo_scenarios.json`. Koordinatlar `px = [sütun, satır]` biçiminde, `contracts/grid.json` ızgarasında.
 
-> **Doğrulama (2026-11-14 17:30):** Senaryolar gerçek katmanlarla API üzerinden doğrulandı:
+> **Doğrulama (2026-11-14 17:45, main):** Senaryolar 17:29 birleştirmelerinden sonraki main üzerinde API ile doğrulandı. Main'de şunlar var:
 > - eğim ve kaya (`slope`, `rock_cfa`),
 > - Emre'nin kaba zemin katmanları (PR #60, 1 epoch),
-> - Bora'nın kum adayları (PR #61).
+> - Bora'nın kum adayları (PR #61),
+> - Samet'in planlayıcı güncellemesi (PR #55).
+>
+> Katman paketi temiz: 11 `.npy` katmanı 1000×1000, NaN yok, olasılıklar her hücrede toplam 1. `pytest` 78/78 geçiyor.
 >
 > Emre'nin 12 epoch'luk sürümü gelince senaryolar yeniden doğrulanacak.
 
@@ -13,9 +16,9 @@ Makine okunur sürüm: `layers/demo_scenarios.json`. Koordinatlar `px = [sütun,
 
 | | Başlangıç → Hedef | 3 rota (km) | 3 rota (dk) | Sürpriz kum | `/replan` | Curiosity kesiti |
 |---|---|---|---|---|---|---|
-| **S1** | sci_1 Boxwork (sol 4617) → sci_4 Atacama sondajı | 0,55 / 0,56 / 0,56 | 18,1 / 18,2 / 18,4 | `sand_13` [472, 641], 19,4 m | 3 rota da değişiyor, +0,1–0,5 dk | yol indeksi 430–701, 1229 m |
-| **S2** | sci_3 Boxwork (sol 4668) → sci_4 | 0,40 / 0,40 / 0,40 | 12,6 / 12,7 / 13,0 | `sand_11` [487, 672], 20 m | 3 rota da değişiyor, +0,2–0,3 dk | yol indeksi 547–701, 744 m |
-| S3 (yedek) | sci_2 Boxwork (sol 4635) → sci_4 | 0,53 / 0,53 / 0,54 | 17,5 / 17,7 / 17,9 | `sand_13` [472, 641], 19,4 m | 3 rota da değişiyor, +0,1–0,5 dk | yol indeksi 455–701, 1106 m |
+| **S1** | sci_1 Boxwork (sol 4617) → sci_4 Atacama sondajı | 0,55 / 0,57 / 0,61 | 18,1 / 18,3 / 19,2 | `sand_13` [472, 641], 19,4 m | 3 rota da değişiyor, +0,1–0,7 dk | yol indeksi 430–701, 1229 m |
+| **S2** | sci_3 Boxwork (sol 4668) → sci_4 | 0,40 / 0,41 / 0,45 | 12,6 / 12,9 / 13,8 | `sand_11` [487, 672], 20 m | 3 rota da değişiyor, +0,2–0,7 dk | yol indeksi 547–701, 744 m |
+| S3 (yedek) | sci_2 Boxwork (sol 4635) → sci_4 | 0,53 / 0,55 / 0,58 | 17,5 / 17,9 / 18,4 | `sand_13` [472, 641], 19,4 m | 3 rota da değişiyor, +0,0–0,7 dk | yol indeksi 455–701, 1106 m |
 
 Rota sırası her zaman en kısa / dengeli / en güvenli. Kesitteki indeksler `layers/msl_proposed_path.json` içindeki `path_px` noktalarıdır.
 
@@ -28,9 +31,10 @@ Rota sırası her zaman en kısa / dengeli / en güvenli. Kesitteki indeksler `l
    - Curiosity S1 arasını 1229 m'de gitti, çünkü yol üstünde boxwork sırtlarını inceledi. Planlayıcı aynı mesafeyi yaklaşık 560 m'de gidiyor.
    - Planlayıcının rotaları Curiosity'nin gerçek yolundan ortalama 28–37 m sapıyor.
 2. **3 rota neden ayrışıyor?**
-   - Bugünkü verilerle 3 rota birbirinden yalnız 1–6 m ayrışıyor.
-   - Sebep: 1 epoch'luk modelde kumun baskın olduğu hücre yok (en yüksek `p_sand` 0,23) ve belirsizlik her yerde yüksek (ortalama `entropy` 0,72). Rotaları ayıracak bir kontrast yok.
-   - Emre'nin tam eğitimli sürümünde kum ve belirsizlik farkları belirginleşirse ayrışmanın büyümesi beklenir. O zaman bu madde yeniden yazılacak.
+   - En güvenli rota belirgin biçimde uzun: S1'de 0,61 km, en kısası 0,55 km (+%11). Rotalar arası ortalama ayrışma en çok 6–11 m.
+   - Ayrışma Samet'in planlayıcı güncellemesiyle (PR #55) büyüdü; önce 1–6 m idi.
+   - Zemin katmanı henüz zayıf: 1 epoch'luk modelde kumun baskın olduğu hücre yok (en yüksek `p_sand` 0,23) ve belirsizlik her yerde yüksek (ortalama `entropy` 0,72).
+   - Emre'nin tam eğitimli sürümünde kum ve belirsizlik farkları belirginleşirse ayrışmanın daha da büyümesi beklenir. O zaman bu madde yeniden yazılacak.
 3. **Sürpriz kum.** Rover rotanın ortasında kum görüyor (`/replan`, `cls: sand`). 3 rotanın hepsi kumu dolaşacak şekilde yeniden çiziliyor ve süre biraz uzuyor.
 
 ## Kum noktaları (Bora, `sand_hint.json`)

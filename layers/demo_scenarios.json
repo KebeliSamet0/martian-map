@@ -1,6 +1,6 @@
 {
  "description": "Demo senaryolari (issue #47). px = [sutun, satir], contracts/grid.json izgarasi; baslangic/hedef layers/science_stops.json'dan.",
- "status": "Emre'nin kaba zemin katmanlari (PR #60, 1 epoch) ve Bora'nin kum adaylari (PR #61) ile API uzerinden dogrulandi. 3 rota birbirinden yalniz 1-6 m ayrisiyor (modelde kum baskin hucre yok); Emre'nin 12 epoch surumu gelince yeniden dogrulanacak.",
+ "status": "main uzerinde (17:29 birlestirmeleri sonrasi) API ile dogrulandi: 3 senaryoda /route 3 farkli rota, /replan 3 rotayi degistiriyor. Rotalar arasi ayrisma en cok 6-11 m. Emre'nin 12 epoch surumu gelince yeniden dogrulanacak.",
  "sand_pick_rule": "Bora'nin koridor adaylari (sand_hint.json, PR #61): S1/S3 = sand_13, S2 = sand_11. Ilk secilen [467, 609] Bora'nin kor kontrolunde cakil/kayalik cikti, birakildi.",
  "curiosity_reference": "layers/msl_proposed_path.json (path_px indeks araligi, ikisi dahil)",
  "scenarios": [
@@ -46,22 +46,22 @@
     "length_m": 1229
    },
    "checked": {
-    "layers": "Emre PR #60 kaba katmanlar (1 epoch)",
+    "layers": "main (2026-11-14 17:29, PR #55/#58/#60/#61 sonrasi): Emre kaba katmanlar (1 epoch) + Samet planlayici guncellemesi",
     "route_km": [
      0.55,
-     0.56,
-     0.56
+     0.57,
+     0.61
     ],
     "route_min": [
      18.1,
-     18.2,
-     18.4
+     18.3,
+     19.2
     ],
     "routes_distinct": 3,
     "pairwise_divergence_m": [
-     1.5,
-     5.7,
-     4.3
+     1.8,
+     10.7,
+     9.1
     ],
     "replan_changed": [
      true,
@@ -71,12 +71,12 @@
     "replan_extra_min": [
      0.1,
      0.1,
-     0.5
+     0.7
     ],
     "curiosity_mean_deviation_m": [
      28,
      29,
-     33
+     37
     ]
    }
   },
@@ -122,22 +122,22 @@
     "length_m": 744
    },
    "checked": {
-    "layers": "Emre PR #60 kaba katmanlar (1 epoch)",
+    "layers": "main (2026-11-14 17:29, PR #55/#58/#60/#61 sonrasi): Emre kaba katmanlar (1 epoch) + Samet planlayici guncellemesi",
     "route_km": [
      0.4,
-     0.4,
-     0.4
+     0.41,
+     0.45
     ],
     "route_min": [
      12.6,
-     12.7,
-     13.0
+     12.9,
+     13.8
     ],
     "routes_distinct": 3,
     "pairwise_divergence_m": [
-     2.1,
-     4.8,
-     3.0
+     3.0,
+     5.9,
+     6.2
     ],
     "replan_changed": [
      true,
@@ -147,12 +147,12 @@
     "replan_extra_min": [
      0.3,
      0.2,
-     0.3
+     0.7
     ],
     "curiosity_mean_deviation_m": [
      32,
      33,
-     35
+     31
     ]
    }
   },
@@ -198,22 +198,22 @@
     "length_m": 1106
    },
    "checked": {
-    "layers": "Emre PR #60 kaba katmanlar (1 epoch)",
+    "layers": "main (2026-11-14 17:29, PR #55/#58/#60/#61 sonrasi): Emre kaba katmanlar (1 epoch) + Samet planlayici guncellemesi",
     "route_km": [
      0.53,
-     0.53,
-     0.54
+     0.55,
+     0.58
     ],
     "route_min": [
      17.5,
-     17.7,
-     17.9
+     17.9,
+     18.4
     ],
     "routes_distinct": 3,
     "pairwise_divergence_m": [
-     1.8,
-     2.4,
-     1.3
+     5.2,
+     4.1,
+     7.4
     ],
     "replan_changed": [
      true,
@@ -222,13 +222,13 @@
     ],
     "replan_extra_min": [
      0.2,
-     0.1,
-     0.5
+     0.0,
+     0.7
     ],
     "curiosity_mean_deviation_m": [
      36,
-     36,
-     37
+     30,
+     36
     ]
    }
   }
