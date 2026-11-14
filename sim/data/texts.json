@@ -70,7 +70,8 @@
     "seg_alt": "alternatif: {alt}",
     "seg_conf_low": "model güveni düşük ({conf} %)",
     "fog_button": "Model güveni katmanı",
-    "fog_hint": "Soluk alan = model emin değil (güven = 1 − normalize entropi). Model tahmini, ölçüm değil."
+    "fog_hint": "Soluk alan = model emin değil (güven = 1 − normalize entropi). Model tahmini, ölçüm değil.",
+    "seg_title": "Segment açıklamaları (model rotası)"
   },
   "compare": {
     "title": "Zemin modeli ne kazandırıyor?",
