@@ -1,6 +1,6 @@
 # Sprint 2 MVP entegrasyon raporu (2026-11-14)
 
-Dal: `samet/mvp`, hedef: `main`, kapsam: `Refs #51` (birleştirilmedi).
+PR: https://github.com/KebeliSamet0/martian-map/pull/55 — Dal: `samet/mvp`, hedef: `main`, kapsam: `Refs #51` (birleştirilmedi).
 
 ## Yapılanlar
 1. **Geçici zemin dolgusu (`api/planner/layers.py`, `route.py`, `params.py`, `main.py`):** `p_soil`, `p_bedrock`, `p_sand`, `p_bigrock` ve `entropy` dosyalarının tamamı eksik olduğunda bellekte eğim ve `rock_cfa` üzerinden geçici katmanlar üretilir (diske yazılmaz). Kısmi pakette anlaşılır Türkçe `LayerError` verilir; beş dosyanın tamamı geldiğinde kod değişmeden gerçek dosyalar kullanılır.
