@@ -177,7 +177,7 @@ export class Terrain {
     if (tex && this.renderer) this.renderer.initTexture(tex);   // GPU yüklemesi mesh bütçesi içinde yapılır (ilk çizimde takılma olmasın)
     const mat = new THREE.MeshStandardMaterial({ map: tex || null, color: tex ? 0xffffff : 0x8b6a52, roughness: 0.96, metalness: 0, side: THREE.DoubleSide });
     mat.onBeforeCompile = patchMaterial;
-    mat.customProgramCacheKey = () => 'mars-terrain-v2';
+    mat.customProgramCacheKey = () => 'mars-terrain-v3';
     const mesh = new THREE.Mesh(geom, mat);
     mesh.castShadow = this.shadows; mesh.receiveShadow = this.shadows; mesh.visible = false;
     this.group.add(mesh);

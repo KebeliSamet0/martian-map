@@ -1,0 +1,18 @@
+# Death Stranding — Terrain Scanner / Odradek taraması: açık kaynaklı bulgular (Claude, 2026-11-14)
+
+`gercek` desk'inin araştırması gelene kadar resmî sayfalardan ben okudum (erişim 2026-11-14, sayfa metninde birebir görüldü).
+
+| # | Bulgu | Kaynak ve birebir alıntı |
+|---|---|---|
+| 1 | DS2: Terrain Scanner varsayılan L1; **rotada kalmaya** ve **yol üstü/dışı tehlikeleri** görmeye yarar; düşman kargosunu da işaretler | [PlayStation DS2 Beginner's Guide](https://www.playstation.com/en-il/games/death-stranding-2-on-the-beach/death-stranding-2-on-the-beach-guide/), Traversal / Scan your surroundings: "Remember to use your Terrain Scanner as you travel (L1 button by default). This handy gadget will help you stay on-route and spot hazards on and off the road." |
+| 2 | DS1: Odradek ile hareket ederken **güvenli zemin** taranır; ağır yükte engebeli arazi çok etkiler | [Kojima Productions DSTips](https://kojimaproductions.jp/en/DSTips), Long-Distance Deliveries: "Be sure to use your Odradek often and scan for safe ground as you move." |
+| 3 | DS1: **kırmızı işaretler derin suyu** gösterir; o alana girilirse araç batar, Sam ve kargo sürüklenir | aynı sayfa, Reverse Trike / Beware of rivers: "The red markers indicate deeper waters, so if you enter that area, your bike will sink and both Sam and the cargo will be washed away." |
+| 4 | DS1: tarama **menzili artırılabilir** (gözetleme kulesi) | aynı sayfa, Stealth Strategy: "if you build a Watchtower, you can scan a larger range of your surroundings." |
+| 5 | DS2 renk kodları (mavi/sarı/kırmızı) ve "Square basılı tut" | GameSpot "20 Things" — **bana 403 verdi, ben doğrulayamadım**; `gercek` raporu (arastirma.md S5) içinde alıntı var |
+
+Sayısal eğim eşiği, tarama yarıçapı ve bekleme süresi bu kaynaklarda **yok** → simdeki 170 m / 10° / 20° değerleri tasarım ayarıdır (20° = ICES-2025-129 astronot traverse sınırı).
+
+## Sim'e aktarım
+- Tarama zemini eğim sınıfına göre boyar (mavi/sarı/kırmızı + çizgili desen); #1 "rotada kal": tarama sırasında **planlanan rota parlar**; tehlike işaretleri rota üstünde zaten görünür.
+- #3 analoğu: kırmızı = basma/kaçın (dik veya kum riskli) — kum riski için API `p_sand` işaretleri.
+- #4: **Shift+L = geniş tarama** (320 m).

@@ -1,5 +1,6 @@
 // Gerçek Mars haritası (Leaflet, enlem/boylam equirectangular): Trek HiRISE mozaiği, CTX, Viking tabanları + kapsama, eğim katmanı.
 // Kullanıcı iki nokta işaretler (A, B) → Nav.route() → rota haritada eğim bandına göre renkli çizilir; "3B yürüyüş" ile FPS'e geçilir.
+import { GRID, API_OFF, pxToWorld, worldToPx, pxInside, apiRoute, adaptRoute } from './api.js';
 const L = window.L;
 const TREK = 'https://trek.nasa.gov/tiles/Mars/EQ/';
 const BAND = ['#30d158', '#a4d12a', '#ffd60a', '#ff9f0a', '#ff3b30'];
@@ -22,6 +23,11 @@ export class MapView {
     viking.addTo(this.map); hirise.addTo(this.map);
     this.overview = L.imageOverlay(`${base}/${man.overview.file}`, this.bounds, { opacity: 0.95 });
     this.slopeLayer = L.imageOverlay(this._slopeCanvas(), this.bounds, { opacity: 0.55 });
+    this.overview.addTo(this.map);   // yerel (internetsiz de çalışır)
+    // Planlayıcı API bölgesi (contracts/grid.json 2×2 km): rota bu kutunun içinde API'den gelir; dışı yerel A* yedeği
+    const gc = [[0, 0], [GRID.w, GRID.h]].map(([c, r]) => { const w = pxToWorld(geo, c, r), ll = geo.worldToLonlat(w[0], w[1]); return [ll[1], ll[0]]; });
+    this.apiBox = L.rectangle(gc, { color: '#00e5ff', weight: 2, fill: false, dashArray: '4 4', interactive: false }).addTo(this.map);
+    this.apiBox.bindTooltip('Planlayıcı API bölgesi (2×2 km)', { permanent: false });
     this.cover = L.rectangle(this.bounds, { color: '#ffd60a', weight: 2, fill: false, dashArray: '6 4', interactive: false }).addTo(this.map);
     // Gerçek Curiosity boxwork konumları (NASA MMGIS MSL_waypoints.json; denetlendi, bkz. tools/export_params.py)
     this.curiosity = L.layerGroup();
@@ -95,11 +101,28 @@ export class MapView {
     if (clearAll) this.onChange?.(null);
   }
 
-  compute() {
+  async compute() {
     if (!this.a || !this.b) return;
-    const t0 = performance.now();
-    const r = this.nav.route(...this.a.world, ...this.b.world, { mode: this.mode, maxSlope: this.maxSlope });
-    if (r.error) { this.toast(r.error); this._clearLines(); this.route = null; this.onChange?.(null); return; }
+    const tok = (this._tok = (this._tok || 0) + 1), t0 = performance.now();
+    let r = null, why = '';
+    if (!API_OFF) {
+      try {
+        const pa = worldToPx(this.geo, ...this.a.world), pb = worldToPx(this.geo, ...this.b.world);
+        if (!pxInside(pa) || !pxInside(pb)) throw new Error('A/B planlayıcı bölgesinin (cyan kutu) dışında');
+        const s = pa.map(Math.floor), g = pb.map(Math.floor);
+        const res = await apiRoute(s, g);
+        const rt = res.routes.find((x) => x.kind === this.mode) || res.routes[0];
+        r = adaptRoute(rt, { geo: this.geo, nav: this.nav, suitSpeed: this.nav.suitSpeed, kind: this.mode });
+        r.startPx = s; r.goalPx = g; r.gridInfo = res.grid;
+      } catch (e) { why = String(e.message || e); r = null; }
+      if (tok !== this._tok) return;   // daha yeni bir istek var
+    }
+    if (!r) {
+      r = this.nav.route(...this.a.world, ...this.b.world, { mode: this.mode === 'safest' ? 'balanced' : this.mode, maxSlope: this.maxSlope });
+      if (r.error) { this.toast(r.error); this._clearLines(); this.route = null; this.onChange?.(null); return; }
+      r.source = 'local'; r.fallbackWhy = API_OFF ? 'api=off' : why;
+      if (!API_OFF) this.toast(`Planlayıcı API kullanılamadı (${why}) → YEDEK: yerel A* rotası.`);
+    }
     r.computeMs = Math.round(performance.now() - t0);
     r.start = { world: this.a.world, lonlat: this.geo.worldToLonlat(...this.a.world), name: 'A', shift_m: Math.round(this.a.shift || 0) };
     r.goal = { world: this.b.world, lonlat: this.geo.worldToLonlat(...this.b.world), name: 'B', shift_m: Math.round(this.b.shift || 0) };
@@ -112,7 +135,9 @@ export class MapView {
     L.polyline(r.dense.map(ll), { color: '#000', weight: 8, opacity: 0.55 }).addTo(g);
     for (const s of r.segments) {
       const pl = L.polyline(r.dense.slice(s.idx[0], s.idx[1] + 1).map(ll), { color: BAND[bandOf(s.slope_max)], weight: 5 }).addTo(g);
-      pl.bindPopup(`<b>Segment ${s.id}</b> · ${s.len_m} m · ${s.min} dk<br>eğim maks ${s.slope_max}° · ort ${s.slope_mean}°<br>zemin sınıfı/güven: veri yok`);
+      pl.bindPopup(r.source === 'api'
+        ? `<b>Segment ${s.id}</b> · ${s.len_m} m · ${s.min} dk · ${s.kcal} kcal<br>eğim maks ${s.slope_max}° · ort ${s.slope_mean}°<br>zemin: ${esc(s.class)} · güven: ${esc(s.conf)} · p_kum ${s.p_sand}<br><i>${esc(s.reason)}</i>`
+        : `<b>Segment ${s.id}</b> · ${s.len_m} m · ${s.min} dk<br>eğim maks ${s.slope_max}° · ort ${s.slope_mean}°<br>zemin sınıfı/güven: veri yok (yedek A*)`);
     }
     g.addTo(this.routeGroup); this.lines = g;
     this.map.fitBounds(L.latLngBounds(r.dense.map(ll)).pad(0.25), { maxZoom: 17 });
@@ -120,6 +145,7 @@ export class MapView {
 
   routeJSON() {
     const r = this.route; if (!r) return null;
+    if (r.raw) return { grid: r.gridInfo, routes: [r.raw], _meta: { source: 'planlayici API /route', note: 'sim/app/api.js' } };
     return {
       kind: r.kind, start: { px: [r.start.world[0] / this.geo.resX, r.start.world[1] / this.geo.resZ].map((v) => Math.round(v * 10) / 10), name: 'A', lonlat: r.start.lonlat },
       goal: { px: [r.goal.world[0] / this.geo.resX, r.goal.world[1] / this.geo.resZ].map((v) => Math.round(v * 10) / 10), name: 'B', lonlat: r.goal.lonlat },

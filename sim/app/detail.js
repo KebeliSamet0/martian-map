@@ -65,14 +65,19 @@ export function makeDetailTexture(N = 512, anisotropy = 8) {
 
 export const DETAIL = { value: null };
 export const SYNTH = { value: 1 };   // 1: sentetik görünüm ayrıntısı açık; 0: SAF VERİ (yalnız DTM + ortofoto, aydınlatma hariç hiçbir ekleme yok)
+// Terrain Scanner (DS2 tarzı): merkez xz, yarıçap, görünürlük (0..1); eğim eşikleri (derece). Eşikler BİZİM arayüz ayarıdır (DS2'nin eşikleri kaynakta yok).
+export const SCAN = { value: new THREE.Vector4(0, 0, 0, 0) };
+export const SCAN_TEX = { value: null };   // R: eğim/64 (derece), G: geçerli (nav 4 m ızgara; rota eğimiyle aynı taban)
+export const SCAN_DIM = { value: new THREE.Vector2(1, 1) };   // ızgara dünya boyu (m)
+export const SCAN_TH = { value: new THREE.Vector2(10, 20) };
 export function ensureDetail(anisotropy) { if (!DETAIL.value) DETAIL.value = makeDetailTexture(512, anisotropy); return DETAIL.value; }
 
 // MeshStandardMaterial gölgelendiricisine eklenir: albedo çeşitliliği + normal bozulması + dik yüzeylerde tabakalı kaya dokusu.
 export function patchMaterial(shader) {
-  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH;
+  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH; shader.uniforms.uScan = SCAN; shader.uniforms.uScanTh = SCAN_TH; shader.uniforms.uScanTex = SCAN_TEX; shader.uniforms.uScanDim = SCAN_DIM;
   shader.vertexShader = 'varying vec3 vWP;\nvarying vec3 vWN;\n' + shader.vertexShader.replace(
     '#include <begin_vertex>', '#include <begin_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;\n vWN = normalize(mat3(modelMatrix) * objectNormal);');
-  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
+  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nuniform vec4 uScan;\nuniform vec2 uScanTh;\nuniform sampler2D uScanTex;\nuniform vec2 uScanDim;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
     .replace('#include <map_fragment>', `#include <map_fragment>
       {
         vec4 a = texture2D(uDetail, vWP.xz / 2.4), b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.81), c = texture2D(uDetail, (vWP.xz + vec2(3.3, 9.9)) / 19.0);
@@ -88,6 +93,19 @@ export function patchMaterial(shader) {
         float lay = 0.5 + 0.5*sin(vWP.y*2.3 + (c.r - 0.5)*9.0 + (texture2D(uDetail, vec2(vWP.x + vWP.z, vWP.y) / 7.0).r - 0.5)*3.5);
         vec3 cliffC = avgC * (0.60 + 0.65*lay) * (0.85 + 0.30*texture2D(uDetail, vWP.xz / 5.0 + vec2(0.37)).a);
         diffuseColor.rgb = mix(diffuseColor.rgb, cliffC, steep*0.92*uSynth);
+      }`)
+    .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+      if (uScan.w > 0.001) {
+        float sd = distance(vWP.xz, uScan.xy);
+        if (sd < uScan.z) {
+          vec4 st = texture2D(uScanTex, vWP.xz / uScanDim);
+          float sl = st.r * 64.0;
+          vec3 sc = st.g < 0.5 ? vec3(0.45, 0.45, 0.5) : (sl < uScanTh.x ? vec3(0.08, 0.50, 1.0) : (sl < uScanTh.y ? vec3(1.0, 0.80, 0.05) : vec3(1.0, 0.12, 0.08)));
+          float hatch = (st.g >= 0.5 && sl >= uScanTh.y) ? 0.55 + 0.45 * step(0.5, fract((vWP.x + vWP.z) * 0.9)) : 1.0;   // kırmızı bölgede çizgili desen (renk dışı ipucu)
+          float front = smoothstep(uScan.z - 5.0, uScan.z, sd);
+          totalEmissiveRadiance += (sc * 0.62 * hatch + vec3(0.6, 0.95, 1.0) * front * 1.4) * uScan.w;
+          diffuseColor.rgb = mix(diffuseColor.rgb, sc * 0.5, 0.25 * uScan.w);
+        }
       }`)
     .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
       {
