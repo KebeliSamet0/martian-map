@@ -435,6 +435,9 @@ for (const [key, mark, color] of [['safe','•','#2ecc71'], ['caution','― ―'
 legend.append(document.createTextNode(` · ${scanner.source}`));
 legend.title = 'API sınıfları model tahminidir; alan dışında 10°/20° eğim yedeği. İşaretin sönmesi güvenli demek değildir.';
 
+// ?perf=1: 30 sn FPS/performans ölçüm probu (sim/tools/qa/perf_probe.js; gerçek GPU'da demo cihazında çalıştır)
+if (Q.get('perf')) { const s = document.createElement('script'); s.src = './tools/qa/perf_probe.js'; document.body.append(s); }
+
 // Test/otomasyon kancası
 window.__mm = {
   man, geo, nav, get mapView() { return mapView; }, get T() { return T; }, P,

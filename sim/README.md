@@ -79,3 +79,6 @@ Koordinat: ızgara px = [sütun, satır], hücre merkezi = idx+0.5; x = ox + px�
 3. Karo yokken sim açılır ama 3B arazi görünmez; harita ve rota (API) yine çalışır.
 
 Bölge uyumu: API ızgarası (`contracts/grid.json`, 2×2 km) sim alanının (6,6×8,7 km) tam içinde; ızgaranın 4 köşesi ve 4 bilim durağı sim yükseklik verisinde geçerli (NoData yok). **Bilinen fark:** planlayıcı DEM'i (USGS merged DEM v3, 2×2 ortalama) ile sim DTM'i (HiRISE T3) aynı px'te eşdeğer değil: ort. +7,2 m, RMSE 9,7 m; ampirik eşleme ≈ +30,7 m doğu / +33,5 m güney kayma ve −15,1 m düşey (RMSE 1,2 m). Sim rotanın X/Z'sini sözleşmeden, Y'sini kendi yüzeyinden alır; kayma **uygulanmadı** (bkz. #49 yorumu).
+
+## Performans ölçümü (gerçek GPU'da FPS)
+`http://127.0.0.1:8001/sim/?perf=1` → 30 sn senaryo otomatik koşar (A/B seç, 3B yürüyüş, 10. sn tarama, 20. sn geniş tarama); sonuç tablosu ve "JSON indir". Hedef (varsayım): p95 kare süresi ≤ 22 ms, ort ≥ 45 FPS. Yazılım GL'de (~1 FPS) "kaldı" çıkması beklenir. Kaynak: `sim/tools/qa/perf_probe.js`.
