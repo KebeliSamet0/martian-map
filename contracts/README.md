@@ -119,9 +119,11 @@ olmalıdır. Eski örnekteki çift boşluk sonrası açıklama yazıları da kab
 ### Mount Sharp karşılaştırması
 
 `api.planner.comparison.compare_reference(layers, route_px, reference_px)` aynı
-ızgarada tam sayı `[x,y]` hücre listesi veya seyrek polyline alır. Seyrek çizgiler
-hücrelere örneklenir; aradaki geçilmez hücreler reddedilir. `mean_deviation_m`
+ızgarada `[x,y]` hücre listesi veya seyrek polyline alır. Seyrek çizgiler
+hücrelere örneklenir. Bizim rota tam sayı olmalı ve geçilmez hücreden geçemez;
+referans (gerçekte sürülmüş yol, ör. `layers/msl_proposed_path.json` → `path_px`)
+ondalıklı olabilir (hücre = floor) ve DEM'in geçilmez gösterdiği hücreler kabul edilir. `mean_deviation_m`
 iki yönlü nokta→polyline mesafelerinin birleşik aritmetik ortalaması,
 `max_deviation_m` maksimumudur (sürekli Hausdorff değil, örneklenmiş metrik).
 `delta_min`, `delta_kcal` bizim rota eksi referans, aynı modelde tek yön farkıdır;
-`route` ve `reference` ham min/kcal toplamları da döner. Gerçek referans henüz yok.
+`route` ve `reference` ham min/kcal toplamları da döner.

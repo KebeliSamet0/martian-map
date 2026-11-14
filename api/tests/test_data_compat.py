@@ -65,3 +65,14 @@ def test_load_rejects_bad_px(tmp_path, bad):
     _write_package(tmp_path, [bad], grid_at_root=True)
     with pytest.raises(LayerError, match="px"):
         load(tmp_path)
+
+
+def test_compare_driven_reference_float_and_steep(layers):
+    from api.planner.comparison import compare_reference
+    layers.slope[100, 100:111] = 40  # referansın geçtiği dik hücreler (DEM abartısı)
+    ref = [[95.4, 100.6], [115.9, 100.2]]
+    route = [[95, 98], [115, 98]]
+    out = compare_reference(layers, route, ref)
+    assert out["max_deviation_m"] > 0 and np.isfinite(out["reference"]["min"])
+    with pytest.raises(PlanError):  # bizim rota hâlâ katı: dik hücreden geçemez
+        compare_reference(layers, [[95, 100], [115, 100]], route)
