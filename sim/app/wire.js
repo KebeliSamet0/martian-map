@@ -55,6 +55,10 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     b.dataset.mission = m.id; b.onclick = () => void selectMission(m); buttons.append(b);
   }
   document.getElementById('btn-routes').onclick = () => { if (!busy) void pickRoute(); };
+  // Uyarı bandında ham kaynak anahtarı ("o2_L") değil texts.json cümlesi görünsün.
+  const RESOURCE_TR = { time_min: 'Süre', kcal: 'Enerji', o2_L: 'Oksijen', dose_uGy: 'Doz' };
+  const limitText = r => (r === 'o2_L' ? texts.alerts?.limit_o2 : r === 'time_min' ? texts.alerts?.limit_time : null)
+    ?? `${RESOURCE_TR[r] ?? r} sınırına ulaşıldı. Üsse dönüşe başla.`;
   function alertLimit(what) {
     const id = generation;
     void showAlert(root, 'limit', { what, timeoutMs: 8000 }).then(action => {
@@ -86,7 +90,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       machine.on('arrived', () => { void finish(id); });
     }
     vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? texts.alerts?.turn_back : 'Kaynak verisi eksik veya limit yaklaşıyor.'); });
-    vitals.on('limit', e => { if (id === generation && running) alertLimit(`Sınır aşıldı: ${e.resource}`); });
+    vitals.on('limit', e => { if (id === generation && running) alertLimit(limitText(e.resource)); });
     hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) });
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
