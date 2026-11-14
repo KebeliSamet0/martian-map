@@ -18,7 +18,7 @@ import { SMAAPass } from '../lib/addons/postprocessing/SMAAPass.js';
 
 // Son geçiş: ekran uzayında (sRGB) vinyet, film greni, hafif S-eğrisi kontrast ve gölgelerde sıcak ton.
 const GradeShader = {
-  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: 0.035 }, uVignette: { value: 0.34 }, uContrast: { value: 0.10 } },
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: 0.035 }, uVignette: { value: 0.34 }, uContrast: { value: 0.14 } },
   vertexShader: /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
   fragmentShader: /* glsl */ `
     uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVignette, uContrast; varying vec2 vUv;
@@ -32,6 +32,8 @@ const GradeShader = {
       // Gölgelere hafif sıcak, parlak alanlara hafif soğuk ton (Mars tozu ışığı)
       float l = dot(col, vec3(0.299, 0.587, 0.114));
       col += vec3(0.012, 0.004, -0.008) * (1.0 - l) + vec3(-0.004, 0.0, 0.006) * l;
+      // Renk derecelendirme: Mars tozu için hafif doygunluk artışı (turuncu-kahve zengin, gri yok)
+      col = mix(vec3(l), col, 1.10);
       // Vinyet
       vec2 d = vUv - 0.5; d.x *= 1.15;
       col *= 1.0 - uVignette * smoothstep(0.25, 0.95, dot(d, d) * 2.2);
@@ -66,7 +68,8 @@ export function initFx(renderer, scene, camera, { quality = 'high', ao: aoOn = q
   }
 
   // Bloom: yalnız çok parlak alanlar (güneş diski, vizör/metal parlaması, tarayıcı dalgası); zemini yıkamaz
-  const bloom = new UnrealBloomPass(new THREE.Vector2(size.x, size.y), 0.22, 0.6, 0.92);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(size.x, size.y), quality === 'low' ? 0.0 : 0.30, 0.65, 0.88);
+  bloom.enabled = quality !== 'low';
   composer.addPass(bloom);
 
   composer.addPass(new OutputPass());   // renderer.toneMapping + sRGB burada uygulanır

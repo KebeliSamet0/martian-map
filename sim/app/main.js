@@ -21,7 +21,7 @@ import { initAudio } from './audio.js';
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
 const quality = Q.get('q') || 'high';
-MICRO.value = Q.get('ground') === 'rich' && Q.get('micro') !== '0' ? 1 : 0;   // ?ground=rich: tas serpintisi + mikro rolyef
+MICRO.value = Q.get('ground') !== 'plain' && quality !== 'low' && Q.get('micro') !== '0' ? 1 : 0; // tur4:gorsel (varsayılan zengin zemin; ?ground=plain eski)   // ?ground=rich: tas serpintisi + mikro rolyef
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const EYE = 1.75;   // skafandrlı astronot göz yüksekliği (varsayım)
@@ -135,12 +135,13 @@ function initThree() {
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.35;
   scene.add(sun, sun.target);
   const terrain = new Terrain(scene, man, geo, { base: BASE, shadows: quality !== 'low', anisotropy: renderer.capabilities.getMaxAnisotropy(), splitFactor: quality === 'ultra' ? 1.0 : quality === 'low' ? 0.45 : 0.65, renderer });
-  const rocks = Q.get('ground') === 'rich' ? new RocksRich(scene, terrain, { shadows: quality !== 'low' }) : new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
+  const rocks = Q.get('ground') !== 'plain' ? new RocksRich(scene, terrain, { shadows: quality !== 'low', quality }) : // tur4:gorsel
+     new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
   rocks.userOff = pure || !$('rocks-on').checked;
   T = { renderer, scene, sky, camera, hemi, sun, terrain, rocks, sunEl: Number($('sun-el').value), sunAz: Number($('sun-az').value), shadowExtent: 0, shadowMap: smap,
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
   const gY = (x, z) => groundY(x, z);
-  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
+  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 0.7 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
   T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();

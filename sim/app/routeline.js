@@ -9,15 +9,16 @@ function chevronTexture() {
   const c = document.createElement('canvas'); c.width = 64; c.height = 128;
   const g = c.getContext('2d');
   g.clearRect(0, 0, 64, 128);
-  g.fillStyle = 'rgba(255,255,255,0.18)'; g.fillRect(0, 0, 64, 128);          // şerit tabanı
-  g.fillStyle = '#fff'; g.beginPath();                                           // ok: +v (rota yönü) = canvas yukarı
-  g.moveTo(32, 18); g.lineTo(58, 70); g.lineTo(46, 70); g.lineTo(32, 44); g.lineTo(18, 70); g.lineTo(6, 70); g.closePath(); g.fill();
+  // Sade saha işareti: iki ince kenar çizgisi + seyrek, küçük V işareti (kalın ok yok). v yönü = rota yönü.
+  g.fillStyle = 'rgba(255,255,255,0.85)'; g.fillRect(1, 0, 5, 128); g.fillRect(58, 0, 5, 128);
+  g.strokeStyle = '#fff'; g.lineWidth = 4; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath();
+  g.moveTo(16, 80); g.lineTo(32, 52); g.lineTo(48, 80); g.stroke();
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4; t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
 
 export class RouteLine {
-  constructor(scene, groundY, { width = 1.5, lift = 0.14, gray = false, opacity = 1 } = {}) {
+  constructor(scene, groundY, { width = 0.7, lift = 0.07, gray = false, opacity = 1 } = {}) {
     this.scene = scene; this.groundY = groundY; this.width = width; this.lift = lift; this.gray = gray;
     this.tex = chevronTexture();
     this.mat = new THREE.MeshBasicMaterial({ map: this.tex, vertexColors: true, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
@@ -30,7 +31,7 @@ export class RouteLine {
   /** arazi LOD'u değişince (version) ya da yeni rota gelince şeridi yeniden örnekle */
   update(dt, version) {
     if (!this.dense) return;
-    this.tex.offset.y -= dt * 0.55;                       // oklar rota yönünde akar
+    this.tex.offset.y -= dt * 0.35;                       // oklar rota yönünde akar
     const now = performance.now();
     if (version !== this.built && now - this.lastBuild > 900) { this.build(); this.built = version; this.lastBuild = now; }
   }
@@ -50,7 +51,7 @@ export class RouteLine {
       const ym = this.groundY(d[i][0], d[i][1]);
       if (ym != null) lastY = ym;
       pos.set([lx, (yl ?? lastY) + this.lift, lz, rx, (yr ?? lastY) + this.lift, rz], i * 6);
-      const v = dist / 3.2; uv.set([0, v, 1, v], i * 4);
+      const v = dist / 5.5; uv.set([0, v, 1, v], i * 4);
       if (this.gray) c.setHex(0x8a8f98); else c.setHex(BAND[segBand[i]]);
       col.set([c.r, c.g, c.b, c.r, c.g, c.b], i * 6);
       if (i < n - 1) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
@@ -67,9 +68,9 @@ export class RouteLine {
 export class Beacon {
   constructor(scene, groundY, color = 0x00e5ff) {
     this.groundY = groundY; this.group = new THREE.Group(); this.group.visible = false; scene.add(this.group);
-    const m = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.28, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false });
-    const pil = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 90, 20, 1, true), m); pil.position.y = 45;
-    const ring = new THREE.Mesh(new THREE.RingGeometry(2.6, 3.4, 40), m.clone()); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.2;
+    const m = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.18, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false });
+    const pil = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 70, 20, 1, true), m); pil.position.y = 35;
+    const ring = new THREE.Mesh(new THREE.RingGeometry(2.8, 3.0, 64), m.clone()); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.2;
     this.group.add(pil, ring); this.ring = ring;
   }
   set(x, z) { const y = this.groundY(x, z); this.group.position.set(x, (y ?? 0), z); this.group.visible = true; }

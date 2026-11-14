@@ -7,8 +7,9 @@
 //   const hz = await initHazards(scene, terrain, geo);   // { setVisible(bool), count, zones, refresh() }
 import * as THREE from 'three';
 import { pxToWorld } from './api.js';
+import { SYNTH } from './detail.js';
 
-const SEAT_LIFT = 0.3;       // kaya merkezi: çevre zeminin en alçağından, dikey yarıçapın bu oranı kadar yukarı (gömülü/havada kalmasın)
+const SEAT_LIFT = 0.12;      // kaya merkezi: çevre zeminin en alçağından, dikey yarıçapın bu oranı kadar yukarı (gömülü/havada kalmasın)
 const SAND_LIFT = 0.12;      // kum diski zeminden bu kadar (m) yukarıda: z-çakışması olmasın
 const BIG_M = 2.6;           // bu çaptan büyük tespitler tek kaya gibi çizilmez (gölge yöntemi sırt gölgelerini de yakalar)
 const RESEAT_MS = 1000;      // daha ince arazi döşemesi geldiyse en çok bu sıklıkta yeniden otur
@@ -32,6 +33,13 @@ function rockGeometry() {
     p.setXYZ(i, v.x * r, v.y * r * flat, v.z * r);
   }
   g.computeVertexNormals();
+  // Toz birikmesi: alt kuşak (zemine yakın) açık toz rengine, üst koyu kaya rengine (köşe rengi × örnek rengi; SENTETİK görünüm)
+  const cl = new Float32Array(p.count * 3);
+  for (let i = 0; i < p.count; i++) {
+    const t = Math.min(1, Math.max(0, (0.15 - p.getY(i)) / 0.75)), k = 0.82 + 0.5 * t;
+    cl[i * 3] = k * (1 + 0.08 * t); cl[i * 3 + 1] = k; cl[i * 3 + 2] = k * (1 - 0.10 * t);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(cl, 3));
   return g;
 }
 
@@ -67,7 +75,7 @@ function sandGeometry() {
 
 /** Kaya malzemesi: CC0 ana kaya dokusu (sim/assets/textures, bkz. sim/ASSETS.md); doku yoksa düz renk. */
 function rockMaterial() {
-  const m = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.96, metalness: 0, flatShading: true });
+  const m = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.96, metalness: 0, flatShading: true, vertexColors: true });
   const L = new THREE.TextureLoader(), base = new URL('../assets/textures/', import.meta.url);
   const load = (name, srgb, set) => L.load(new URL(name, base).href, (t) => {
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 2); if (srgb) t.colorSpace = THREE.SRGBColorSpace; set(t); m.needsUpdate = true;
@@ -113,6 +121,13 @@ export async function initHazards(scene, terrain, geo) {
   rockMesh.instanceColor.needsUpdate = true;
   group.add(rockMesh);
 
+  // Diplerinde toz birikintisi: zemine yatık, kenarı yumuşayan yarı saydam disk (SENTETİK; kaya konumu gerçek tespit, toz görsel)
+  const dustTex = softDiscTexture();
+  const dustMat = new THREE.MeshStandardMaterial({ color: 0xa4764f, roughness: 1, metalness: 0, transparent: true, opacity: 0.55, alphaMap: dustTex, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1.5, polygonOffsetUnits: -1.5 });
+  const dustMesh = new THREE.InstancedMesh(new THREE.CircleGeometry(1, 20).rotateX(-Math.PI / 2), dustMat, Math.max(N, 1));
+  dustMesh.name = 'hazard-dust'; dustMesh.frustumCulled = false; dustMesh.receiveShadow = true; dustMesh.renderOrder = 1;
+  group.add(dustMesh);
+
   // --- kum bölgeleri: zemini izleyen yarı saydam, kenarı yumuşak disk ---
   const tex = softDiscTexture();
   const sandMat = new THREE.MeshBasicMaterial({ color: 0xe9d4a0, transparent: true, opacity: 0.34, alphaMap: tex, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
@@ -132,13 +147,17 @@ export async function initHazards(scene, terrain, geo) {
     for (let i = 0; i < N; i++) {
       let lo = Infinity;
       for (const [ax, az] of AX) { const y = terrain.heightAt(rx[i] + ax * rr[i], rz[i] + az * rr[i]); if (y != null && y < lo) lo = y; }
-      if (lo === Infinity) { m.compose(pos.set(rx[i], 0, rz[i]), q.identity(), zero); rockMesh.setMatrixAt(i, m); continue; }   // karo yok: sıfır ölçek, gizli
+      if (lo === Infinity) { m.compose(pos.set(rx[i], 0, rz[i]), q.identity(), zero); rockMesh.setMatrixAt(i, m); dustMesh.setMatrixAt(i, m); continue; }   // karo yok: sıfır ölçek, gizli
       e.set(0, yaw[i], 0); q.setFromEuler(e);
       s.set(sc[i * 3], sc[i * 3 + 1], sc[i * 3 + 2]);
       pos.set(rx[i], lo + s.y * SEAT_LIFT, rz[i]);
       m.compose(pos, q, s); rockMesh.setMatrixAt(i, m); placed++;
+      const dr = rr[i] * (1.55 + 0.4 * hash(i, 8));   // toz halkası: yarıçapın ~1,5–2 katı; en yüksek çevre zemin yüksekliğine oturur
+      let hi = lo; for (const [ax, az] of AX) { const y = terrain.heightAt(rx[i] + ax * dr, rz[i] + az * dr); if (y != null && y > hi) hi = y; }
+      e.set(0, yaw[i], 0); q.setFromEuler(e); pos.set(rx[i], hi + 0.03, rz[i]); s.set(dr, 1, dr * (0.85 + 0.2 * hash(i, 9)));
+      m.compose(pos, q, s); dustMesh.setMatrixAt(i, m);
     }
-    rockMesh.instanceMatrix.needsUpdate = true;
+    rockMesh.instanceMatrix.needsUpdate = true; dustMesh.instanceMatrix.needsUpdate = true;
   }
   function seatSand() {
     for (const o of sand) {
@@ -162,7 +181,7 @@ export async function initHazards(scene, terrain, geo) {
     lastVersion = v; lastT = now;
     seatRocks(); seatSand();
   }
-  rockMesh.onBeforeRender = () => refresh();   // kendi kendine günceller; main.js'e ek çağrı gerekmez
+  rockMesh.onBeforeRender = () => { dustMesh.visible = SYNTH.value > 0.5; refresh(); };   // saf veri modunda (V) sentetik toz gizlenir   // kendi kendine günceller; main.js'e ek çağrı gerekmez
   refresh(true);
 
   const api = {
