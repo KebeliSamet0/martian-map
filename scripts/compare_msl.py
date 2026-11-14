@@ -73,6 +73,13 @@ def load_layers_with_fallback(root: Path = ROOT) -> tuple[Layers, dict]:
     root = Path(root)
     try:
         layers = planner.load(root)
+        if getattr(layers, "provisional_terrain", False):
+            # Planlayıcı eksik zemin katmanlarını eğim+rock_cfa'dan geçici dolguyla tamamladı: model çıktısı değil.
+            return layers, {
+                "terrain_model_available": False,
+                "mode": "gecici_zemin_dolgusu",
+                "label": "geçici zemin dolgusu (eğim + rock_cfa; zemin modeli çıktısı değil)",
+            }
         return layers, {
             "terrain_model_available": True,
             "mode": "tam_zemin_modeli",
