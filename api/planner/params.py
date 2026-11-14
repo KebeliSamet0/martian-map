@@ -41,7 +41,12 @@ SCIENCE_STOP_MIN = 30.0  # VARSAYIM: hedefte bilim çalışması
 RESERVE_MIN = 30.0  # VARSAYIM: eve dönüş için yedek pay
 
 # Radyasyon: Curiosity RAD yüzey dozu ~180–225 µGy/gün (Hassler et al. 2014)
-DOSE_UGY_PER_H = 210.0 / 24.0
+SURFACE_DOSE_MGY_PER_DAY = 0.21  # Hassler et al. 2014, doi:10.1126/science.1244797
+DOSE_UGY_PER_H = SURFACE_DOSE_MGY_PER_DAY * 1000 / 24.0
+EVA_MAX_KCAL = 2000.0  # VARSAYIM: görev bütçesi, tıbbi sınır değil
+EVA_MAX_O2_L = 420.0  # VARSAYIM
+EVA_MAX_DOSE_UGY = 60.0  # VARSAYIM: EVA planlama bütçesi
+STOP_METABOLIC_W = FLAT_REFERENCE_W  # VARSAYIM: durak/yedek metabolizması
 
 # Oksijen: 1 L O₂ ≈ 4.8 kcal (dolaylı kalorimetri kalorik eşdeğeri)
 KCAL_PER_L_O2 = 4.8
@@ -55,7 +60,7 @@ PRESETS = {
 
 # Segmentleme
 SEG_MIN_M = 40.0
-SEG_MAX_M = 150.0
+SEG_MAX_M = 100.0
 SLOPE_BANDS = (8.0, 15.0, 25.0)
 
 # Güven sınıfları (normalize entropi)
@@ -71,10 +76,15 @@ def assumptions():
         {"name": "Ekipman", "value": TOOLS_KG, "unit": "kg", "source": "VARSAYIM"},
         {"name": "Temel yürüme hızı", "value": BASE_SPEED_MS, "unit": "m/s", "source": "VARSAYIM (doğrulanacak)"},
         {"name": "Düz zemin metabolik düzeyi", "value": FLAT_REFERENCE_W, "unit": "W", "source": "Apollo EVA ortalaması, Waligora & Horrigan 1975 (doğrulanacak)"},
-        {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": "Pandolf 1977 (doğrulanacak)"},
+        {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": TERRAIN_SOURCE},
         {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "VARSAYIM"},
         {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "VARSAYIM"},
         {"name": "Maksimum EVA süresi", "value": EVA_MAX_H, "unit": "saat", "source": "VARSAYIM"},
         {"name": "Yüzey doz hızı", "value": round(DOSE_UGY_PER_H, 2), "unit": "µGy/saat", "source": "Curiosity RAD, Hassler et al. 2014"},
         {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir"},
     ]
+
+
+# Tek yükleme noktası; belge yoksa yukarıdaki varsayılanlar korunur.
+from .terrain import load_terrain
+TERRAIN_ETA, TERRAIN_SPEED, TERRAIN_SOURCE = load_terrain(TERRAIN_ETA, TERRAIN_SPEED)
