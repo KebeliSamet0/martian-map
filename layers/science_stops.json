@@ -1,0 +1,98 @@
+[
+  {
+    "id": "sci_1_sol4617",
+    "name": "Boxwork inceleme alanı (sol 4617–4634)",
+    "px": [
+      433,
+      525
+    ],
+    "why": "Curiosity burada sol 4617–4634 arasında yakın inceleme yaptı: 644 MAHLI + 257 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %7'i). Boxwork: yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleştiği düşünülen sırt ağı; katmanlı sülfat birimi (LSu) içinde, kuru sülfat dönemindeki daha ıslak bir ara evreye işaret ediyor (NASA/JPL 2025; GSA 2025 — Elif Nisa, PR #32).",
+    "lat": -4.805863,
+    "lon": 137.379756,
+    "evidence": {
+      "sol_range": [
+        4617,
+        4634
+      ],
+      "mahli_images": 644,
+      "chemcam_images": 257,
+      "n_stops": 8,
+      "score_share_pct": 6.5,
+      "slope_deg": 11.1,
+      "anchor_stop": "site 118 drive 762"
+    },
+    "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
+  },
+  {
+    "id": "sci_2_sol4635",
+    "name": "Boxwork inceleme alanı (sol 4635–4653)",
+    "px": [
+      435,
+      555
+    ],
+    "why": "Curiosity burada sol 4635–4653 arasında yakın inceleme yaptı: 464 MAHLI + 388 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %6'i). Boxwork: yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleştiği düşünülen sırt ağı; katmanlı sülfat birimi (LSu) içinde, kuru sülfat dönemindeki daha ıslak bir ara evreye işaret ediyor (NASA/JPL 2025; GSA 2025 — Elif Nisa, PR #32).",
+    "lat": -4.806875,
+    "lon": 137.379824,
+    "evidence": {
+      "sol_range": [
+        4635,
+        4653
+      ],
+      "mahli_images": 464,
+      "chemcam_images": 388,
+      "n_stops": 7,
+      "score_share_pct": 6.2,
+      "slope_deg": 13.4,
+      "anchor_stop": "site 118 drive 2268"
+    },
+    "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
+  },
+  {
+    "id": "sci_3_sol4668",
+    "name": "Boxwork inceleme alanı (sol 4668–4803)",
+    "px": [
+      470,
+      589
+    ],
+    "why": "Curiosity burada sol 4668–4803 arasında yakın inceleme yaptı: 1502 MAHLI + 1143 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %19'i). Boxwork: yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleştiği düşünülen sırt ağı; katmanlı sülfat birimi (LSu) içinde, kuru sülfat dönemindeki daha ıslak bir ara evreye işaret ediyor (NASA/JPL 2025; GSA 2025 — Elif Nisa, PR #32).",
+    "lat": -4.808022,
+    "lon": 137.381005,
+    "evidence": {
+      "sol_range": [
+        4668,
+        4803
+      ],
+      "mahli_images": 1502,
+      "chemcam_images": 1143,
+      "n_stops": 12,
+      "score_share_pct": 19.2,
+      "slope_deg": 13.6,
+      "anchor_stop": "site 120 drive 82"
+    },
+    "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
+  },
+  {
+    "id": "sci_4_sol4869",
+    "name": "Katmanlı sülfat inceleme alanı (sol 4869–4914)",
+    "px": [
+      491,
+      774
+    ],
+    "why": "Curiosity burada sol 4869–4914 arasında yakın inceleme yaptı: 563 MAHLI + 675 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %9'i). Boxwork kampanyası (sol ~4600–4844) sonrasında, aynı katmanlı sülfat biriminde ikinci büyük inceleme alanı; bilimsel bağlam Elif Nisa tarafından kaynakla tamamlanacak.",
+    "lat": -4.814265,
+    "lon": 137.381713,
+    "evidence": {
+      "sol_range": [
+        4869,
+        4914
+      ],
+      "mahli_images": 563,
+      "chemcam_images": 675,
+      "n_stops": 5,
+      "score_share_pct": 9.0,
+      "slope_deg": 14.9,
+      "anchor_stop": "site 122 drive 0"
+    },
+    "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
+  }
+]
