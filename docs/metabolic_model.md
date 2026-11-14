@@ -6,7 +6,7 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Kullanan kod: `api/planner/cost.py`, `ap
 > düzeltmesiyle birlikte EVA rota planlamasında kullanıyor. Koddaki formül orijinalle **birebir aynı**.
 > **Mars için ölçülmüş zemin katsayısı yok** (bkz. bölüm 3, yapılan araştırma). Bu yüzden zemin katsayıları
 > **Dünya'da ölçülmüş** değerlerdir (Soule & Goldman 1972); Mars zeminlerine eşlenmeleri bizim varsayımımız.
-> Bu belgeyle **toprak η 1.2 → 1.1** oluyor. NASA 2024 makalesinde zemin katsayısı tablosu **yok**. Mars
+> Değerler kodun mevcut değerleriyle aynı; bu belge kodun davranışını **değiştirmiyor**. NASA 2024 makalesinde zemin katsayısı tablosu **yok**. Mars
 > yerçekimi için doğrulanmış bir formül yok; bu konudaki her şey VARSAYIM olarak işaretli.
 
 ## 1. Formül (doğrulandı)
@@ -84,7 +84,7 @@ Richmond, Potter & Santee (2015) bu tabloyu gözden geçirmiş.
 | Mars sınıfı | Kullanılan Dünya değeri | Gerekçe |
 |---|---|---|
 | Ana kaya | asfalt, 1.0 | Sert, düz yüzey |
-| Toprak | toprak yol, 1.1 | Sıkı, ince taneli yüzey |
+| Toprak | hafif çalılık, 1.2 | Sıkı, ince taneli yüzey. Toprak yol (1.1) ile hafif çalılık (1.2) arasında temkinli olan seçildi; kodun mevcut değeri ve dondurulmuş `contracts/route.example.json` değişmesin diye |
 | Kum | gevşek kum, 2.1 | Doğrudan karşılık |
 | Büyük kaya | yoğun çalılık, 1.5 | Tabloda kaya alanı yok; engelden kaçınma maliyetine en yakın karşılık. NASA Rock Yard'daki karışık arazi ölçümü (+%58) bu değerle tutarlı |
 
@@ -95,7 +95,7 @@ Samet'in **VARSAYIM**'larıdır, kaynak bulunamadı.
 | class | eta | speed | eta kaynağı |
 |---|---|---|---|
 | bedrock | 1.0 | 1.0 | Dünya ölçümü: asfalt (Soule & Goldman 1972) |
-| soil | 1.1 | 0.95 | Dünya ölçümü: toprak yol (Soule & Goldman 1972) |
+| soil | 1.2 | 0.95 | Dünya ölçümü: hafif çalılık (Soule & Goldman 1972); temkinli seçim |
 | sand | 2.1 | 0.6 | Dünya ölçümü: gevşek kum (Soule & Goldman 1972) |
 | bigrock | 1.5 | 0.5 | Dünya ölçümü: yoğun çalılık (Soule & Goldman 1972); kayaya eşleme VARSAYIM |
 
