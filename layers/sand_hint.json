@@ -1,0 +1,106 @@
+{
+  "description": "Ortofotoda kum olma ihtimali yuksek adaylar (kesin degil). px = [sutun, satir], contracts/grid.json izgarasinda (2 m hucre, ondalikli).",
+  "source": "ml/orbital/sand_candidates.py, Bora gozle dogruladi",
+  "points": [
+    {
+      "id": "sand_1",
+      "px": [
+        897.6,
+        938.1
+      ],
+      "radius_m": 30.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi.",
+      "route_dist_m": 503.0
+    },
+    {
+      "id": "sand_2",
+      "px": [
+        454.8,
+        405.3
+      ],
+      "radius_m": 9.7,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~27 m.",
+      "route_dist_m": 27.0
+    },
+    {
+      "id": "sand_3",
+      "px": [
+        971.0,
+        460.1
+      ],
+      "radius_m": 25.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi.",
+      "route_dist_m": 679.0
+    },
+    {
+      "id": "sand_4",
+      "px": [
+        521.3,
+        915.7
+      ],
+      "radius_m": 15.3,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~8 m.",
+      "route_dist_m": 8.0
+    },
+    {
+      "id": "sand_5",
+      "px": [
+        554.5,
+        263.2
+      ],
+      "radius_m": 30.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~34 m.",
+      "route_dist_m": 34.0
+    },
+    {
+      "id": "sand_6",
+      "px": [
+        44.4,
+        235.4
+      ],
+      "radius_m": 18.7,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi.",
+      "route_dist_m": 876.0
+    },
+    {
+      "id": "sand_7",
+      "px": [
+        385.9,
+        296.0
+      ],
+      "radius_m": 30.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi.",
+      "route_dist_m": 250.0
+    },
+    {
+      "id": "sand_8",
+      "px": [
+        427.7,
+        809.9
+      ],
+      "radius_m": 15.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~107 m.",
+      "route_dist_m": 107.0
+    },
+    {
+      "id": "sand_9",
+      "px": [
+        542.0,
+        962.4
+      ],
+      "radius_m": 11.8,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~0 m.",
+      "route_dist_m": 0.0
+    },
+    {
+      "id": "sand_10",
+      "px": [
+        414.5,
+        370.9
+      ],
+      "radius_m": 15.8,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~112 m.",
+      "route_dist_m": 112.0
+    }
+  ]
+}
