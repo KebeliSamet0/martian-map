@@ -149,7 +149,7 @@ Not: Altyazı seslendirme metniyle aynı. Render: Batu. Ekran kaydı 21:00 prova
 
 **From the literature, applied to Mars (assumption)**
 - Walking energy: Pandolf et al. (1977) equation, validated on Earth; NASA uses the same equation for EVA traverse planning (Kim et al. 2024).
-- Terrain coefficients are **Earth measurements** (Soule & Goldman 1972). **No Mars-measured values exist.** Mapping them to Martian terrain classes is our assumption: bedrock 1.0, soil 1.2, sand 2.1, boulders 1.5.
+- Terrain coefficients are **Earth measurements** (Soule & Goldman 1972). **No Mars-measured values exist.** Mapping them to Martian terrain classes is our assumption: bedrock 1.0, soil 1.2, sand 2.1, boulders 1.5. The sand value sits at the low end of a second Earth measurement: walking on sand costs 2.1–2.7× more energy (Lejeune et al. 1998).
 - Mars gravity: load and walking terms are scaled by 3.71 / 9.81. Real Mars walking is likely costlier, because walking cost does not fall in proportion to gravity (Farley & McMahon 1992). Our energy values are a **lower bound**.
 - Extra load in the simulator (e.g. a collected sample) is estimated from the total mass ratio, not a full Pandolf recalculation.
 
