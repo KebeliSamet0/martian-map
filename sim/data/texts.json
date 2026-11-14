@@ -1,0 +1,53 @@
+{
+  "missions": {
+    "S1": {
+      "title": "Boxwork'ten Atacama sondaj alanına",
+      "brief": "Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yaklaşık 0,55 km yürüyeceksin. Sırtlar, yeraltı suyunun çatlaklarda bıraktığı minerallerin izini taşıyor. Atacama, boxwork sonrasında katmanlı sülfat biriminde açılan ilk sondajın yeri.",
+      "objective": "Atacama sondaj alanına ulaş ve numune al."
+    },
+    "S2": {
+      "title": "Son boxwork durağından Atacama'ya",
+      "brief": "Boxwork kampanyasının en yoğun inceleme alanından Atacama sondaj alanına yaklaşık 0,40 km yürüyeceksin. Kısa bir geçiş, ama zemin her yerde aynı değil. Taramada modelin emin olmadığı bölgeleri izle.",
+      "objective": "Atacama sondaj alanına ulaş ve numune al."
+    },
+    "S3": {
+      "title": "Yedek görev: ikinci boxwork durağından Atacama'ya",
+      "brief": "Boxwork'ün ikinci inceleme alanından Atacama sondaj alanına yaklaşık 0,53 km yürüyeceksin. Başlangıç noktası dar bir sırt kenarında. İlk adımlarda eğimi kontrol et.",
+      "objective": "Atacama sondaj alanına ulaş ve numune al."
+    }
+  },
+  "hud": {
+    "oxygen": "Oksijen",
+    "energy": "Enerji",
+    "time": "Süre",
+    "dose": "Doz",
+    "effort": "Efor",
+    "load": "Yük",
+    "return": "Üsse dönüş",
+    "status_go": "GO · Bütçe içinde",
+    "status_caution": "DİKKAT · Dönüş payı daralıyor",
+    "status_nogo": "NO-GO · Bütçe sınırı aşıldı"
+  },
+  "scan": {
+    "safe": "Güvenli zemin",
+    "caution": "Dikkat: kum ya da dik eğim",
+    "nogo": "Geçilmez",
+    "unknown": "Model emin değil"
+  },
+  "alerts": {
+    "sand": "Önünde kum var. Rota yeniden hesaplanıyor.",
+    "replan_done": "Yeni rota hazır. Kumun çevresinden geçiliyor.",
+    "limit_o2": "Oksijen sınırına ulaşıldı. Üsse dönüşe başla.",
+    "limit_time": "Süre sınırına ulaşıldı. Üsse dönüşe başla.",
+    "turn_back": "Dönüş payı tükeniyor. Geri dönme zamanı.",
+    "off_route": "Rotadan ayrıldın. Planlanan yola geri dön."
+  },
+  "debrief": {
+    "title": "Görev karnesi",
+    "grade_A": "Görev bütçe içinde ve güvenli dönüş payıyla tamamlandı.",
+    "grade_B": "Görev tamamlandı; bir kaynak sınıra yaklaştı.",
+    "grade_C": "Görev tamamlandı, ama bir sınır aşıldı; rota gözden geçirilmeli.",
+    "planned": "Planlanan",
+    "actual": "Gerçekleşen"
+  }
+}
