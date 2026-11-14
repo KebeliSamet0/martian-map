@@ -10,12 +10,14 @@ Dal: `samet/deploy`; hedef: `main`; gövde: `Refs #16`. Birleştirilmedi.
 - Özel çift listesi, çıktı dizini, sentetik veya gerçek katman seçimi.
 - Üç sentetik çift ve `web/public/routes/synthetic-*.json` çıktıları.
 - CLI, sözleşme/çekirdek eşitliği, örnek güncelliği ve hatalı girdi testleri.
-- `api/planner` dosyaları değiştirilmedi; pull/checkout yapılmadı.
+- PR #25, `git fetch && git merge origin/main` ile alındı; checkout yapılmadı.
+- Planlayıcıya ek değişiklik yapılmadı; üç JSON yeni çekirdekle yeniden üretildi.
 - Commit'ler: `0674d79` Docker paketi, `f3ede4b` B planı; bu rapor ayrı commit.
 
 ## Test çıktısı (2026-11-14)
 Python: `/Users/samet/Desktop/Spaceapp/martian-map/.venv/bin/python`.
-`python -m pytest -q`: **38 passed, 1 warning in 1.16s**.
+`python -m pytest -q`: **57 passed, 1 warning in 1.07s** (PR #25 sonrası).
+Eski JSON eşitliği testi kırılıyordu; yeniden üretimle status/budget dahil güncellendi.
 Uyarı: mevcut Starlette TestClient/httpx kullanımının kullanımdan kaldırılması.
 `git diff --check`: temiz.
 Docker komutu kurulu değil; `docker build` çalıştırılamadı.

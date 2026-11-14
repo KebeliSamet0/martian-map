@@ -38,10 +38,32 @@
         "o2_L": 121.0,
         "dose_uGy": 22.6,
         "slope_max": 17.5,
-        "low_conf_m": 640.0,
+        "low_conf_m": 658.0,
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
-        "go": true
+        "go": true,
+        "status": "GO",
+        "limit_exceeded_at_px": null,
+        "limit_exceeded_at_index": null,
+        "budget": {
+          "limits": {
+            "time_min": 360.0,
+            "kcal": 2000.0,
+            "o2_L": 420.0,
+            "dose_uGy": 60.0,
+            "reserve_min": 30.0
+          },
+          "used": {
+            "time_min": 184.649,
+            "kcal": 815.454,
+            "o2_L": 169.886,
+            "dose_uGy": 26.928
+          },
+          "exceeded": [],
+          "first_exceeded": [],
+          "return_min": 62.325,
+          "return_kcal": 290.71
+        }
       },
       "segments": [
         {
@@ -62,31 +84,31 @@
             [
               113,
               232
-            ],
-            [
-              114,
-              231
             ]
           ],
-          "len_m": 45.3,
+          "len_m": 33.9,
           "slope_max": 7.3,
-          "slope_mean": 6.7,
+          "slope_mean": 6.8,
           "class": "bedrock",
-          "p_sand": 0.26,
+          "p_sand": 0.24,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.056,
+          "rock_cfa": 0.053,
           "entropy": 0.65,
           "conf": "low",
-          "nearest_evidence_m": 100.0,
-          "kcal": 8.1,
-          "min": 1.6,
-          "risk": 10.57,
+          "nearest_evidence_m": 104.0,
+          "kcal": 6.0,
+          "min": 1.2,
+          "risk": 7.81,
           "rejected_alt": "En güvenli rota burada ayrılıyor (2195 m): 4 dk daha uzun süre, 8 kcal daha fazla enerji.",
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%120 kcal. Model emin değil: en yakın rover kanıtı 100 m uzakta."
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%118 kcal. Model emin değil: en yakın rover kanıtı 104 m uzakta."
         },
         {
           "id": 2,
           "path_px": [
+            [
+              113,
+              232
+            ],
             [
               114,
               231
@@ -122,6 +144,30 @@
             [
               122,
               223
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 7.0,
+          "slope_mean": 6.3,
+          "class": "soil",
+          "p_sand": 0.25,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.055,
+          "entropy": 0.49,
+          "conf": "mid",
+          "nearest_evidence_m": 96.0,
+          "kcal": 17.8,
+          "min": 3.6,
+          "risk": 17.43,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%115 kcal."
+        },
+        {
+          "id": 3,
+          "path_px": [
+            [
+              122,
+              223
             ],
             [
               122,
@@ -132,24 +178,24 @@
               221
             ]
           ],
-          "len_m": 106.5,
+          "len_m": 16.0,
           "slope_max": 8.1,
-          "slope_mean": 6.6,
+          "slope_mean": 7.5,
           "class": "soil",
-          "p_sand": 0.22,
+          "p_sand": 0.12,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.057,
-          "entropy": 0.42,
-          "conf": "mid",
-          "nearest_evidence_m": 96.0,
-          "kcal": 18.7,
-          "min": 3.8,
-          "risk": 17.31,
+          "rock_cfa": 0.069,
+          "entropy": 0.28,
+          "conf": "high",
+          "nearest_evidence_m": 112.0,
+          "kcal": 3.0,
+          "min": 0.6,
+          "risk": 2.64,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%116 kcal."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%131 kcal."
         },
         {
-          "id": 3,
+          "id": 4,
           "path_px": [
             [
               122,
@@ -205,7 +251,7 @@
           "reason": "Toprak zemin, eğim 9°; düz ana kayaya göre +%144 kcal."
         },
         {
-          "id": 4,
+          "id": 5,
           "path_px": [
             [
               122,
@@ -262,6 +308,30 @@
             [
               122,
               200
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 7.4,
+          "slope_mean": 5.3,
+          "class": "soil",
+          "p_sand": 0.08,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.039,
+          "entropy": 0.46,
+          "conf": "mid",
+          "nearest_evidence_m": 29.0,
+          "kcal": 15.3,
+          "min": 3.2,
+          "risk": 15.38,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%81 kcal."
+        },
+        {
+          "id": 6,
+          "path_px": [
+            [
+              122,
+              200
             ],
             [
               122,
@@ -272,24 +342,24 @@
               198
             ]
           ],
-          "len_m": 120.0,
-          "slope_max": 7.4,
-          "slope_mean": 4.9,
+          "len_m": 16.0,
+          "slope_max": 2.9,
+          "slope_mean": 2.2,
           "class": "soil",
-          "p_sand": 0.07,
+          "p_sand": 0.04,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.034,
-          "entropy": 0.48,
+          "rock_cfa": 0.0,
+          "entropy": 0.6,
           "conf": "mid",
           "nearest_evidence_m": 24.0,
-          "kcal": 16.9,
-          "min": 3.6,
-          "risk": 17.3,
+          "kcal": 1.7,
+          "min": 0.4,
+          "risk": 1.92,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%73 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%31 kcal."
         },
         {
-          "id": 5,
+          "id": 7,
           "path_px": [
             [
               122,
@@ -346,6 +416,30 @@
             [
               122,
               185
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 3.4,
+          "slope_mean": 2.1,
+          "class": "bedrock",
+          "p_sand": 0.01,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.017,
+          "entropy": 0.27,
+          "conf": "high",
+          "nearest_evidence_m": 24.0,
+          "kcal": 10.6,
+          "min": 2.5,
+          "risk": 7.93,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%25 kcal."
+        },
+        {
+          "id": 8,
+          "path_px": [
+            [
+              122,
+              185
             ],
             [
               123,
@@ -366,30 +460,6 @@
             [
               127,
               180
-            ]
-          ],
-          "len_m": 160.6,
-          "slope_max": 4.0,
-          "slope_mean": 2.2,
-          "class": "bedrock",
-          "p_sand": 0.01,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.018,
-          "entropy": 0.24,
-          "conf": "high",
-          "nearest_evidence_m": 24.0,
-          "kcal": 16.6,
-          "min": 3.9,
-          "risk": 11.54,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%27 kcal."
-        },
-        {
-          "id": 6,
-          "path_px": [
-            [
-              127,
-              180
             ],
             [
               128,
@@ -403,6 +473,30 @@
               130,
               177
             ],
+            [
+              131,
+              176
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 4.0,
+          "slope_mean": 2.4,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.027,
+          "entropy": 0.17,
+          "conf": "high",
+          "nearest_evidence_m": 40.0,
+          "kcal": 10.8,
+          "min": 2.5,
+          "risk": 7.1,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%31 kcal."
+        },
+        {
+          "id": 9,
+          "path_px": [
             [
               131,
               176
@@ -446,31 +540,31 @@
             [
               138,
               166
-            ],
-            [
-              138,
-              165
             ]
           ],
-          "len_m": 156.5,
-          "slope_max": 4.0,
-          "slope_mean": 1.6,
+          "len_m": 103.2,
+          "slope_max": 1.7,
+          "slope_mean": 1.1,
           "class": "bedrock",
           "p_sand": 0.01,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.044,
-          "entropy": 0.19,
+          "rock_cfa": 0.059,
+          "entropy": 0.18,
           "conf": "high",
-          "nearest_evidence_m": 40.0,
-          "kcal": 15.0,
-          "min": 3.6,
-          "risk": 17.35,
+          "nearest_evidence_m": 56.0,
+          "kcal": 9.6,
+          "min": 2.3,
+          "risk": 13.18,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%18 kcal."
+          "reason": "Ana kaya zemin, eğim 2°; düz ana kayaya göre +%14 kcal."
         },
         {
-          "id": 7,
+          "id": 10,
           "path_px": [
+            [
+              138,
+              166
+            ],
             [
               138,
               165
@@ -522,30 +616,54 @@
             [
               138,
               153
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 3.8,
+          "slope_mean": 1.6,
+          "class": "bedrock",
+          "p_sand": 0.08,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.028,
+          "entropy": 0.51,
+          "conf": "mid",
+          "nearest_evidence_m": 128.0,
+          "kcal": 10.7,
+          "min": 2.5,
+          "risk": 15.49,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%27 kcal."
+        },
+        {
+          "id": 11,
+          "path_px": [
+            [
+              138,
+              153
             ],
             [
               139,
               152
             ]
           ],
-          "len_m": 107.3,
+          "len_m": 11.3,
           "slope_max": 4.6,
-          "slope_mean": 1.9,
-          "class": "bedrock",
-          "p_sand": 0.08,
+          "slope_mean": 4.2,
+          "class": "soil",
+          "p_sand": 0.04,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.029,
-          "entropy": 0.54,
-          "conf": "mid",
-          "nearest_evidence_m": 128.0,
-          "kcal": 11.5,
-          "min": 2.7,
-          "risk": 16.67,
+          "rock_cfa": 0.033,
+          "entropy": 0.61,
+          "conf": "low",
+          "nearest_evidence_m": 129.0,
+          "kcal": 1.5,
+          "min": 0.3,
+          "risk": 1.87,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%32 kcal."
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%63 kcal. Model emin değil: en yakın rover kanıtı 129 m uzakta."
         },
         {
-          "id": 8,
+          "id": 12,
           "path_px": [
             [
               139,
@@ -586,6 +704,30 @@
             [
               148,
               143
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 5.2,
+          "slope_mean": 3.0,
+          "class": "soil",
+          "p_sand": 0.06,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.024,
+          "entropy": 0.59,
+          "conf": "mid",
+          "nearest_evidence_m": 138.0,
+          "kcal": 11.9,
+          "min": 2.7,
+          "risk": 15.5,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%44 kcal."
+        },
+        {
+          "id": 13,
+          "path_px": [
+            [
+              148,
+              143
             ],
             [
               149,
@@ -596,24 +738,24 @@
               141
             ]
           ],
-          "len_m": 121.1,
-          "slope_max": 5.2,
-          "slope_mean": 2.9,
+          "len_m": 19.3,
+          "slope_max": 2.9,
+          "slope_mean": 2.2,
           "class": "soil",
-          "p_sand": 0.07,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.02,
-          "entropy": 0.61,
+          "p_sand": 0.1,
+          "p_bigrock": 0.01,
+          "rock_cfa": 0.004,
+          "entropy": 0.71,
           "conf": "low",
-          "nearest_evidence_m": 138.0,
-          "kcal": 14.1,
-          "min": 3.2,
-          "risk": 18.31,
+          "nearest_evidence_m": 229.0,
+          "kcal": 2.2,
+          "min": 0.5,
+          "risk": 2.82,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%43 kcal. Model emin değil: en yakın rover kanıtı 138 m uzakta."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%40 kcal. Model emin değil: en yakın rover kanıtı 229 m uzakta."
         },
         {
-          "id": 9,
+          "id": 14,
           "path_px": [
             [
               149,
@@ -634,31 +776,31 @@
             [
               149,
               137
-            ],
-            [
-              149,
-              136
             ]
           ],
-          "len_m": 40.0,
-          "slope_max": 10.1,
-          "slope_mean": 6.3,
+          "len_m": 32.0,
+          "slope_max": 8.5,
+          "slope_mean": 5.5,
           "class": "bedrock",
           "p_sand": 0.09,
-          "p_bigrock": 0.03,
-          "rock_cfa": 0.005,
-          "entropy": 0.71,
+          "p_bigrock": 0.02,
+          "rock_cfa": 0.002,
+          "entropy": 0.7,
           "conf": "low",
           "nearest_evidence_m": 243.0,
-          "kcal": 6.7,
-          "min": 1.4,
-          "risk": 6.03,
+          "kcal": 5.0,
+          "min": 1.0,
+          "risk": 4.56,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%106 kcal. Model emin değil: en yakın rover kanıtı 243 m uzakta."
+          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%92 kcal. Model emin değil: en yakın rover kanıtı 243 m uzakta."
         },
         {
-          "id": 10,
+          "id": 15,
           "path_px": [
+            [
+              149,
+              137
+            ],
             [
               149,
               136
@@ -684,24 +826,24 @@
               131
             ]
           ],
-          "len_m": 40.0,
+          "len_m": 48.0,
           "slope_max": 15.5,
-          "slope_mean": 13.2,
+          "slope_mean": 12.5,
           "class": "bedrock",
           "p_sand": 0.06,
-          "p_bigrock": 0.32,
-          "rock_cfa": 0.074,
-          "entropy": 0.73,
+          "p_bigrock": 0.28,
+          "rock_cfa": 0.065,
+          "entropy": 0.72,
           "conf": "low",
-          "nearest_evidence_m": 264.0,
-          "kcal": 13.0,
-          "min": 2.7,
-          "risk": 15.79,
+          "nearest_evidence_m": 260.0,
+          "kcal": 14.6,
+          "min": 3.0,
+          "risk": 17.26,
           "rejected_alt": null,
-          "reason": "Dik (16°), dikkatli geç; düz ana kayaya göre +%300 kcal. Model emin değil: en yakın rover kanıtı 264 m uzakta."
+          "reason": "Dik (16°), dikkatli geç; düz ana kayaya göre +%274 kcal. Model emin değil: en yakın rover kanıtı 260 m uzakta."
         },
         {
-          "id": 11,
+          "id": 16,
           "path_px": [
             [
               149,
@@ -765,7 +907,7 @@
           "reason": "Dik (18°), dikkatli geç, kayalık (yüzeyin %22'i kaya); düz ana kayaya göre +%511 kcal."
         },
         {
-          "id": 12,
+          "id": 17,
           "path_px": [
             [
               149,
@@ -778,6 +920,30 @@
             [
               149,
               119
+            ]
+          ],
+          "len_m": 16.0,
+          "slope_max": 13.9,
+          "slope_mean": 12.2,
+          "class": "bigrock",
+          "p_sand": 0.03,
+          "p_bigrock": 0.51,
+          "rock_cfa": 0.205,
+          "entropy": 0.63,
+          "conf": "low",
+          "nearest_evidence_m": 296.0,
+          "kcal": 4.4,
+          "min": 0.9,
+          "risk": 7.68,
+          "rejected_alt": null,
+          "reason": "Kayalık (yüzeyin %20'i kaya); düz ana kayaya göre +%238 kcal. Model emin değil: en yakın rover kanıtı 296 m uzakta."
+        },
+        {
+          "id": 18,
+          "path_px": [
+            [
+              149,
+              119
             ],
             [
               149,
@@ -786,31 +952,31 @@
             [
               149,
               117
-            ],
-            [
-              149,
-              116
             ]
           ],
-          "len_m": 40.0,
-          "slope_max": 13.9,
-          "slope_mean": 9.9,
+          "len_m": 16.0,
+          "slope_max": 10.5,
+          "slope_mean": 9.0,
           "class": "soil",
           "p_sand": 0.04,
-          "p_bigrock": 0.29,
-          "rock_cfa": 0.199,
-          "entropy": 0.53,
+          "p_bigrock": 0.14,
+          "rock_cfa": 0.198,
+          "entropy": 0.52,
           "conf": "mid",
-          "nearest_evidence_m": 296.0,
-          "kcal": 8.8,
-          "min": 1.8,
-          "risk": 16.67,
+          "nearest_evidence_m": 302.0,
+          "kcal": 3.1,
+          "min": 0.6,
+          "risk": 6.13,
           "rejected_alt": null,
-          "reason": "Kayalık (yüzeyin %20'i kaya); düz ana kayaya göre +%171 kcal."
+          "reason": "Kayalık (yüzeyin %20'i kaya); düz ana kayaya göre +%138 kcal."
         },
         {
-          "id": 13,
+          "id": 19,
           "path_px": [
+            [
+              149,
+              117
+            ],
             [
               149,
               116
@@ -862,6 +1028,30 @@
             [
               149,
               104
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 7.6,
+          "slope_mean": 4.7,
+          "class": "soil",
+          "p_sand": 0.06,
+          "p_bigrock": 0.07,
+          "rock_cfa": 0.182,
+          "entropy": 0.51,
+          "conf": "mid",
+          "nearest_evidence_m": 308.0,
+          "kcal": 15.0,
+          "min": 3.2,
+          "risk": 39.07,
+          "rejected_alt": null,
+          "reason": "Kayalık (yüzeyin %18'i kaya); düz ana kayaya göre +%77 kcal."
+        },
+        {
+          "id": 20,
+          "path_px": [
+            [
+              149,
+              104
             ],
             [
               149,
@@ -890,30 +1080,6 @@
             [
               149,
               97
-            ]
-          ],
-          "len_m": 152.0,
-          "slope_max": 6.7,
-          "slope_mean": 5.1,
-          "class": "soil",
-          "p_sand": 0.07,
-          "p_bigrock": 0.12,
-          "rock_cfa": 0.155,
-          "entropy": 0.58,
-          "conf": "mid",
-          "nearest_evidence_m": 311.0,
-          "kcal": 23.5,
-          "min": 5.0,
-          "risk": 52.94,
-          "rejected_alt": null,
-          "reason": "Kayalık (yüzeyin %16'i kaya); düz ana kayaya göre +%90 kcal."
-        },
-        {
-          "id": 14,
-          "path_px": [
-            [
-              149,
-              97
             ],
             [
               149,
@@ -935,6 +1101,30 @@
               149,
               92
             ],
+            [
+              149,
+              91
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 6.5,
+          "slope_mean": 4.9,
+          "class": "soil",
+          "p_sand": 0.09,
+          "p_bigrock": 0.14,
+          "rock_cfa": 0.067,
+          "entropy": 0.64,
+          "conf": "low",
+          "nearest_evidence_m": 364.0,
+          "kcal": 15.9,
+          "min": 3.4,
+          "risk": 22.21,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 6°; düz ana kayaya göre +%88 kcal. Model emin değil: en yakın rover kanıtı 364 m uzakta."
+        },
+        {
+          "id": 21,
+          "path_px": [
             [
               149,
               91
@@ -992,24 +1182,24 @@
               78
             ]
           ],
-          "len_m": 152.0,
+          "len_m": 104.0,
           "slope_max": 7.8,
-          "slope_mean": 5.7,
+          "slope_mean": 6.7,
           "class": "soil",
           "p_sand": 0.08,
-          "p_bigrock": 0.07,
-          "rock_cfa": 0.023,
+          "p_bigrock": 0.08,
+          "rock_cfa": 0.033,
           "entropy": 0.58,
           "conf": "mid",
-          "nearest_evidence_m": 400.0,
-          "kcal": 24.4,
-          "min": 5.1,
-          "risk": 23.1,
+          "nearest_evidence_m": 416.0,
+          "kcal": 18.3,
+          "min": 3.7,
+          "risk": 17.62,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%98 kcal."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%117 kcal."
         },
         {
-          "id": 15,
+          "id": 22,
           "path_px": [
             [
               149,
@@ -1066,6 +1256,30 @@
             [
               149,
               65
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 7.1,
+          "slope_mean": 5.3,
+          "class": "soil",
+          "p_sand": 0.09,
+          "p_bigrock": 0.09,
+          "rock_cfa": 0.009,
+          "entropy": 0.66,
+          "conf": "low",
+          "nearest_evidence_m": 466.0,
+          "kcal": 16.1,
+          "min": 3.4,
+          "risk": 14.97,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%91 kcal. Model emin değil: en yakın rover kanıtı 466 m uzakta."
+        },
+        {
+          "id": 23,
+          "path_px": [
+            [
+              149,
+              65
             ],
             [
               149,
@@ -1090,31 +1304,31 @@
             [
               150,
               59
+            ],
+            [
+              151,
+              58
             ]
           ],
-          "len_m": 155.3,
-          "slope_max": 7.1,
-          "slope_mean": 4.8,
+          "len_m": 62.6,
+          "slope_max": 4.3,
+          "slope_mean": 3.6,
           "class": "soil",
-          "p_sand": 0.1,
-          "p_bigrock": 0.1,
-          "rock_cfa": 0.01,
-          "entropy": 0.71,
+          "p_sand": 0.11,
+          "p_bigrock": 0.11,
+          "rock_cfa": 0.012,
+          "entropy": 0.82,
           "conf": "low",
-          "nearest_evidence_m": 466.0,
-          "kcal": 22.8,
-          "min": 4.9,
-          "risk": 24.38,
+          "nearest_evidence_m": 532.0,
+          "kcal": 8.3,
+          "min": 1.8,
+          "risk": 11.44,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%81 kcal. Model emin değil: en yakın rover kanıtı 466 m uzakta."
+          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%63 kcal. Model emin değil: en yakın rover kanıtı 532 m uzakta."
         },
         {
-          "id": 16,
+          "id": 24,
           "path_px": [
-            [
-              150,
-              59
-            ],
             [
               151,
               58
@@ -1131,30 +1345,6 @@
               151,
               55
             ],
-            [
-              151,
-              54
-            ]
-          ],
-          "len_m": 43.3,
-          "slope_max": 5.1,
-          "slope_mean": 4.0,
-          "class": "bedrock",
-          "p_sand": 0.12,
-          "p_bigrock": 0.12,
-          "rock_cfa": 0.0,
-          "entropy": 0.87,
-          "conf": "low",
-          "nearest_evidence_m": 572.0,
-          "kcal": 6.1,
-          "min": 1.3,
-          "risk": 7.56,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%73 kcal. Model emin değil: en yakın rover kanıtı 572 m uzakta."
-        },
-        {
-          "id": 17,
-          "path_px": [
             [
               151,
               54
@@ -1191,6 +1381,30 @@
               151,
               46
             ],
+            [
+              151,
+              45
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 6.7,
+          "slope_mean": 5.2,
+          "class": "bedrock",
+          "p_sand": 0.13,
+          "p_bigrock": 0.13,
+          "rock_cfa": 0.001,
+          "entropy": 0.87,
+          "conf": "low",
+          "nearest_evidence_m": 583.0,
+          "kcal": 16.2,
+          "min": 3.5,
+          "risk": 18.16,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%92 kcal. Model emin değil: en yakın rover kanıtı 583 m uzakta."
+        },
+        {
+          "id": 25,
+          "path_px": [
             [
               151,
               45
@@ -1234,30 +1448,6 @@
             [
               150,
               35
-            ]
-          ],
-          "len_m": 155.3,
-          "slope_max": 7.2,
-          "slope_mean": 5.6,
-          "class": "bedrock",
-          "p_sand": 0.14,
-          "p_bigrock": 0.14,
-          "rock_cfa": 0.008,
-          "entropy": 0.88,
-          "conf": "low",
-          "nearest_evidence_m": 601.0,
-          "kcal": 24.9,
-          "min": 5.3,
-          "risk": 29.35,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%97 kcal. Model emin değil: en yakın rover kanıtı 601 m uzakta."
-        },
-        {
-          "id": 18,
-          "path_px": [
-            [
-              150,
-              35
             ],
             [
               150,
@@ -1267,6 +1457,30 @@
               150,
               33
             ],
+            [
+              150,
+              32
+            ]
+          ],
+          "len_m": 107.3,
+          "slope_max": 7.2,
+          "slope_mean": 5.7,
+          "class": "bedrock",
+          "p_sand": 0.15,
+          "p_bigrock": 0.15,
+          "rock_cfa": 0.026,
+          "entropy": 0.89,
+          "conf": "low",
+          "nearest_evidence_m": 639.0,
+          "kcal": 17.6,
+          "min": 3.7,
+          "risk": 23.57,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%102 kcal. Model emin değil: en yakın rover kanıtı 639 m uzakta."
+        },
+        {
+          "id": 26,
+          "path_px": [
             [
               150,
               32
@@ -1280,21 +1494,21 @@
               30
             ]
           ],
-          "len_m": 40.0,
-          "slope_max": 7.2,
-          "slope_mean": 6.9,
+          "len_m": 16.0,
+          "slope_max": 6.8,
+          "slope_mean": 6.7,
           "class": "bedrock",
           "p_sand": 0.16,
-          "p_bigrock": 0.15,
-          "rock_cfa": 0.065,
+          "p_bigrock": 0.16,
+          "rock_cfa": 0.061,
           "entropy": 0.89,
           "conf": "low",
-          "nearest_evidence_m": 681.0,
-          "kcal": 7.2,
-          "min": 1.5,
-          "risk": 11.05,
+          "nearest_evidence_m": 697.0,
+          "kcal": 2.8,
+          "min": 0.6,
+          "risk": 4.21,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%122 kcal. Model emin değil: en yakın rover kanıtı 681 m uzakta."
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%115 kcal. Model emin değil: en yakın rover kanıtı 697 m uzakta."
         }
       ]
     },
@@ -1328,10 +1542,32 @@
         "o2_L": 122.0,
         "dose_uGy": 23.1,
         "slope_max": 10.8,
-        "low_conf_m": 682.0,
+        "low_conf_m": 619.0,
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
-        "go": true
+        "go": true,
+        "status": "GO",
+        "limit_exceeded_at_px": null,
+        "limit_exceeded_at_index": null,
+        "budget": {
+          "limits": {
+            "time_min": 360.0,
+            "kcal": 2000.0,
+            "o2_L": 420.0,
+            "dose_uGy": 60.0,
+            "reserve_min": 30.0
+          },
+          "used": {
+            "time_min": 188.636,
+            "kcal": 817.737,
+            "o2_L": 170.362,
+            "dose_uGy": 27.509
+          },
+          "exceeded": [],
+          "first_exceeded": [],
+          "return_min": 64.318,
+          "return_kcal": 291.851
+        }
       },
       "segments": [
         {
@@ -1408,35 +1644,35 @@
             [
               99,
               230
+            ]
+          ],
+          "len_m": 22.6,
+          "slope_max": 8.6,
+          "slope_mean": 7.3,
+          "class": "sand",
+          "p_sand": 0.63,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.051,
+          "entropy": 0.62,
+          "conf": "low",
+          "nearest_evidence_m": 108.0,
+          "kcal": 5.5,
+          "min": 1.1,
+          "risk": 4.44,
+          "rejected_alt": null,
+          "reason": "Kum ağırlıklı (%63); düz ana kayaya göre +%199 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
+        },
+        {
+          "id": 3,
+          "path_px": [
+            [
+              99,
+              230
             ],
             [
               98,
               229
             ],
-            [
-              97,
-              228
-            ]
-          ],
-          "len_m": 45.3,
-          "slope_max": 10.0,
-          "slope_mean": 8.3,
-          "class": "sand",
-          "p_sand": 0.69,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.049,
-          "entropy": 0.57,
-          "conf": "mid",
-          "nearest_evidence_m": 108.0,
-          "kcal": 12.2,
-          "min": 2.3,
-          "risk": 8.17,
-          "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%69); düz ana kayaya göre +%231 kcal."
-        },
-        {
-          "id": 3,
-          "path_px": [
             [
               97,
               228
@@ -1470,21 +1706,21 @@
               221
             ]
           ],
-          "len_m": 79.2,
+          "len_m": 101.8,
           "slope_max": 10.1,
           "slope_mean": 9.3,
           "class": "sand",
-          "p_sand": 0.62,
+          "p_sand": 0.64,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.027,
-          "entropy": 0.63,
+          "rock_cfa": 0.032,
+          "entropy": 0.61,
           "conf": "low",
-          "nearest_evidence_m": 109.0,
-          "kcal": 20.5,
-          "min": 3.9,
-          "risk": 13.31,
+          "nearest_evidence_m": 108.0,
+          "kcal": 27.1,
+          "min": 5.2,
+          "risk": 17.03,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%62); düz ana kayaya göre +%219 kcal. Model emin değil: en yakın rover kanıtı 109 m uzakta."
+          "reason": "Kum ağırlıklı (%64); düz ana kayaya göre +%228 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
         },
         {
           "id": 4,
@@ -1496,6 +1732,30 @@
             [
               89,
               220
+            ]
+          ],
+          "len_m": 11.3,
+          "slope_max": 8.4,
+          "slope_mean": 8.2,
+          "class": "soil",
+          "p_sand": 0.28,
+          "p_bigrock": 0.01,
+          "rock_cfa": 0.01,
+          "entropy": 0.79,
+          "conf": "low",
+          "nearest_evidence_m": 144.0,
+          "kcal": 2.2,
+          "min": 0.4,
+          "risk": 1.96,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%140 kcal. Model emin değil: en yakın rover kanıtı 144 m uzakta."
+        },
+        {
+          "id": 5,
+          "path_px": [
+            [
+              89,
+              220
             ],
             [
               88,
@@ -1504,31 +1764,31 @@
             [
               87,
               218
-            ],
-            [
-              86,
-              217
             ]
           ],
-          "len_m": 45.3,
-          "slope_max": 8.4,
-          "slope_mean": 6.8,
+          "len_m": 22.6,
+          "slope_max": 7.9,
+          "slope_mean": 7.0,
           "class": "soil",
-          "p_sand": 0.19,
+          "p_sand": 0.18,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.019,
-          "entropy": 0.74,
+          "rock_cfa": 0.018,
+          "entropy": 0.75,
           "conf": "low",
-          "nearest_evidence_m": 144.0,
-          "kcal": 7.5,
-          "min": 1.5,
-          "risk": 8.08,
+          "nearest_evidence_m": 152.0,
+          "kcal": 3.7,
+          "min": 0.8,
+          "risk": 4.02,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%104 kcal. Model emin değil: en yakın rover kanıtı 144 m uzakta."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%101 kcal. Model emin değil: en yakın rover kanıtı 152 m uzakta."
         },
         {
-          "id": 5,
+          "id": 6,
           "path_px": [
+            [
+              87,
+              218
+            ],
             [
               86,
               217
@@ -1568,6 +1828,30 @@
             [
               80,
               208
+            ]
+          ],
+          "len_m": 103.2,
+          "slope_max": 5.9,
+          "slope_mean": 4.0,
+          "class": "bedrock",
+          "p_sand": 0.07,
+          "p_bigrock": 0.01,
+          "rock_cfa": 0.022,
+          "entropy": 0.54,
+          "conf": "mid",
+          "nearest_evidence_m": 169.0,
+          "kcal": 12.9,
+          "min": 2.8,
+          "risk": 14.34,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%54 kcal."
+        },
+        {
+          "id": 7,
+          "path_px": [
+            [
+              80,
+              208
             ],
             [
               80,
@@ -1600,30 +1884,6 @@
             [
               80,
               200
-            ]
-          ],
-          "len_m": 155.9,
-          "slope_max": 4.7,
-          "slope_mean": 3.2,
-          "class": "bedrock",
-          "p_sand": 0.07,
-          "p_bigrock": 0.01,
-          "rock_cfa": 0.026,
-          "entropy": 0.5,
-          "conf": "mid",
-          "nearest_evidence_m": 178.0,
-          "kcal": 18.2,
-          "min": 4.1,
-          "risk": 21.51,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%44 kcal."
-        },
-        {
-          "id": 6,
-          "path_px": [
-            [
-              80,
-              200
             ],
             [
               80,
@@ -1641,6 +1901,30 @@
               80,
               196
             ],
+            [
+              80,
+              195
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 3.3,
+          "slope_mean": 2.5,
+          "class": "bedrock",
+          "p_sand": 0.07,
+          "p_bigrock": 0.02,
+          "rock_cfa": 0.026,
+          "entropy": 0.5,
+          "conf": "mid",
+          "nearest_evidence_m": 244.0,
+          "kcal": 11.4,
+          "min": 2.6,
+          "risk": 14.83,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%35 kcal."
+        },
+        {
+          "id": 8,
+          "path_px": [
             [
               80,
               195
@@ -1698,24 +1982,24 @@
               182
             ]
           ],
-          "len_m": 150.6,
+          "len_m": 110.6,
           "slope_max": 6.1,
-          "slope_mean": 4.2,
+          "slope_mean": 4.6,
           "class": "bedrock",
           "p_sand": 0.08,
           "p_bigrock": 0.04,
-          "rock_cfa": 0.026,
-          "entropy": 0.65,
+          "rock_cfa": 0.027,
+          "entropy": 0.68,
           "conf": "low",
-          "nearest_evidence_m": 275.0,
-          "kcal": 19.8,
-          "min": 4.3,
-          "risk": 25.17,
+          "nearest_evidence_m": 300.0,
+          "kcal": 15.3,
+          "min": 3.3,
+          "risk": 19.61,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%62 kcal. Model emin değil: en yakın rover kanıtı 275 m uzakta."
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%70 kcal. Model emin değil: en yakın rover kanıtı 300 m uzakta."
         },
         {
-          "id": 7,
+          "id": 9,
           "path_px": [
             [
               78,
@@ -1768,6 +2052,30 @@
             [
               76,
               170
+            ]
+          ],
+          "len_m": 102.6,
+          "slope_max": 3.3,
+          "slope_mean": 1.8,
+          "class": "bedrock",
+          "p_sand": 0.06,
+          "p_bigrock": 0.06,
+          "rock_cfa": 0.0,
+          "entropy": 0.56,
+          "conf": "mid",
+          "nearest_evidence_m": 352.0,
+          "kcal": 10.7,
+          "min": 2.5,
+          "risk": 11.31,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%28 kcal."
+        },
+        {
+          "id": 10,
+          "path_px": [
+            [
+              76,
+              170
             ],
             [
               76,
@@ -1792,30 +2100,6 @@
             [
               74,
               164
-            ]
-          ],
-          "len_m": 157.3,
-          "slope_max": 3.3,
-          "slope_mean": 1.4,
-          "class": "bedrock",
-          "p_sand": 0.06,
-          "p_bigrock": 0.06,
-          "rock_cfa": 0.0,
-          "entropy": 0.53,
-          "conf": "mid",
-          "nearest_evidence_m": 352.0,
-          "kcal": 15.7,
-          "min": 3.8,
-          "risk": 16.55,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%23 kcal."
-        },
-        {
-          "id": 8,
-          "path_px": [
-            [
-              74,
-              164
             ],
             [
               73,
@@ -1833,6 +2117,30 @@
               70,
               160
             ],
+            [
+              69,
+              159
+            ]
+          ],
+          "len_m": 111.2,
+          "slope_max": 3.2,
+          "slope_mean": 1.4,
+          "class": "bedrock",
+          "p_sand": 0.06,
+          "p_bigrock": 0.06,
+          "rock_cfa": 0.013,
+          "entropy": 0.5,
+          "conf": "mid",
+          "nearest_evidence_m": 378.0,
+          "kcal": 11.4,
+          "min": 2.7,
+          "risk": 13.7,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%26 kcal."
+        },
+        {
+          "id": 11,
+          "path_px": [
             [
               69,
               159
@@ -1874,24 +2182,24 @@
               150
             ]
           ],
-          "len_m": 158.4,
+          "len_m": 101.8,
           "slope_max": 3.7,
-          "slope_mean": 2.5,
+          "slope_mean": 2.6,
           "class": "bedrock",
           "p_sand": 0.07,
           "p_bigrock": 0.07,
-          "rock_cfa": 0.039,
-          "entropy": 0.54,
+          "rock_cfa": 0.048,
+          "entropy": 0.55,
           "conf": "mid",
-          "nearest_evidence_m": 391.0,
-          "kcal": 17.9,
-          "min": 4.1,
-          "risk": 27.02,
+          "nearest_evidence_m": 416.0,
+          "kcal": 11.6,
+          "min": 2.7,
+          "risk": 18.55,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%39 kcal."
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%40 kcal."
         },
         {
-          "id": 9,
+          "id": 12,
           "path_px": [
             [
               60,
@@ -1951,7 +2259,7 @@
           "reason": "Ana kaya zemin, eğim 9°; düz ana kayaya göre +%63 kcal."
         },
         {
-          "id": 10,
+          "id": 13,
           "path_px": [
             [
               59,
@@ -2011,7 +2319,7 @@
           "reason": "Ana kaya zemin, eğim 11°; düz ana kayaya göre +%146 kcal."
         },
         {
-          "id": 11,
+          "id": 14,
           "path_px": [
             [
               59,
@@ -2059,7 +2367,7 @@
           "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%90 kcal. Model emin değil: en yakın rover kanıtı 355 m uzakta."
         },
         {
-          "id": 12,
+          "id": 15,
           "path_px": [
             [
               59,
@@ -2112,6 +2420,30 @@
             [
               63,
               114
+            ]
+          ],
+          "len_m": 109.3,
+          "slope_max": 5.2,
+          "slope_mean": 2.4,
+          "class": "soil",
+          "p_sand": 0.04,
+          "p_bigrock": 0.04,
+          "rock_cfa": 0.04,
+          "entropy": 0.42,
+          "conf": "mid",
+          "nearest_evidence_m": 260.0,
+          "kcal": 12.0,
+          "min": 2.8,
+          "risk": 15.46,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%35 kcal."
+        },
+        {
+          "id": 16,
+          "path_px": [
+            [
+              63,
+              114
             ],
             [
               63,
@@ -2128,31 +2460,31 @@
             [
               66,
               110
+            ],
+            [
+              67,
+              109
             ]
           ],
-          "len_m": 151.2,
-          "slope_max": 5.2,
-          "slope_mean": 2.4,
+          "len_m": 53.3,
+          "slope_max": 2.8,
+          "slope_mean": 2.2,
           "class": "soil",
-          "p_sand": 0.04,
-          "p_bigrock": 0.03,
-          "rock_cfa": 0.034,
-          "entropy": 0.42,
+          "p_sand": 0.01,
+          "p_bigrock": 0.01,
+          "rock_cfa": 0.019,
+          "entropy": 0.4,
           "conf": "mid",
-          "nearest_evidence_m": 221.0,
-          "kcal": 16.7,
-          "min": 3.9,
-          "risk": 19.83,
+          "nearest_evidence_m": 209.0,
+          "kcal": 5.9,
+          "min": 1.3,
+          "risk": 5.48,
           "rejected_alt": "En güvenli rota burada ayrılıyor (758 m): 2 dk daha uzun süre, 8 kcal daha fazla enerji.",
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%36 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%36 kcal."
         },
         {
-          "id": 13,
+          "id": 17,
           "path_px": [
-            [
-              66,
-              110
-            ],
             [
               67,
               109
@@ -2165,30 +2497,6 @@
               69,
               107
             ],
-            [
-              70,
-              106
-            ]
-          ],
-          "len_m": 45.3,
-          "slope_max": 2.8,
-          "slope_mean": 1.3,
-          "class": "bedrock",
-          "p_sand": 0.0,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.022,
-          "entropy": 0.34,
-          "conf": "high",
-          "nearest_evidence_m": 175.0,
-          "kcal": 4.1,
-          "min": 1.0,
-          "risk": 4.49,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%11 kcal."
-        },
-        {
-          "id": 14,
-          "path_px": [
             [
               70,
               106
@@ -2221,6 +2529,30 @@
               72,
               99
             ],
+            [
+              72,
+              98
+            ]
+          ],
+          "len_m": 104.6,
+          "slope_max": 3.7,
+          "slope_mean": 2.1,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.043,
+          "entropy": 0.13,
+          "conf": "high",
+          "nearest_evidence_m": 122.0,
+          "kcal": 10.4,
+          "min": 2.5,
+          "risk": 9.82,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%22 kcal."
+        },
+        {
+          "id": 18,
+          "path_px": [
             [
               72,
               98
@@ -2264,35 +2596,35 @@
             [
               73,
               88
-            ]
-          ],
-          "len_m": 153.9,
-          "slope_max": 3.7,
-          "slope_mean": 2.0,
-          "class": "bedrock",
-          "p_sand": 0.0,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.04,
-          "entropy": 0.05,
-          "conf": "high",
-          "nearest_evidence_m": 97.0,
-          "kcal": 15.5,
-          "min": 3.7,
-          "risk": 10.54,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%24 kcal."
-        },
-        {
-          "id": 15,
-          "path_px": [
-            [
-              73,
-              88
             ],
             [
               74,
               87
             ],
+            [
+              75,
+              86
+            ]
+          ],
+          "len_m": 105.9,
+          "slope_max": 3.2,
+          "slope_mean": 1.9,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.026,
+          "entropy": 0.03,
+          "conf": "high",
+          "nearest_evidence_m": 86.0,
+          "kcal": 10.5,
+          "min": 2.5,
+          "risk": 4.59,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%22 kcal."
+        },
+        {
+          "id": 19,
+          "path_px": [
             [
               75,
               86
@@ -2332,6 +2664,30 @@
             [
               84,
               77
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 3.2,
+          "slope_mean": 2.4,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.001,
+          "entropy": 0.03,
+          "conf": "high",
+          "nearest_evidence_m": 79.0,
+          "kcal": 10.5,
+          "min": 2.5,
+          "risk": 0.72,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%27 kcal."
+        },
+        {
+          "id": 20,
+          "path_px": [
+            [
+              84,
+              77
             ],
             [
               85,
@@ -2341,30 +2697,6 @@
               86,
               75
             ],
-            [
-              87,
-              74
-            ]
-          ],
-          "len_m": 158.4,
-          "slope_max": 3.2,
-          "slope_mean": 2.4,
-          "class": "bedrock",
-          "p_sand": 0.0,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.006,
-          "entropy": 0.04,
-          "conf": "high",
-          "nearest_evidence_m": 79.0,
-          "kcal": 16.5,
-          "min": 3.8,
-          "risk": 2.44,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%28 kcal."
-        },
-        {
-          "id": 16,
-          "path_px": [
             [
               87,
               74
@@ -2389,6 +2721,30 @@
               92,
               69
             ],
+            [
+              93,
+              68
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 5.7,
+          "slope_mean": 3.5,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.018,
+          "entropy": 0.13,
+          "conf": "high",
+          "nearest_evidence_m": 104.0,
+          "kcal": 11.9,
+          "min": 2.7,
+          "risk": 5.93,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%44 kcal."
+        },
+        {
+          "id": 21,
+          "path_px": [
             [
               93,
               68
@@ -2418,24 +2774,24 @@
               62
             ]
           ],
-          "len_m": 135.8,
+          "len_m": 67.9,
           "slope_max": 5.7,
-          "slope_mean": 4.6,
+          "slope_mean": 5.2,
           "class": "bedrock",
-          "p_sand": 0.0,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.023,
-          "entropy": 0.32,
-          "conf": "high",
-          "nearest_evidence_m": 129.0,
-          "kcal": 17.7,
-          "min": 3.8,
-          "risk": 14.03,
+          "p_sand": 0.01,
+          "p_bigrock": 0.01,
+          "rock_cfa": 0.02,
+          "entropy": 0.49,
+          "conf": "mid",
+          "nearest_evidence_m": 187.0,
+          "kcal": 9.3,
+          "min": 2.0,
+          "risk": 9.34,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%60 kcal."
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%69 kcal."
         },
         {
-          "id": 17,
+          "id": 22,
           "path_px": [
             [
               99,
@@ -2480,6 +2836,30 @@
             [
               109,
               53
+            ]
+          ],
+          "len_m": 109.8,
+          "slope_max": 5.2,
+          "slope_mean": 4.1,
+          "class": "soil",
+          "p_sand": 0.03,
+          "p_bigrock": 0.03,
+          "rock_cfa": 0.043,
+          "entropy": 0.5,
+          "conf": "mid",
+          "nearest_evidence_m": 245.0,
+          "kcal": 14.4,
+          "min": 3.1,
+          "risk": 18.01,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%61 kcal."
+        },
+        {
+          "id": 23,
+          "path_px": [
+            [
+              109,
+              53
             ],
             [
               110,
@@ -2493,30 +2873,6 @@
               112,
               50
             ],
-            [
-              113,
-              49
-            ]
-          ],
-          "len_m": 155.1,
-          "slope_max": 5.2,
-          "slope_mean": 3.2,
-          "class": "soil",
-          "p_sand": 0.04,
-          "p_bigrock": 0.04,
-          "rock_cfa": 0.045,
-          "entropy": 0.49,
-          "conf": "mid",
-          "nearest_evidence_m": 245.0,
-          "kcal": 18.8,
-          "min": 4.2,
-          "risk": 25.58,
-          "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%49 kcal."
-        },
-        {
-          "id": 18,
-          "path_px": [
             [
               113,
               49
@@ -2540,6 +2896,30 @@
             [
               118,
               44
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 5.0,
+          "slope_mean": 2.5,
+          "class": "soil",
+          "p_sand": 0.06,
+          "p_bigrock": 0.06,
+          "rock_cfa": 0.038,
+          "entropy": 0.53,
+          "conf": "mid",
+          "nearest_evidence_m": 342.0,
+          "kcal": 12.2,
+          "min": 2.8,
+          "risk": 16.78,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%47 kcal."
+        },
+        {
+          "id": 24,
+          "path_px": [
+            [
+              118,
+              44
             ],
             [
               119,
@@ -2550,24 +2930,24 @@
               42
             ]
           ],
-          "len_m": 79.2,
-          "slope_max": 5.0,
-          "slope_mean": 3.7,
+          "len_m": 22.6,
+          "slope_max": 4.6,
+          "slope_mean": 4.1,
           "class": "soil",
-          "p_sand": 0.07,
-          "p_bigrock": 0.07,
-          "rock_cfa": 0.025,
-          "entropy": 0.65,
+          "p_sand": 0.08,
+          "p_bigrock": 0.08,
+          "rock_cfa": 0.0,
+          "entropy": 0.79,
           "conf": "low",
-          "nearest_evidence_m": 383.0,
-          "kcal": 10.8,
-          "min": 2.3,
-          "risk": 12.88,
+          "nearest_evidence_m": 436.0,
+          "kcal": 3.0,
+          "min": 0.7,
+          "risk": 3.67,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%68 kcal. Model emin değil: en yakın rover kanıtı 383 m uzakta."
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%63 kcal. Model emin değil: en yakın rover kanıtı 436 m uzakta."
         },
         {
-          "id": 19,
+          "id": 25,
           "path_px": [
             [
               120,
@@ -2616,6 +2996,30 @@
             [
               131,
               36
+            ]
+          ],
+          "len_m": 107.9,
+          "slope_max": 3.7,
+          "slope_mean": 2.0,
+          "class": "bedrock",
+          "p_sand": 0.1,
+          "p_bigrock": 0.1,
+          "rock_cfa": 0.011,
+          "entropy": 0.8,
+          "conf": "low",
+          "nearest_evidence_m": 458.0,
+          "kcal": 12.1,
+          "min": 2.8,
+          "risk": 19.13,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%38 kcal. Model emin değil: en yakın rover kanıtı 458 m uzakta."
+        },
+        {
+          "id": 26,
+          "path_px": [
+            [
+              131,
+              36
             ],
             [
               132,
@@ -2633,30 +3037,6 @@
               135,
               35
             ],
-            [
-              136,
-              35
-            ]
-          ],
-          "len_m": 151.2,
-          "slope_max": 3.7,
-          "slope_mean": 1.8,
-          "class": "bedrock",
-          "p_sand": 0.11,
-          "p_bigrock": 0.1,
-          "rock_cfa": 0.011,
-          "entropy": 0.81,
-          "conf": "low",
-          "nearest_evidence_m": 458.0,
-          "kcal": 16.6,
-          "min": 3.9,
-          "risk": 27.26,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%35 kcal. Model emin değil: en yakın rover kanıtı 458 m uzakta."
-        },
-        {
-          "id": 20,
-          "path_px": [
             [
               136,
               35
@@ -2685,6 +3065,30 @@
               142,
               34
             ],
+            [
+              143,
+              33
+            ]
+          ],
+          "len_m": 105.9,
+          "slope_max": 3.6,
+          "slope_mean": 2.0,
+          "class": "bedrock",
+          "p_sand": 0.13,
+          "p_bigrock": 0.13,
+          "rock_cfa": 0.006,
+          "entropy": 0.85,
+          "conf": "low",
+          "nearest_evidence_m": 558.0,
+          "kcal": 12.4,
+          "min": 2.9,
+          "risk": 18.83,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%44 kcal. Model emin değil: en yakın rover kanıtı 558 m uzakta."
+        },
+        {
+          "id": 27,
+          "path_px": [
             [
               143,
               33
@@ -2718,21 +3122,21 @@
               30
             ]
           ],
-          "len_m": 128.6,
+          "len_m": 65.9,
           "slope_max": 6.5,
-          "slope_mean": 4.3,
+          "slope_mean": 5.7,
           "class": "bedrock",
-          "p_sand": 0.15,
-          "p_bigrock": 0.14,
-          "rock_cfa": 0.012,
-          "entropy": 0.86,
+          "p_sand": 0.16,
+          "p_bigrock": 0.15,
+          "rock_cfa": 0.022,
+          "entropy": 0.88,
           "conf": "low",
-          "nearest_evidence_m": 597.0,
-          "kcal": 19.0,
-          "min": 4.1,
-          "risk": 24.41,
+          "nearest_evidence_m": 651.0,
+          "kcal": 11.0,
+          "min": 2.3,
+          "risk": 13.72,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%82 kcal. Model emin değil: en yakın rover kanıtı 597 m uzakta."
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%105 kcal. Model emin değil: en yakın rover kanıtı 651 m uzakta."
         }
       ]
     },
@@ -2766,10 +3170,32 @@
         "o2_L": 130.0,
         "dose_uGy": 24.4,
         "slope_max": 10.1,
-        "low_conf_m": 554.0,
+        "low_conf_m": 397.0,
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
-        "go": true
+        "go": true,
+        "status": "GO",
+        "limit_exceeded_at_px": null,
+        "limit_exceeded_at_index": null,
+        "budget": {
+          "limits": {
+            "time_min": 360.0,
+            "kcal": 2000.0,
+            "o2_L": 420.0,
+            "dose_uGy": 60.0,
+            "reserve_min": 30.0
+          },
+          "used": {
+            "time_min": 197.175,
+            "kcal": 858.295,
+            "o2_L": 178.812,
+            "dose_uGy": 28.755
+          },
+          "exceeded": [],
+          "first_exceeded": [],
+          "return_min": 68.587,
+          "return_kcal": 312.131
+        }
       },
       "segments": [
         {
@@ -2790,35 +3216,35 @@
             [
               108,
               232
+            ]
+          ],
+          "len_m": 30.6,
+          "slope_max": 7.3,
+          "slope_mean": 6.5,
+          "class": "bedrock",
+          "p_sand": 0.24,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.031,
+          "entropy": 0.6,
+          "conf": "mid",
+          "nearest_evidence_m": 96.0,
+          "kcal": 5.2,
+          "min": 1.1,
+          "risk": 5.3,
+          "rejected_alt": "En kısa rota burada ayrılıyor (1705 m): daha yüksek risk, daha dik eğim (18°). Dengeli rota burada ayrılıyor (557 m): daha yüksek risk.",
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%109 kcal."
+        },
+        {
+          "id": 2,
+          "path_px": [
+            [
+              108,
+              232
             ],
             [
               108,
               231
             ],
-            [
-              108,
-              230
-            ]
-          ],
-          "len_m": 46.6,
-          "slope_max": 7.3,
-          "slope_mean": 6.3,
-          "class": "bedrock",
-          "p_sand": 0.35,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.026,
-          "entropy": 0.63,
-          "conf": "low",
-          "nearest_evidence_m": 80.0,
-          "kcal": 8.3,
-          "min": 1.7,
-          "risk": 7.93,
-          "rejected_alt": "En kısa rota burada ayrılıyor (1705 m): daha yüksek risk, daha dik eğim (18°). Dengeli rota burada ayrılıyor (557 m): daha yüksek risk.",
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%119 kcal. Model emin değil: en yakın rover kanıtı 80 m uzakta."
-        },
-        {
-          "id": 2,
-          "path_px": [
             [
               108,
               230
@@ -2838,31 +3264,31 @@
             [
               108,
               226
-            ],
-            [
-              108,
-              225
             ]
           ],
-          "len_m": 40.0,
-          "slope_max": 8.4,
-          "slope_mean": 7.4,
+          "len_m": 48.0,
+          "slope_max": 8.1,
+          "slope_mean": 6.8,
           "class": "sand",
-          "p_sand": 0.77,
+          "p_sand": 0.67,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.015,
-          "entropy": 0.46,
+          "rock_cfa": 0.017,
+          "entropy": 0.57,
           "conf": "mid",
-          "nearest_evidence_m": 40.0,
-          "kcal": 10.1,
-          "min": 2.0,
-          "risk": 4.26,
+          "nearest_evidence_m": 48.0,
+          "kcal": 11.0,
+          "min": 2.2,
+          "risk": 6.27,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%77); düz ana kayaya göre +%211 kcal."
+          "reason": "Kum ağırlıklı (%67); düz ana kayaya göre +%182 kcal."
         },
         {
           "id": 3,
           "path_px": [
+            [
+              108,
+              226
+            ],
             [
               108,
               225
@@ -2896,21 +3322,21 @@
               218
             ]
           ],
-          "len_m": 56.0,
+          "len_m": 64.0,
           "slope_max": 8.8,
           "slope_mean": 8.5,
           "class": "sand",
-          "p_sand": 0.95,
+          "p_sand": 0.94,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.023,
-          "entropy": 0.16,
+          "rock_cfa": 0.022,
+          "entropy": 0.18,
           "conf": "high",
           "nearest_evidence_m": 0.0,
-          "kcal": 16.5,
-          "min": 3.2,
-          "risk": 3.65,
+          "kcal": 18.7,
+          "min": 3.6,
+          "risk": 4.28,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%95); düz ana kayaya göre +%263 kcal."
+          "reason": "Kum ağırlıklı (%94); düz ana kayaya göre +%260 kcal."
         },
         {
           "id": 4,
@@ -3034,6 +3460,30 @@
             [
               101,
               195
+            ]
+          ],
+          "len_m": 111.2,
+          "slope_max": 4.7,
+          "slope_mean": 3.7,
+          "class": "bedrock",
+          "p_sand": 0.21,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.014,
+          "entropy": 0.37,
+          "conf": "mid",
+          "nearest_evidence_m": 97.0,
+          "kcal": 14.1,
+          "min": 3.1,
+          "risk": 10.37,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%56 kcal."
+        },
+        {
+          "id": 6,
+          "path_px": [
+            [
+              101,
+              195
             ],
             [
               100,
@@ -3048,24 +3498,24 @@
               192
             ]
           ],
-          "len_m": 145.1,
-          "slope_max": 4.7,
-          "slope_mean": 3.4,
+          "len_m": 33.9,
+          "slope_max": 2.7,
+          "slope_mean": 2.4,
           "class": "bedrock",
-          "p_sand": 0.25,
+          "p_sand": 0.36,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.013,
-          "entropy": 0.4,
+          "rock_cfa": 0.006,
+          "entropy": 0.51,
           "conf": "mid",
-          "nearest_evidence_m": 97.0,
-          "kcal": 18.4,
-          "min": 4.1,
-          "risk": 14.52,
+          "nearest_evidence_m": 146.0,
+          "kcal": 4.3,
+          "min": 1.0,
+          "risk": 4.16,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%56 kcal."
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%56 kcal."
         },
         {
-          "id": 6,
+          "id": 7,
           "path_px": [
             [
               98,
@@ -3106,6 +3556,30 @@
             [
               89,
               183
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 3.3,
+          "slope_mean": 1.6,
+          "class": "sand",
+          "p_sand": 0.72,
+          "p_bigrock": 0.01,
+          "rock_cfa": 0.022,
+          "entropy": 0.55,
+          "conf": "mid",
+          "nearest_evidence_m": 175.0,
+          "kcal": 14.1,
+          "min": 3.4,
+          "risk": 14.36,
+          "rejected_alt": null,
+          "reason": "Kum ağırlıklı (%72); düz ana kayaya göre +%70 kcal."
+        },
+        {
+          "id": 8,
+          "path_px": [
+            [
+              89,
+              183
             ],
             [
               88,
@@ -3120,24 +3594,24 @@
               180
             ]
           ],
-          "len_m": 135.8,
+          "len_m": 33.9,
           "slope_max": 6.5,
-          "slope_mean": 2.5,
+          "slope_mean": 5.0,
           "class": "sand",
-          "p_sand": 0.63,
-          "p_bigrock": 0.02,
-          "rock_cfa": 0.017,
-          "entropy": 0.62,
+          "p_sand": 0.4,
+          "p_bigrock": 0.04,
+          "rock_cfa": 0.007,
+          "entropy": 0.83,
           "conf": "low",
-          "nearest_evidence_m": 175.0,
-          "kcal": 20.0,
-          "min": 4.6,
-          "risk": 20.32,
+          "nearest_evidence_m": 268.0,
+          "kcal": 5.8,
+          "min": 1.2,
+          "risk": 5.96,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%63); düz ana kayaya göre +%81 kcal. Model emin değil: en yakın rover kanıtı 175 m uzakta."
+          "reason": "Kum ağırlıklı (%40); düz ana kayaya göre +%111 kcal. Model emin değil: en yakın rover kanıtı 268 m uzakta."
         },
         {
-          "id": 7,
+          "id": 9,
           "path_px": [
             [
               86,
@@ -3178,6 +3652,30 @@
             [
               77,
               171
+            ]
+          ],
+          "len_m": 101.8,
+          "slope_max": 7.0,
+          "slope_mean": 4.2,
+          "class": "bedrock",
+          "p_sand": 0.08,
+          "p_bigrock": 0.04,
+          "rock_cfa": 0.005,
+          "entropy": 0.56,
+          "conf": "mid",
+          "nearest_evidence_m": 301.0,
+          "kcal": 13.1,
+          "min": 2.9,
+          "risk": 11.7,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%58 kcal."
+        },
+        {
+          "id": 10,
+          "path_px": [
+            [
+              77,
+              171
             ],
             [
               77,
@@ -3198,30 +3696,6 @@
             [
               74,
               166
-            ]
-          ],
-          "len_m": 151.8,
-          "slope_max": 7.0,
-          "slope_mean": 3.1,
-          "class": "bedrock",
-          "p_sand": 0.07,
-          "p_bigrock": 0.05,
-          "rock_cfa": 0.003,
-          "entropy": 0.54,
-          "conf": "mid",
-          "nearest_evidence_m": 301.0,
-          "kcal": 17.8,
-          "min": 4.1,
-          "risk": 16.52,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%44 kcal."
-        },
-        {
-          "id": 8,
-          "path_px": [
-            [
-              74,
-              166
             ],
             [
               73,
@@ -3239,6 +3713,30 @@
               70,
               162
             ],
+            [
+              69,
+              161
+            ]
+          ],
+          "len_m": 106.5,
+          "slope_max": 3.7,
+          "slope_mean": 1.7,
+          "class": "bedrock",
+          "p_sand": 0.06,
+          "p_bigrock": 0.06,
+          "rock_cfa": 0.004,
+          "entropy": 0.5,
+          "conf": "mid",
+          "nearest_evidence_m": 377.0,
+          "kcal": 11.1,
+          "min": 2.6,
+          "risk": 11.53,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%28 kcal."
+        },
+        {
+          "id": 11,
+          "path_px": [
             [
               69,
               161
@@ -3280,24 +3778,24 @@
               152
             ]
           ],
-          "len_m": 158.4,
+          "len_m": 101.8,
           "slope_max": 4.2,
-          "slope_mean": 2.7,
+          "slope_mean": 3.0,
           "class": "bedrock",
           "p_sand": 0.07,
           "p_bigrock": 0.07,
-          "rock_cfa": 0.027,
-          "entropy": 0.55,
+          "rock_cfa": 0.039,
+          "entropy": 0.57,
           "conf": "mid",
-          "nearest_evidence_m": 394.0,
-          "kcal": 18.4,
-          "min": 4.2,
-          "risk": 24.37,
+          "nearest_evidence_m": 424.0,
+          "kcal": 12.0,
+          "min": 2.7,
+          "risk": 17.65,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%43 kcal."
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%45 kcal."
         },
         {
-          "id": 9,
+          "id": 12,
           "path_px": [
             [
               60,
@@ -3365,7 +3863,7 @@
           "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%67 kcal."
         },
         {
-          "id": 10,
+          "id": 13,
           "path_px": [
             [
               58,
@@ -3425,7 +3923,7 @@
           "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%139 kcal."
         },
         {
-          "id": 11,
+          "id": 14,
           "path_px": [
             [
               58,
@@ -3473,7 +3971,7 @@
           "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%92 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
         },
         {
-          "id": 12,
+          "id": 15,
           "path_px": [
             [
               58,
@@ -3530,6 +4028,30 @@
             [
               58,
               113
+            ]
+          ],
+          "len_m": 104.0,
+          "slope_max": 5.4,
+          "slope_mean": 2.8,
+          "class": "soil",
+          "p_sand": 0.04,
+          "p_bigrock": 0.04,
+          "rock_cfa": 0.02,
+          "entropy": 0.41,
+          "conf": "mid",
+          "nearest_evidence_m": 284.0,
+          "kcal": 12.2,
+          "min": 2.8,
+          "risk": 11.23,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%44 kcal."
+        },
+        {
+          "id": 16,
+          "path_px": [
+            [
+              58,
+              113
             ],
             [
               58,
@@ -3551,30 +4073,6 @@
               59,
               108
             ],
-            [
-              59,
-              107
-            ]
-          ],
-          "len_m": 155.3,
-          "slope_max": 5.4,
-          "slope_mean": 2.9,
-          "class": "soil",
-          "p_sand": 0.04,
-          "p_bigrock": 0.03,
-          "rock_cfa": 0.019,
-          "entropy": 0.35,
-          "conf": "mid",
-          "nearest_evidence_m": 249.0,
-          "kcal": 18.4,
-          "min": 4.1,
-          "risk": 14.57,
-          "rejected_alt": "Dengeli rota burada ayrılıyor (694 m): daha yüksek risk.",
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%46 kcal."
-        },
-        {
-          "id": 13,
-          "path_px": [
             [
               59,
               107
@@ -3603,6 +4101,30 @@
               59,
               101
             ],
+            [
+              59,
+              100
+            ]
+          ],
+          "len_m": 107.3,
+          "slope_max": 3.5,
+          "slope_mean": 2.3,
+          "class": "soil",
+          "p_sand": 0.02,
+          "p_bigrock": 0.02,
+          "rock_cfa": 0.014,
+          "entropy": 0.19,
+          "conf": "high",
+          "nearest_evidence_m": 223.0,
+          "kcal": 12.0,
+          "min": 2.7,
+          "risk": 6.22,
+          "rejected_alt": "Dengeli rota burada ayrılıyor (694 m): daha yüksek risk.",
+          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%38 kcal."
+        },
+        {
+          "id": 17,
+          "path_px": [
             [
               59,
               100
@@ -3652,24 +4174,24 @@
               89
             ]
           ],
-          "len_m": 157.3,
+          "len_m": 101.3,
           "slope_max": 2.8,
-          "slope_mean": 2.0,
+          "slope_mean": 2.3,
           "class": "soil",
-          "p_sand": 0.01,
-          "p_bigrock": 0.01,
-          "rock_cfa": 0.007,
-          "entropy": 0.22,
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.003,
+          "entropy": 0.26,
           "conf": "high",
           "nearest_evidence_m": 175.0,
-          "kcal": 16.8,
-          "min": 3.9,
-          "risk": 9.08,
+          "kcal": 11.0,
+          "min": 2.5,
+          "risk": 6.2,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%31 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%34 kcal."
         },
         {
-          "id": 14,
+          "id": 18,
           "path_px": [
             [
               63,
@@ -3714,6 +4236,30 @@
             [
               70,
               79
+            ]
+          ],
+          "len_m": 103.2,
+          "slope_max": 3.4,
+          "slope_mean": 2.1,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.0,
+          "entropy": 0.15,
+          "conf": "high",
+          "nearest_evidence_m": 88.0,
+          "kcal": 10.4,
+          "min": 2.5,
+          "risk": 2.55,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%24 kcal."
+        },
+        {
+          "id": 19,
+          "path_px": [
+            [
+              70,
+              79
             ],
             [
               70,
@@ -3738,30 +4284,6 @@
             [
               73,
               73
-            ]
-          ],
-          "len_m": 161.1,
-          "slope_max": 3.4,
-          "slope_mean": 1.8,
-          "class": "bedrock",
-          "p_sand": 0.0,
-          "p_bigrock": 0.0,
-          "rock_cfa": 0.0,
-          "entropy": 0.11,
-          "conf": "high",
-          "nearest_evidence_m": 51.0,
-          "kcal": 15.9,
-          "min": 3.8,
-          "risk": 3.01,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%21 kcal."
-        },
-        {
-          "id": 15,
-          "path_px": [
-            [
-              73,
-              73
             ],
             [
               74,
@@ -3775,6 +4297,30 @@
               76,
               70
             ],
+            [
+              77,
+              69
+            ]
+          ],
+          "len_m": 103.2,
+          "slope_max": 5.4,
+          "slope_mean": 2.6,
+          "class": "bedrock",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.004,
+          "entropy": 0.04,
+          "conf": "high",
+          "nearest_evidence_m": 51.0,
+          "kcal": 11.3,
+          "min": 2.6,
+          "risk": 1.54,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%35 kcal."
+        },
+        {
+          "id": 20,
+          "path_px": [
             [
               77,
               69
@@ -3812,24 +4358,24 @@
               61
             ]
           ],
-          "len_m": 132.5,
-          "slope_max": 5.4,
-          "slope_mean": 3.8,
+          "len_m": 87.2,
+          "slope_max": 5.1,
+          "slope_mean": 3.5,
           "class": "bedrock",
           "p_sand": 0.0,
           "p_bigrock": 0.0,
-          "rock_cfa": 0.007,
-          "entropy": 0.18,
+          "rock_cfa": 0.008,
+          "entropy": 0.24,
           "conf": "high",
-          "nearest_evidence_m": 51.0,
-          "kcal": 15.9,
-          "min": 3.5,
-          "risk": 6.5,
+          "nearest_evidence_m": 64.0,
+          "kcal": 10.0,
+          "min": 2.3,
+          "risk": 5.42,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%48 kcal."
+          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%41 kcal."
         },
         {
-          "id": 16,
+          "id": 21,
           "path_px": [
             [
               84,
@@ -3874,6 +4420,30 @@
             [
               94,
               53
+            ]
+          ],
+          "len_m": 106.5,
+          "slope_max": 4.1,
+          "slope_mean": 2.8,
+          "class": "soil",
+          "p_sand": 0.0,
+          "p_bigrock": 0.0,
+          "rock_cfa": 0.004,
+          "entropy": 0.16,
+          "conf": "high",
+          "nearest_evidence_m": 132.0,
+          "kcal": 12.2,
+          "min": 2.8,
+          "risk": 3.32,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%41 kcal."
+        },
+        {
+          "id": 22,
+          "path_px": [
+            [
+              94,
+              53
             ],
             [
               95,
@@ -3887,30 +4457,6 @@
               97,
               50
             ],
-            [
-              98,
-              49
-            ]
-          ],
-          "len_m": 151.8,
-          "slope_max": 4.7,
-          "slope_mean": 3.0,
-          "class": "soil",
-          "p_sand": 0.01,
-          "p_bigrock": 0.01,
-          "rock_cfa": 0.01,
-          "entropy": 0.18,
-          "conf": "high",
-          "nearest_evidence_m": 132.0,
-          "kcal": 18.0,
-          "min": 4.0,
-          "risk": 7.17,
-          "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%46 kcal."
-        },
-        {
-          "id": 17,
-          "path_px": [
             [
               98,
               49
@@ -3939,6 +4485,30 @@
               104,
               47
             ],
+            [
+              105,
+              47
+            ]
+          ],
+          "len_m": 107.9,
+          "slope_max": 7.2,
+          "slope_mean": 5.1,
+          "class": "soil",
+          "p_sand": 0.03,
+          "p_bigrock": 0.03,
+          "rock_cfa": 0.029,
+          "entropy": 0.29,
+          "conf": "high",
+          "nearest_evidence_m": 233.0,
+          "kcal": 15.8,
+          "min": 3.3,
+          "risk": 11.1,
+          "rejected_alt": null,
+          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%80 kcal."
+        },
+        {
+          "id": 23,
+          "path_px": [
             [
               105,
               47
@@ -3982,31 +4552,31 @@
             [
               115,
               43
+            ],
+            [
+              116,
+              43
             ]
           ],
-          "len_m": 155.9,
-          "slope_max": 7.2,
-          "slope_mean": 4.2,
+          "len_m": 101.3,
+          "slope_max": 5.0,
+          "slope_mean": 3.0,
           "class": "soil",
-          "p_sand": 0.05,
-          "p_bigrock": 0.05,
-          "rock_cfa": 0.027,
-          "entropy": 0.45,
+          "p_sand": 0.06,
+          "p_bigrock": 0.06,
+          "rock_cfa": 0.025,
+          "entropy": 0.55,
           "conf": "mid",
-          "nearest_evidence_m": 277.0,
-          "kcal": 21.2,
-          "min": 4.6,
-          "risk": 20.5,
+          "nearest_evidence_m": 333.0,
+          "kcal": 12.2,
+          "min": 2.8,
+          "risk": 14.73,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 7°; düz ana kayaya göre +%67 kcal."
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%48 kcal."
         },
         {
-          "id": 18,
+          "id": 24,
           "path_px": [
-            [
-              115,
-              43
-            ],
             [
               116,
               43
@@ -4028,24 +4598,24 @@
               42
             ]
           ],
-          "len_m": 43.3,
+          "len_m": 35.3,
           "slope_max": 4.2,
-          "slope_mean": 3.9,
+          "slope_mean": 4.0,
           "class": "soil",
           "p_sand": 0.08,
-          "p_bigrock": 0.07,
-          "rock_cfa": 0.013,
-          "entropy": 0.76,
+          "p_bigrock": 0.08,
+          "rock_cfa": 0.009,
+          "entropy": 0.78,
           "conf": "low",
-          "nearest_evidence_m": 419.0,
-          "kcal": 5.8,
-          "min": 1.3,
-          "risk": 7.31,
+          "nearest_evidence_m": 426.0,
+          "kcal": 4.7,
+          "min": 1.0,
+          "risk": 5.82,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%65 kcal. Model emin değil: en yakın rover kanıtı 419 m uzakta."
+          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%64 kcal. Model emin değil: en yakın rover kanıtı 426 m uzakta."
         },
         {
-          "id": 19,
+          "id": 25,
           "path_px": [
             [
               120,
@@ -4094,6 +4664,30 @@
             [
               131,
               36
+            ]
+          ],
+          "len_m": 107.9,
+          "slope_max": 3.7,
+          "slope_mean": 2.1,
+          "class": "bedrock",
+          "p_sand": 0.1,
+          "p_bigrock": 0.1,
+          "rock_cfa": 0.009,
+          "entropy": 0.81,
+          "conf": "low",
+          "nearest_evidence_m": 458.0,
+          "kcal": 12.2,
+          "min": 2.8,
+          "risk": 18.87,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%39 kcal. Model emin değil: en yakın rover kanıtı 458 m uzakta."
+        },
+        {
+          "id": 26,
+          "path_px": [
+            [
+              131,
+              36
             ],
             [
               132,
@@ -4111,30 +4705,6 @@
               135,
               36
             ],
-            [
-              136,
-              35
-            ]
-          ],
-          "len_m": 151.2,
-          "slope_max": 3.7,
-          "slope_mean": 1.8,
-          "class": "bedrock",
-          "p_sand": 0.11,
-          "p_bigrock": 0.1,
-          "rock_cfa": 0.009,
-          "entropy": 0.82,
-          "conf": "low",
-          "nearest_evidence_m": 458.0,
-          "kcal": 16.7,
-          "min": 3.9,
-          "risk": 26.85,
-          "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%36 kcal. Model emin değil: en yakın rover kanıtı 458 m uzakta."
-        },
-        {
-          "id": 20,
-          "path_px": [
             [
               136,
               35
@@ -4163,6 +4733,30 @@
               142,
               33
             ],
+            [
+              143,
+              32
+            ]
+          ],
+          "len_m": 109.3,
+          "slope_max": 4.1,
+          "slope_mean": 2.1,
+          "class": "bedrock",
+          "p_sand": 0.14,
+          "p_bigrock": 0.13,
+          "rock_cfa": 0.006,
+          "entropy": 0.85,
+          "conf": "low",
+          "nearest_evidence_m": 558.0,
+          "kcal": 13.0,
+          "min": 3.0,
+          "risk": 19.22,
+          "rejected_alt": null,
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%46 kcal. Model emin değil: en yakın rover kanıtı 558 m uzakta."
+        },
+        {
+          "id": 27,
+          "path_px": [
             [
               143,
               32
@@ -4196,21 +4790,21 @@
               30
             ]
           ],
-          "len_m": 128.6,
+          "len_m": 62.6,
           "slope_max": 6.5,
-          "slope_mean": 4.4,
+          "slope_mean": 5.8,
           "class": "bedrock",
-          "p_sand": 0.15,
-          "p_bigrock": 0.14,
-          "rock_cfa": 0.011,
-          "entropy": 0.86,
+          "p_sand": 0.16,
+          "p_bigrock": 0.15,
+          "rock_cfa": 0.021,
+          "entropy": 0.88,
           "conf": "low",
-          "nearest_evidence_m": 597.0,
-          "kcal": 19.1,
-          "min": 4.1,
-          "risk": 24.25,
+          "nearest_evidence_m": 656.0,
+          "kcal": 10.6,
+          "min": 2.2,
+          "risk": 13.02,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%83 kcal. Model emin değil: en yakın rover kanıtı 597 m uzakta."
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%108 kcal. Model emin değil: en yakın rover kanıtı 656 m uzakta."
         }
       ]
     }
