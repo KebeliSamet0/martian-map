@@ -70,14 +70,36 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
   - S3, hard, "Half O₂ tank": only 80 L of oxygen; every route is NO-GO and the astronaut must decide to turn back.
 - **Görsel:** Canlı demo. Yedek: `[Samet'ten istenecek: 21:00 provasının ekran kaydı]`
 
-### Slayt 6: Doğrulama ve varsayımlar
-- **Başlık:** What we checked against reality, and what we assume
-- **Ana mesaj:** We test the model against Curiosity's real images and real path, and label every assumption.
-- **Maddeler:**
-  - Terrain model vs Curiosity's own Navcam images at 18 stops: the dominant terrain is right at 16 of 18. Sand was caught at only 2 of the 7 stops where it is visible, so the scanner under-reports sand, and we say so. On expert-labelled test images the model finds 97% of large rocks (AI4Mars test set; `ml/rover_terrain/METRICS.md`, `LAYERS.md`).
-  - Curiosity's real path: Curiosity crossed our area in 3.89 km; between the same entry and exit our routes are 2.26–2.30 km, 140 m from its track on average. Most of the gap is Curiosity's science detours to the boxwork ridges (PR #65; slope and rocks only, without the terrain model).
-  - Assumptions are shown in the app (`/assumptions`): Earth-measured terrain coefficients, Mars gravity scaling, EVA limits. Full text: bölüm 4.
-- **Görsel:** `docs/figures/msl_compare.png` (bizim rotalar + Curiosity'nin gerçek yolu) + 18 durak kontrol tablosunun kısaltılmış hâli (`ml/rover_terrain/LAYERS.md`; 2–3 örnek Navcam karesi ve modelin tahmini yan yana).
+### Slayt 6: Doğrulama
+Slayt metni (İngilizce, başlık dahil 37 kelime; 40 sınırı):
+
+- **Başlık:** Checked against reality
+- **Sol yarı (Curiosity'nin gerçek yolu):** Curiosity drove 3.89 km; our routes, same endpoints: 2.26–2.30 km.
+- **Sağ yarı (zemin modeli):** Terrain model, expert-labelled test: mIoU 0.798, large-rock recall 0.97, ECE 0.004.
+- **Sağ yarı alt satır:** Scanner vs Navcam: 3 of 6 stops right, 1 partly; both misses were sandy.
+
+Görseller:
+- Sol: `docs/figures/msl_compare.png` (bizim üç rota + Curiosity'nin gerçek yolu).
+- Sağ: `docs/figures/navcam_vs_model.png` (Emre, PR #91; üç durak: #6 tuttu, #15 kum kaçtı, #13 kum yakalandı).
+
+Sayıların kaynağı (her sayı dosyadaki değerle aynı):
+
+| Slayttaki sayı | Kaynak dosya | Dosyadaki değer |
+|---|---|---|
+| 3.89 km | `docs/validation_msl.md` §2 | Curiosity polyline `3887.6 m` |
+| 2.26–2.30 km | `docs/validation_msl.md` §2 tablo | shortest `2256.2`, balanced `2270.9`, safest `2297.0` m |
+| mIoU 0.798 | `ml/rover_terrain/METRICS.md` (Kapı 2, test_min3) | `0,798` |
+| large-rock recall 0.97 | `ml/rover_terrain/METRICS.md` (Kapı 2, test_min3) | `0,973` |
+| ECE 0.004 | `ml/rover_terrain/METRICS.md` (Kapı 2, test_min3) | `0,004` |
+| 3 of 6 right, 1 partly, 2 missed (sandy) | `ml/rover_terrain/SCAN_CHECK.md` (PR #91) | "6 duraktan 3'ünde tuttu, 1'inde kısmen, 2'sinde tutmadı; tutmayan ikisi de kumlu" |
+
+Konuşmacı notu (TR, slaytta yok):
+- Curiosity aynı giriş–çıkış arasında 3,89 km gitti, çünkü boxwork sırtlarına bilim için saptı. Bizim rotalar 2,26–2,30 km ve onun izinden ortalama 140 m uzakta (`docs/validation_msl.md`; yalnız eğim + kaya, zemin modeli olmadan).
+- mIoU: modelin her sınıfta ne kadar örtüştüğünün ortalaması (NASA rover ekibinin etiketlediği AI4Mars test görüntüleri). ECE 0,004: modelin "eminim" dediği oran gerçek doğruluğuyla neredeyse aynı; yani "model emin değil" uyarısına güvenebiliriz.
+- Zayıf yanı açıkça söyle: model kumu kaçırıyor (18 durakta kum 7'nin 2'sinde yakalandı, `ml/rover_terrain/LAYERS.md`). Bu yüzden simülatörde yolda kum çıkınca rota yeniden planlanıyor.
+- Varsayımlar (Dünya'da ölçülmüş zemin katsayıları, Mars yerçekimi ölçeklemesi, EVA sınırları) uygulamada `/assumptions` sayfasında; tam metin yedek slaytta (bölüm 4).
+
+Not: `navcam_vs_model.png` ve `SCAN_CHECK.md` PR #91 birleşince main'de olacak. Birleşmezse alt satır ve sağ görsel çıkarılır, yerine `ml/rover_terrain/LAYERS.md`'den "dominant terrain right at 16 of 18 stops" yazılır.
 
 ### Slayt 7: Etki ve sonraki adım
 - **Başlık:** Rehearse on data today, walk on Mars tomorrow
@@ -96,7 +118,7 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
 |---|---|---|
 | **Impact** | 1, 7 | "Every step on Mars spends oxygen you cannot get back." / "Astronauts and mission control see the cost and the risk of a route before anyone steps out." |
 | **Creativity** | 2, 5 | "An astronaut mission rehearsal simulator on real Mars terrain." Tarayıcının "model not sure" etiketi: modelin bilmediğini gösteren bir arayüz. |
-| **Validity** | 3, 6 | "Built on real NASA data from where Curiosity explored." / "The dominant terrain is right at 16 of 18 stops" (Navcam) / Curiosity'nin gerçek yoluyla kıyas / "label every assumption". |
+| **Validity** | 3, 6 | "Built on real NASA data from where Curiosity explored." / "Checked against reality": Curiosity'nin gerçek yolu (3.89 km ↔ 2.26–2.30 km) + uzman etiketli test (large-rock recall 0.97, ECE 0.004) + Navcam kıyası (3/6 tuttu, ikisi kumda kaçtı) / yedek slaytta her varsayım etiketli. |
 | **Relevance** | 1, 3, 5 | Challenge "Interplanetary Survival Guide: Martian Map": Mars yüzeyinde insanlı yürüyüşün hazırlığı, gerçek Curiosity bölgesinde, NASA verisiyle. |
 | **Presentation** | 2, 5 | Tek karede ürün; baştan sona tek görev demosu; 30 sn video (bölüm 3). |
 
@@ -127,7 +149,7 @@ Not: Altyazı seslendirme metniyle aynı. Render: Batu. Ekran kaydı 21:00 prova
 
 **From the literature, applied to Mars (assumption)**
 - Walking energy: Pandolf et al. (1977) equation, validated on Earth; NASA uses the same equation for EVA traverse planning (Kim et al. 2024).
-- Terrain coefficients are **Earth measurements** (Soule & Goldman 1972). **No Mars-measured values exist.** Mapping them to Martian terrain classes is our assumption: bedrock 1.0, soil 1.2, sand 2.1, boulders 1.5.
+- Terrain coefficients are **Earth measurements** (Soule & Goldman 1972). **No Mars-measured values exist.** Mapping them to Martian terrain classes is our assumption: bedrock 1.0, soil 1.2, sand 2.1, boulders 1.5. The sand value sits at the low end of a second Earth measurement: walking on sand costs 2.1–2.7× more energy (Lejeune et al. 1998).
 - Mars gravity: load and walking terms are scaled by 3.71 / 9.81. Real Mars walking is likely costlier, because walking cost does not fall in proportion to gravity (Farley & McMahon 1992). Our energy values are a **lower bound**.
 - Extra load in the simulator (e.g. a collected sample) is estimated from the total mass ratio, not a full Pandolf recalculation.
 
@@ -135,6 +157,7 @@ Not: Altyazı seslendirme metniyle aynı. Render: Batu. Ekran kaydı 21:00 prova
 - EVA limits used by the app: 6 h, 2000 kcal, 420 L O₂, 30 min science stop, 30 min reserve.
 - Sourced alternatives in `docs/eva_parameters.md`: 7 h and 1800 kcal (Apollo 15–17 life support), walk-back distance ≤ 3.5 km (NASA Mars suit study, Ogilvie et al. 2026).
 - Radiation dose budget per EVA: demo value; not a NASA limit (`docs/data/rad_rems_route.md`).
+- Slope thresholds (15° caution, 25° no-go; 12° no-go on sand) and scanner thresholds are planning assumptions, not validated human limits for Mars (`api/planner/params.py`).
 - Rock cover counts only rocks ≥ 1 m (HiRISE resolution), so it is a lower bound.
 - Terrain model: trained on AI4Mars (Curiosity Navcam, 2012–2019), applied to 391 Navcam frames at 128 rover stops in our area. About 65% of the area has no nearby Navcam evidence; there the scanner shows "model not sure" instead of guessing. The model under-reports sand (2 of 7 checked stops).
 

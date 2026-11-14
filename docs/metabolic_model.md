@@ -85,7 +85,7 @@ Richmond, Potter & Santee (2015) bu tabloyu gözden geçirmiş.
 |---|---|---|
 | Ana kaya | asfalt, 1.0 | Sert, düz yüzey |
 | Toprak | hafif çalılık, 1.2 | Sıkı, ince taneli yüzey. Toprak yol (1.1) ile hafif çalılık (1.2) arasında temkinli olan seçildi; kodun mevcut değeri ve dondurulmuş `contracts/route.example.json` değişmesin diye |
-| Kum | gevşek kum, 2.1 | Doğrudan karşılık |
+| Kum | gevşek kum, 2.1 | Doğrudan karşılık. Bağımsız Dünya ölçümüyle tutarlı: aynı hızda kumda yürümek sert zemine göre **2.1–2.7 kat** enerji istiyor (Lejeune vd. 1998); 2.1 bu aralığın alt ucu |
 | Büyük kaya | yoğun çalılık, 1.5 | Tabloda kaya alanı yok; engelden kaçınma maliyetine en yakın karşılık. NASA Rock Yard'daki karışık arazi ölçümü (+%58) bu değerle tutarlı |
 
 **Kodun okuduğu tablo.** `api/planner/terrain.py` bu tabloyu okur. Sütun ve sınıf adlarını değiştirmeyin.
@@ -98,6 +98,12 @@ Samet'in **VARSAYIM**'larıdır, kaynak bulunamadı.
 | soil | 1.2 | 0.95 | Dünya ölçümü: hafif çalılık (Soule & Goldman 1972); temkinli seçim |
 | sand | 2.1 | 0.6 | Dünya ölçümü: gevşek kum (Soule & Goldman 1972) |
 | bigrock | 1.5 | 0.5 | Dünya ölçümü: yoğun çalılık (Soule & Goldman 1972); kayaya eşleme VARSAYIM |
+
+**Kum için ikinci Dünya ölçümü (Lejeune, Willems & Heglund 1998).** Kuvvet platformu ve O₂ tüketimiyle ölçülmüş:
+kumda yürümek aynı hızda sert zemine göre 1.6–2.5 kat mekanik iş, **2.1–2.7 kat enerji** istiyor. Bu oran toplam
+yürüme enerjisinin oranıdır; Pandolf'taki η yalnız hareket terimini çarptığı için iki sayı birebir aynı tanım değildir.
+Yine de η = 2.1'in iyimser değil, ölçülen aralığın alt ucunda olduğunu gösterir. Mars kumu, Mars yerçekimi ve basınçlı
+skafandr için ölçüm yine **yok**.
 
 Sunumda söylenecek cümle: *"Terrain coefficients are Earth measurements (Soule & Goldman 1972); no
 Mars-measured values exist. Mapping them to Martian terrain classes is our assumption."*
@@ -137,6 +143,8 @@ Mars-measured values exist. Mapping them to Martian terrain classes is our assum
 - Soule, R. G., Goldman, R. F. (1972). Terrain coefficients for energy cost prediction. *J. Appl. Physiol.* 32(5), 706–708.
 - Richmond, P. W., Potter, A. W., Santee, W. R. (2015). Terrain Factors for Predicting Walking and Load Carriage
   Energy Costs: Review and Refinement. *J. Sport Hum. Perform.* 3(3). https://jhp-ojs-tamucc.tdl.org/jhp/article/view/67
+- Lejeune, T. M., Willems, P. A., Heglund, N. C. (1998). Mechanics and energetics of human locomotion on sand.
+  *J. Exp. Biol.* 201(13), 2071–2080. https://doi.org/10.1242/jeb.201.13.2071
 - Kim, K. J., Baughman, A., Estep, P., Rivas, E., Young, M., Marshall-Goebel, K., Abercromby, A., Somers, J. (2023).
   Uneven terrain affects metabolic cost and gait in simulated complex lunar surfaces. *Physiol. Meas.* 44(10), 104001.
   https://doi.org/10.1088/1361-6579/acf993
