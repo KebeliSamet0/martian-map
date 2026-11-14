@@ -36,8 +36,8 @@ def _check(L: Layers, px, snap: bool = True):
     return y, x
 
 
-def shortest_path(L: Layers, start, goal, w: dict):
-    cost, terms = cost_surface(L, w)
+def shortest_path(L: Layers, start, goal, w: dict, load_kg: float = P.DEFAULT_LOAD_KG):
+    cost, terms = cost_surface(L, w, load_kg=load_kg)
     s, g = _check(L, start), _check(L, goal)
     mcp = MCP_Geometric(cost)
     acc, _ = mcp.find_costs([s], [g])
@@ -173,8 +173,8 @@ def _reason(seg: dict, base_kcal_m: float, provisional_terrain: bool = False) ->
     return txt + "."
 
 
-def _segments(L: Layers, path: np.ndarray, prof) -> list[dict]:
-    base = flat_bedrock_kcal_per_m()
+def _segments(L: Layers, path: np.ndarray, prof, load_kg: float = P.DEFAULT_LOAD_KG) -> list[dict]:
+    base = flat_bedrock_kcal_per_m(load_kg=load_kg)
     segs = []
     for i, (a, b) in enumerate(_segment_bounds(prof)):
         sl = slice(a, b + 1)
@@ -252,14 +252,24 @@ def _budget(prof, segs, path, limits=None) -> dict:
     }
 
 
-def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None) -> dict:
+def plan_one(
+    L: Layers,
+    start,
+    goal,
+    kind: str = "balanced",
+    weights: dict | None = None,
+    budget: dict | None = None,
+    load_kg: float = P.DEFAULT_LOAD_KG,
+) -> dict:
+    if isinstance(load_kg, bool) or not isinstance(load_kg, (int, float)) or not math.isfinite(load_kg) or load_kg < 0:
+        raise PlanError("load_kg negatif olmayan sonlu bir sayı olmalı")
     presets = P.PRESETS if L.synthetic else P.REAL_PRESETS
     w = dict(presets.get(kind, presets["balanced"]))
     if weights:
         w.update(weights)
-    path, terms = shortest_path(L, start, goal, w)
+    path, terms = shortest_path(L, start, goal, w, load_kg=float(load_kg))
     prof = _profile(L, path, terms)
-    segs = _segments(L, path, prof)
+    segs = _segments(L, path, prof, load_kg=float(load_kg))
     return {
         "kind": kind,
         "label": w.get("label", kind),
@@ -337,8 +347,16 @@ def _contrast(chosen: dict, alt: dict, res_m: float, min_dev_m: float = 40.0):
         seg["rejected_alt"] = (seg["rejected_alt"] + " " if seg["rejected_alt"] else "") + txt
 
 
-def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None) -> list[dict]:
-    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget) for k in kinds]
+def plan(
+    L: Layers,
+    start,
+    goal,
+    kinds=("shortest", "balanced", "safest"),
+    weights: dict | None = None,
+    budget: dict | None = None,
+    load_kg: float = P.DEFAULT_LOAD_KG,
+) -> list[dict]:
+    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget, load_kg=load_kg) for k in kinds]
     for r in routes:
         for alt in routes:
             if alt is not r:
@@ -560,4 +578,166 @@ def evaluate_step(
         "class_counts": class_counts,
         "scan_counts": scan_counts,
         "cells": cells,
+    }
+
+
+def _extract_planned_points(planned: dict) -> list[list[float]]:
+    if not isinstance(planned, dict):
+        raise PlanError("Planlanan rota nesnesi (dict) gerekli")
+    if "segments" in planned and isinstance(planned["segments"], list) and planned["segments"]:
+        pts = []
+        for i, seg in enumerate(planned["segments"]):
+            if not isinstance(seg, dict) or "path_px" not in seg or not seg["path_px"]:
+                raise PlanError("Planlanan rota segmentinde path_px eksik")
+            pts.extend(seg["path_px"][1:] if i else seg["path_px"])
+        return pts
+    if "path_px" in planned and isinstance(planned["path_px"], list) and planned["path_px"]:
+        return planned["path_px"]
+    if "path" in planned and isinstance(planned["path"], list) and planned["path"]:
+        return planned["path"]
+    raise PlanError("Planlanan rotada segments veya path_px alanı bulunamadı")
+
+
+def _point_to_polyline_dist(points: np.ndarray, line: np.ndarray) -> np.ndarray:
+    best = np.full(len(points), np.inf)
+    if len(line) == 1:
+        return np.linalg.norm(points - line[0], axis=1)
+    for a, b in zip(line[:-1], line[1:]):
+        v = b - a
+        t = np.clip((points - a) @ v / max(float(v @ v), 1e-30), 0.0, 1.0)
+        best = np.minimum(best, np.linalg.norm(points - (a + t[:, None] * v), axis=1))
+    return best
+
+
+def evaluate_debrief(
+    L: Layers,
+    planned: dict,
+    actual_path,
+    load_kg: float = P.DEFAULT_LOAD_KG,
+    observations: list[dict] | None = None,
+) -> dict:
+    """Planlanan rota ve gerçekleşen yürüyüş izini karşılaştırıp karne (A/B/C + gerekçe) üretir."""
+    planned_pts = _extract_planned_points(planned)
+    planned_step = evaluate_step(L, planned_pts, load_kg=load_kg)
+    actual_step = evaluate_step(L, actual_path, load_kg=load_kg, observations=observations)
+
+    p_arr = _sample_path(L, planned_pts)
+    a_arr = _sample_path(L, actual_path)
+    dists_m = np.concatenate((_point_to_polyline_dist(a_arr, p_arr), _point_to_polyline_dist(p_arr, a_arr))) * L.res_m
+    mean_dev_m = float(dists_m.mean())
+    max_dev_m = float(dists_m.max())
+
+    default_limits = {
+        "time_min": P.EVA_MAX_H * 60.0,
+        "kcal": P.EVA_MAX_KCAL,
+        "o2_L": P.EVA_MAX_O2_L,
+        "dose_uGy": P.EVA_MAX_DOSE_UGY,
+        "reserve_min": P.RESERVE_MIN,
+    }
+    planned_limits = planned.get("total", {}).get("budget", {}).get("limits") if isinstance(planned.get("total"), dict) else None
+    limits = {**default_limits, **(planned_limits or {})}
+
+    def _eva_summary(st: dict) -> dict:
+        out_min = st["duration_s"] / 60.0
+        out_kcal = st["kcal"]
+        stop_res_min = P.SCIENCE_STOP_MIN + float(limits["reserve_min"])
+        stop_res_kcal = stop_res_min * 60.0 * P.STOP_METABOLIC_W / 4184.0
+        used_min = 2.0 * out_min + stop_res_min
+        used_kcal = 2.0 * out_kcal + stop_res_kcal
+        used_o2 = used_kcal / P.KCAL_PER_L_O2
+        used_dose = (used_min / 60.0) * P.DOSE_UGY_PER_H
+        return {
+            "distance_m": st["distance_m"],
+            "km": st["km"],
+            "duration_s": st["duration_s"],
+            "min": st["min"],
+            "kcal": st["kcal"],
+            "o2_L": st["o2_L"],
+            "o2_g": st["o2_g"],
+            "dose_uGy": st["dose_uGy"],
+            "risk": st["risk"],
+            "slope_max": st["slope_max"],
+            "eva_used": {
+                "time_min": round(used_min, 2),
+                "kcal": round(used_kcal, 2),
+                "o2_L": round(used_o2, 2),
+                "dose_uGy": round(used_dose, 2),
+            },
+        }
+
+    p_sum = _eva_summary(planned_step)
+    a_sum = _eva_summary(actual_step)
+
+    d_sec = actual_step["duration_s"] - planned_step["duration_s"]
+    d_min = actual_step["min"] - planned_step["min"]
+    d_kcal = actual_step["kcal"] - planned_step["kcal"]
+    d_o2_l = actual_step["o2_L"] - planned_step["o2_L"]
+    d_o2_g = actual_step["o2_g"] - planned_step["o2_g"]
+    d_dose = actual_step["dose_uGy"] - planned_step["dose_uGy"]
+    d_dist = actual_step["distance_m"] - planned_step["distance_m"]
+    d_risk = actual_step["risk"] - planned_step["risk"]
+
+    extra_min_pct = (d_sec / max(planned_step["duration_s"], 1e-6)) * 100.0 if planned_step["duration_s"] > 0 else 0.0
+    extra_kcal_pct = (d_kcal / max(planned_step["kcal"], 1e-6)) * 100.0 if planned_step["kcal"] > 0 else 0.0
+
+    eva_used = a_sum["eva_used"]
+    exceeded = [k for k in ("time_min", "kcal", "o2_L", "dose_uGy") if eva_used[k] > limits[k]]
+    nogo_cells = int(actual_step["scan_classes"]["nogo"]["cells"])
+
+    grade, reason = P.grade_debrief(
+        extra_min_pct=extra_min_pct,
+        extra_kcal_pct=extra_kcal_pct,
+        mean_dev_m=mean_dev_m,
+        nogo_cells=nogo_cells,
+        exceeded=exceeded,
+    )
+
+    deltas = {
+        "distance_m": round(d_dist, 2),
+        "km": round(d_dist / 1000.0, 4),
+        "duration_s": round(d_sec, 2),
+        "min": round(d_min, 2),
+        "kcal": round(d_kcal, 2),
+        "o2_L": round(d_o2_l, 3),
+        "o2_g": round(d_o2_g, 2),
+        "dose_uGy": round(d_dose, 3),
+        "risk": round(d_risk, 3),
+        "min_pct": round(extra_min_pct, 2),
+        "kcal_pct": round(extra_kcal_pct, 2),
+        "mean_deviation_m": round(mean_dev_m, 2),
+        "max_deviation_m": round(max_dev_m, 2),
+    }
+
+    remaining = {
+        "time_min": round(limits["time_min"] - eva_used["time_min"], 2),
+        "kcal": round(limits["kcal"] - eva_used["kcal"], 2),
+        "o2_L": round(limits["o2_L"] - eva_used["o2_L"], 2),
+        "dose_uGy": round(limits["dose_uGy"] - eva_used["dose_uGy"], 2),
+        "one_way": {
+            "time_min": round(limits["time_min"] - actual_step["min"], 2),
+            "kcal": round(limits["kcal"] - actual_step["kcal"], 2),
+            "o2_L": round(limits["o2_L"] - actual_step["o2_L"], 2),
+            "dose_uGy": round(limits["dose_uGy"] - actual_step["dose_uGy"], 2),
+        },
+        "limits": limits,
+        "eva_used": eva_used,
+        "exceeded": exceeded,
+    }
+
+    return {
+        "load_kg": float(load_kg),
+        "planned": p_sum,
+        "actual": {
+            **a_sum,
+            "nogo_cells": nogo_cells,
+            "dominant_class": actual_step["dominant_class"],
+            "terrain_classes": actual_step["terrain_classes"],
+            "scan_classes": actual_step["scan_classes"],
+        },
+        "deltas": deltas,
+        "deviations": deltas,
+        "remaining": remaining,
+        "margins": remaining,
+        "grade": grade,
+        "reason": reason,
     }

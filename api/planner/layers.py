@@ -355,3 +355,86 @@ def load(layers_dir: Path | None = None) -> Layers:
         raise
     except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
         raise LayerError(f"Katman paketi okunamadı ({root}): {exc}") from exc
+
+
+def load_missions(layers_dir: Path | None = None) -> dict:
+    """layers/demo_scenarios.json ve varsa layers/sand_hint.json dosyalarını okuyup sim için sunar."""
+    selected = layers_dir or os.environ.get("MARTIAN_LAYERS_DIR") or os.environ.get("MM_LAYERS_DIR")
+    roots = ([Path(selected), Path(selected) / "layers"] if selected else []) + [REPO / "layers", REPO]
+
+    def _find_json(filename: str) -> dict | None:
+        for base in roots:
+            p = base / filename
+            if p.exists():
+                return json.loads(p.read_text(encoding="utf-8"))
+        return None
+
+    demo_data = _find_json("demo_scenarios.json") or {"scenarios": []}
+    sand_data = _find_json("sand_hint.json") or {"points": []}
+
+    default_limits = {
+        "time_min": P.EVA_MAX_H * 60.0,
+        "kcal": P.EVA_MAX_KCAL,
+        "o2_L": P.EVA_MAX_O2_L,
+        "dose_uGy": P.EVA_MAX_DOSE_UGY,
+        "reserve_min": P.RESERVE_MIN,
+    }
+
+    sand_points = []
+    for pt in sand_data.get("points", []):
+        px_raw = pt["px"]
+        px_int = [int(math.floor(float(px_raw[0]))), int(math.floor(float(px_raw[1])))]
+        sand_points.append({
+            "id": pt["id"],
+            "px": px_int,
+            "exact_px": [float(px_raw[0]), float(px_raw[1])],
+            "radius_m": float(pt["radius_m"]),
+            "cls": "sand",
+            "reason": pt.get("reason", ""),
+            "route_dist_m": pt.get("route_dist_m"),
+        })
+
+    missions = []
+    for s in demo_data.get("scenarios", []):
+        start_obj = dict(s["start"])
+        goal_obj = dict(s["goal"])
+        start_px = [int(math.floor(float(start_obj["px"][0]))), int(math.floor(float(start_obj["px"][1])))]
+        goal_px = [int(math.floor(float(goal_obj["px"][0]))), int(math.floor(float(goal_obj["px"][1])))]
+        start_obj["px"] = start_px
+        goal_obj["px"] = goal_px
+        limits = {**default_limits, **(s.get("limits") or s.get("budget") or {})}
+        surprise = s.get("surprise_sand")
+        sand_events = []
+        if surprise:
+            ev_px = [int(math.floor(float(surprise["px"][0]))), int(math.floor(float(surprise["px"][1])))]
+            sand_events.append({
+                "px": ev_px,
+                "radius_m": float(surprise["radius_m"]),
+                "cls": surprise.get("cls", "sand"),
+                "source": surprise.get("source", ""),
+            })
+        title = s.get("title") or s.get("name") or s["id"]
+        missions.append({
+            "id": s["id"],
+            "name": s.get("name") or title,
+            "title": title,
+            "start": start_obj,
+            "goal": goal_obj,
+            "start_px": start_px,
+            "goal_px": goal_px,
+            "limits": limits,
+            "surprise_sand": sand_events[0] if sand_events else None,
+            "sand_events": sand_events,
+            "curiosity_section": s.get("curiosity_section"),
+            "checked": s.get("checked"),
+        })
+
+    return {
+        "description": demo_data.get("description", ""),
+        "status": demo_data.get("status", ""),
+        "default_limits": default_limits,
+        "missions": missions,
+        "scenarios": missions,
+        "sand_points": sand_points,
+        "sand_hints": sand_points,
+    }

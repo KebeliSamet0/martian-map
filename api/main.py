@@ -58,6 +58,7 @@ class RouteInput(Input):
     goal: Pixel
     weights: Weights | None = None
     budget: Budget | None = None
+    load_kg: Nonnegative = params.DEFAULT_LOAD_KG
 
 
 class Observation(Input):
@@ -72,6 +73,13 @@ class ReplanInput(RouteInput):
 
 class StepInput(Input):
     path: list[PathPoint] = Field(min_length=1)
+    load_kg: Nonnegative = params.DEFAULT_LOAD_KG
+    observations: list[Observation] | None = None
+
+
+class DebriefInput(Input):
+    planned: dict
+    actual_path: list[PathPoint] = Field(min_length=1)
     load_kg: Nonnegative = params.DEFAULT_LOAD_KG
     observations: list[Observation] | None = None
 
@@ -97,10 +105,16 @@ def assumptions(request: Request):
     return params.assumptions(provisional_terrain=bool(layers and layers.provisional_terrain))
 
 
+@app.get("/missions")
+def missions():
+    return planner.load_missions()
+
+
 def result(layers, body: RouteInput):
     routes = planner.plan(layers, body.start, body.goal,
                           weights=body.weights.model_dump() if body.weights else None,
-                          budget=body.budget.model_dump() if body.budget else None)
+                          budget=body.budget.model_dump() if body.budget else None,
+                          load_kg=body.load_kg)
     info = layers.grid_info()
     return {"grid": {k: info[k] for k in ("region", "width", "height", "res_m", "synthetic", "px_note")},
             "routes": routes}
@@ -129,6 +143,18 @@ def step(body: StepInput, request: Request):
     return planner.evaluate_step(
         request.app.state.layers,
         body.path,
+        load_kg=body.load_kg,
+        observations=obs_list,
+    )
+
+
+@app.post("/debrief")
+def debrief(body: DebriefInput, request: Request):
+    obs_list = [o.model_dump() for o in body.observations] if body.observations else None
+    return planner.evaluate_debrief(
+        request.app.state.layers,
+        body.planned,
+        body.actual_path,
         load_kg=body.load_kg,
         observations=obs_list,
     )

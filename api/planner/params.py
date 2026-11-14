@@ -135,6 +135,62 @@ def classify_scan(slope, p_sand, entropy, rock_cfa):
     return out.astype(np.float32)
 
 
+# Görev sonu karnesi (/debrief) derece eşikleri (VARSAYIM)
+DEBRIEF_A_MAX_EXTRA_PCT = 10.0  # Planlanana göre en fazla +%10 süre veya enerji artışı
+DEBRIEF_A_MAX_DEV_M = 20.0  # Ortalama geometrik sapma üst sınırı (m)
+DEBRIEF_B_MAX_EXTRA_PCT = 25.0  # Planlanana göre en fazla +%25 süre veya enerji artışı
+DEBRIEF_B_MAX_DEV_M = 60.0  # Ortalama geometrik sapma üst sınırı (m)
+
+DEBRIEF_RULE = {
+    "grades": {
+        "A": f"Bütçe ve NOGO ihlali yok; süre/enerji artışı <= %{DEBRIEF_A_MAX_EXTRA_PCT:.0f} ve ortalama sapma <= {DEBRIEF_A_MAX_DEV_M:.0f} m",
+        "B": f"Bütçe ve NOGO ihlali yok; süre/enerji artışı <= %{DEBRIEF_B_MAX_EXTRA_PCT:.0f} ve ortalama sapma <= {DEBRIEF_B_MAX_DEV_M:.0f} m",
+        "C": "A/B eşiğini aşan sapma veya ek tüketim, geçilmez hücre geçişi ya da bütçe aşımı",
+    },
+    "thresholds": {
+        "a_max_extra_pct": DEBRIEF_A_MAX_EXTRA_PCT,
+        "a_max_dev_m": DEBRIEF_A_MAX_DEV_M,
+        "b_max_extra_pct": DEBRIEF_B_MAX_EXTRA_PCT,
+        "b_max_dev_m": DEBRIEF_B_MAX_DEV_M,
+    },
+}
+
+
+def grade_debrief(
+    extra_min_pct: float,
+    extra_kcal_pct: float,
+    mean_dev_m: float,
+    nogo_cells: int,
+    exceeded: list[str],
+) -> tuple[str, str]:
+    """Planlanan ve gerçekleşen yürüyüş metriklerinden karne derecesi (A/B/C) ve Türkçe gerekçe üretir."""
+    if exceeded or nogo_cells > 0:
+        parts = []
+        if exceeded:
+            parts.append(f"bütçe sınırı aşıldı ({', '.join(exceeded)})")
+        if nogo_cells > 0:
+            parts.append(f"{nogo_cells} geçilmez (NOGO) hücreden geçildi")
+        return "C", "C derecesi: " + "; ".join(parts) + "."
+    extra_max = max(extra_min_pct, extra_kcal_pct)
+    if extra_max <= DEBRIEF_A_MAX_EXTRA_PCT and mean_dev_m <= DEBRIEF_A_MAX_DEV_M:
+        return (
+            "A",
+            f"A derecesi: planlanan rotaya sadık kalındı (ort. sapma {mean_dev_m:.1f} m <= {DEBRIEF_A_MAX_DEV_M:.0f} m, "
+            f"süre farkı %{extra_min_pct:+.1f}, enerji farkı %{extra_kcal_pct:+.1f}); bütçe ve güvenlik sınırları korundu.",
+        )
+    if extra_max <= DEBRIEF_B_MAX_EXTRA_PCT and mean_dev_m <= DEBRIEF_B_MAX_DEV_M:
+        return (
+            "B",
+            f"B derecesi: orta düzey sapma veya ek tüketim (ort. sapma {mean_dev_m:.1f} m, "
+            f"süre farkı %{extra_min_pct:+.1f}, enerji farkı %{extra_kcal_pct:+.1f}); bütçe ve güvenlik sınırları korundu.",
+        )
+    return (
+        "C",
+        f"C derecesi: yüksek rota sapması veya ek tüketim (ort. sapma {mean_dev_m:.1f} m, "
+        f"süre farkı %{extra_min_pct:+.1f}, enerji farkı %{extra_kcal_pct:+.1f}).",
+    )
+
+
 def assumptions(provisional_terrain: bool = False):
     """Arayüzde gösterilecek varsayım tablosu."""
     items = [
@@ -150,6 +206,7 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "VARSAYIM"},
         {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "VARSAYIM"},
         {"name": "Tarayıcı sınıfı (scan_class) kuralı", "value": SCAN_RULE, "unit": "sınıf (0..3)", "source": "VARSAYIM: öncelik sırasıyla 2 geçilmez -> 3 bilinmiyor -> 1 dikkat -> 0 güvenli"},
+        {"name": "Görev karnesi (/debrief) derece kuralı", "value": DEBRIEF_RULE, "unit": "derece (A/B/C)", "source": "VARSAYIM: bütçe, NOGO hücre geçişi, ortalama sapma (m) ve ek süre/enerji (%) eşikleri"},
         {"name": "Geçilmez hücreden bağlanma yarıçapı", "value": SNAP_RADIUS_M, "unit": "m", "source": "VARSAYIM: 2 m DEM sırt kenarında eğimi abartıyor (rover tilt karşılaştırması)"},
         {"name": "Segment uzunluk ve yumuşatma sınırları", "value": {"min_m": SEG_MIN_M, "max_m": SEG_MAX_M, "max_count": SEG_MAX_COUNT, "smooth_m": SEG_SMOOTH_M, "hysteresis_deg": SEG_HYSTERESIS_DEG}, "unit": "m / °", "source": "VARSAYIM: DEM hücre gürültüsünde 8–25 okunabilir segment hedefi"},
         {"name": "Rota ön ayar ağırlıkları (t, k, r)", "value": {k: {x: v[x] for x in ("t", "k", "r")} for k, v in REAL_PRESETS.items()}, "unit": "-", "source": "VARSAYIM: gerçek veride süre/enerji/risk ödünleşimi kalibrasyonu"},
