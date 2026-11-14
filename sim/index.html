@@ -40,6 +40,13 @@
   #toast { position:fixed; z-index:2000; left:50%; bottom:70px; transform:translateX(-50%); padding:9px 16px; border-radius:10px; background:#000d; border:1px solid var(--line); max-width:90vw; }
   #vig { position:fixed; inset:0; pointer-events:none; z-index:5; background:radial-gradient(ellipse at center, transparent 55%, rgba(8,4,2,.55) 100%); }
   .leaflet-container { background:#0d0907; }
+  #missions { display:grid; gap:5px; margin:10px 0; } #missions button { text-align:left; font-size:12px; }
+  #mission-ui { position:fixed; inset:0; z-index:2100; pointer-events:none; }
+  #mission-ui .mm-modal, #mission-ui .mm-alert { pointer-events:auto; }
+  #vitals-source { position:fixed; left:14px; top:330px; z-index:2101; font:11px monospace; background:#14100de8; padding:5px; }
+  #hud { width:248px; max-height:170px; overflow:auto; font-size:11px; opacity:.8; }
+  #hint { max-width:calc(100% - 560px); }
+  @media(max-height:650px) { #hud { left:275px; width:250px; max-height:130px; } }
 </style>
 </head>
 <body>
@@ -48,6 +55,7 @@
   <div id="panel" class="card">
     <h1>Martian Map</h1>
     <div class="sub">Gale Krateri · Mount Sharp KB — HiRISE DTM + renkli ortofoto</div>
+    <div id="missions" aria-label="Görevler"></div><div id="mission-name" class="tiny">Serbest mod · Haritada A/B seç</div>
     <div class="step"><b>1</b><span>Haritada sarı çerçevenin içine tıkla: <b style="color:#30d158">A</b> (başlangıç).</span></div>
     <div class="step"><b>2</b><span>Tekrar tıkla: <b style="color:#ff3b30">B</b> (hedef). Rota otomatik hesaplanır; işaretleri sürükleyebilirsin.</span></div>
     <div class="step"><b>3</b><span><b>3B yürüyüş</b> ile rotayı astronot gözüyle yürü.</span></div>
@@ -61,6 +69,7 @@
       <div id="route-shift" class="tiny" style="color:#ffb27a"></div>
       <div id="route-note"></div>
     </div>
+    <button id="btn-routes" disabled>Üç rotayı karşılaştır</button>
     <div class="row"><button id="btn-walk" class="primary" disabled>3B yürüyüş</button><button id="btn-free">Serbest yürüyüş</button></div>
     <div class="row"><button id="btn-json" disabled>route.json indir</button><button id="btn-reset">Temizle</button></div>
     <p class="tiny" style="margin-top:10px">Veri: HiRISE DTM (1 m) ve HiRISE renkli mozaik — NASA/JPL/UArizona, USGS. Eğim 4 m ızgarada hesaplanır; zemin sınıfı, güven, kalori ve radyasyon planlayıcıdan gelecek, burada <b>gösterilmez</b>.</p>
@@ -70,6 +79,7 @@
 </div>
 <canvas id="gl" hidden></canvas>
 <div id="vig"></div>
+<div id="mission-ui"></div><div id="vitals-source" hidden></div>
 <div id="hud" class="card" hidden></div>
 <div id="hint" class="card" hidden><kbd>W A S D</kbd> yürü · <kbd>Shift</kbd> koş · <kbd>Fare</kbd> bak (tıkla) · <kbd>R</kbd> rotaya dön · <kbd>[</kbd><kbd>]</kbd> hız · <kbd>F</kbd> uçuş · <kbd>K</kbd> taş · <kbd>H</kbd> HUD · <kbd>B</kbd> baş sallama · <kbd>V</kbd> saf veri · <kbd>L</kbd> Terrain Scanner (<kbd>Shift</kbd>+<kbd>L</kbd> geniş) · <kbd>T</kbd> 3. şahıs/FPS · <kbd>M</kbd> harita</div>
 <canvas id="mini" hidden></canvas>

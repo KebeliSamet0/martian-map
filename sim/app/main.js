@@ -6,8 +6,9 @@ import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
 import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
-import { MapView } from './mapview.js';
-import { worldToPx, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
+import { MissionMap as MapView } from './wire-map.js';
+import { initWire } from './wire.js';
+import { worldToPx, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 
@@ -37,9 +38,10 @@ const nav = await Nav.load(BASE, man, geo);
 nav.suitSpeed = SUIT_V;
 $('status').textContent = `HiRISE DTM ${man.W}×${man.H} @ ${man.res_p.toFixed(3)} m · ${(geo.sizeX / 1000).toFixed(1)}×${(geo.sizeZ / 1000).toFixed(1)} km · USGS/NASA`;
 
-let mapView;
+let mapView, wire;
+let paused = false;
 function onRouteChange(r) {
-  $('btn-walk').disabled = !r; $('btn-json').disabled = !r;
+  $('btn-routes').disabled = !r; $('btn-walk').disabled = !r; $('btn-json').disabled = !r;
   $('route-info').hidden = !r;
   if (!r) return;
   const t = r.total;
@@ -165,14 +167,14 @@ function groundY(x, z) {
 }
 
 function enter3D(kind) {
-  initThree();
+  paused = false; keys.clear(); initThree();
   $('mapwrap').hidden = true; $('gl').hidden = false; $('hud').hidden = hudHidden; $('ctl').hidden = false; $('mini').hidden = false; $('hint').hidden = false;
   const r = mapView.route;
   if (kind === 'auto' && r) {
     const cum = [0]; for (let i = 1; i < r.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(r.dense[i][0] - r.dense[i - 1][0], r.dense[i][1] - r.dense[i - 1][1]));
     routeRun = { r, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V };
     P.x = r.dense[0][0]; P.z = r.dense[0][1];
-    P.yaw = Math.atan2(r.dense[4][0] - r.dense[0][0], -(r.dense[4][1] - r.dense[0][1])); P.pitch = view === 'tps' ? -0.22 : -0.05;
+    P.yaw = Math.atan2(r.dense[Math.min(4, r.dense.length - 1)][0] - r.dense[0][0], -(r.dense[Math.min(4, r.dense.length - 1)][1] - r.dense[0][1])); P.pitch = view === 'tps' ? -0.22 : -0.05;
     state = 'auto';
   } else {
     routeRun = null;
@@ -182,16 +184,13 @@ function enter3D(kind) {
   }
   T.oldLine.clear(); T.hazard.hide();
   if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); T.warns.set(r.dense, r.segments); } else { T.line.clear(); T.beacon.hide(); T.warns.clear(); }
-  if (routeRun && r?.source === 'api') {   // sürpriz kum anı: rotanın ~%45'inde, 80 m önceden "algılanır" → /replan
-    const R = routeRun, at = R.total * 0.45; let i = 1; while (i < R.cum.length - 1 && R.cum[i] < at) i++;
-    const w = R.r.dense[i], px = worldToPx(geo, w[0], w[1]).map(Math.floor);
-    R.sand = { world: w, px, radius_m: 20, s: R.cum[i], fired: false };
-  }
+  wire?.start(r, P);
   const gy = groundY(P.x, P.z); P.y = (gy ?? 0) + EYE; T.snap = true;
   toast(state === 'auto' ? 'Rota yürüyüşü başladı. Fareyle etrafa bak, W/A/S/D ile rotadan çık (R: rotaya dön).' : 'Serbest yürüyüş: W/A/S/D, Shift koş, F uçuş, M harita.');
 }
 function enterMap() {
   if (document.pointerLockElement) document.exitPointerLock();
+  wire?.stop(); paused = false; keys.clear();
   state = 'map'; $('mapwrap').hidden = false; $('gl').hidden = true; $('hud').hidden = true; $('ctl').hidden = true; $('mini').hidden = true; $('hint').hidden = true;
   mapView.map.invalidateSize();
   if (T) T.renderer.setAnimationLoop(null);
@@ -200,15 +199,15 @@ function enterMap() {
 
 // Girdi
 addEventListener('keydown', (e) => {
-  if (state === 'map' || e.target.tagName === 'INPUT') return;
+  if (state === 'map' || paused || e.target.tagName === 'INPUT') return;
   keys.add(e.code);
   if (e.code === 'KeyM') enterMap();
   if (e.code === 'KeyL') scanStart(e.shiftKey);
   if (e.code === 'KeyT') { view = view === 'tps' ? 'fps' : 'tps'; toast(view === 'tps' ? '3. şahıs görünüm (T: birinci şahıs)' : 'Birinci şahıs görünüm (T: 3. şahıs)'); }
   if (e.code === 'KeyF') { state = state === 'fly' ? 'walk' : 'fly'; toast(state === 'fly' ? 'Serbest uçuş (Space/C yukarı-aşağı)' : 'Yürüyüş'); }
   if (e.code === 'KeyR' && routeRun) { state = 'auto'; }
-  if (e.code === 'KeyK') { $('rocks-on').checked = !$('rocks-on').checked; T.rocks.userOff = !$('rocks-on').checked; }
-  if (e.code === 'KeyH') { hudHidden = !hudHidden; $('hud').hidden = hudHidden; }
+  if (e.code === 'KeyK') { $('rocks-on').checked = !$('rocks-on').checked; T.rocks.userOff = pure || !$('rocks-on').checked; }
+  if (e.code === 'KeyH') { hudHidden = !hudHidden; $('hud').hidden = hudHidden; wire?.setVisible(!hudHidden); }
   if (e.code === 'KeyB' && !pure) { bobOn = !bobOn; toast(bobOn ? 'Baş sallanması açık' : 'Baş sallanması kapalı'); }
   if (e.code === 'KeyV') { pure = !pure; applyPure(); toast(pure ? 'SAF VERİ modu: yalnız DTM + ortofoto, sentetik ayrıntı yok' : 'Sentetik görünüm ayrıntısı açık'); }
   if (e.code === 'BracketRight') { timeScale = Math.min(40, timeScale * 1.5); toast(`Hız ×${timeScale.toFixed(1)} (×1 = ${SUIT_V.toFixed(2)} m/s skafandr referansı)`); }
@@ -239,20 +238,23 @@ function deviationCheck(now) {
   w.hidden = !offRoute; if (offRoute) w.textContent = `Rotadan saptın (${Math.round(best)} m) — R: rotaya dön`;
 }
 
-async function fireReplan() {
-  const R = routeRun, S = R.sand; S.fired = true;
+async function fireReplan(S) {
+  const R = routeRun; if (!R || R.r.source !== 'api') { toast('API yok: kum uyarısı gösterildi, yerel rotaya devam.'); return; }
+  const oldGeneration = R;
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
   toast('⚠ Kum tespit edildi (kırmızı bölge) — rota yeniden planlanıyor (POST /replan)…');
   try {
     const cur = worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
     const t0 = performance.now();
-    const res = await apiReplan(cur, R.r.goalPx, [{ px: S.px, radius_m: S.radius_m, cls: 'sand' }]);
+    const res = await wire.call('/replan', { start: cur, goal: R.r.goalPx, observations: [{ px: S.px, radius_m: S.radius_m, cls: 'sand' }], ...(wire.selected?.limits ? { budget: wire.selected.limits } : {}) });
+    if (routeRun !== oldGeneration || state === 'map') return;
     const rt = res.routes.find((x) => x.kind === R.r.kind) || res.routes[0];
     const nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind }); nr.goalPx = R.r.goalPx; nr.startPx = cur; nr.start = R.r.start; nr.goal = R.r.goal; nr.computeMs = Math.round(performance.now() - t0);
     const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
     const oldLeft = (R.total - R.s) / 1000;
     T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
     routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, replanned: true, prev: { km: R.r.total.km, min: R.r.total.min } };
+    wire?.setRoute(nr);
     toast(`Yeni rota (${nr.computeMs} ms): ${nr.total.km} km · ${nr.total.min} dk · ${nr.total.status} — eski kalan ${oldLeft.toFixed(2)} km (gri). Kum bölgesi kaçınıldı.`);
   } catch (e) { toast(`Yeniden planlama başarısız (${e.message}) — mevcut rotaya devam edilir.`); }
 }
@@ -270,7 +272,6 @@ function stepPlayer(dt, t) {
       const step = d * Math.min(1, dt * 1.6), lim = dt * 0.7;          // yumuşak takip + en çok ~40°/sn dönüş: rota köşelerinde sarsıntı yok
       P.yaw += Math.max(-lim, Math.min(lim, step));
     }
-    if (R.sand && !R.sand.fired && R.s >= R.sand.s - 80) fireReplan();
     moving = R.s < R.total;
     if (!moving && !R.done) { R.done = true; toast('Hedefe ulaşıldı. M: haritaya dön.'); }
   } else {
@@ -332,7 +333,8 @@ function frame(now) {
     if (T.ft > T.budget * 1.15) r = Math.max(0.55, r * 0.9); else if (T.ft < T.budget * 0.7 && r < T.maxRatio) r = Math.min(T.maxRatio, r * 1.05);
     if (Math.abs(r - T.ratio) > 0.005) { T.ratio = r; T.renderer.setPixelRatio(r); T.renderer.setSize(innerWidth, innerHeight, false); }
   }
-  const gy = stepPlayer(dt, now / 1000);
+  const gy = paused ? groundY(P.x, P.z) : stepPlayer(dt, now / 1000);
+  if (!paused) wire?.update(dt * timeScale, P);
   deviationCheck(now); scanUpdate(now / 1000);
   T.terrain.update(T.camera.position);
   if (window.__trace) window.__trace.push({ dt: rdt, y: P.y, gy, yaw: P.yaw, pitch: P.pitch, x: P.x, z: P.z, swaps: T.terrain.swaps, loading: T.terrain.stats.loading, built: T.terrain.builtLast || 0 });
@@ -390,10 +392,13 @@ function minimap() {
   g.beginPath(); g.moveTo(0, -8); g.lineTo(5, 6); g.lineTo(-5, 6); g.closePath(); g.fill(); g.stroke(); g.restore();
 }
 
+wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: value => { paused = value; keys.clear(); }, replan: fireReplan, toast });
+
 // Test/otomasyon kancası
 window.__mm = {
   man, geo, nav, get mapView() { return mapView; }, get T() { return T; }, P,
-  enter3D, enterMap,
+  enter3D, enterMap, get wire() { return wire; }, get routeRun() { return routeRun; },
+  setTimeScale(value) { timeScale = clamp(value, 1, 2000); },
   teleport(x, z, yaw = 0, pitch = -0.1, st = 'walk', heightAbove) {
     if (!T) enter3D('walk');
     state = st; P.x = x; P.z = z; P.yaw = yaw; P.pitch = pitch; routeRun = st === 'auto' ? routeRun : null;
@@ -402,6 +407,6 @@ window.__mm = {
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
   stats: () => ({ ...T.terrain.stats, fps, state }),
   scan: (w) => { scanStart(!!w); },
-  scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
+  scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle
 };
 if (Q.get('mod') === '3d') enter3D('walk');
