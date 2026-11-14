@@ -139,7 +139,7 @@
       updateHud('Koordinatlar dönüştürülüyor ([433,525] -> [491,774])...');
 
       // 1. Koordinatları haritada seç
-      const api = await import('./app/api.js');
+      const api = await import('../../app/api.js');
       const g = window.__mm.geo;
       const mv = window.__mm.mapView;
 
