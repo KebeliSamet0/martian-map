@@ -2,7 +2,7 @@
 
 Makine okunur sürüm: `layers/demo_scenarios.json`. Koordinatlar `px = [sütun, satır]` biçiminde, `contracts/grid.json` ızgarasında.
 
-> **Geçici:** Bu senaryolar, zemin olasılıkları yerine dolgu değerlerle doğrulandı: `p_* = 0.25`, `entropy = 0`. Emre'nin #45 katmanları henüz yok. Eğim (`slope`) ve kaya (`rock_cfa`) katmanları gerçek. Kum noktaları ortofotodan seçildi; Bora'nın `sand_hint.json` dosyası (#46) gelince değişecek. Her iki katman geldiğinde senaryolar yeniden doğrulanacak.
+> **Geçici:** Bu senaryolar, zemin olasılıkları yerine dolgu değerlerle doğrulandı: `p_* = 0.25`, `entropy = 0`. Emre'nin #45 katmanları henüz yok. Eğim (`slope`) ve kaya (`rock_cfa`) katmanları gerçek. Kum noktaları ortofotodan seçildi; Bora'nın `sand_hint.json` adaylarından hiçbiri rotaların üstünde değil (aşağıya bakın). Emre'nin katmanları gelince senaryolar yeniden doğrulanacak.
 
 ## Senaryolar
 
@@ -30,6 +30,13 @@ Rota sırası her zaman en kısa / dengeli / en güvenli. Kesitteki indeksler `l
 - ve dengeli rotanın orta kısmına (%30–70) en yakın hücre.
 
 Bu kurallara uyan hücreler ızgaranın %3,3'ü. Bu seçim yalnız bir yer tutucu; kum olduğu doğrulanmadı.
+
+## Bora'nın kum adayları (`sand_hint.json`, PR #56)
+
+Bora 10 aday çıkardı ve gözle doğruladı. Hiçbiri senaryo rotalarının üstüne düşmüyor: bu rotalar bilim durakları arasında, yaklaşık satır 525–775 bandında. Rotada olmayan bir kum `/replan` ile rotayı değiştirmez, bitti koşulu bozulur. Bu yüzden senaryolarda ortofotodan seçilen noktalar kaldı.
+
+- En yakın aday `sand_8` [427.7, 809.9] (yarıçap 15 m); hedef durak sci_4'e 145 m uzakta.
+- Curiosity yolu üzerindeki adaylar `sand_4` (8 m) ve `sand_9` (0 m) ızgaranın güneyinde. Bilim durağı şartı esnetilirse bu adaylarla ek bir senaryo kurulabilir.
 
 ## Nasıl tekrar üretilir
 
