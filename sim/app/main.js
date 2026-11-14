@@ -82,7 +82,8 @@ const keys = new Set();
 let view = Q.get('view') === 'fps' ? 'fps' : 'tps';   // 3. şahıs (varsayılan) | fps; T tuşu değiştirir
 let aSpeed = 0, aLastX = null, aLastZ = null;
 // Terrain Scanner (L): çevreye dalga yayılır, zemin eğime göre mavi (≤10°) / sarı (10–20°) / kırmızı (≥20°) boyanır; birkaç sn kalıp söner
-const scanner = { t0: -1, x: 0, z: 0, R: 170, speed: 95, hold: 7, fade: 3 };
+// Süreler/yarıçap TASARIM ayarıdır (docs/data/ekip/rehberlik/terrain_scanner.md §5): 0,8 sn yayılma + 4,2 sn tutma + 1 sn solma; 1 sn bekleme; DS'nin sayısal değeri kaynakta yok
+const scanner = { t0: -1, x: 0, z: 0, R: 90, ramp: 0.8, hold: 4.2, fade: 1.0, cool: 1.0 };
 function ensureScanTex() {
   if (SCAN_TEX.value) return;
   const sg = nav.slopeGrid(), n = nav.w * nav.h, d = new Uint8Array(n * 4);
@@ -91,10 +92,11 @@ function ensureScanTex() {
   SCAN_TEX.value = tx; SCAN_DIM.value.set(nav.w * nav.cx, nav.h * nav.cz);
 }
 function scanStart(wide = false) {
-  ensureScanTex(); scanner.R = wide ? 320 : 170; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (320 m) — rota parlar' : 'Terrain Scanner: eğim taraması (mavi kolay · sarı eğimli · kırmızı dik); rota parlar. Shift+L: geniş'); }
+  const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
+  ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m) — rota parlar' : 'Terrain Scanner: ○ geçiş adayı · △ dikkat · ✕ kaçın (yalnız eğim; zemin bilinmiyor). Shift+L: geniş'); }
 function scanUpdate(now) {
   if (scanner.t0 < 0) { SCAN.value.w = 0; return; }
-  const e = now - scanner.t0, ramp = scanner.R / scanner.speed, rad = Math.min(scanner.R, e * scanner.speed);
+  const e = now - scanner.t0, ramp = scanner.ramp, rad = Math.min(scanner.R, (e / ramp) * scanner.R);
   const a = e < ramp + scanner.hold ? 1 : Math.max(0, 1 - (e - ramp - scanner.hold) / scanner.fade);
   SCAN.value.set(scanner.x, scanner.z, rad, a);
   if (T) { const b = 1 + 0.9 * a; T.line.mat.color.setScalar(b); }   // tarama sırasında planlanan rota parlar (DS2: 'rotada kal')
