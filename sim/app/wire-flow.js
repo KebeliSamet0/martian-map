@@ -39,7 +39,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
       el('p', 'mm-intro-tag', t('intro.tagline')),
     );
     const go = button(t('intro.start'));
-    go.classList.add('mm-btn-lg');
+    go.classList.add('mm-btn-lg'); go.dataset.testid = 'intro-start';
     go.onclick = () => showSelect();
     box.append(go);
     const foot = el('footer', 'mm-intro-foot');
@@ -63,7 +63,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     list.forEach((m, i) => {
       const s = missionSummary(m, wire.coords);
       const card = el('article', 'mm-mcard');
-      card.dataset.difficulty = s.difficulty ?? '';
+      card.dataset.difficulty = s.difficulty ?? ''; card.dataset.testid = `mission-${m.id}`; card.dataset.mission = m.id;
       card.style.setProperty('--i', i);
       const top = el('div', 'mm-mcard-top');
       top.append(el('span', 'mm-mcard-id mm-num', m.id), el('span', 'mm-diff', t(`diff.${s.difficulty}`) || '—'));
@@ -71,7 +71,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
       for (const [k, v] of [['select.distance', fmtDist(s.straightM)], ['select.time', s.timeMin == null ? '—' : `${s.timeMin} ${t('unit.min')}`], ['select.o2', s.o2L == null ? '—' : `${s.o2L} L`]]) {
         const f = el('div'); f.append(el('span', 'mm-g-label', t(k)), el('b', 'mm-num', v)); facts.append(f);
       }
-      const go = button(t('select.go'), 'ghost');
+      const go = button(t('select.go'), 'ghost'); go.dataset.testid = `mission-go-${m.id}`;
       go.onclick = () => { clearLayer(); layer.classList.remove('mm-in'); void wire.selectMission(m); };
       card.append(top, el('h3', 'mm-mcard-title', wire.missionTitle(m)), el('p', 'mm-mcard-story', missionText(m.id, 'brief')), facts, go);
       row.append(card);
@@ -99,7 +99,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
   }
   function showWalk(kind) {
     clearLayer(); layer.classList.remove('mm-in'); setScreen('walk');
-    buildWalkHud(); hudLayer.hidden = false;
+    buildWalkHud(); hudLayer.hidden = false; hudLayer.dataset.testid = 'walk-3d';
     hudRefs.tip.textContent = t(kind === 'auto' ? 'tip.auto' : 'tip.walk');
     hudRefs.tip.classList.add('mm-show');
     clearTimeout(tipTimer);
@@ -147,7 +147,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     emit('pause');
   }
   function renderPause(view = 'main') {
-    const c = current.card; c.replaceChildren();
+    const c = current.card; c.replaceChildren(); c.classList.toggle('mm-card-layers', view === 'layers');
     c.append(el('div', 'mm-kicker', wire.selected ? wire.selected.id : ''), el('h2', 'mm-card-title', t('pause.title')));
     if (view === 'main') {
       const menu = el('div', 'mm-menu');
@@ -183,7 +183,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
   }
   function backRow(c) {
     const acts = el('div', 'mm-alert-acts mm-acts-end'), b = button(t('select.back'), 'ghost');
-    b.onclick = () => renderPause(); acts.append(b); c.append(acts); b.focus();
+    b.onclick = () => renderPause(); acts.append(b); c.append(acts); b.focus({ preventScroll: true }); c.scrollTop = 0;
   }
   function closePause(resume = true) {
     current?.close(); current = null; paused = false;
