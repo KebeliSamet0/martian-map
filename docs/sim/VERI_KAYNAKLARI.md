@@ -68,6 +68,26 @@ değiştirmez; karar onlarda.** Sunumda "limitler tıbbi eşik değil, planlama 
 | Terrain Scanner tasarımı | `docs/sim/TERRAIN_SCANNER_KAYNAKLAR.md` | — |
 | Boxwork bağlamı | LPSC 2026 #1716; NASA/JPL 2025 haberleri (`docs/REFERENCES.md`) | GERÇEK |
 
+
+## 6. Bağımsız kaynak doğrulaması (gercek masası, 2026-11-14)
+Tam rapor ve atıflar: `docs/data/ekip/gercek_parametre_arastirmasi.md`. Bu doğrulama yukarıdaki tabloları **sıkılaştırır**:
+
+| Değer | Bulgu | Sunumda nasıl denir |
+|---|---|---|
+| **0.378 g ölçeği** | Farley & McMahon 1992: yerçekimi %75 azalınca koşu enerjisi %72, **yürüme yalnız %33** azalıyor. Enerjiyi g oranıyla doğrusal ölçeklemek desteklenmiyor. | "Enerji tahmini Dünya formülüne dayanır, Mars g'si için doğrulanmış katsayı yok; alt/üst sınır olarak oku." |
+| **Riskli 15° / geçilmez 25°** | Mars insanı için doğrulanmış eşik **bulunamadı**. Apollo yaya eğimleri (Iqbal 2024) ve Ay planlama örneği ±20° (Kim 2025) var; bunlar güvenlik sertifikası değil. | "Eşikler planlama varsayımı; uyarı 'yerel değerlendirme gerekli' anlamında." |
+| **Yedek süre 30 dk** | Yalnız Apollo OPS acil sisteminin asgari süresi olarak kaynaklı (SP-368). Genel Mars payı için kaynak yok. | "Yedek süre görev prosedüründen gelmeli." |
+| **Bilim durağı 30 dk** | Sabit standart yok; faaliyet başına süre (Johnson 2010). | "Görev planı girdisi." |
+| **Doz 60 µGy** | NASA EVA-başına 60 µGy limiti **bulunamadı**. NASA-STD-3001: kariyer <600 mSv, 30 gün/1 yıl organ limitleri; bunlar EVA bütçesine bölünmez. HUD'daki "doz" Curiosity RAD arka planıdır (0.210 mGy/gün → 8.75 µGy/sa, sabit hız varsayımı). | "Doz = tarihsel RAD arka planıyla tahmin; NASA limiti değil, plan bütçesi." |
+| **0.67 m/s** | APACHE slayt 23: N=1, Mark III, sabit hız, eğim −%10…+%30. Genel Mars hız yasası değil. | "Tek denekli NASA benchmark hızı." |
+| **Kum η 2.1** | Soule & Goldman'ın özgün tablosu bağımsız okunamadı; Lejeune 1998: kumda yürüme **2.1–2.7×** enerji (Dünya). Mars katsayısı yok. | "Dünya ölçümü, Mars için doğrulanmadı." |
+| **4.8 kcal/L O₂** | Ogilvie 2026 RER 0.85 senaryosunda ≈5.02 kcal/L O₂ türetiyor; Péronnet-Massicotte özgün tablosu okunmadı. Fark %5 civarı. | "RER 0.85 varsayımlı dönüşüm." |
+| **Skafandr kütlesi 104 kg** | Mars suit için NASA ön tasarım üst önerisi; var olan bir skafandr değil. xEMU 177 kg. | "Hedef skafandr." |
+
+Sim tarafı önerisi (Samet/Veysel kararı, kod değişikliği yok): HUD'da doz ve limitler "plan bütçesi" diye etiketlensin;
+`/assumptions`'a `verified` yerine `kaynak_dogrulandi` + `mars_icin_gecerli` ayrı alanlar eklensin.
+Uçuş/operasyon onay aracı olarak tanıtılmamalı: bu bir **EVA prova ve karar destek araştırma simülatörü**.
+
 ## 5. Açık kalanlar
 - [ ] 420 → 370 L ve diğer önerilen değerlerin koda alınması: Samet + Elif Nisa kararı.
 - [ ] `RESERVE_MIN`, `SCIENCE_STOP_MIN` için kaynak yok.
