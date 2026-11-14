@@ -14,6 +14,7 @@ import { API_BASE, API_OFF } from './api.js';
 import { worldToPx, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
+import { initFx } from './fx.js';
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -140,7 +141,10 @@ function initThree() {
   T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
-  addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); });
+  // Ard işlem (fx.js): ?fx=off ile kapatılır; P tuşu aç/kapa; saf veri modunda kapalı
+  T.fx = Q.get('fx') === 'off' ? null : initFx(renderer, scene, camera, { quality });
+  renderer.info.autoReset = false;
+  addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); T.fx?.setSize(innerWidth, innerHeight, renderer.getPixelRatio()); });
   renderer.setAnimationLoop(frame);
   return T;
 }
@@ -153,7 +157,7 @@ $('sun-el').oninput = () => { if (T) { T.sunEl = Number($('sun-el').value); appl
 $('sun-az').oninput = () => { if (T) { T.sunAz = Number($('sun-az').value); applySun(); } };
 $('exp').oninput = () => { if (T) T.renderer.toneMappingExposure = Number($('exp').value); };
 // Saf veri modu: sentetik taş, çakıl/regolit, dik yamaç dokusu ve baş sallaması kapanır (yalnız DTM + ortofoto + aydınlatma kalır)
-let pure = false;
+let pure = false, fxOn = true;
 function applyPure() {
   SYNTH.value = pure ? 0 : 1;
   $('pure').checked = pure; $('rocks-on').disabled = pure;
@@ -213,6 +217,7 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyK') { $('rocks-on').checked = !$('rocks-on').checked; T.rocks.userOff = pure || !$('rocks-on').checked; }
   if (e.code === 'KeyH') { hudHidden = !hudHidden; $('hud').hidden = hudHidden; wire?.setVisible(!hudHidden); }
   if (e.code === 'KeyB' && !pure) { bobOn = !bobOn; toast(bobOn ? 'Baş sallanması açık' : 'Baş sallanması kapalı'); }
+  if (e.code === 'KeyP' && T?.fx) { fxOn = !fxOn; toast(fxOn ? 'Ard işlem açık (bloom, ortam gölgesi, kenar yumuşatma, gren)' : 'Ard işlem kapalı'); }
   if (e.code === 'KeyV') { pure = !pure; applyPure(); toast(pure ? 'SAF VERİ modu: yalnız DTM + ortofoto, sentetik ayrıntı yok' : 'Sentetik görünüm ayrıntısı açık'); }
   if (e.code === 'BracketRight') { timeScale = Math.min(40, timeScale * 1.5); toast(`Hız ×${timeScale.toFixed(1)} (×1 = ${SUIT_V.toFixed(2)} m/s skafandr referansı)`); }
   if (e.code === 'BracketLeft') { timeScale = Math.max(1, timeScale / 1.5); toast(`Hız ×${timeScale.toFixed(1)} (×1 = ${SUIT_V.toFixed(2)} m/s skafandr referansı)`); }
@@ -335,7 +340,7 @@ function frame(now) {
     T.lastAdapt = now;
     let r = T.ratio;
     if (T.ft > T.budget * 1.15) r = Math.max(0.55, r * 0.9); else if (T.ft < T.budget * 0.7 && r < T.maxRatio) r = Math.min(T.maxRatio, r * 1.05);
-    if (Math.abs(r - T.ratio) > 0.005) { T.ratio = r; T.renderer.setPixelRatio(r); T.renderer.setSize(innerWidth, innerHeight, false); }
+    if (Math.abs(r - T.ratio) > 0.005) { T.ratio = r; T.renderer.setPixelRatio(r); T.renderer.setSize(innerWidth, innerHeight, false); T.fx?.setSize(innerWidth, innerHeight, r); }
   }
   const gy = paused ? groundY(P.x, P.z) : stepPlayer(dt, now / 1000);
   if (!paused) wire?.update(dt * timeScale, P);
@@ -358,7 +363,8 @@ function frame(now) {
   T.sun.target.updateMatrixWorld();
   T.sky.follow(T.camera);
   const logic = performance.now() - c0;   // render() HARİÇ JS süresi (arazi/taş/gölge mantığı)
-  T.renderer.render(T.scene, T.camera);
+  T.renderer.info.reset();   // ard işlem birden çok geçiş çizer; üçgen sayacı kare başına bir kez sıfırlanır
+  if (T.fx && fxOn && !pure) T.fx.render(dt); else T.renderer.render(T.scene, T.camera);
   T.cpuMax = Math.max(T.cpuMax * 0.98, logic);
   if (now - hudT > 250) { hudT = now; hud(gy, now); }
   if (now - miniT > 150) { miniT = now; minimap(); }
