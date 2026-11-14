@@ -8,6 +8,9 @@ import { Nav } from './nav.js';
 import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
 import { MissionMap as MapView } from './wire-map.js';
 import { initWire } from './wire.js';
+import { initExtras } from './wire-extras.js';
+import { applyScanClasses } from './wire-scan.js';
+import { API_BASE, API_OFF } from './api.js';
 import { worldToPx, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
@@ -95,7 +98,7 @@ function ensureScanTex() {
 }
 function scanStart(wide = false) {
   const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
-  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m) — rota parlar' : 'Terrain Scanner: ○ geçiş adayı · △ dikkat · ✕ kaçın (yalnız eğim; zemin bilinmiyor). Shift+L: geniş'); }
+  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m) — rota parlar' : `Arazi tarayıcı: ${scanner.source ?? 'eğim yedeği'} · renkler ve çizgiler için lejant. Shift+L: geniş`); }
 function scanUpdate(now) {
   if (scanner.t0 < 0) { SCAN.value.w = 0; SCAN_E.value = 0; return; }
   const e = scanner.fix ?? (now - scanner.t0), { R, ramp, hold, fade } = scanner, e0 = ramp + hold, Rmax = R + 8;
@@ -134,6 +137,7 @@ function initThree() {
   const gY = (x, z) => groundY(x, z);
   T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
+  T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); });
@@ -184,13 +188,13 @@ function enter3D(kind) {
   }
   T.oldLine.clear(); T.hazard.hide();
   if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); T.warns.set(r.dense, r.segments); } else { T.line.clear(); T.beacon.hide(); T.warns.clear(); }
-  wire?.start(r, P);
+  T.extras?.close(); wire?.start(r, P); wire?.setVisible(!hudHidden);
   const gy = groundY(P.x, P.z); P.y = (gy ?? 0) + EYE; T.snap = true;
   toast(state === 'auto' ? 'Rota yürüyüşü başladı. Fareyle etrafa bak, W/A/S/D ile rotadan çık (R: rotaya dön).' : 'Serbest yürüyüş: W/A/S/D, Shift koş, F uçuş, M harita.');
 }
 function enterMap() {
   if (document.pointerLockElement) document.exitPointerLock();
-  wire?.stop(); paused = false; keys.clear();
+  T?.extras?.close(); wire?.stop(); paused = false; keys.clear();
   state = 'map'; $('mapwrap').hidden = false; $('gl').hidden = true; $('hud').hidden = true; $('ctl').hidden = true; $('mini').hidden = true; $('hint').hidden = true;
   mapView.map.invalidateSize();
   if (T) T.renderer.setAnimationLoop(null);
@@ -335,6 +339,7 @@ function frame(now) {
   }
   const gy = paused ? groundY(P.x, P.z) : stepPlayer(dt, now / 1000);
   if (!paused) wire?.update(dt * timeScale, P);
+  if (!paused) T.extras?.update(P);
   deviationCheck(now); scanUpdate(now / 1000);
   T.terrain.update(T.camera.position);
   if (window.__trace) window.__trace.push({ dt: rdt, y: P.y, gy, yaw: P.yaw, pitch: P.pitch, x: P.x, z: P.z, swaps: T.terrain.swaps, loading: T.terrain.stats.loading, built: T.terrain.builtLast || 0 });
@@ -394,6 +399,23 @@ function minimap() {
 
 wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: value => { paused = value; keys.clear(); }, replan: fireReplan, toast });
 
+ensureScanTex();
+scanner.source = 'yalnız eğim';
+if (!API_OFF && wire.grid.aux_layers?.includes('scan_class')) {
+  try {
+    const response = await fetch(`${API_BASE}/layers/scan_class.bin?dtype=uint8`, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) throw new Error(`scan_class ${response.status}`);
+    applyScanClasses(SCAN_TEX.value.image.data, nav, wire.coords, wire.grid, new Uint8Array(await response.arrayBuffer()));
+    SCAN_TEX.value.needsUpdate = true; scanner.source = 'API scan_class (alan dışında eğim)';
+  } catch { toast('Tarayıcı sınıfı alınamadı; eğim yedeği kullanılıyor.'); }
+}
+const legend = $('scanleg'); legend.replaceChildren();
+for (const [key, mark, color] of [['safe','•','#2ecc71'], ['caution','― ―','#f1c40f'], ['nogo','― ― ―','#e74c3c'], ['unknown','· · ·','#9b59b6']]) {
+  const span = document.createElement('span'); span.style.color = color; span.textContent = `${mark} ${wire.texts.scan[key]}  `; legend.append(span);
+}
+legend.append(document.createTextNode(` · ${scanner.source}`));
+legend.title = 'API sınıfları model tahminidir; alan dışında 10°/20° eğim yedeği. İşaretin sönmesi güvenli demek değildir.';
+
 // Test/otomasyon kancası
 window.__mm = {
   man, geo, nav, get mapView() { return mapView; }, get T() { return T; }, P,
@@ -405,7 +427,7 @@ window.__mm = {
     const gy = groundY(x, z); P.y = (gy ?? 0) + (heightAbove ?? EYE); T.snap = true;
   },
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
-  stats: () => ({ ...T.terrain.stats, fps, state }),
+  stats: () => ({ ...T.terrain.stats, fps, state, paused, scannerSource: scanner.source }),
   scan: (w) => { scanStart(!!w); },
   scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle
 };

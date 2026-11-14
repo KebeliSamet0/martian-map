@@ -47,6 +47,8 @@
   #hud { width:248px; max-height:170px; overflow:auto; font-size:11px; opacity:.8; }
   #hint { max-width:calc(100% - 560px); }
   @media(max-height:650px) { #hud { left:275px; width:250px; max-height:130px; } }
+  #stop-photo { position:fixed; z-index:2050; right:280px; bottom:18px; width:min(360px,40vw); margin:0; padding:8px; background:#14100df2; border:1px solid var(--line); }
+  #stop-photo img { display:block; width:100%; max-height:240px; object-fit:contain; } #stop-photo figcaption { font-size:11px; margin-top:5px; } #stop-photo button { float:right; }
 </style>
 </head>
 <body>
@@ -72,13 +74,14 @@
     <button id="btn-routes" disabled>Üç rotayı karşılaştır</button>
     <div class="row"><button id="btn-walk" class="primary" disabled>3B yürüyüş</button><button id="btn-free">Serbest yürüyüş</button></div>
     <div class="row"><button id="btn-json" disabled>route.json indir</button><button id="btn-reset">Temizle</button></div>
-    <p class="tiny" style="margin-top:10px">Veri: HiRISE DTM (1 m) ve HiRISE renkli mozaik — NASA/JPL/UArizona, USGS. Eğim 4 m ızgarada hesaplanır; zemin sınıfı, güven, kalori ve radyasyon planlayıcıdan gelecek, burada <b>gösterilmez</b>.</p>
+    <p class="tiny" style="margin-top:10px">Veri: HiRISE DTM (1 m) ve HiRISE renkli mozaik — NASA/JPL/UArizona, USGS. Eğim 4 m ızgarada hesaplanır; zemin ve kaynak tüketimi planlayıcı modelinden gelir; API yokken yerel yedek açıkça etiketlenir.</p>
   </div>
   <div id="coord">—</div>
   <div id="status"></div>
 </div>
 <canvas id="gl" hidden></canvas>
 <div id="vig"></div>
+<figure id="stop-photo" hidden><button type="button">Kapat · Esc</button><img alt=""><figcaption></figcaption></figure>
 <div id="mission-ui"></div><div id="vitals-source" hidden></div>
 <div id="hud" class="card" hidden></div>
 <div id="hint" class="card" hidden><kbd>W A S D</kbd> yürü · <kbd>Shift</kbd> koş · <kbd>Fare</kbd> bak (tıkla) · <kbd>R</kbd> rotaya dön · <kbd>[</kbd><kbd>]</kbd> hız · <kbd>F</kbd> uçuş · <kbd>K</kbd> taş · <kbd>H</kbd> HUD · <kbd>B</kbd> baş sallama · <kbd>V</kbd> saf veri · <kbd>L</kbd> Terrain Scanner (<kbd>Shift</kbd>+<kbd>L</kbd> geniş) · <kbd>T</kbd> 3. şahıs/FPS · <kbd>M</kbd> harita</div>
@@ -92,7 +95,7 @@
   <label style="display:flex;gap:6px;align-items:center" title="Taş, çakıl/regolit ayrıntısı, dik yamaç dokusu ve baş sallaması kapanır; yalnız DTM + ortofoto kalır"><input id="pure" type="checkbox"> <b>Saf veri modu</b> (tüm sentetik ayrıntı kapalı)</label>
   <button id="btn-map" style="width:100%;margin-top:8px">Haritaya dön (M)</button>
 </div>
-<div id="scanleg" hidden title="İşaretler yalnız DTM eğiminden (4 m ızgara) çıkar; zemin türü/kum bilinmez. İşaret yokluğu ya da sönmesi güvenli demek değildir. Eşikler (10°/20°) bu arayüzün ayarıdır; Death Stranding'in sayısal eşiği kaynakta yok. 20° = astronot traverse sınırı (ICES-2025-129).">Terrain Scanner · <b style="color:#1a8cff">○</b> &lt;10° geçiş adayı <b style="color:#ffd10d">△</b> 10–20° dikkat <b style="color:#ff2014">✕</b> ≥20° kaçın <b style="color:#999">■</b> veri yok · <i style="all:unset;opacity:.8">yalnız eğim</i></div>
+<div id="scanleg" hidden></div>
 <div id="warn" hidden></div>
 <div id="toast" hidden></div>
 <script src="./lib/leaflet/leaflet.js"></script>

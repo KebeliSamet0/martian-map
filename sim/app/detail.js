@@ -99,17 +99,19 @@ export function patchMaterial(shader) {
       if (uScan.w > 0.001) {
         float sd = distance(vWP.xz, uScan.xy);
         if (sd < uScan.z + 3.0) {
-          // DS tarzı ayrı zemin işaretleri: 3 m ızgara, hücre merkezindeki eğim sınıfı → ○ (geçiş adayı) / △ (dikkat) / ✕ (kaçın) / ■ gri (veri yok)
+          // B kanalında scan_class + 1; sıfırsa yerel eğim yedeği.
           float G = 3.0;
           vec2 cell = floor(vWP.xz / G), ctr = (cell + 0.5) * G, q = vWP.xz - ctr;
           vec4 st = texture2D(uScanTex, ctr / uScanDim);
           float sl = st.r * 64.0;
-          float R0 = 0.55, d;
+          float cls = st.b > 0.001 ? floor(st.b * 255.0 + 0.5) - 1.0
+            : (st.g < 0.5 ? 3.0 : (sl < uScanTh.x ? 0.0 : (sl < uScanTh.y ? 1.0 : 2.0)));
+          float d;
           vec3 sc;
-          if (st.g < 0.5) { sc = vec3(0.6, 0.6, 0.66); d = max(abs(q.x), abs(q.y)) - R0 * 0.55; }
-          else if (sl < uScanTh.x) { sc = vec3(0.10, 0.55, 1.0); d = length(q) - R0 * 0.7; }
-          else if (sl < uScanTh.y) { sc = vec3(1.0, 0.82, 0.05); vec2 p = q / R0; p.y += 0.22; d = (max(abs(p.x) * 0.866 + p.y * 0.5, -p.y) - 0.55) * R0; }
-          else { sc = vec3(1.0, 0.13, 0.08); vec2 p = q / R0; d = max(min(abs(p.x - p.y), abs(p.x + p.y)) * 0.7071 - 0.16, max(abs(p.x), abs(p.y)) - 0.85) * R0; }
+          if (cls < 0.5) { sc = vec3(0.18, 0.8, 0.44); d = length(q) - 0.20; }
+          else if (cls < 1.5) { sc = vec3(0.945, 0.77, 0.06); d = max(abs(q.x) - 0.45, abs(abs(q.y) - 0.18) - 0.055); }
+          else if (cls < 2.5) { sc = vec3(0.906, 0.298, 0.235); d = max(abs(q.x) - 0.48, min(abs(q.y), abs(abs(q.y) - 0.28)) - 0.055); }
+          else { sc = vec3(0.608, 0.349, 0.714); d = min(length(q), min(length(q - vec2(0.35, 0.0)), length(q + vec2(0.35, 0.0)))) - 0.08; }
           float born = smoothstep(0.0, 7.0, uScan.z - sd);                 // işaret, dalga geçtikçe belirir
           float alive = smoothstep(uScanE, uScanE + 7.0, sd);              // sonra merkezden dışa süpürülerek söner
           float vis = born * alive * uScan.w;
