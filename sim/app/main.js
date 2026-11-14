@@ -107,7 +107,7 @@ function scanUpdate(now) {
   const e = scanner.fix ?? (now - scanner.t0), { R, ramp, hold, fade } = scanner, e0 = ramp + hold, Rmax = R + 8;
   const front = Math.min(R, (e / ramp) * R), erase = e < e0 ? 0 : Math.min(Rmax, ((e - e0) / fade) * Rmax);
   SCAN.value.set(scanner.x, scanner.z, front, 1); SCAN_E.value = erase; SCAN_T.value = e;
-  if (T) T.line.mat.color.setScalar(1 + 0.9 * (e < e0 ? 1 : Math.max(0, 1 - (e - e0) / fade)));   // tarama sırasında planlanan rota parlar (DS2: 'rotada kal')
+  if (T) T.line.mat.color.setScalar(1 + 0.9 * (e < e0 ? 1 : Math.max(0, 1 - (e - e0) / fade)));   // tarama sırasında planlanan rota parlar ('rotada kal' ipucu)
   if (e > e0 + fade) { scanner.t0 = -1; SCAN.value.w = 0; SCAN_E.value = 0; $('scanleg').hidden = true; if (T) T.line.mat.color.setScalar(1); }
 }
 let routeRun = null, lastLook = 0, hudHidden = false, bobOn = false;   // baş sallanması varsayılan KAPALI (görüntü kararlılığı)
@@ -427,7 +427,7 @@ if (!API_OFF && wire.grid.aux_layers?.includes('scan_class')) {
   } catch { toast('Tarayıcı sınıfı alınamadı; eğim yedeği kullanılıyor.'); }
 }
 const legend = $('scanleg'); legend.replaceChildren();
-for (const [key, mark, color] of [['caution','✕','#ff8a1f'], ['nogo','✕','#ff2a1a']]) {   // tarayıcı v2: yalnız tehlikeli bölgeler
+for (const [key, mark, color] of [['caution','═','#ff8a1f'], ['nogo','≡','#ff2a1a']]) {   // tarayıcı v2: yalnız tehlikeli bölgeler
   const span = document.createElement('span'); span.style.color = color; span.textContent = `${mark} ${wire.texts.scan[key]}  `; legend.append(span);
 }
 legend.append(document.createTextNode(` · ${scanner.source}`));

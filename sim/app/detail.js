@@ -490,7 +490,7 @@ export function patchMaterial(shader) {
         float sd = distance(vWP.xz, uScan.xy);
         if (sd < uScan.z + 3.0) {
           // Sınıf kaynağı Samet'in entegrasyonu: B kanalı = API scan_class + 1 (0 güvenli, 1 dikkat, 2 geçilmez, 3 bilinmiyor); yoksa yerel eğim yedeği.
-          // Tarayıcı v2 (referans: Death Stranding Terrain Scanner videosu): YALNIZ tehlikeli bölgeler — 1 dikkat, 2 geçilmez.
+          // Tarayıcı v2: YALNIZ tehlikeli bölgeler — 1 dikkat (çift çizgi), 2 geçilmez (üç çizgi).
           vec4 st = texture2D(uScanTex, vWP.xz / uScanDim);
           float sl = st.r * 64.0;
           float cls0 = st.b > 0.001 ? floor(st.b * 255.0 + 0.5) - 1.0 : (st.g < 0.5 ? 3.0 : (sl < uScanTh.x ? 0.0 : (sl < uScanTh.y ? 1.0 : 2.0)));
@@ -506,7 +506,7 @@ export function patchMaterial(shader) {
           float line = 1.0 - smoothstep(0.0, 1.4 * fw, cd);
           float flick = 0.72 + 0.28 * sin(vWP.y * 5.0 + vWP.x * 1.7 - uScanT * 8.0);
           vec3 blue = vec3(0.12, 0.55, 1.0);
-          // 2) sık ✕ işaretleri (1,6 m ızgara, hücre içinde sapma); geçilmez = kırmızı, dikkat = turuncu; eğim arttıkça yoğunluk artar
+          // 2) sık çizgi işaretleri (1,6 m ızgara, hücre içinde sapma ve yön); dikkat = çift çizgi (turuncu), geçilmez = üç çizgi (kırmızı); eğim arttıkça yoğunluk artar
           float G = 1.6;
           vec2 cell = floor(vWP.xz / G);
           float h1 = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
@@ -521,7 +521,11 @@ export function patchMaterial(shader) {
           float on = step(h3, dens) * step(0.5, dzc);
           float R0 = 0.34 + 0.16 * h3;
           vec2 pp = (vWP.xz - ctr) / R0;
-          float dX = max(min(abs(pp.x - pp.y), abs(pp.x + pp.y)) * 0.7071 - 0.17, max(abs(pp.x), abs(pp.y)) - 0.85) * R0;
+          float ang = h1 * 3.14159;
+          vec2 qq = vec2(cos(ang) * pp.x + sin(ang) * pp.y, -sin(ang) * pp.x + cos(ang) * pp.y);
+          float nL = mix(2.0, 3.0, step(0.9, dzc)), offL = (nL - 1.0) * 0.5;
+          float idxL = clamp(floor(qq.y / 0.34 + offL + 0.5), 0.0, nL - 1.0);
+          float dX = max(abs(qq.x) - 0.8, abs(qq.y - (idxL - offL) * 0.34) - 0.075) * R0;
           float xm = (1.0 - smoothstep(0.0, 0.03, dX)) * on * vis;
           float halo = (1.0 - smoothstep(0.0, 0.5, length(vWP.xz - ctr))) * on * vis * 0.18;
           vec3 red = mix(vec3(1.0, 0.45, 0.02), vec3(1.0, 0.035, 0.02), step(0.9, dzc));
