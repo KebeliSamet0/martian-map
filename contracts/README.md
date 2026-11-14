@@ -136,3 +136,40 @@ iki yönlü nokta→polyline mesafelerinin birleşik aritmetik ortalaması,
 `max_deviation_m` maksimumudur (sürekli Hausdorff değil, örneklenmiş metrik).
 `delta_min`, `delta_kcal` bizim rota eksi referans, aynı modelde tek yön farkıdır;
 `route` ve `reference` ham min/kcal toplamları da döner.
+
+## Simülasyon API ekleri (issue #51)
+
+### 1. Türetilmiş maliyet ve tarayıcı sınıfı katmanları (`/layers/{name}.bin|png`)
+`/grid` yanıtındaki `aux_layers` listesi şu katmanları içerir:
+- `reachable`: erişilebilirlik maskesi (`1.0` ana bileşen, `0.35` izole ada, `0.0` NOGO)
+- `speed_mps`: hücrede yürüme hızı (m/s, `cost.speed_ms`)
+- `kcal_per_m`: metre başına metabolik enerji (kcal/m, `cost.kcal_per_m`)
+- `o2_l_per_m` ve `o2_g_per_m`: metre başına O₂ tüketimi (litre/m ve gram/m; `1 L O₂ = 4.8 kcal`, `1 L O₂ = 1.429 g`)
+- `risk`: metre başına birleşik risk (`0–1`, `cost.risk_per_m`)
+- `scan_class`: arazi tarayıcı sınıfı (`0`: güvenli, `1`: dikkat, `2`: geçilmez, `3`: bilinmiyor; `.bin` varsayılan `<f4`, isteğe bağlı `?dtype=uint8`; `.png` lejant renklerinde RGBA)
+
+Hücre maliyet katmanlarında yürüyüş yönü bilinmediğinden hücre eğim büyüklüğü (`|slope|`) ile çıkış yönsüz özet olarak kullanılır. `scan_class` öncelik sırası (`params.py` ve `/assumptions`):
+1. `2` (geçilmez): `slope >= 25°` veya (`p_sand >= 0.55` ve `slope >= 12°`)
+2. `3` (bilinmiyor): `entropy >= 0.60`
+3. `1` (dikkat): `slope >= 15°` veya `p_sand >= 0.40` veya `rock_cfa >= 0.15`
+4. `0` (güvenli): aksi durum.
+`/grid` yanıtındaki `scan_legend` alanı her sınıf için `{code, key, name, color, rgb}` döner.
+
+### 2. Yürüyüş adımı tüketimi (`POST /step` ve `POST /consume`)
+İstek:
+```json
+{"path": [[433, 525], [434, 526], [435, 527]], "load_kg": 5.0, "observations": [{"px": [434, 526], "radius_m": 20.0, "cls": "sand"}]}
+```
+Yanıt (özet):
+```json
+{
+  "distance_m": 5.66, "km": 0.0057, "duration_s": 10.42, "sec": 10.42, "min": 0.17,
+  "kcal": 0.68, "o2_L": 0.142, "o2_g": 0.2, "dose_uGy": 0.025, "risk": 0.74,
+  "load_kg": 5.0, "slope_max": 11.2, "slope_mean": 9.8, "ascent_m": 0.4, "descent_m": 0.1,
+  "directional": {"duration_s": 9.85, "kcal": 0.64, "o2_L": 0.133, "o2_g": 0.19},
+  "dominant_class": "sand",
+  "terrain_classes": {"sand": {"cells": 3, "distance_m": 5.66, "pct": 100.0}},
+  "scan_classes": {"caution": {"code": 1, "name": "dikkat", "cells": 3, "distance_m": 5.66, "pct": 100.0}},
+  "cells": [{"px": [433, 525], "class": "sand", "scan_class": 1, "scan_key": "caution", "scan_name": "dikkat", "slope_deg": 11.2, "step_m": 0.0, "sec": 0.0, "kcal": 0.0}]
+}
+```

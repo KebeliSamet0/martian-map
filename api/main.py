@@ -24,6 +24,8 @@ app = FastAPI(title="Martian Map Planlayıcı", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 Pixel = tuple[StrictInt, StrictInt]
+FiniteCoord = Annotated[float, Field(allow_inf_nan=False)]
+PathPoint = tuple[FiniteCoord, FiniteCoord]
 Nonnegative = Annotated[float, Field(ge=0, allow_inf_nan=False)]
 
 
@@ -66,6 +68,12 @@ class Observation(Input):
 
 class ReplanInput(RouteInput):
     observations: list[Observation]
+
+
+class StepInput(Input):
+    path: list[PathPoint] = Field(min_length=1)
+    load_kg: Nonnegative = params.DEFAULT_LOAD_KG
+    observations: list[Observation] | None = None
 
 
 @app.exception_handler(planner.PlanError)
@@ -114,29 +122,63 @@ def replan(body: ReplanInput, request: Request):
     return result(layers, body)
 
 
+@app.post("/step")
+@app.post("/consume")
+def step(body: StepInput, request: Request):
+    obs_list = [o.model_dump() for o in body.observations] if body.observations else None
+    return planner.evaluate_step(
+        request.app.state.layers,
+        body.path,
+        load_kg=body.load_kg,
+        observations=obs_list,
+    )
+
+
+LAYER_ALIASES = {
+    "o2_L_per_m": "o2_l_per_m",
+    "risk_per_m": "risk",
+}
+
+
 def layer_array(request: Request, name: str):
     layers = request.app.state.layers
     info = layers.grid_info()
+    canonical = LAYER_ALIASES.get(name, name)
     valid = set(info["layers"]) | set(info.get("aux_layers", []))
-    if name not in valid:
+    if canonical not in valid:
         raise HTTPException(404, "Bilinmeyen katman")
-    return layers.probs[name[2:]] if name.startswith("p_") else getattr(layers, name)
+    return layers.probs[canonical[2:]] if canonical.startswith("p_") else getattr(layers, canonical)
 
 
 @app.get("/layers/{name}.bin")
-def layer_binary(name: str, request: Request):
-    data = np.asarray(layer_array(request, name), dtype="<f4")
+def layer_binary(name: str, request: Request, dtype: str = "float32"):
+    arr = layer_array(request, name)
+    canonical = LAYER_ALIASES.get(name, name)
+    if canonical == "scan_class" and dtype == "uint8":
+        data = np.asarray(arr, dtype=np.uint8)
+    else:
+        data = np.asarray(arr, dtype="<f4")
     return Response(data.tobytes(order="C"), media_type="application/octet-stream")
 
 
 @app.get("/layers/{name}.png")
 def layer_png(name: str, request: Request):
-    data = layer_array(request, name)
+    canonical = LAYER_ALIASES.get(name, name)
+    data = layer_array(request, canonical)
     finite = np.isfinite(data)
+    if canonical == "scan_class":
+        codes = np.where(finite, data, 0).astype(int)
+        rgb = np.zeros((*data.shape, 3), dtype=np.uint8)
+        for meta in params.SCAN_LEGEND.values():
+            rgb[codes == meta["code"]] = meta["rgb"]
+        rgba = np.dstack((rgb, finite.astype(np.uint8) * 255))
+        output = BytesIO()
+        Image.fromarray(rgba).save(output, format="PNG")
+        return Response(output.getvalue(), media_type="image/png")
     lo, hi = 0.0, 1.0
-    if name == "slope":
+    if canonical == "slope":
         hi = params.SLOPE_NOGO_DEG
-    elif name == "elevation" and finite.any():
+    elif canonical in ("elevation", "speed_mps", "kcal_per_m", "o2_l_per_m", "o2_g_per_m") and finite.any():
         lo, hi = float(data[finite].min()), float(data[finite].max())
     scaled = np.clip((np.where(finite, data, lo) - lo) / max(hi - lo, 1e-9), 0, 1)
     # Düşük: koyu mavi; yüksek: sıcak turuncu. Geçersiz hücreler saydam.
