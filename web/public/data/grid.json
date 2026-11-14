@@ -1,0 +1,61 @@
+{
+  "region": "Gale / Mount Sharp boxwork bolgesi (Curiosity sol ~4459-4983)",
+  "width": 1000,
+  "height": 1000,
+  "res_m": 2.0,
+  "origin_xy_m": [
+    8142276.492786024,
+    -283815.075189438
+  ],
+  "crs": "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=3396190 +units=m +no_defs=True",
+  "crs_note": "origin_xy_m = izgaranin sol ust kosesi (piksel kenari), kaynak DTM projeksiyonunda. px = [sutun, satir]; sutun = (x - origin_x) / res_m, satir = (origin_y - y) / res_m; hucre indeksi = floor. MMGIS waypoint easting/northing ayni projeksiyonda. Frontend piksel uzayinda (Leaflet CRS.Simple).",
+  "corners_latlon": {
+    "NW": [
+      -4.788132,
+      137.365129
+    ],
+    "NE": [
+      -4.788132,
+      137.398871
+    ],
+    "SW": [
+      -4.821873,
+      137.365129
+    ],
+    "SE": [
+      -4.821873,
+      137.398871
+    ]
+  },
+  "source": {
+    "dem": "USGS MSL Gale Merged DEM 1m v3 (2x2 blok ortalamasi)",
+    "ortho": "USGS MSL Gale Merged Orthophoto 25cm v3"
+  },
+  "layers": {
+    "elevation": "layers/elevation.npy  float32, metre",
+    "slope": "layers/slope.npy  float32, derece",
+    "rock_cfa": "layers/rock_cfa.npy  float32, 0-1 (kayaların kapladığı alan oranı)",
+    "thermal_inertia": "layers/thermal_inertia.npy  float32, TIU (opsiyonel)",
+    "p_soil": "layers/p_soil.npy  float32, 0-1",
+    "p_bedrock": "layers/p_bedrock.npy  float32, 0-1",
+    "p_sand": "layers/p_sand.npy  float32, 0-1",
+    "p_bigrock": "layers/p_bigrock.npy  float32, 0-1",
+    "entropy": "layers/entropy.npy  float32, 0-1 (model belirsizliği, 1 = hiç emin değil)",
+    "science": "layers/science_stops.json  bilim durakları listesi",
+    "ortho": "layers/ortho_2m.png  uint8 gri, 1000x1000 (izgaraya hizali); layers/ortho_1m.png 2000x2000",
+    "elevation_norm": "layers/elevation_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)",
+    "slope_norm": "layers/slope_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)"
+  },
+  "normalization": {
+    "elevation": {
+      "method": "min-max",
+      "min": -3884.307373046875,
+      "max": -3389.55419921875
+    },
+    "slope": {
+      "method": "min-max",
+      "min": 0.027312885969877243,
+      "max": 76.82396697998047
+    }
+  }
+}

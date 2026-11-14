@@ -56,3 +56,34 @@ export interface RouteResponse {
   grid: GridInfo
   routes: Route[]
 }
+
+export interface ScienceStop {
+  id: string
+  name: string
+  px: Px
+  why: string
+  lat?: number
+  lon?: number
+  evidence?: {
+    sol_range?: [number, number]
+    mahli_images?: number
+    chemcam_images?: number
+    n_stops?: number
+    slope_deg?: number
+    anchor_stop?: string
+  }
+  source?: string
+}
+
+export interface RoverStop {
+  stop_id: string
+  sol: number
+  px: Px
+  images: string[]
+  site: number
+  drive: number
+  slope_deg?: number
+  lat?: number
+  lon?: number
+  loc_source?: string | null
+}
