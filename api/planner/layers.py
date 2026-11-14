@@ -6,6 +6,7 @@ Sahte veri: yaklaşık 2×2 km, Mount Sharp eteğine benzeyen kuzeye yükselen a
 from __future__ import annotations
 
 import json
+import math
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -37,7 +38,7 @@ class Layers:
     def __post_init__(self):
         mask = np.zeros((self.height, self.width), bool)
         for s in self.rover_stops:
-            x, y = s["px"]
+            x, y = (math.floor(v) for v in s["px"])  # ondalıklı px: noktanın düştüğü hücre
             if 0 <= x < self.width and 0 <= y < self.height:
                 mask[y, x] = True
         if mask.any():
@@ -150,7 +151,10 @@ def load(layers_dir: Path | None = None) -> Layers:
         return synthetic()
     root = Path(selected)
     try:
-        g = json.loads((root / "grid.json").read_text(encoding="utf-8"))
+        grid_path = root / "grid.json"
+        if not grid_path.exists():  # repo kökü verildiyse sözleşmedeki yer (yollar köke göre)
+            grid_path = root / "contracts" / "grid.json"
+        g = json.loads(grid_path.read_text(encoding="utf-8"))
         w, h, res = g["width"], g["height"], g["res_m"]
         if type(w) is not int or type(h) is not int or min(w, h) <= 0:
             raise LayerError("grid.json: width/height pozitif tam sayı olmalı")
@@ -207,8 +211,10 @@ def load(layers_dir: Path | None = None) -> Layers:
             values = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
             for item in values:
                 px = item["px"]
-                if len(px) != 2 or any(type(v) is not int for v in px) or not (0 <= px[0] < w and 0 <= px[1] < h):
-                    raise LayerError(f"{name}: durak px ızgara içinde tam sayı [x,y] olmalı")
+                # px ondalıklı olabilir (durağın hücre içindeki konumu); hücre = floor
+                if (len(px) != 2 or any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in px)
+                        or not (0 <= px[0] < w and 0 <= px[1] < h)):
+                    raise LayerError(f"{name}: durak px ızgara içinde sonlu sayı [x,y] olmalı")
             return values
         return Layers(w, h, float(res), elev, slope, rock, probs, ent,
                       stops("rover_stops", "rover_stops.json"), stops("science", "science_stops.json"),

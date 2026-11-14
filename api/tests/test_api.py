@@ -52,7 +52,8 @@ def test_route_and_metadata(client, routes):
 
 
 def test_impassable(client):
-    app.state.layers.slope[START[1], START[0]] = 30
+    # SNAP_RADIUS_M içindeki tüm komşular da geçilmez: nokta reddedilir
+    app.state.layers.slope[START[1] - 2:START[1] + 3, START[0] - 2:START[0] + 3] = 30
     response = client.post("/route", json={"start": START, "goal": GOAL})
     assert response.status_code == 422
     assert "geçilmez" in response.json()["detail"]
