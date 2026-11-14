@@ -1,0 +1,118 @@
+{
+  "region": "Gale / Mount Sharp boxwork bolgesi (Curiosity sol ~4459-4983)",
+  "grid": {
+    "width": 1000,
+    "height": 1000,
+    "res_m": 2.0,
+    "synthetic": false
+  },
+  "terrain_model": {
+    "terrain_model_available": false,
+    "mode": "zemin_modeli_yok",
+    "label": "zemin modeli yok (yalnız eğim + rock_cfa; tek tip referans zemin: p_bedrock=1, entropy=0)",
+    "missing_layers": [
+      "p_soil",
+      "p_bedrock",
+      "p_sand",
+      "p_bigrock",
+      "entropy"
+    ]
+  },
+  "endpoints": {
+    "start_px": [
+      790,
+      1
+    ],
+    "goal_px": [
+      629,
+      998
+    ],
+    "reference_start_px": [
+      790.55,
+      1.38
+    ],
+    "reference_goal_px": [
+      629.97,
+      998.58
+    ],
+    "euclidean_distance_m": 2019.8
+  },
+  "reference": {
+    "source": "https://mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_traverse.json",
+    "source_note": "NASA/JPL MMGIS MSL traverse; kutuya giris kuzey kenar, cikis guney kenar; sol ~4459-4983 (MMGIS waypoint)",
+    "point_count": 854,
+    "sampled_cell_count": 1785,
+    "length_m": 3887.6,
+    "grid_length_m": 4141.3,
+    "min": 177.0,
+    "kcal": 844.4,
+    "slope_mean_deg": 9.9,
+    "slope_max_deg": 45.7,
+    "steep_cells_ge_nogo": 35
+  },
+  "presets": [
+    {
+      "kind": "shortest",
+      "label": "En kısa",
+      "weights": {
+        "t": 1.0,
+        "k": 0.0,
+        "r": 0.0
+      },
+      "length_m": 2256.2,
+      "delta_length_m": -1631.3,
+      "delta_grid_length_m": -1885.0,
+      "mean_deviation_m": 140.02,
+      "max_deviation_m": 326.02,
+      "min": 69.5,
+      "delta_min": -107.5,
+      "kcal": 323.7,
+      "delta_kcal": -520.6,
+      "slope_max_deg": 18.6,
+      "status": "GO",
+      "go": true
+    },
+    {
+      "kind": "balanced",
+      "label": "Dengeli",
+      "weights": {
+        "t": 1.0,
+        "k": 10.0,
+        "r": 4.0
+      },
+      "length_m": 2270.9,
+      "delta_length_m": -1616.7,
+      "delta_grid_length_m": -1870.4,
+      "mean_deviation_m": 140.33,
+      "max_deviation_m": 326.02,
+      "min": 69.7,
+      "delta_min": -107.4,
+      "kcal": 324.6,
+      "delta_kcal": -519.8,
+      "slope_max_deg": 19.9,
+      "status": "GO",
+      "go": true
+    },
+    {
+      "kind": "safest",
+      "label": "En güvenli",
+      "weights": {
+        "t": 1.0,
+        "k": 10.0,
+        "r": 25.0
+      },
+      "length_m": 2297.0,
+      "delta_length_m": -1590.5,
+      "delta_grid_length_m": -1844.3,
+      "mean_deviation_m": 139.92,
+      "max_deviation_m": 326.02,
+      "min": 70.3,
+      "delta_min": -106.8,
+      "kcal": 327.4,
+      "delta_kcal": -517.0,
+      "slope_max_deg": 16.2,
+      "status": "GO",
+      "go": true
+    }
+  ]
+}
