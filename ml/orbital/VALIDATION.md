@@ -45,6 +45,33 @@ Görsel: `docs/data/img/rock_abundance_validation.png`
   için kullanılabilir; kesin kaya sayısı için kullanılmamalı.
 - Kapı 2 için yeterli.
 
+## 3b. İkinci doğrulama: Curiosity rotası yakını + dik yamaç (2×2 km haritası, 14 Kasım)
+
+Neden: Elif Rana'nın PR #44 notu. Haritada rota boyunca kaya yoğunluğu kutu ortalamasının ~2 katı çıktı
+(rota çizgisi %1,58, ±10 m çevresi %1,45, kutu %0,81); `boxwork` sırtlarının kenar gölgeleri kaya sayılmış olabilir.
+İlk doğrulama farklı (sırtsız) bir kesitteydi.
+
+Yöntem: ≥1 m adaylardan **kör** örnek (sayfada grup yazmıyor, sıra karışık), `ml/orbital/validation_sheet_route.py`:
+15 aday rota yakınından (±10 m), 15 aday dik yamaçtan (eğim ≥30°, rota dışı). Bora elle işaretledi
+(`docs/data/img/validation2_*`).
+
+| Grup | Kaya | Kaya değil | Şüpheli | Kaya oranı |
+|---|---|---|---|---|
+| Rota yakını (15) | 11 | 3 (#18, 19, 23) | 1 (#12) | %73 |
+| Dik yamaç (15) | 12 | 1 (#20) | 2 (#10, 11) | %80 |
+| **Toplam (30)** | **23** | **4** | **3** | **%77** (şüpheliler kaya çıkarsa en çok %87) |
+
+- "Kaya değil" denenler çıkıntı/sırt kenarı gölgesi. Bora'nın sırt kenarı dediği 3 aday (#12, 20, 23) üçü de
+  kaya değil ya da şüpheli.
+- **Yanlış alarm bu bölgelerde ~%13 (şüphelilerle %23'e kadar).** İlk doğrulamadaki sırtsız kesitte 30/30 kaya çıkmıştı;
+  yani sorun sırt kenarı ve dik yamaçlarda yoğunlaşıyor.
+- Yanlış alarmlar çıkarılsa bile rota çevresi ≈ %1,1-1,3 kalır, kutu ortalamasının (%0,81) belirgin üstünde.
+  Yani "rota kayalı yerlerden geçiyor" sonucu büyük ölçüde gerçek, ama bu bölgelerde harita ~%13-23 şişmiş olabilir.
+- Hata güvenli yönde: planlayıcı gereksiz yere kaçınır, tehlikeli yeri güvenli göstermez.
+
+**Karar:** Haritayı olduğu gibi bırakıyoruz, sınırı belgeliyoruz. 3-4 örneğe bakıp sırt filtresi eşiği koymak
+gerçek kayaları da atabilir (Bora'nın kararı).
+
 ## 4. Önerilen iyileştirmeler (henüz uygulanmadı)
 
 1. Birbirine çok yakın daireleri tek kayada birleştir (çift sayma biter).
@@ -53,6 +80,8 @@ Görsel: `docs/data/img/rock_abundance_validation.png`
 
 ## 5. Sınırlar
 
+- Harita sırt kenarı ve dik yamaçlarda kayayı ~%13-23 fazla sayıyor olabilir (bkz. 3b). Bu grupların her biri 15 örnekle
+  denendi, sonuçlar kaba. Sırt filtresi (uzun/çizgi gölgeleri ya da çok dik yamaçtaki adayları ele) ileride denenebilir, henüz yapılmadı.
 - Sadece 30 örnek ve tek kişinin gözü; çift sayma oranı (%7-13) bu küçük örneklemden geliyor.
 - Sarılar (şüpheli) kaya mı değil mi belli değil, iki ihtimal de tabloda gösterildi.
 - 1 m'den küçük kayalar fotoğrafta görünmüyor, bu karneye dahil değil.
