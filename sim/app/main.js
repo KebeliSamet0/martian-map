@@ -143,7 +143,7 @@ function initThree() {
   const gY = (x, z) => groundY(x, z);
   T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
-  T.wf = createWalkFeel({ scene, camera, terrain, geo, audio, apiBase: API_BASE, apiOff: API_OFF, quality, toast, text: (k) => wire?.texts?.walk?.[k] }); T.wf.load();   // tur4:his
+  T.wf = Q.get('wf') === 'off' ? null : createWalkFeel({ scene, camera, terrain, geo, audio, apiBase: API_BASE, apiOff: API_OFF, quality, toast, text: (k) => wire?.texts?.walk?.[k] }); T.wf?.load();   // tur4:his
   T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
