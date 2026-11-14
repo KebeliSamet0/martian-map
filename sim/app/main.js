@@ -9,6 +9,7 @@ import { SYNTH } from './detail.js';
 import { MapView } from './mapview.js';
 import { worldToPx, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
+import { createAstronaut } from './astronaut.js';
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -78,6 +79,8 @@ let T = null;      // üç boyut durumu (ilk girişte kurulur)
 const P = { x: 0, y: 0, z: 0, yaw: 0, pitch: 0 };
 let state = 'map';  // map | auto | walk | fly
 const keys = new Set();
+let view = Q.get('view') === 'fps' ? 'fps' : 'tps';   // 3. şahıs (varsayılan) | fps; T tuşu değiştirir
+let aSpeed = 0, aLastX = null, aLastZ = null;
 let routeRun = null, lastLook = 0, hudHidden = false, bobOn = false;   // baş sallanması varsayılan KAPALI (görüntü kararlılığı)
 
 function initThree() {
@@ -107,6 +110,7 @@ function initThree() {
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
   const gY = (x, z) => groundY(x, z);
   T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
+  T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); });
@@ -147,7 +151,7 @@ function enter3D(kind) {
     const cum = [0]; for (let i = 1; i < r.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(r.dense[i][0] - r.dense[i - 1][0], r.dense[i][1] - r.dense[i - 1][1]));
     routeRun = { r, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V };
     P.x = r.dense[0][0]; P.z = r.dense[0][1];
-    P.yaw = Math.atan2(r.dense[4][0] - r.dense[0][0], -(r.dense[4][1] - r.dense[0][1])); P.pitch = -0.05;
+    P.yaw = Math.atan2(r.dense[4][0] - r.dense[0][0], -(r.dense[4][1] - r.dense[0][1])); P.pitch = view === 'tps' ? -0.22 : -0.05;
     state = 'auto';
   } else {
     routeRun = null;
@@ -178,6 +182,7 @@ addEventListener('keydown', (e) => {
   if (state === 'map' || e.target.tagName === 'INPUT') return;
   keys.add(e.code);
   if (e.code === 'KeyM') enterMap();
+  if (e.code === 'KeyT') { view = view === 'tps' ? 'fps' : 'tps'; toast(view === 'tps' ? '3. şahıs görünüm (T: birinci şahıs)' : 'Birinci şahıs görünüm (T: 3. şahıs)'); }
   if (e.code === 'KeyF') { state = state === 'fly' ? 'walk' : 'fly'; toast(state === 'fly' ? 'Serbest uçuş (Space/C yukarı-aşağı)' : 'Yürüyüş'); }
   if (e.code === 'KeyR' && routeRun) { state = 'auto'; }
   if (e.code === 'KeyK') { $('rocks-on').checked = !$('rocks-on').checked; T.rocks.userOff = !$('rocks-on').checked; }
@@ -269,9 +274,26 @@ function stepPlayer(dt, t) {
       const target = gy + EYE; P.y += (target - P.y) * (T.snap ? 1 : 1 - Math.exp(-dt * 7)); T.snap = false;
     }
   }
-  const bob = bobOn && state !== 'fly' && moving ? Math.sin(t * 7.2) * 0.035 : 0;
-  T.camera.position.set(P.x, P.y + bob, P.z);
-  T.camera.rotation.set(P.pitch, -P.yaw, 0);
+  const tps = view === 'tps' && state !== 'fly' && gy != null;
+  T.astro.group.visible = tps;
+  if (tps) {
+    // Astronot hızı (animasyon için): gerçek yer değiştirmeden
+    const sp = aLastX == null ? 0 : Math.hypot(P.x - aLastX, P.z - aLastZ) / Math.max(1e-3, dt); aLastX = P.x; aLastZ = P.z;
+    aSpeed += (Math.min(sp, 8) - aSpeed) * (1 - Math.exp(-dt * 10));
+    const foot = P.y - EYE;   // P.y zaten sönümlü zemin + göz yüksekliği
+    T.astro.group.position.set(P.x, foot, P.z); T.astro.group.rotation.y = Math.PI - P.yaw;   // model +Z'ye bakar; sim ileri = (sin yaw, −cos yaw)
+    T.astro.update(dt, aSpeed, true);
+    // 3. şahıs yörünge kamerası: hedef = astronotun omuz hizası; fareyle yaw/pitch ile dönülür, arazi içine girmez
+    const D = 5.2, cp = Math.cos(P.pitch), tgt = [P.x, foot + 1.35, P.z];
+    let cx = tgt[0] - Math.sin(P.yaw) * cp * D, cy = tgt[1] - Math.sin(P.pitch) * D, cz = tgt[2] + Math.cos(P.yaw) * cp * D;
+    const cg = groundY(cx, cz); if (cg != null) cy = Math.max(cy, cg + 0.6);
+    T.camera.position.set(cx, cy, cz); T.camera.lookAt(tgt[0], tgt[1], tgt[2]);
+  } else {
+    aLastX = null;
+    const bob = bobOn && state !== 'fly' && moving ? Math.sin(t * 7.2) * 0.035 : 0;
+    T.camera.position.set(P.x, P.y + bob, P.z);
+    T.camera.rotation.set(P.pitch, -P.yaw, 0);
+  }
   return gy;
 }
 
