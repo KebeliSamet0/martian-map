@@ -83,4 +83,5 @@ Bölge uyumu: API ızgarası (`contracts/grid.json`, 2×2 km) sim alanının (6,
 ## Performans ölçümü ve regresyon testi (QA)
 - **Gerçek GPU'da FPS (demo laptopu):** `http://127.0.0.1:8001/sim/?perf=1` aç → 30 sn senaryo otomatik koşar (A/B seç, 3B yürüyüş, 10. sn tarama, 20. sn geniş tarama), sonuç tablosu + "JSON indir". Hedef (varsayım): p95 ≤ 22 ms, ort ≥ 45 FPS. Yazılım GL'de (~1 FPS) "kaldı" çıkması beklenir.
 - **Regresyon:** `node sim/tools/qa/e2e_regression.js` (API :8000 ve sim :8001 çalışırken; `playwright-core` gerekir). 8 assert: rota kaynağı=api, replan, astronot zeminde, sapma uyarısı, tarama, sayfa hatası yok.
+- **Rigli astronot (isteğe bağlı):** `?char=glb` (Quaternius CC0, stilize düşük poligon; Idle/Walk animasyonu). Varsayılan prosedürel astronot.
 - **Gerçekçi zemin (isteğe bağlı):** `?terrain=pbr` veya panelden "Gerçekçi zemin" (CC0 Poly Haven; Dünya malzemesi). Varsayılan kapalı.

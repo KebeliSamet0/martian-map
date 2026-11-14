@@ -1,0 +1,159 @@
+MODEL / CODE ATTRIBUTION AND PROVENANCE — 2026-11-14
+Only files in models/ are selected models. Other candidate binaries in provenance/evaluated are rejected evaluation evidence.
+Both selected models are CC0 1.0 Universal. Full license: licenses/CC0-1.0.txt
+CC0 canonical URL: https://creativecommons.org/publicdomain/zero/1.0/
+The Quaternius GLB is unchanged. The backup was converted from CC0 FBX, preserving mesh/rig; missing texture reference was removed.
+No Sketchfab or Mixamo asset, animation or account is used.
+
+FILE: models/astronaut_quaternius_2022.glb
+Author: Quaternius
+Source: https://poly.pizza/m/3hC2i0CTuO
+Acquisition URL: https://static.poly.pizza/0076345b-bbea-42d5-931c-4a5ad2050b18.glb
+Exact source license label: "Public Domain (CC0)"
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Downloaded UTC: 2026-11-14T15:42:51.931395+00:00
+Bytes: 1944976
+SHA-256: c825fb5dc0f3c2875f8c298938c35df79e884c8117d9ff62a6b213d783957758
+Suggested voluntary credit: Astronaut by Quaternius, CC0 1.0; source https://poly.pizza/m/3hC2i0CTuO
+
+FILE: models/astronaut_mrlentereng.glb
+Author: ThunderWare games (original); MrLentereng (rig)
+Source: https://mrlentereng.itch.io/rigged-low-poly-astronaut
+Acquisition URL: https://mrlentereng.itch.io/rigged-low-poly-astronaut
+Exact source license label: "CC0 1.0 Universal"
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Downloaded UTC: 2026-11-14T15:31:51.837Z
+Bytes: 757884
+SHA-256: e7ae57a4ef9d1dbc9d9afebbe7a543708e2c586c4d9ea97fb24d4291655db355
+Suggested voluntary credit: Astronaut by ThunderWare games (original); MrLentereng (rig), CC0 1.0; source https://mrlentereng.itch.io/rigged-low-poly-astronaut
+Converted UTC: 2026-11-14T15:35:17.659Z
+Conversion: Three.js 0.160 FBXLoader -> GLTFExporter; no new rig, no Mixamo; source archive preserved
+Modification: absent AstronautTexture.png reference removed; source diffuse color retained. NO Idle/Walk clips in backup.
+Source download URL, original filename and ZIP hash: provenance/itch_download_record.json
+
+THIRD-PARTY LOADER / EXPORTER FILES
+three.js r160: Copyright 2010-2023 three.js authors. MIT. Full verbatim notice: licenses/three-MIT.txt.
+Exact notice heading: "The MIT License".
+fflate 0.6.9: Arjun Barrett, MIT. Full verbatim notice: licenses/fflate-MIT.txt.
+Original fflate source header: "Licensed under MIT."
+Every downloaded helper file URL, download timestamp, byte size and SHA-256 follows:
+
+provenance/poly_3hC2i0CTuO.html
+Author: see source page/model credit
+License classification: provenance/license text; model license is not applied to whole page
+URL: https://poly.pizza/m/3hC2i0CTuO
+Downloaded UTC: 2026-11-14T15:42:50.792669+00:00
+Bytes: 111321
+SHA-256: 851b95d95a6efc5b93fd1ef1f0f1a5f1c294565d4628fb44ff04be3025cafa2c
+
+models/astronaut_quaternius_2022.glb
+Author: see source page/model credit
+License classification: CC0-1.0
+URL: https://static.poly.pizza/0076345b-bbea-42d5-931c-4a5ad2050b18.glb
+Downloaded UTC: 2026-11-14T15:42:51.931395+00:00
+Bytes: 1944976
+SHA-256: c825fb5dc0f3c2875f8c298938c35df79e884c8117d9ff62a6b213d783957758
+
+licenses/CC0-1.0.txt
+Author: see source page/model credit
+License classification: provenance/license text; model license is not applied to whole page
+URL: https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
+Downloaded UTC: 2026-11-14T15:42:52.500236+00:00
+Bytes: 7048
+SHA-256: a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499
+
+licenses/three-MIT.txt
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/LICENSE
+Downloaded UTC: 2026-11-14T15:42:52.809518+00:00
+Bytes: 1081
+SHA-256: 852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d
+
+vendor/loaders/GLTFLoader.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js
+Downloaded UTC: 2026-11-14T15:42:52.901064+00:00
+Bytes: 108522
+SHA-256: d073b438e6a07e1359741dd5d6c76c953420cc0d4fd84eb1bdde94315540e6a3
+
+vendor/utils/BufferGeometryUtils.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/utils/BufferGeometryUtils.js
+Downloaded UTC: 2026-11-14T15:42:52.982051+00:00
+Bytes: 31906
+SHA-256: 9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb
+
+vendor/loaders/FBXLoader.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/loaders/FBXLoader.js
+Downloaded UTC: 2026-11-14T15:37:41.636242+00:00
+Bytes: 101466
+SHA-256: e8c2a47dffc04ca5699839a6d80fa9140fd9c943f62cea8d074736d7de9c5d98
+
+vendor/exporters/GLTFExporter.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/exporters/GLTFExporter.js
+Downloaded UTC: 2026-11-14T15:37:41.745196+00:00
+Bytes: 77714
+SHA-256: f8a6eb87719e68c925fdf445014b5ead49cf779ae14e69c6cc1cb1dd4eae514d
+
+vendor/curves/NURBSCurve.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/curves/NURBSCurve.js
+Downloaded UTC: 2026-11-14T15:37:41.830827+00:00
+Bytes: 1878
+SHA-256: 34dee297704432358680934a8d5acae35f05c71aa59ce7a8e97decb0ac38e452
+
+vendor/curves/NURBSUtils.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/curves/NURBSUtils.js
+Downloaded UTC: 2026-11-14T15:37:41.923935+00:00
+Bytes: 7861
+SHA-256: 86bcf4002721854739f6dc7fd185b5eb0540d6b8676feaae6979bb605baac85e
+
+vendor/libs/fflate.module.js
+Author: Arjun Barrett
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/libs/fflate.module.js
+Downloaded UTC: 2026-11-14T15:37:42.024399+00:00
+Bytes: 83291
+SHA-256: 5686c3d02432a47d8e31f16cabc2d725bbf4531a3abb37cc6fd00142256e3730
+
+vendor/utils/TextureUtils.js
+Author: three.js authors
+License classification: MIT
+URL: https://unpkg.com/three@0.160.0/examples/jsm/utils/TextureUtils.js
+Downloaded UTC: 2026-11-14T15:37:42.107995+00:00
+Bytes: 2367
+SHA-256: 1b84a7fde8745dd614f62b6ca8108b592144278c07891a0cbe8cdf8e15796efa
+
+licenses/fflate-MIT.txt
+Author: Arjun Barrett
+License classification: MIT
+URL: https://unpkg.com/fflate@0.6.9/LICENSE
+Downloaded UTC: 2026-11-14T15:37:42.485666+00:00
+Bytes: 1069
+SHA-256: 62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751
+
+provenance/thunderware_original.html
+Author: see source page/model credit
+License classification: provenance/license text; model license is not applied to whole page
+URL: https://mariusmopar.itch.io/astronaut-low-poly
+Downloaded UTC: 2026-11-14T15:37:42.914147+00:00
+Bytes: 23154
+SHA-256: 0bc791cb2a08c5bde74f17126d4b1737ef108f414c86fd282881bd04f3984e70
+
+REJECTED CC0 CANDIDATE EVIDENCE (NOT FOR THE CHARACTER)
+Astronaut bee / flamingo by Quaternius: CC0 1.0; source pages https://poly.pizza/m/OgeSH89Nmx and https://poly.pizza/m/zbtPq4dOJL.
+Hashes, original download times and original URLs: provenance/bee_candidate_asset_manifest.json and provenance/flamingo_candidate_asset_manifest.json.
+Astronaut by Polygonal Mind: CC0 1.0; https://poly.pizza/m/UeBrldDxE9. No skin; hash/URL in provenance/polygonalmind_rejected.json.
+Original source labels: "Public Domain (CC0)". Same CC0 legal text applies to those rejected model files.
+The optional original ThunderWare .blend download is CC0; its record is provenance/thunderware_download_record.json.
+three.module.js is READ ONLY from sim/lib; its hash is in test_results.json. No copy/change was made there.

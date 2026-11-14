@@ -11,6 +11,7 @@ import { MapView } from './mapview.js';
 import { worldToPx, pxToWorld, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
+import { loadGlbAstronaut } from './astro_glb.js';
 
 const BASE = './data/' + (new URLSearchParams(location.search).get('tiles') || 'tiles');   // ?tiles=tiles_shifted: DTM–ortofoto kayması düzeltilmiş karolar
 const Q = new URLSearchParams(location.search);
@@ -151,6 +152,7 @@ function initThree() {
   const gY = (x, z) => groundY(x, z);
   T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
+  if (Q.get('char') === 'glb') loadGlbAstronaut({ castShadow: quality !== 'low', receiveShadow: quality !== 'low' }).then((a) => { scene.remove(T.astro.group); a.group.visible = false; T.astro = a; scene.add(a.group); }).catch((e) => console.warn('GLB astronot yüklenemedi, prosedürel kalır', e));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); });
