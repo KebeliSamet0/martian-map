@@ -113,6 +113,42 @@ def test_smoke_real_gale_layers():
     summary = run_smoke(ROOT)
     assert summary["size"] == "1000x1000"
     assert summary["route_s"] < 2.0
+    assert summary["long_route_s"] < 2.0
     assert [r["kind"] for r in summary["route_summary"]] == ["shortest", "balanced", "safest"]
     assert [r["kind"] for r in summary["replan_summary"]] == ["shortest", "balanced", "safest"]
+    assert [r["kind"] for r in summary["long_route_summary"]] == ["shortest", "balanced", "safest"]
+    assert all(8 <= r["segments"] <= 25 for r in summary["route_summary"])
+    assert all(8 <= r["segments"] <= 25 for r in summary["long_route_summary"])
+    assert all(v < 0.75 for v in summary["long_overlaps"].values())
     assert all(r["status"] in ("GO", "NO-GO") for r in summary["route_summary"])
+
+
+def test_reachability_mask_and_disconnected_component_message(monkeypatch, tmp_path):
+    pkg = _make_partial_or_provisional_pkg(tmp_path, include_terrain=[])
+    # Ortadan geçilmez bir duvar çekerek ızgarayı iki bağlı bileşene ayır (sol büyük, sağ küçük)
+    slope = np.load(pkg / "slope.npy")
+    slope[:, 8] = 35.0
+    np.save(pkg / "slope.npy", slope)
+    monkeypatch.setenv("MARTIAN_LAYERS_DIR", str(pkg))
+
+    with TestClient(app) as client:
+        grid = client.get("/grid").json()
+        rc = grid["reachability"]
+        assert rc["component_count"] == 2
+        assert rc["nogo_cells"] == 12
+        assert rc["main_component_cells"] == 12 * 8
+        assert "reachable" in grid["aux_layers"]
+
+        png = client.get("/layers/reachable.png")
+        assert png.status_code == 200 and png.headers["content-type"] == "image/png"
+        raw = client.get("/layers/reachable.bin")
+        assert raw.status_code == 200
+        arr = np.frombuffer(raw.content, dtype="<f4").reshape(12, 12)
+        assert float(arr[0, 0]) == pytest.approx(1.0)
+        assert float(arr[0, 8]) == pytest.approx(0.0)
+        assert float(arr[0, 10]) == pytest.approx(0.35)
+
+        resp = client.post("/route", json={"start": [1, 1], "goal": [10, 10]})
+        assert resp.status_code == 422
+        detail = resp.json()["detail"]
+        assert "bileşen #1" in detail and "bileşen #2" in detail

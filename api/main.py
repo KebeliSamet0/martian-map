@@ -116,7 +116,9 @@ def replan(body: ReplanInput, request: Request):
 
 def layer_array(request: Request, name: str):
     layers = request.app.state.layers
-    if name not in layers.grid_info()["layers"]:
+    info = layers.grid_info()
+    valid = set(info["layers"]) | set(info.get("aux_layers", []))
+    if name not in valid:
         raise HTTPException(404, "Bilinmeyen katman")
     return layers.probs[name[2:]] if name.startswith("p_") else getattr(layers, name)
 

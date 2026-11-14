@@ -45,8 +45,41 @@ class Layers:
                 mask[y, x] = True
         if mask.any():
             self.evidence_dist_m = ndimage.distance_transform_edt(~mask) * self.res_m
+            if self.provisional_terrain:
+                dist_factor = np.clip(self.evidence_dist_m / 400.0, 0.0, 1.0)
+                self.entropy = np.clip(0.65 + 0.30 * dist_factor, 0.65, 0.95).astype(np.float32)
         else:
             self.evidence_dist_m = np.full((self.height, self.width), np.nan)
+        self._comp_slope_ref: np.ndarray | None = None
+        self._comp_data: tuple | None = None
+
+    def connectivity(self) -> tuple[np.ndarray, np.ndarray, dict[int, int], np.ndarray]:
+        """8-komşulukla geçilebilir bağlı bileşenleri hesaplar ve önbelleğe alır."""
+        if (self._comp_data is not None and self._comp_slope_ref is not None
+                and np.array_equal(self._comp_slope_ref, self.slope)):
+            return self._comp_data
+        passable = self.slope < P.SLOPE_NOGO_DEG
+        raw_labels, num = ndimage.label(passable, structure=np.ones((3, 3), dtype=bool))
+        sizes = np.bincount(raw_labels.ravel())
+        sizes[0] = 0
+        order = np.argsort(sizes)[::-1]
+        ranks: dict[int, int] = {}
+        comp_sizes_list = [0]
+        for r_idx, cid in enumerate(order, start=1):
+            if sizes[cid] <= 0:
+                break
+            ranks[int(cid)] = r_idx
+            comp_sizes_list.append(int(sizes[cid]))
+        comp_sizes = np.asarray(comp_sizes_list, dtype=int)
+        main_cid = int(order[0]) if len(order) and sizes[order[0]] > 0 else -1
+        reachable = np.where(raw_labels == main_cid, 1.0, np.where(passable, 0.35, 0.0)).astype(np.float32)
+        self._comp_slope_ref = self.slope.copy()
+        self._comp_data = (raw_labels, comp_sizes, ranks, reachable)
+        return self._comp_data
+
+    @property
+    def reachable(self) -> np.ndarray:
+        return self.connectivity()[3]
 
     @property
     def dominant(self) -> np.ndarray:
@@ -62,6 +95,11 @@ class Layers:
         )
 
     def grid_info(self) -> dict:
+        _, comp_sizes, _, _ = self.connectivity()
+        total_cells = self.width * self.height
+        passable_cells = int(comp_sizes.sum())
+        nogo_cells = total_cells - passable_cells
+        main_cells = int(comp_sizes[1]) if len(comp_sizes) > 1 else 0
         return {
             "region": self.region,
             "width": self.width,
@@ -72,6 +110,17 @@ class Layers:
             "terrain_note": PROVISIONAL_TERRAIN_NOTE if self.provisional_terrain else None,
             "px_note": "Koordinatlar [x, y] = [sütun, satır]; (0,0) sol üst köşe",
             "layers": ["elevation", "slope", "rock_cfa", "p_soil", "p_bedrock", "p_sand", "p_bigrock", "entropy"],
+            "aux_layers": ["reachable"],
+            "reachability": {
+                "passable_cells": passable_cells,
+                "passable_pct": round(passable_cells / total_cells * 100, 2),
+                "nogo_cells": nogo_cells,
+                "nogo_pct": round(nogo_cells / total_cells * 100, 2),
+                "component_count": max(len(comp_sizes) - 1, 0),
+                "main_component_cells": main_cells,
+                "main_component_pct": round(main_cells / total_cells * 100, 2),
+                "reachable_layer": "/layers/reachable.png",
+            },
             "rover_stops": self.rover_stops,
             "science_stops": self.science_stops,
         }
@@ -254,9 +303,13 @@ def load(layers_dir: Path | None = None) -> Layers:
             provisional = False
         if not np.allclose(sum(probs.values()), 1, atol=1e-3, rtol=0):
             raise LayerError("Sınıf olasılıkları her hücrede toplam 1 olmalı")
-        def stops(name, fallback):
-            path = path_for(name)[0] if name in g["layers"] else root / fallback
-            values = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+        def stops(name, *fallbacks):
+            if name in g["layers"]:
+                candidates = [path_for(name)[0]]
+            else:
+                candidates = [root / fb for fb in fallbacks] + [root / "layers" / fb for fb in fallbacks]
+            path = next((p for p in candidates if p.exists()), None)
+            values = json.loads(path.read_text(encoding="utf-8")) if path is not None else []
             for item in values:
                 px = item["px"]
                 # px ondalıklı olabilir (durağın hücre içindeki konumu); hücre = floor
@@ -265,7 +318,8 @@ def load(layers_dir: Path | None = None) -> Layers:
                     raise LayerError(f"{name}: durak px ızgara içinde sonlu sayı [x,y] olmalı")
             return values
         return Layers(w, h, float(res), elev, slope, rock, probs, ent,
-                      stops("rover_stops", "rover_stops.json"), stops("science", "science_stops.json"),
+                      stops("rover_stops", "rover_stops.json", "rover_stops_selected.json"),
+                      stops("science", "science_stops.json"),
                       synthetic=False, region=g.get("region", ""), provisional_terrain=provisional)
     except LayerError:
         raise

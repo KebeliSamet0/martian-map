@@ -30,3 +30,28 @@ Süreler: yükleme=0.037s, /route=0.080s, /replan=0.079s
 - `sim/tools/devserver.py` varsayılan olarak 8000 portunu kullanıyor; API (`:8000`) ile çakışmaması için `scripts/dev.sh` içinde Sim sunucusuna argüman olarak `8001` portu verildi (`web` ve `sim` koduna dokunulmadı).
 - Bu makinede `sim/data/tiles` dizini (3D arazi karoları) henüz üretilmemiş; `dev.sh` bunu kontrol edip uyarı basarak Sim sunucusunu başlatmaya devam eder.
 - AI4Mars gerçek model çıktıları (`p_soil`, `p_bedrock`, `p_sand`, `p_bigrock`, `entropy`) Emre tarafından üretildiğinde `layers/` altına konulması yeterlidir; geçici dolgu kendiliğinden devre dışı kalacaktır.
+
+## Brif 2 — Gerçek veride rota kalitesi (segmentleme, ayrışma ve bağlantı)
+
+### 1. Önce / Sonra karşılaştırma tablosu
+| Çift / Ön ayar | Önce (km / dk / kcal / seg / ort. eğim / ort. kaya) | Sonra (km / dk / kcal / seg / ort. eğim / ort. kaya) | Ortak hücre oranı (Önce → Sonra) |
+|---|---|---|---|
+| `[433,525]→[491,774]` shortest | 0.55 / 21.4 / 103 / **114** / 6.72° / 0.0100 | 0.55 / 21.4 / 103 / **8** / 6.72° / 0.0100 | S–B: %68.5 → **%78.6** |
+| `[433,525]→[491,774]` balanced | 0.55 / 21.4 / 103 / **113** / 6.74° / 0.0012 | 0.56 / 21.5 / 103 / **8** / 6.70° / 0.0001 | B–Saf: %6.6 → **%55.9** |
+| `[433,525]→[491,774]` safest | 0.55 / 21.5 / 105 / **111** / 7.27° / 0.0006 | 0.57 / 21.6 / 104 / **8** / **6.49°** / **0.0000** | S–Saf: %6.1 → **%48.1** |
+| `[150,150]→[850,850]` shortest | 2.79 / 135.9 / 670 / **568** / 10.13° / 0.0012 | 2.79 / 135.9 / 670 / **24** / 10.13° / 0.0012 | S–B: %57.5 → **%42.1** |
+| `[150,150]→[850,850]` balanced | 2.81 / 136.1 / 670 / **581** / 10.02° / 0.0001 | 2.85 / 136.3 / 671 / **24** / **9.85°** / 0.0001 | B–Saf: %37.3 → **%26.0** |
+| `[150,150]→[850,850]` safest | 2.82 / 136.8 / 676 / **563** / 10.14° / 0.0000 | 2.99 / 138.6 / 681 / **24** / **9.29°** / **0.0000** | S–Saf: %31.7 → **%15.7** |
+
+### 2. Neden analizi ve yapılan belgeli varsayımlar (`params.py` & `/assumptions`)
+- **Neden:** Gerçek Gale verisinde medyan `s_per_m=2.83` (std 1.42) iken `risk_per_m=0.22` (std 0.15) düzeyindeydi; ayrıca `layers/rover_stops.json` kökten çağrıldığında yüklenmediği için kanıt mesafesi `NaN` kalıyor ve geçici entropi sabit (0.75) oluyordu. Eğim riski de 10° altında sıfır olduğu için `safest` rota 6–10° arası yamaçları düz zeminden ayırt etmiyordu.
+- **Segmentleme (`SEG_MIN_M=40`, `SEG_MAX_M=70`, `SEG_MAX_COUNT=24`, `SEG_SMOOTH_M=30`, `SEG_HYSTERESIS_DEG=1.5`):** 2 m ızgarada eğim ve sınıf olasılıkları 30 m pencere ortalaması ve 1.5° bant histerezisi ile yumuşatıldı; kısa parçalar komşusuna katılarak 8–24 segment aralığı sağlandı (segment toplamları rota toplamına eşit).
+- **Risk ve ön ayarlar (`REAL_PRESETS`, `RISK_STEER_SLOPE_DEG=8.0`, `RISK_ROCK_SCALE=0.15`):** Gerçek veride eğim riski doğrusal + 8° üstü karesel bileşenle tanımlandı; rover kanıtlarına uzaklıkla artan geçici entropi (`0.65–0.95`) bağlandı; `balanced` (`t=1, k=12, r=22`) ve `safest` (`t=0.2, k=1.5, r=140`) ağırlıklarıyla hem ortalama eğim hem kaya oranı düzenli azalacak şekilde ayrışma sağlandı. Sentetik veri sözleşmesi (`PRESETS`) korundu.
+
+### 3. Bağlantı ölçümü ve erişilebilirlik katmanı
+- **1000×1000 Gale ızgarası:** Geçilebilir hücre (`slope < 25°`) oranı **%81.25** (812.546 hücre); geçilmez (`≥ 25°`) **187.454 hücre (%18.75)**.
+- **8-komşuluk bağlı bileşenler:** Toplam **2.281** bileşen; en büyük ana bileşen **743.390 hücre** (tüm ızgaranın **%74.34**'ü, geçilebilir alanın **%91.49**'u). `#2` bileşen %2.80 (28.000 hücre), `#3` bileşen %1.19 (11.918 hücre).
+- **Yeni maske ve hata mesajı:** `/grid` yanıtına `reachability` özeti ve `aux_layers: ["reachable"]`, katman uçlarına `/layers/reachable.png` (ve `.bin`: ana bileşen `1.0`, izole geçilebilir adalar `0.35`, NOGO `0.0`) eklendi. `[100,800]→[900,200]` artık `"başlangıç [100, 800] bileşen #1 (743390 hücre, %74.34), hedef [900, 200] bileşen #269 (19 hücre, %0.00) içinde kaldı"` mesajıyla 422 döner.
+
+### 4. Bilinen eksikler
+- Emre'nin gerçek AI4Mars zemin katmanları geldiğinde sınıf/entropi dağılımı değişeceğinden `REAL_PRESETS` ağırlıkları gerçek model çıktısıyla yeniden gözden geçirilmelidir.

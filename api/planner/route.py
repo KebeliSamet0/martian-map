@@ -4,6 +4,7 @@ from __future__ import annotations
 import math
 
 import numpy as np
+from scipy.ndimage import uniform_filter1d
 from skimage.graph import MCP_Geometric
 
 from . import params as P
@@ -40,7 +41,17 @@ def shortest_path(L: Layers, start, goal, w: dict):
     mcp = MCP_Geometric(cost)
     acc, _ = mcp.find_costs([s], [g])
     if not np.isfinite(acc[g]):
-        raise PlanError("Başlangıç ile hedef arasında geçilebilir yol yok")
+        raw_labels, comp_sizes, ranks, _ = L.connectivity()
+        total_cells = L.width * L.height
+        cs, cg = int(raw_labels[s]), int(raw_labels[g])
+        rs, rg = ranks.get(cs, 0), ranks.get(cg, 0)
+        ss, sg = int(comp_sizes[rs]) if rs else 0, int(comp_sizes[rg]) if rg else 0
+        ps, pg = ss / total_cells * 100, sg / total_cells * 100
+        raise PlanError(
+            f"Başlangıç ile hedef arasında geçilebilir yol yok: "
+            f"başlangıç {[int(start[0]), int(start[1])]} bileşen #{rs} ({ss} hücre, %{ps:.2f}), "
+            f"hedef {[int(goal[0]), int(goal[1])]} bileşen #{rg} ({sg} hücre, %{pg:.2f}) içinde kaldı"
+        )
     path = np.array(mcp.traceback(g))  # (satır, sütun)
     return path, terms
 
@@ -75,15 +86,60 @@ def _band(s):
 
 def _segment_bounds(prof) -> list[tuple[int, int]]:
     n = len(prof["cum_m"])
-    keys = [(int(prof["dom"][i]), _band(prof["slope"][i])) for i in range(n)]
+    if n <= 1:
+        return [(0, max(n - 1, 0))]
+    step_mean = max(float(prof["cum_m"][-1]) / max(n - 1, 1), 1e-6)
+    # 2 m gibi ince ızgaralarda hücreden hücreye DEM eğim ve sınıf gürültüsünü pencere ortalaması ve histerezisle yumuşat
+    use_smooth = step_mean < 5.0 and n >= 10
+    if use_smooth:
+        w = max(1, min(int(round(P.SEG_SMOOTH_M / step_mean)), n))
+        s_arr = uniform_filter1d(prof["slope"].astype(float), size=w, mode="nearest")
+        dom_probs = np.stack([prof["p"][k] for k in P.CLASSES])
+        d_arr = np.argmax(uniform_filter1d(dom_probs, size=w, axis=1, mode="nearest"), axis=0)
+        hyst = P.SEG_HYSTERESIS_DEG
+        min_m = P.SEG_MIN_M
+        max_m = P.SEG_MAX_M
+    else:
+        s_arr = prof["slope"]
+        d_arr = prof["dom"]
+        hyst = 0.0
+        min_m = 0.0
+        max_m = 100.0
+
     bounds, start = [], 0
+    cur_dom = int(d_arr[0])
+    cur_band = _band(s_arr[0])
     for i in range(1, n):
         seg_len = prof["cum_m"][i] - prof["cum_m"][start]
-        if keys[i] != keys[i - 1] or seg_len >= P.SEG_MAX_M:
+        new_dom = int(d_arr[i])
+        new_band = _band(s_arr[i])
+        if hyst > 0 and new_band != cur_band:
+            thresh = P.SLOPE_BANDS[min(cur_band, new_band)]
+            if abs(float(s_arr[i]) - thresh) < hyst:
+                new_band = cur_band
+        changed = (new_dom != cur_dom) or (new_band != cur_band)
+        if (changed and seg_len >= min_m) or seg_len >= max_m:
             bounds.append((start, i))
             start = i
+            cur_dom = int(d_arr[i])
+            cur_band = _band(s_arr[i])
     if start < n - 1 or not bounds:
         bounds.append((start, n - 1))
+
+    if use_smooth:
+        while len(bounds) > 1:
+            lengths = [prof["cum_m"][b] - prof["cum_m"][a] for a, b in bounds]
+            idx = int(np.argmin(lengths))
+            if lengths[idx] >= min_m and len(bounds) <= P.SEG_MAX_COUNT:
+                break
+            if idx == 0:
+                bounds[0:2] = [(bounds[0][0], bounds[1][1])]
+            elif idx == len(bounds) - 1:
+                bounds[-2:] = [(bounds[-2][0], bounds[-1][1])]
+            elif lengths[idx - 1] <= lengths[idx + 1]:
+                bounds[idx - 1:idx + 1] = [(bounds[idx - 1][0], bounds[idx][1])]
+            else:
+                bounds[idx:idx + 2] = [(bounds[idx][0], bounds[idx + 1][1])]
     return bounds
 
 
@@ -196,7 +252,8 @@ def _budget(prof, segs, path, limits=None) -> dict:
 
 
 def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None) -> dict:
-    w = dict(P.PRESETS.get(kind, P.PRESETS["balanced"]))
+    presets = P.PRESETS if L.synthetic else P.REAL_PRESETS
+    w = dict(presets.get(kind, presets["balanced"]))
     if weights:
         w.update(weights)
     path, terms = shortest_path(L, start, goal, w)
