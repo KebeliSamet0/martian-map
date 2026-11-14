@@ -15,8 +15,8 @@ CRISM / jeoloji ──► bilim durakları ────────────�
 | Klasör | İçerik | Sorumlu |
 |---|---|---|
 | `pipeline/` | DTM, ortofoto, eğim, ızgara, CRISM, THEMIS işleme | Elif Rana |
-| `ml/rover_terrain/` | AI4Mars zemin segmentasyonu + MC Dropout (RTX 4070) | Emre |
-| `ml/orbital/` | HiRISE kaya tespiti / kaya yoğunluğu (M5 Pro) | Bora |
+| `ml/rover_terrain/` | AI4Mars zemin segmentasyonu + MC Dropout (RTX 4070, Emre'nin makinesi) | Emre |
+| `ml/orbital/` | HiRISE kaya tespiti / kaya yoğunluğu (Colab; eğitim gerekirse Samet'in M5 Pro'su) | Bora |
 | `api/` | Maliyet modeli, rota, açıklama, FastAPI | Samet |
 | `web/` | React + Leaflet arayüz, segment kartları | Veysel |
 | `sim/` | Three.js 3D prova simülasyonu | Batu |
@@ -31,5 +31,9 @@ CRISM / jeoloji ──► bilim durakları ────────────�
 | Paz 12:00 | **Kapı 3 – Simülasyon** | 3D hazır değilse 2D ile teslim |
 | Paz 16:00 | **Kapı 4 – Kod dondurma** | Sonrası yalnız video, slayt, proje sayfası |
 | Paz 22:00 | **Teslim** | Resmî son 23:59 |
+
+Veri keşfi: [docs/data/README.md](docs/data/README.md)
+
+Eğitim makineleri: **RTX 4070** (Emre) ve **M5 Pro** (Samet). Diğer herkes ağır iş için Google Colab kullanır.
 
 Çalışma kuralları: [CONTRIBUTING.md](CONTRIBUTING.md)
