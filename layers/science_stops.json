@@ -74,12 +74,12 @@
   },
   {
     "id": "sci_4_sol4869",
-    "name": "Katmanlı sülfat inceleme alanı (sol 4869–4914)",
+    "name": "Atacama sondaj alanı, katmanlı sülfat (sol 4869–4914)",
     "px": [
       491.3,
       774.6
     ],
-    "why": "Curiosity burada sol 4869–4914 arasında yakın inceleme yaptı: 563 MAHLI + 675 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %9'i). Boxwork kampanyası (sol ~4600–4844) sonrasında, aynı katmanlı sülfat biriminde ikinci büyük inceleme alanı; bilimsel bağlam Elif Nisa tarafından kaynakla tamamlanacak.",
+    "why": "Curiosity burada sol 4869–4914 arasında yakın inceleme yaptı: 563 MAHLI + 675 ChemCam görüntüsü (kutudaki yakın inceleme görüntülerinin %9'i). Boxwork'ten ayrıldıktan sonra katmanlı sülfat birimindeki ilk sondaj alanı (Atacama, sol 4873+): sonuç ~160 m aşağıdaki Mineral King örneğiyle karşılaştırılarak sülfat biriminin yükseklikle nasıl değiştiği anlaşılacak. Yakındaki açık/koyu kaya dokanağı (Toro / Inca de Oro) oluşum koşullarında bir değişime ya da zaman boşluğuna işaret edebilir (NASA Curiosity blogları, Sols 4873–4878 ve 4886–4892, 2026 — Elif Nisa).",
     "lat": -4.814268,
     "lon": 137.381706,
     "evidence": {
@@ -92,8 +92,13 @@
       "n_stops": 5,
       "score_share_pct": 9.0,
       "slope_deg": 14.9,
-      "anchor_stop": "site 122 drive 0 (kumenin en yogun duragi)"
+      "anchor_stop": "site 122 drive 0 (kumenin en yogun duragi)",
+      "location_check": "MMGIS waypoint: rover sol 4868-4889 bu noktada park (site 122 drive 0, 0 m), sol 4893'e kadar 13 m icinde; Atacama (4873-4878) ve Toro/Inca de Oro (4886-4892) bu aralikta."
     },
-    "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri"
+    "source": "NASA raw_image_items API (MAHLI, CHEMCAM_RMI) + MMGIS MSL_waypoints site orijinleri",
+    "references": [
+      "https://science.nasa.gov/blog/curiosity-blog-sols-4873-4878-welcome-to-the-atacama-drill-target/",
+      "https://science.nasa.gov/blog/curiosity-blog-sols-4886-4892-ingenuity-and-perseverance-curiosity-style/"
+    ]
   }
 ]
