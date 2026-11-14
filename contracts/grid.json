@@ -34,7 +34,7 @@
   "layers": {
     "elevation": "layers/elevation.npy  float32, metre",
     "slope": "layers/slope.npy  float32, derece",
-    "rock_cfa": "layers/rock_cfa.npy  float32, 0-1 (kayaların kapladığı alan oranı)",
+    "rock_cfa": "layers/rock_cfa.npy  float32, 0-1 (kayalarin kapladigi alan orani; Bora, golge yontemi, tum adaylar)",
     "thermal_inertia": "layers/thermal_inertia.npy  float32, TIU (opsiyonel)",
     "p_soil": "layers/p_soil.npy  float32, 0-1",
     "p_bedrock": "layers/p_bedrock.npy  float32, 0-1",
@@ -44,7 +44,10 @@
     "science": "layers/science_stops.json  bilim durakları listesi",
     "ortho": "layers/ortho_2m.png  uint8 gri, 1000x1000 (izgaraya hizali); layers/ortho_1m.png 2000x2000",
     "elevation_norm": "layers/elevation_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)",
-    "slope_norm": "layers/slope_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)"
+    "slope_norm": "layers/slope_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)",
+    "rock_cfa_ge1m": "layers/rock_cfa_ge1m.npy  float32, 0-1 (yalniz >=1 m kayalar)",
+    "rover_stops": "layers/rover_stops_selected.json  json (zemin modeli kaniti: 18 durak, px [sutun, satir] ondalikli; Emre class_frac/entropy doldurur)",
+    "msl_reference_path": "layers/msl_proposed_path.json  json (Curiosity'nin gercek rotasi, path_px; compare_reference referansi)"
   },
   "normalization": {
     "elevation": {
