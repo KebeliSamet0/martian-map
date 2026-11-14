@@ -2,6 +2,8 @@
 //   import { initHud } from './hud.js';  const hud = initHud(container, vitals);
 // vitals.snapshot() yoksa sahte veriyle çizer. DOM ve stil bu dosyada + sim/ui.css.
 
+import { t } from './i18n.js';
+
 const CSS_ID = 'mm-ui-css';
 export function ensureUiCss() {
   if (document.getElementById(CSS_ID)) return;
@@ -111,17 +113,17 @@ export function initHud(container, vitals, { position = 'tl', hz = 5 } = {}) {
   const root = el('section', `mm-ui mm-hud mm-pos-${position}`);
   root.setAttribute('aria-label', 'Görev göstergeleri');
   const head = el('div', 'mm-hud-head');
-  const title = el('span', 'mm-hud-title', 'Telemetri');
+  const title = el('span', 'mm-hud-title', t('hud.telemetry'));
   const status = el('span', 'mm-status');
   head.append(title, status);
 
   const g = {
-    time: gauge('Geçen süre', 'sa:dk'),
-    o2: gauge('Oksijen', 'L kaldı'),
-    kcal: gauge('Enerji', 'kcal'),
-    dose: gauge('Doz', 'µGy'),
-    load: gauge('Taşınan yük', 'kg'),
-    ret: gauge('Üsse dönüş payı', 'dk'),
+    time: gauge(t('hud.time'), 'sa:dk'),
+    o2: gauge(t('hud.o2'), t('hud.o2.unit')),
+    kcal: gauge(t('hud.energy'), 'kcal'),
+    dose: gauge(t('hud.dose'), 'µGy'),
+    load: gauge(t('hud.load'), 'kg'),
+    ret: gauge(t('hud.return'), t('unit.min')),
   };
   root.append(head, ...Object.values(g).map((x) => x.row));
   if (src.fake) root.append(el('div', 'mm-note', 'Sahte veri'));
