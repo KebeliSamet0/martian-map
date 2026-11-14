@@ -36,7 +36,7 @@
     ],
     "radius_m": 20,
     "cls": "sand",
-    "source": "ortofoto (gecici)"
+    "source": "ortofoto (Elif Rana); sand_hint.json'da rota uzerinde aday yok"
    },
    "curiosity_section": {
     "path_idx": [
@@ -102,7 +102,7 @@
     ],
     "radius_m": 20,
     "cls": "sand",
-    "source": "ortofoto (gecici)"
+    "source": "ortofoto (Elif Rana); sand_hint.json'da rota uzerinde aday yok"
    },
    "curiosity_section": {
     "path_idx": [
@@ -168,7 +168,7 @@
     ],
     "radius_m": 30,
     "cls": "sand",
-    "source": "ortofoto (gecici)"
+    "source": "ortofoto (Elif Rana); sand_hint.json'da rota uzerinde aday yok"
    },
    "curiosity_section": {
     "path_idx": [
@@ -203,5 +203,18 @@
    }
   }
  ],
- "px_note": "start/goal px tam sayi hucre (floor): /route ve /replan StrictInt ister. Duragin ondalikli konumu stop_px'te (science_stops.json)."
+ "px_note": "start/goal px tam sayi hucre (floor): /route ve /replan StrictInt ister. Duragin ondalikli konumu stop_px'te (science_stops.json).",
+ "sand_hint_check": {
+  "source": "layers/sand_hint.json (Bora, PR #56, 10 aday, gozle dogrulanmis)",
+  "result": "Hicbir aday senaryo rotalarinin (bilim duraklari arasi, satir ~525-775) uzerine dusmuyor; /replan rotayi degistirmez. Bu yuzden senaryolarda ortofotodan secilen noktalar kaldi.",
+  "nearest": {
+   "id": "sand_8",
+   "px": [
+    427.7,
+    809.9
+   ],
+   "radius_m": 15.0,
+   "dist_to_sci_4_m": 145
+  }
+ }
 }
