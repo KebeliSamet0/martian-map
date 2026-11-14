@@ -5,7 +5,7 @@ import { Terrain } from './terrain.js';
 import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
-import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
+import { SYNTH, SCAN, SCAN_E, SCAN_T, SCAN_TEX, SCAN_DIM } from './detail.js';
 import { MapView } from './mapview.js';
 import { worldToPx, pxToWorld, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
@@ -104,12 +104,12 @@ function ensureScanTex() {
 }
 function scanStart(wide = false) {
   const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
-  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m) — rota parlar' : 'Terrain Scanner: ○ geçiş adayı · △ dikkat · ✕ kaçın (yalnız eğim; zemin bilinmiyor). Shift+L: geniş'); }
+  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m): tehlikeli bölgeler' : 'Terrain Scanner: ✕ basma — yalnız tehlikeli (dik) bölgeler gösterilir. Shift+L: geniş'); }
 function scanUpdate(now) {
   if (scanner.t0 < 0) { SCAN.value.w = 0; SCAN_E.value = 0; return; }
   const e = scanner.fix ?? (now - scanner.t0), { R, ramp, hold, fade } = scanner, e0 = ramp + hold, Rmax = R + 8;
   const front = Math.min(R, (e / ramp) * R), erase = e < e0 ? 0 : Math.min(Rmax, ((e - e0) / fade) * Rmax);
-  SCAN.value.set(scanner.x, scanner.z, front, 1); SCAN_E.value = erase;
+  SCAN.value.set(scanner.x, scanner.z, front, 1); SCAN_E.value = erase; SCAN_T.value = e;
   if (T) T.line.mat.color.setScalar(1 + 0.9 * (e < e0 ? 1 : Math.max(0, 1 - (e - e0) / fade)));   // tarama sırasında planlanan rota parlar (DS2: 'rotada kal')
   if (e > e0 + fade) { scanner.t0 = -1; SCAN.value.w = 0; SCAN_E.value = 0; $('scanleg').hidden = true; if (T) T.line.mat.color.setScalar(1); }
 }

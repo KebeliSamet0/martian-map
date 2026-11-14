@@ -25,3 +25,11 @@ Sim'e yansıyan (bulgu → değişiklik):
 - "Güvenli sanma" (Akhil Arora: renk işaretleri tam güvenilmez) → efsane ve ipucu metni "yalnız eğim; zemin bilinmiyor; yokluk/sönme güvenli değildir".
 - Süre/yarıçap raporun **tasarım önerisi**: 0,8 s yayılma + 4,2 s tutma + 1 s solma, 1 s bekleme, 90 m (Shift+L 220 m). DS'nin değeri değil.
 - Veri yok → gri ■ (rapor §5.1).
+
+## Referans video incelemesi (kullanıcı referansı; 2026-11-14)
+Video: "Death Stranding Terrain Scanner" (YouTube kkkiMqq4kac, 18,6 sn, 720p; DS1 Odradek — ekranda "The Cargo Scanner" ve "Recharging…" göstergesi). Yerelde indirilip 40 kare (≈0,47 sn aralık) çıkarıldı ve tek tek incelendi; aşağıdakiler **gözlemdir, ölçüm değil** (ekran kaydı):
+- t≈4,7 sn: dalga cephesi — ince **kırmızı yatay tarama çizgisi** ve parıltılı parçacıklar; arkasında çalılık/zemin mavi parıldıyor.
+- t≈5,2 sn: zemin/kaya yüzeylerine yapışık **neon mavi eş-yükselti (kontur) çizgileri**; en yoğun dik kaya yüzlerinde, dalgalı/düzensiz.
+- t≈5,6–6,6 sn: konturlar **sönüyor** (≈1,5 sn); zeminde küçük, sık **kırmızı ✕** işaretleri ve sarı/turuncu parçacıklar kalıyor.
+- Tarama sırasında HUD'da "Recharging…" şarj çubuğu (bekleme süresi var; saniyesi videodan çıkarılmadı).
+Sim'e aktarım (kullanıcı isteği): yalnız tehlikeli bölgeler (eğim ≥ 20° veya çok dik yüz), **sık ✕** (1,6 m ızgara, eğimle artan yoğunluk), tehlikeli yüzeylerde dalgalı mavi kontur, ince dalga cephesi, merkezden dışa süpürülerek sönme. Mavi ○/sarı △ kaldırıldı.

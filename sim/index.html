@@ -83,7 +83,7 @@
   <label style="display:flex;gap:6px;align-items:center" title="Taş, çakıl/regolit ayrıntısı, dik yamaç dokusu ve baş sallaması kapanır; yalnız DTM + ortofoto kalır"><input id="pure" type="checkbox"> <b>Saf veri modu</b> (tüm sentetik ayrıntı kapalı)</label>
   <button id="btn-map" style="width:100%;margin-top:8px">Haritaya dön (M)</button>
 </div>
-<div id="scanleg" hidden title="İşaretler yalnız DTM eğiminden (4 m ızgara) çıkar; zemin türü/kum bilinmez. İşaret yokluğu ya da sönmesi güvenli demek değildir. Eşikler (10°/20°) bu arayüzün ayarıdır; Death Stranding'in sayısal eşiği kaynakta yok. 20° = astronot traverse sınırı (ICES-2025-129).">Terrain Scanner · <b style="color:#1a8cff">○</b> &lt;10° geçiş adayı <b style="color:#ffd10d">△</b> 10–20° dikkat <b style="color:#ff2014">✕</b> ≥20° kaçın <b style="color:#999">■</b> veri yok · <i style="all:unset;opacity:.8">yalnız eğim</i></div>
+<div id="scanleg" hidden title="Yalnız tehlikeli bölgeler: DTM eğimi (4 m ızgara) ≥ 20° (astronot traverse sınırı, ICES-2025-129; eşik arayüz ayarıdır, Death Stranding'in sayısal eşiği kaynakta yok). Zemin türü/kum bilinmez; işaret yokluğu güvenli demek değildir.">TERRAIN SCANNER · <b style="color:#ff2a1a">✕</b> basma / kaçın (eğim ≥ 20°) · <span style="color:#3aa0ff">kontur</span> dik yüzey · yalnız eğim, işaret yokluğu güvenli değildir</div>
 <div id="warn" hidden></div>
 <div id="toast" hidden></div>
 <script src="./lib/leaflet/leaflet.js"></script>
