@@ -98,13 +98,21 @@ export function patchMaterial(shader) {
       if (uScan.w > 0.001) {
         float sd = distance(vWP.xz, uScan.xy);
         if (sd < uScan.z) {
-          vec4 st = texture2D(uScanTex, vWP.xz / uScanDim);
+          // DS tarzı ayrı zemin işaretleri: 3 m ızgara, hücre merkezindeki eğim sınıfı → ○ (geçiş adayı) / △ (dikkat) / ✕ (kaçın) / ■ gri (veri yok)
+          float G = 3.0;
+          vec2 cell = floor(vWP.xz / G), ctr = (cell + 0.5) * G, q = vWP.xz - ctr;
+          vec4 st = texture2D(uScanTex, ctr / uScanDim);
           float sl = st.r * 64.0;
-          vec3 sc = st.g < 0.5 ? vec3(0.45, 0.45, 0.5) : (sl < uScanTh.x ? vec3(0.08, 0.50, 1.0) : (sl < uScanTh.y ? vec3(1.0, 0.80, 0.05) : vec3(1.0, 0.12, 0.08)));
-          float hatch = (st.g >= 0.5 && sl >= uScanTh.y) ? 0.55 + 0.45 * step(0.5, fract((vWP.x + vWP.z) * 0.9)) : 1.0;   // kırmızı bölgede çizgili desen (renk dışı ipucu)
-          float front = smoothstep(uScan.z - 5.0, uScan.z, sd);
-          totalEmissiveRadiance += (sc * 0.62 * hatch + vec3(0.6, 0.95, 1.0) * front * 1.4) * uScan.w;
-          diffuseColor.rgb = mix(diffuseColor.rgb, sc * 0.5, 0.25 * uScan.w);
+          float R0 = 0.55, d;
+          vec3 sc;
+          if (st.g < 0.5) { sc = vec3(0.6, 0.6, 0.66); d = max(abs(q.x), abs(q.y)) - R0 * 0.55; }
+          else if (sl < uScanTh.x) { sc = vec3(0.10, 0.55, 1.0); d = length(q) - R0 * 0.7; }
+          else if (sl < uScanTh.y) { sc = vec3(1.0, 0.82, 0.05); vec2 p = q / R0; p.y += 0.22; d = (max(abs(p.x) * 0.866 + p.y * 0.5, -p.y) - 0.55) * R0; }
+          else { sc = vec3(1.0, 0.13, 0.08); vec2 p = q / R0; d = max(min(abs(p.x - p.y), abs(p.x + p.y)) * 0.7071 - 0.16, max(abs(p.x), abs(p.y)) - 0.85) * R0; }
+          float mask = 1.0 - smoothstep(0.0, 0.07, d);
+          float front = smoothstep(uScan.z - 4.0, uScan.z, sd);
+          totalEmissiveRadiance += (sc * (0.03 + 1.9 * mask) + vec3(0.6, 0.95, 1.0) * front * 0.9) * uScan.w;
+          diffuseColor.rgb = mix(diffuseColor.rgb, sc * 0.45, (0.02 + 0.5 * mask) * uScan.w);
         }
       }`)
     .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>

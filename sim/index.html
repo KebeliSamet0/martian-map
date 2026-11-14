@@ -35,7 +35,7 @@
   #hint { position:fixed; z-index:10; left:50%; top:12px; transform:translateX(-50%); padding:6px 12px; font-size:12px; color:var(--dim); }
   #hint kbd { background:#2b1f18; border:1px solid var(--line); border-radius:4px; padding:0 5px; color:var(--ink); }
   #scanleg { position:fixed; z-index:1800; left:50%; top:130px; transform:translateX(-50%); padding:6px 12px; border-radius:10px; background:#000b; border:1px solid var(--line); font-size:12px; white-space:nowrap; }
-  #scanleg i { display:inline-block; width:10px; height:10px; border-radius:3px; margin:0 4px 0 10px; vertical-align:-1px; }
+  
   #warn { position:fixed; z-index:1900; left:50%; top:88px; transform:translateX(-50%); padding:8px 16px; border-radius:10px; background:#7a1410e6; border:1px solid #ff6b5e; font-weight:600; }
   #toast { position:fixed; z-index:2000; left:50%; bottom:70px; transform:translateX(-50%); padding:9px 16px; border-radius:10px; background:#000d; border:1px solid var(--line); max-width:90vw; }
   #vig { position:fixed; inset:0; pointer-events:none; z-index:5; background:radial-gradient(ellipse at center, transparent 55%, rgba(8,4,2,.55) 100%); }
@@ -82,7 +82,7 @@
   <label style="display:flex;gap:6px;align-items:center" title="Taş, çakıl/regolit ayrıntısı, dik yamaç dokusu ve baş sallaması kapanır; yalnız DTM + ortofoto kalır"><input id="pure" type="checkbox"> <b>Saf veri modu</b> (tüm sentetik ayrıntı kapalı)</label>
   <button id="btn-map" style="width:100%;margin-top:8px">Haritaya dön (M)</button>
 </div>
-<div id="scanleg" hidden title="Eğim DTM mesh normalinden hesaplanır. Eşikler bu arayüzün ayarıdır (DS2 eşikleri kaynakta yok); 20° = astronot traverse sınırı (ICES-2025-129).">Terrain Scanner<i style="background:#1480ff"></i>&lt;10° kolay<i style="background:#ffcc0d"></i>10–20° eğimli<i style="background:#ff1f14"></i>≥20° dik</div>
+<div id="scanleg" hidden title="İşaretler yalnız DTM eğiminden (4 m ızgara) çıkar; zemin türü/kum bilinmez. İşaret yokluğu ya da sönmesi güvenli demek değildir. Eşikler (10°/20°) bu arayüzün ayarıdır; Death Stranding'in sayısal eşiği kaynakta yok. 20° = astronot traverse sınırı (ICES-2025-129).">Terrain Scanner · <b style="color:#1a8cff">○</b> &lt;10° geçiş adayı <b style="color:#ffd10d">△</b> 10–20° dikkat <b style="color:#ff2014">✕</b> ≥20° kaçın <b style="color:#999">■</b> veri yok · <i style="all:unset;opacity:.8">yalnız eğim</i></div>
 <div id="warn" hidden></div>
 <div id="toast" hidden></div>
 <script src="./lib/leaflet/leaflet.js"></script>
