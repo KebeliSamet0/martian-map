@@ -7,11 +7,11 @@ import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
 import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
 import { MapView } from './mapview.js';
-import { worldToPx, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
+import { worldToPx, pxToWorld, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 
-const BASE = './data/tiles';
+const BASE = './data/' + (new URLSearchParams(location.search).get('tiles') || 'tiles');   // ?tiles=tiles_shifted: DTM–ortofoto kayması düzeltilmiş karolar
 const Q = new URLSearchParams(location.search);
 const quality = Q.get('q') || 'high';
 const $ = (id) => document.getElementById(id);
@@ -32,6 +32,8 @@ $('sun-el').value = SUN0.el; $('sun-az').value = SUN0.az;
 $('sun-src').textContent = SUN0.real
   ? `Varsayılan = HiRISE ESP_019698_1750 çekim güneşi (yükseklik ${SUN0.el.toFixed(1)}°, kuzeyden ${SUN0.az.toFixed(1)}°; PDS etiketi). Ortofotodaki gölgeler bu yöne aittir.`
   : 'Güneş varsayılanı kaynaksız (params.json yüklenemedi).';
+// Demo senaryoları (tek kaynak: layers/demo_scenarios.json, Elif Rana #47; kum noktaları Bora #61). Dosya yoksa %45 yedek kum noktası kullanılır.
+const scen = await fetch('../layers/demo_scenarios.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
 const geo = new Geo(man);
 const nav = await Nav.load(BASE, man, geo);
 nav.suitSpeed = SUIT_V;
@@ -60,6 +62,15 @@ function onRouteChange(r) {
   g.clearRect(0, 0, c.width, c.height); g.strokeStyle = '#ffb27a'; g.lineWidth = 2; g.beginPath();
   ys.forEach((v, i) => { const x = (i / (n - 1)) * c.width, y = c.height - 6 - ((v - lo) / ((hi - lo) || 1)) * (c.height - 14); i ? g.lineTo(x, y) : g.moveTo(x, y); });
   g.stroke(); g.fillStyle = '#f3e3d3'; g.font = '11px system-ui'; g.fillText(`${Math.round(hi + geo.zref)} m`, 4, 11); g.fillText(`${Math.round(lo + geo.zref)} m`, 4, c.height - 8);
+}
+function loadScenario(id) {
+  const sc = scen?.scenarios?.find((s) => s.id === id); if (!sc) return;
+  const ll = (px) => { const w = pxToWorld(geo, px[0] + 0.5, px[1] + 0.5), l = geo.worldToLonlat(w[0], w[1]); return { lat: l[1], lng: l[0] }; };
+  mapView.reset(false); mapView._click(ll(sc.start.px)); mapView._click(ll(sc.goal.px));
+}
+if (scen?.scenarios?.length) {
+  const sel = $('scen'); for (const s of scen.scenarios) sel.add(new Option(`${s.id} · ${s.title}`, s.id)); sel.hidden = false;
+  sel.onchange = () => { if (sel.value) loadScenario(sel.value); };
 }
 mapView = new MapView($('map'), { man, geo, nav, base: BASE, toast, onChange: onRouteChange, params });
 $('mode').onchange = () => mapView.setOptions({ mode: $('mode').value });
@@ -183,9 +194,16 @@ function enter3D(kind) {
   T.oldLine.clear(); T.hazard.hide();
   if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); T.warns.set(r.dense, r.segments); } else { T.line.clear(); T.beacon.hide(); T.warns.clear(); }
   if (routeRun && r?.source === 'api') {   // sürpriz kum anı: rotanın ~%45'inde, 80 m önceden "algılanır" → /replan
-    const R = routeRun, at = R.total * 0.45; let i = 1; while (i < R.cum.length - 1 && R.cum[i] < at) i++;
-    const w = R.r.dense[i], px = worldToPx(geo, w[0], w[1]).map(Math.floor);
-    R.sand = { world: w, px, radius_m: 20, s: R.cum[i], fired: false };
+    const R = routeRun, sc = (scen?.scenarios || []).find((s) => r.startPx && Math.hypot(s.start.px[0] - r.startPx[0], s.start.px[1] - r.startPx[1]) <= 2 && Math.hypot(s.goal.px[0] - r.goalPx[0], s.goal.px[1] - r.goalPx[1]) <= 2);
+    if (sc) {   // senaryo kum noktası: rotaya en yakın noktada tetiklenir
+      const sp = sc.surprise_sand.px, w0 = pxToWorld(geo, sp[0] + 0.5, sp[1] + 0.5);
+      let bi = 0, bd = 1e9; R.r.dense.forEach((p, k) => { const d = Math.hypot(p[0] - w0[0], p[1] - w0[1]); if (d < bd) { bd = d; bi = k; } });
+      R.sand = { world: w0, px: sp.map(Math.floor), radius_m: sc.surprise_sand.radius_m, s: R.cum[bi], fired: false, scenario: sc.id, off_route_m: Math.round(bd) };
+    } else {
+      const at = R.total * 0.45; let i = 1; while (i < R.cum.length - 1 && R.cum[i] < at) i++;
+      const w = R.r.dense[i], px = worldToPx(geo, w[0], w[1]).map(Math.floor);
+      R.sand = { world: w, px, radius_m: 20, s: R.cum[i], fired: false };
+    }
   }
   const gy = groundY(P.x, P.z); P.y = (gy ?? 0) + EYE; T.snap = true;
   toast(state === 'auto' ? 'Rota yürüyüşü başladı. Fareyle etrafa bak, W/A/S/D ile rotadan çık (R: rotaya dön).' : 'Serbest yürüyüş: W/A/S/D, Shift koş, F uçuş, M harita.');
@@ -402,6 +420,7 @@ window.__mm = {
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
   stats: () => ({ ...T.terrain.stats, fps, state }),
   scan: (w) => { scanStart(!!w); },
-  scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
+  scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle
+  get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
 };
 if (Q.get('mod') === '3d') enter3D('walk');
