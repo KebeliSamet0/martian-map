@@ -1,0 +1,147 @@
+{
+ "source": "layers/demo_scenarios.json + api.planner (pipeline/export_missions.py)",
+ "px_note": "px = [sutun, satir], contracts/grid.json izgarasi; limits = /route budget alanlari",
+ "missions": [
+  {
+   "id": "S1",
+   "title": "Boxwork'ten Atacama sondajına",
+   "start_px": [
+    433,
+    525
+   ],
+   "goal_px": [
+    491,
+    774
+   ],
+   "start_stop": "sci_1_sol4617",
+   "goal_stop": "sci_4_sol4869",
+   "limits": {
+    "time_min": 360.0,
+    "o2_L": 420.0,
+    "kcal": 2000.0,
+    "dose_uGy": 60.0
+   },
+   "sand": {
+    "px": [
+     472,
+     641
+    ],
+    "radius_m": 19.4
+   },
+   "sample_kg": 8,
+   "difficulty": "kolay",
+   "goal": {
+    "grid_px": [
+     491,
+     774
+    ],
+    "radius_m": 5.0
+   },
+   "events": [
+    {
+     "id": "S1-sand",
+     "type": "sand",
+     "grid_px": [
+      472,
+      641
+     ],
+     "radius_m": 19.4
+    }
+   ]
+  },
+  {
+   "id": "S2",
+   "title": "Kumlu kestirme",
+   "start_px": [
+    470,
+    589
+   ],
+   "goal_px": [
+    491,
+    774
+   ],
+   "start_stop": "sci_3_sol4668",
+   "goal_stop": "sci_4_sol4869",
+   "limits": {
+    "time_min": 360.0,
+    "o2_L": 420.0,
+    "kcal": 2000.0,
+    "dose_uGy": 60.0
+   },
+   "sand": {
+    "px": [
+     487,
+     672
+    ],
+    "radius_m": 20
+   },
+   "sample_kg": 10,
+   "difficulty": "orta",
+   "goal": {
+    "grid_px": [
+     491,
+     774
+    ],
+    "radius_m": 5.0
+   },
+   "events": [
+    {
+     "id": "S2-sand",
+     "type": "sand",
+     "grid_px": [
+      487,
+      672
+     ],
+     "radius_m": 20
+    }
+   ]
+  },
+  {
+   "id": "S3",
+   "title": "Yarım O₂ tüpü",
+   "start_px": [
+    421,
+    545
+   ],
+   "goal_px": [
+    491,
+    774
+   ],
+   "start_stop": "sci_2_sol4635",
+   "goal_stop": "sci_4_sol4869",
+   "limits": {
+    "time_min": 360.0,
+    "o2_L": 80,
+    "kcal": 2000.0,
+    "dose_uGy": 60.0
+   },
+   "sand": {
+    "px": [
+     472,
+     641
+    ],
+    "radius_m": 19.4
+   },
+   "sample_kg": 8,
+   "difficulty": "zor",
+   "goal": {
+    "grid_px": [
+     491,
+     774
+    ],
+    "radius_m": 5.0
+   },
+   "events": [
+    {
+     "id": "S3-sand",
+     "type": "sand",
+     "grid_px": [
+      472,
+      641
+     ],
+     "radius_m": 19.4
+    }
+   ]
+  }
+ ]
+}
