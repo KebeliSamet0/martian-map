@@ -1,0 +1,11 @@
+# Python 3.11 · CUDA 12.8 tekerleği:
+#   uv venv .venv --python 3.11
+#   uv pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+#   uv pip install -r ml/rover_terrain/requirements.txt
+segmentation-models-pytorch==0.6.0
+albumentations==2.0.8
+numpy==2.4.6
+pillow==13.0.0
+pyarrow==26.0.1
+pandas==3.1.1
+matplotlib==3.11.2

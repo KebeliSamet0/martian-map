@@ -74,7 +74,7 @@ Bizim ihtiyacımız Curiosity (Gale) olduğu için **HF alt kümesi yeterli**, Z
 ## 6. Bizim için kullanımı
 - Besler: **Model 1 — rover zemin sınıfı + belirsizlik** → `layers/rover_stops.json`.
 - İşleme: `has_labels` filtresi; loss'ta `ignore_index=255`; 1024 → 512 yeniden boyut (veya 512 rastgele crop); gri → 3 kanal; sınıf ağırlıklı CE (veya CE + Dice) dengesizlik için; değerlendirme `test_min3` (asıl) + `test_min1` (raporda ek).
-- Tahmini eğitim süresi (DeepLabv3+ ResNet34, 512², AMP, batch 8, ~16K etiketli görüntü): **~10–15 dk/epoch** (tahmin — 4070 Laptop ~25–30 görüntü/s ileri+geri varsayımı; PNG/JPG çözme darboğaz olabilir). 1024²'de ~4× (~45–60 dk/epoch). **Henüz ölçülmedi** — Kapı 1 duman testinde gerçek sayı `METRICS.md`'ye yazılacak.
+- Eğitim süresi (DeepLabv3+ ResNet34, 512², AMP, batch 8, 14 453 train görüntüsü): **ölçüldü — 10,3 dk/epoch** (23,5 görüntü/s, 2,2 GB GPU belleği) + val 45 sn, RTX 4070 Laptop. 1 epoch sonra val mIoU 0,76 (büyük kaya IoU 0,37). Ayrıntı: `ml/rover_terrain/METRICS.md`.
 
 ## 7. Karar
 **KULLAN** — Curiosity Navcam'den 16K+ etiketli, hazır uzman test kümeli, tek komutla inen temiz bir set; sınıflarımızla birebir aynı. Riskler (büyük kaya azlığı, kaba train etiketleri, boxwork bölgesinin olmaması) sunumda belirsizlik haritasıyla açıkça gösterilecek.
