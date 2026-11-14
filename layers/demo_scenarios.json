@@ -1,7 +1,7 @@
 {
  "description": "Demo senaryolari (issue #47). px = [sutun, satir], contracts/grid.json izgarasi; baslangic/hedef layers/science_stops.json'dan.",
- "status": "GECICI: p_* = 0.25 ve entropy = 0 dolgusuyla dogrulandi (Emre'nin #45 katmanlari yok). Kum noktalari ortofotodan secildi; Bora'nin sand_hint.json'u (#46) gelince degisecek. Zemin katmanlari gelince yeniden dogrulanacak.",
- "sand_pick_rule": "ortho_2m.png en karanlik %15 + slope < 8 derece + 3x3 komsulukta rock_cfa = 0; dengeli rotanin orta %30-70 kismina en yakin aday",
+ "status": "Emre'nin kaba zemin katmanlari (PR #60, 1 epoch) ve Bora'nin kum adaylari (PR #61) ile API uzerinden dogrulandi. 3 rota birbirinden yalniz 1-6 m ayrisiyor (modelde kum baskin hucre yok); Emre'nin 12 epoch surumu gelince yeniden dogrulanacak.",
+ "sand_pick_rule": "Bora'nin koridor adaylari (sand_hint.json, PR #61): S1/S3 = sand_13, S2 = sand_11. Ilk secilen [467, 609] Bora'nin kor kontrolunde cakil/kayalik cikti, birakildi.",
  "curiosity_reference": "layers/msl_proposed_path.json (path_px indeks araligi, ikisi dahil)",
  "scenarios": [
   {
@@ -31,12 +31,12 @@
    },
    "surprise_sand": {
     "px": [
-     467,
-     609
+     472,
+     641
     ],
-    "radius_m": 20,
+    "radius_m": 19.4,
     "cls": "sand",
-    "source": "ortofoto (gecici)"
+    "source": "Bora layers/sand_hint.json sand_13 (PR #61, gozle dogrulanmis aday; px tam sayi hucre)"
    },
    "curiosity_section": {
     "path_idx": [
@@ -46,15 +46,22 @@
     "length_m": 1229
    },
    "checked": {
+    "layers": "Emre PR #60 kaba katmanlar (1 epoch)",
     "route_km": [
      0.55,
      0.56,
      0.56
     ],
     "route_min": [
-     23.4,
-     23.5,
-     23.7
+     18.1,
+     18.2,
+     18.4
+    ],
+    "routes_distinct": 3,
+    "pairwise_divergence_m": [
+     1.5,
+     5.7,
+     4.3
     ],
     "replan_changed": [
      true,
@@ -62,12 +69,15 @@
      true
     ],
     "replan_extra_min": [
-     0.3,
-     0.2,
-     0.4
+     0.1,
+     0.1,
+     0.5
     ],
-    "balanced_vs_curiosity_mean_m": 29,
-    "balanced_vs_curiosity_max_m": 115
+    "curiosity_mean_deviation_m": [
+     28,
+     29,
+     33
+    ]
    }
   },
   {
@@ -102,7 +112,7 @@
     ],
     "radius_m": 20,
     "cls": "sand",
-    "source": "ortofoto (gecici)"
+    "source": "Bora layers/sand_hint.json sand_11 (PR #61, gozle dogrulanmis aday; px tam sayi hucre)"
    },
    "curiosity_section": {
     "path_idx": [
@@ -112,15 +122,22 @@
     "length_m": 744
    },
    "checked": {
+    "layers": "Emre PR #60 kaba katmanlar (1 epoch)",
     "route_km": [
      0.4,
      0.4,
-     0.41
+     0.4
     ],
     "route_min": [
-     16.4,
-     16.5,
-     16.8
+     12.6,
+     12.7,
+     13.0
+    ],
+    "routes_distinct": 3,
+    "pairwise_divergence_m": [
+     2.1,
+     4.8,
+     3.0
     ],
     "replan_changed": [
      true,
@@ -128,12 +145,15 @@
      true
     ],
     "replan_extra_min": [
-     0.4,
      0.3,
+     0.2,
      0.3
     ],
-    "balanced_vs_curiosity_mean_m": 33,
-    "balanced_vs_curiosity_max_m": 109
+    "curiosity_mean_deviation_m": [
+     32,
+     33,
+     35
+    ]
    }
   },
   {
@@ -163,12 +183,12 @@
    },
    "surprise_sand": {
     "px": [
-     467,
-     609
+     472,
+     641
     ],
-    "radius_m": 30,
+    "radius_m": 19.4,
     "cls": "sand",
-    "source": "ortofoto (gecici)"
+    "source": "Bora layers/sand_hint.json sand_13 (PR #61, gozle dogrulanmis aday; px tam sayi hucre)"
    },
    "curiosity_section": {
     "path_idx": [
@@ -178,15 +198,22 @@
     "length_m": 1106
    },
    "checked": {
+    "layers": "Emre PR #60 kaba katmanlar (1 epoch)",
     "route_km": [
      0.53,
      0.53,
-     0.55
+     0.54
     ],
     "route_min": [
-     22.6,
-     22.8,
-     23.1
+     17.5,
+     17.7,
+     17.9
+    ],
+    "routes_distinct": 3,
+    "pairwise_divergence_m": [
+     1.8,
+     2.4,
+     1.3
     ],
     "replan_changed": [
      true,
@@ -194,12 +221,15 @@
      true
     ],
     "replan_extra_min": [
-     0.6,
-     0.5,
-     0.6
+     0.2,
+     0.1,
+     0.5
     ],
-    "balanced_vs_curiosity_mean_m": 29,
-    "balanced_vs_curiosity_max_m": 117
+    "curiosity_mean_deviation_m": [
+     36,
+     36,
+     37
+    ]
    }
   }
  ],
