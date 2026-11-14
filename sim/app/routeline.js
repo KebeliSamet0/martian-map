@@ -87,3 +87,30 @@ export class HazardDisc {
   set(x, z, radius) { this.mesh.position.set(x, (this.groundY(x, z) ?? 0) + 0.3, z); this.mesh.scale.setScalar(radius); this.mesh.visible = true; }
   hide() { this.mesh.visible = false; }
 }
+
+/** Segment girişi uyarıları (tasarım: docs/data/ekip/rehberlik/arastirma.md §4.2): eğim ≥ sınır → "⚠ eğim", p_sand ≥ eşik → "kum". Kesin ayak basışı iddiası YOK. */
+export class WarnMarkers {
+  constructor(scene, groundY) { this.scene = scene; this.groundY = groundY; this.group = new THREE.Group(); scene.add(this.group); }
+  clear() { for (const s of this.group.children) { s.material.map.dispose(); s.material.dispose(); } this.group.clear(); }
+  static label(lines, color) {
+    const c = document.createElement('canvas'); c.width = 256; c.height = 96; const g = c.getContext('2d');
+    g.fillStyle = 'rgba(0,0,0,.72)'; g.strokeStyle = color; g.lineWidth = 4; g.beginPath(); g.roundRect(4, 4, 248, 88, 14); g.fill(); g.stroke();
+    g.fillStyle = '#fff'; g.font = 'bold 26px system-ui'; g.textAlign = 'center'; g.fillText(lines[0], 128, 40); g.font = '22px system-ui'; g.fillStyle = '#ffd7d2'; g.fillText(lines[1] || '', 128, 72);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+  set(dense, segments, { slopeWarn = 20, sandWarn = 0.6 } = {}) {
+    this.clear();
+    let n = 0;
+    for (const s of segments) {
+      if (n >= 12) break;
+      const i = s.idx[0], p = dense[Math.min(dense.length - 1, i)];
+      const items = [];
+      if ((s.slope_max ?? 0) >= slopeWarn) items.push([`⚠ eğim ${s.slope_max}°`, `segment ${s.id} · sınır ${slopeWarn}°`, '#ff6b5e']);
+      if ((s.p_sand ?? 0) >= sandWarn) items.push([`kum skoru ${s.p_sand}`, `segment ${s.id} · model, batma değil`, '#ffd60a']);
+      items.forEach((it, k) => {
+        const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: WarnMarkers.label(it.slice(0, 2), it[2]), transparent: true, depthWrite: false, toneMapped: false, sizeAttenuation: true, fog: false }));
+        sp.scale.set(5, 1.9, 1); sp.position.set(p[0], (this.groundY(p[0], p[1]) ?? 0) + 3.2 + k * 2.1, p[1]); sp.renderOrder = 8; this.group.add(sp); n++;
+      });
+    }
+  }
+}

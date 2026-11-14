@@ -8,7 +8,7 @@ import { Nav } from './nav.js';
 import { SYNTH } from './detail.js';
 import { MapView } from './mapview.js';
 import { worldToPx, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
-import { RouteLine, Beacon, HazardDisc } from './routeline.js';
+import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -106,7 +106,7 @@ function initThree() {
   T = { renderer, scene, sky, camera, hemi, sun, terrain, rocks, sunEl: Number($('sun-el').value), sunAz: Number($('sun-az').value), shadowExtent: 0, shadowMap: smap,
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
   const gY = (x, z) => groundY(x, z);
-  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY);
+  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); });
@@ -156,7 +156,7 @@ function enter3D(kind) {
     P.x = (c[0] + 0.5) * nav.cx; P.z = (c[1] + 0.5) * nav.cz; P.yaw = 0; P.pitch = -0.1; state = 'walk';
   }
   T.oldLine.clear(); T.hazard.hide();
-  if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); } else { T.line.clear(); T.beacon.hide(); }
+  if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); T.warns.set(r.dense, r.segments); } else { T.line.clear(); T.beacon.hide(); T.warns.clear(); }
   if (routeRun && r?.source === 'api') {   // sürpriz kum anı: rotanın ~%45'inde, 80 m önceden "algılanır" → /replan
     const R = routeRun, at = R.total * 0.45; let i = 1; while (i < R.cum.length - 1 && R.cum[i] < at) i++;
     const w = R.r.dense[i], px = worldToPx(geo, w[0], w[1]).map(Math.floor);
@@ -201,6 +201,17 @@ addEventListener('mousemove', (e) => {
   }
 });
 
+// Rotadan sapma uyarısı (histerezis: >8 m uyar, <4 m kaldır); yalnız serbest yürüyüşte
+let offRoute = false, devT = 0;
+function deviationCheck(now) {
+  if (now - devT < 200) return; devT = now;
+  const w = $('warn');
+  if (!routeRun || state === 'auto' || state === 'map') { if (offRoute) { offRoute = false; w.hidden = true; } return; }
+  let best = Infinity; for (const p of routeRun.r.dense) { const d = Math.hypot(p[0] - P.x, p[1] - P.z); if (d < best) best = d; }
+  if (!offRoute && best > 8) offRoute = true; else if (offRoute && best < 4) offRoute = false;
+  w.hidden = !offRoute; if (offRoute) w.textContent = `Rotadan saptın (${Math.round(best)} m) — R: rotaya dön`;
+}
+
 async function fireReplan() {
   const R = routeRun, S = R.sand; S.fired = true;
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
@@ -213,7 +224,7 @@ async function fireReplan() {
     const nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind }); nr.goalPx = R.r.goalPx; nr.startPx = cur; nr.start = R.r.start; nr.goal = R.r.goal; nr.computeMs = Math.round(performance.now() - t0);
     const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
     const oldLeft = (R.total - R.s) / 1000;
-    T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments);
+    T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
     routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, replanned: true, prev: { km: R.r.total.km, min: R.r.total.min } };
     toast(`Yeni rota (${nr.computeMs} ms): ${nr.total.km} km · ${nr.total.min} dk · ${nr.total.status} — eski kalan ${oldLeft.toFixed(2)} km (gri). Kum bölgesi kaçınıldı.`);
   } catch (e) { toast(`Yeniden planlama başarısız (${e.message}) — mevcut rotaya devam edilir.`); }
@@ -278,6 +289,7 @@ function frame(now) {
     if (Math.abs(r - T.ratio) > 0.005) { T.ratio = r; T.renderer.setPixelRatio(r); T.renderer.setSize(innerWidth, innerHeight, false); }
   }
   const gy = stepPlayer(dt, now / 1000);
+  deviationCheck(now);
   T.terrain.update(T.camera.position);
   if (window.__trace) window.__trace.push({ dt: rdt, y: P.y, gy, yaw: P.yaw, pitch: P.pitch, x: P.x, z: P.z, swaps: T.terrain.swaps, loading: T.terrain.stats.loading, built: T.terrain.builtLast || 0 });
   const nearGround = gy != null && P.y - gy < 80;

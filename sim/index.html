@@ -34,6 +34,7 @@
   #mini { position:fixed; z-index:10; right:14px; top:14px; border-radius:10px; border:1px solid var(--line); box-shadow:0 6px 20px rgba(0,0,0,.5); }
   #hint { position:fixed; z-index:10; left:50%; top:12px; transform:translateX(-50%); padding:6px 12px; font-size:12px; color:var(--dim); }
   #hint kbd { background:#2b1f18; border:1px solid var(--line); border-radius:4px; padding:0 5px; color:var(--ink); }
+  #warn { position:fixed; z-index:1900; left:50%; top:88px; transform:translateX(-50%); padding:8px 16px; border-radius:10px; background:#7a1410e6; border:1px solid #ff6b5e; font-weight:600; }
   #toast { position:fixed; z-index:2000; left:50%; bottom:70px; transform:translateX(-50%); padding:9px 16px; border-radius:10px; background:#000d; border:1px solid var(--line); max-width:90vw; }
   #vig { position:fixed; inset:0; pointer-events:none; z-index:5; background:radial-gradient(ellipse at center, transparent 55%, rgba(8,4,2,.55) 100%); }
   .leaflet-container { background:#0d0907; }
@@ -79,6 +80,7 @@
   <label style="display:flex;gap:6px;align-items:center" title="Taş, çakıl/regolit ayrıntısı, dik yamaç dokusu ve baş sallaması kapanır; yalnız DTM + ortofoto kalır"><input id="pure" type="checkbox"> <b>Saf veri modu</b> (tüm sentetik ayrıntı kapalı)</label>
   <button id="btn-map" style="width:100%;margin-top:8px">Haritaya dön (M)</button>
 </div>
+<div id="warn" hidden></div>
 <div id="toast" hidden></div>
 <script src="./lib/leaflet/leaflet.js"></script>
 <script type="importmap">{ "imports": { "three": "./lib/three.module.js" } }</script>
