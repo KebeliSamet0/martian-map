@@ -15,20 +15,44 @@ export function toWorld(data, geo, { dataBase } = {}) {
   return { trail, stops };
 }
 
-/** Yakınlık izleyici: check([x,z] | {x,z}) → bu karede yarıçapa yeni girilen duraklar. */
+/**
+ * Yakınlık izleyici. step([x,z] | {x,z}) → { entered, exited }: bu karede `near` içine yeni girilen ve
+ * `rearm`'dan uzağa çıkılan duraklar. Aradaki bant (near..rearm) sınırda titreşmeyi önler; çıkılan durak yeniden kurulur.
+ * check(pos) = step(pos).entered (geriye uyum).
+ */
 export function createStopWatcher(stops, { near = NEAR_M, rearm = REARM_M } = {}) {
   const inside = new Set();
+  const step = (pos) => {
+    const x = Array.isArray(pos) ? pos[0] : pos.x, z = Array.isArray(pos) ? pos[1] : pos.z, entered = [], exited = [];
+    for (const s of stops) {
+      const d = Math.hypot(s.world[0] - x, s.world[1] - z);
+      if (d <= near && !inside.has(s.id)) { inside.add(s.id); entered.push({ ...s, distance_m: d }); }
+      else if (d > rearm && inside.delete(s.id)) exited.push({ ...s, distance_m: d });
+    }
+    return { entered, exited };
+  };
+  return { step, check: (pos) => step(pos).entered, reset() { inside.clear(); } };
+}
+
+/**
+ * Navcam kartı denetleyicisi (DOM'dan bağımsız; wire-extras.js bağlar, test sahte nesneyle sınar).
+ * view: { show(stop), expand(bool), hide() }. update({entered, exited}, { blocked }) her karede çağrılır.
+ * Kural: duraka girince küçük açılır; o duraktan çıkınca (REARM_M) kendiliğinden kapanır;
+ * elle kapatılan kart aynı durakta yeniden açılmaz (izleyici çıkış görmeden tekrar giriş üretmez).
+ */
+export function createStopCard(view) {
+  let current = null, big = false;
+  const hide = () => { if (current) view.hide(); current = null; big = false; };
   return {
-    check(pos) {
-      const x = Array.isArray(pos) ? pos[0] : pos.x, z = Array.isArray(pos) ? pos[1] : pos.z, hits = [];
-      for (const s of stops) {
-        const d = Math.hypot(s.world[0] - x, s.world[1] - z);
-        if (d <= near && !inside.has(s.id)) { inside.add(s.id); hits.push({ ...s, distance_m: d }); }
-        else if (d > rearm) inside.delete(s.id);
-      }
-      return hits;
+    get current() { return current; },
+    get big() { return big; },
+    update({ entered = [], exited = [] } = {}, { blocked = false } = {}) {
+      if (current && exited.some(s => s.id === current.id)) hide();
+      if (entered.length && !blocked) { current = entered[0]; big = false; view.show(current); view.expand(false); }
     },
-    reset() { inside.clear(); },
+    toggle() { if (current) { big = !big; view.expand(big); } },
+    close() { hide(); },
+    escape() { if (big) { big = false; view.expand(false); } else hide(); },
   };
 }
 
@@ -36,7 +60,7 @@ export function createStopWatcher(stops, { near = NEAR_M, rearm = REARM_M } = {}
  * initCorridor(scene, terrain, geo, opts?) → { stops, update(pos), setVisible(bool), dispose() }
  * terrain: heightAt(x, z) → y | null ve isteğe bağlı version (LOD değişince çizgi yeniden yere oturur).
  * opts: groundY(x,z) (ör. main.js groundY; yoksa terrain.heightAt), data (önceden yüklenmiş JSON), url, lift, width.
- * Her karede update(oyuncuKonumu) çağırın.
+ * Her karede update(oyuncuKonumu) çağırın → { entered, exited } ('corridor:stop' / 'corridor:leave' olayları da gönderilir).
  */
 export async function initCorridor(scene, terrain, geo, { groundY, data, url, lift = 0.05, width = 0.38, track = 2.8 } = {}) {
   const THREE = await import('three');
@@ -86,10 +110,11 @@ export async function initCorridor(scene, terrain, geo, { groundY, data, url, li
     update(pos) {
       const v = terrain?.version ?? 0, now = performance.now();
       if (v !== built && now - lastBuild > 900) { build(); built = v; lastBuild = now; }
-      if (!pos || !group.visible) return [];
-      const hits = watcher.check(pos);
-      for (const s of hits) globalThis.dispatchEvent?.(new CustomEvent('corridor:stop', { detail: s }));
-      return hits;
+      if (!pos || !group.visible) return { entered: [], exited: [] };
+      const r = watcher.step(pos);
+      for (const s of r.entered) globalThis.dispatchEvent?.(new CustomEvent('corridor:stop', { detail: s }));
+      for (const s of r.exited) globalThis.dispatchEvent?.(new CustomEvent('corridor:leave', { detail: s }));
+      return r;
     },
     setVisible(on) { group.visible = !!on; if (!on) watcher.reset(); },
     dispose() {
