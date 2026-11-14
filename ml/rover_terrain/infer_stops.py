@@ -26,12 +26,22 @@ CLASSES = ("soil", "bedrock", "sand", "bigrock")  # train.py NAMES sırası: top
 COLORS = np.array([[205, 133, 63], [70, 130, 180], [240, 200, 80], [200, 40, 40]], np.uint8)
 
 
-def load_image(img_dir, stop_id, url):
-    f = os.path.join(img_dir, f"{stop_id}__{url.rsplit('/', 1)[1]}")
+RAW = "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/{sol:05d}/opgs/edr/ncam/{fn}"
+
+
+def load_image(img_dir, stop_id, ref):
+    """ref: tam URL ya da rover_stops.json biçimi 'navcam/sol_04580/<dosya>.JPG'. İndirilemezse None."""
+    fn = ref.rsplit("/", 1)[1]
+    f = os.path.join(img_dir, f"{stop_id}__{fn}")
     if not os.path.exists(f):
-        os.makedirs(img_dir, exist_ok=True)
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        open(f, "wb").write(urllib.request.urlopen(req, timeout=60).read())
+        url = ref if ref.startswith("http") else RAW.format(sol=int(ref.split("sol_")[1].split("/")[0]), fn=fn)
+        try:
+            os.makedirs(img_dir, exist_ok=True)
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            open(f, "wb").write(urllib.request.urlopen(req, timeout=60).read())
+        except Exception as e:
+            print(f"  atlandı ({e}): {fn}")
+            return None
     return np.array(Image.open(f).convert("L"))
 
 
@@ -79,6 +89,8 @@ def main():
     ap.add_argument("--mask", default="models/rover_terrain/mask/mask.pt")
     ap.add_argument("--T", type=int, default=20)
     ap.add_argument("--fig", default="")
+    ap.add_argument("--fig-max", type=int, default=18, help="figürdeki en fazla durak")
+    ap.add_argument("--csv", default="", help="durak başına sonuçlar (geçerli piksel payı dahil)")
     ap.add_argument("--dry-run", action="store_true", help="json'a yazma, yalnız yazdır")
     a = ap.parse_args()
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -90,15 +102,20 @@ def main():
         mask_model.load_state_dict(torch.load(a.mask, map_location=dev)); mask_model.to(dev).eval()
 
     stops = json.load(open(a.stops_json, encoding="utf-8"))
-    tiles = []
+    tiles, rows = [], []
     for s in stops:
         psum, esum, nvalid, ntot = np.zeros(4), 0.0, 0, 0
-        for j, url in enumerate(s["images"]):
-            g, p, ent, inv = predict(model, mask_model, load_image(a.img_dir, s["stop_id"], url), a.T, dev)
+        first = True
+        for url in s["images"]:
+            gray = load_image(a.img_dir, s["stop_id"], url)
+            if gray is None:
+                continue
+            g, p, ent, inv = predict(model, mask_model, gray, a.T, dev)
             v = ~inv
             psum += p[:, v].sum(1); esum += float(ent[v].sum()); nvalid += int(v.sum()); ntot += v.size
-            if j == 0:
+            if first and len(tiles) < a.fig_max:
                 tiles.append((s["stop_id"], tile(g, p, ent, inv)))
+            first = False
         if nvalid == 0:
             frac, e = np.full(4, 0.25), 1.0
         else:
@@ -106,8 +123,13 @@ def main():
         frac = np.round(frac, 4); frac[np.argmax(frac)] += round(1 - frac.sum(), 4)  # toplam tam 1
         s["class_frac"] = {c: round(float(v), 4) for c, v in zip(CLASSES, frac)}
         s["entropy"] = round(float(e), 4)
-        print(f"{s['stop_id']:16s} {len(s['images'])} kare | geçerli %{100 * nvalid / ntot:4.1f} | "
+        rows.append([s["stop_id"], len(s["images"]), round(nvalid / max(ntot, 1), 3), *s["class_frac"].values(), s["entropy"]])
+        print(f"{s['stop_id']:16s} {len(s['images'])} kare | geçerli %{100 * nvalid / max(ntot, 1):4.1f} | "
               + " ".join(f"{c} {v:.2f}" for c, v in s["class_frac"].items()) + f" | entropy {s['entropy']:.3f}", flush=True)
+    if a.csv:
+        with open(a.csv, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write("stop_id,n_images,valid_frac," + ",".join(CLASSES) + ",entropy\n")
+            fh.writelines(",".join(map(str, r)) + "\n" for r in rows)
     if not a.dry_run:
         json.dump(stops, open(a.stops_json, "w", encoding="utf-8", newline="\n"), indent=2, ensure_ascii=False)
         open(a.stops_json, "a", encoding="utf-8", newline="\n").write("\n")
@@ -115,14 +137,14 @@ def main():
     if a.fig:
         import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
         from matplotlib.patches import Patch
-        rows = (len(tiles) + 1) // 2
-        fig, ax = plt.subplots(rows, 6, figsize=(15, 2.6 * rows))
+        nr = (len(tiles) + 1) // 2
+        fig, ax = plt.subplots(nr, 6, figsize=(15, 2.6 * nr), squeeze=False)
         for i, (sid, t) in enumerate(tiles):
             for k in range(3):
                 axx = ax[i // 2, 3 * (i % 2) + k]; axx.imshow(t[k]); axx.axis("off")
                 if k == 0:
                     axx.set_title(sid, fontsize=8, loc="left")
-        for i in range(len(tiles), rows * 2):
+        for i in range(len(tiles), nr * 2):
             for k in range(3):
                 ax[i // 2, 3 * (i % 2) + k].axis("off")
         fig.legend(handles=[Patch(color=COLORS[i] / 255, label=n) for i, n in enumerate(("toprak", "ana kaya", "kum", "büyük kaya"))]
