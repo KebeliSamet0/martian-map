@@ -125,6 +125,10 @@ def main():
     ap.add_argument("--threads", type=int, default=8)
     ap.add_argument("--max-k", type=int, default=None)
     ap.add_argument("--no-texture", action="store_true")
+    # DTM–ortofoto kayması düzeltmesi: yükseklik, ortofoto pikselinin (col,row) yerine DTM(col+dcol, row+drow) örneklenerek okunur.
+    # Ölçüm: Curiosity yolu ortofotoda KAYMASIZ konumda tekerlek izleriyle çakışıyor; planlayıcı DEM'i ile T3 DTM'i arasında ≈+30,7 m D / +33,5 m G fark var (docs/sim/DEM_KAYMA.md).
+    ap.add_argument("--dtm-dcol", type=int, default=0)
+    ap.add_argument("--dtm-drow", type=int, default=0)
     args = ap.parse_args()
     out = Path(args.out)
     work = Path(args.work) if args.work else out.parent / "_work"
@@ -151,7 +155,7 @@ def main():
         if not done.exists():
             for r in range(0, H, 512):
                 rows = min(512, H - r)
-                z = d.read(1, window=Window(col0, row0 + r, W, rows), boundless=True, fill_value=-3.4e38).astype(np.float32)
+                z = d.read(1, window=Window(col0 + args.dtm_dcol, row0 + args.dtm_drow + r, W, rows), boundless=True, fill_value=-3.4e38).astype(np.float32)
                 ok = np.isfinite(z) & (z > -1e6)
                 q = np.clip(np.rint((z - ZMIN) / ZSTEP), 1, 65535).astype(np.uint16)
                 L0[r:r + rows] = np.where(ok, q, 0)
@@ -233,6 +237,7 @@ def main():
             level_meta=meta_levels,
             sources=dict(dtm=dict(id=DTM_ID, url=DTM_URL), color=dict(name="MSL_Gale_HiRISE-LRGB_78quads_sharp_cog", url=LRGB_URL)),
             credit="NASA/JPL/University of Arizona (HiRISE); USGS Astrogeology Science Center",
+            dtm_shift_px=dict(dcol=args.dtm_dcol, drow=args.dtm_drow),
             notes=["Yükseklik areoid (MOLA'ya bağlı) metre; 0 = veri yok.",
                    "Doku: HiRISE RED mozaiği + renk şeritleri, USGS 'sharp' LRGB; JPEG q86; keskinleştirme ve renk dengesi kaynakta uygulanmış.",
                    "Doğu-batı ölçeği cos(lat0) ile düzeltildi; yüksek enlemlerde yetersiz."],
