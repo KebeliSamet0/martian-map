@@ -25,8 +25,8 @@
     "load": "Yük",
     "return": "Üsse dönüş",
     "status_go": "GO · Bütçe içinde",
-    "status_caution": "DİKKAT · Dönüş payı daralıyor",
-    "status_nogo": "NO-GO · Bütçe sınırı aşıldı"
+    "status_caution": "DİKKAT · Sınıra yaklaşılıyor",
+    "status_nogo": "NO-GO · Sınır aşıldı ya da dönüş payı yok"
   },
   "scan": {
     "safe": "Güvenli zemin",
@@ -44,10 +44,14 @@
   },
   "debrief": {
     "title": "Görev karnesi",
-    "grade_A": "Görev bütçe içinde ve güvenli dönüş payıyla tamamlandı.",
-    "grade_B": "Görev tamamlandı; bir kaynak sınıra yaklaştı.",
-    "grade_C": "Görev tamamlandı, ama bir sınır aşıldı; rota gözden geçirilmeli.",
-    "planned": "Planlanan",
-    "actual": "Gerçekleşen"
+    "grade_A": "Plana çok yakın: süre ve enerji sapması %10'un altında.",
+    "grade_B": "Plandan küçük sapma (%10–25).",
+    "grade_C": "Plandan belirgin sapma (%25'ten fazla); rota gözden geçirilmeli.",
+    "grade_D": "Bir sınır aşıldı: oksijen, enerji, süre ya da doz.",
+    "grade_F": "Görev tamamlanmadı. Bütçe yetmiyorsa geri dönmek doğru karardır.",
+    "planned": "Planlanan (tek yön)",
+    "actual": "Gerçekleşen",
+    "retry": "Görevi tekrarla",
+    "close": "Haritaya dön"
   }
 }
