@@ -4,7 +4,7 @@
 //
 // Kullanım:
 //   const audio = initAudio();              // ilk kullanıcı tıklaması/tuşunda kendiliğinden başlar (tarayıcı kuralı)
-//   audio.update(dt, { speed, effort, moving, surface })   // her kare; speed m/s (gösterim hızı), effort 0..1
+//   audio.update(dt, { speed, effort, moving, surface, externalSteps })   // her kare; speed m/s (gösterim hızı), effort 0..1
 //   audio.alert('sand' | 'limit' | 'stop' | 'scan' | 'arrive')
 //   audio.setEnabled(bool), audio.enabled
 
@@ -40,20 +40,40 @@ export function initAudio({ volume = 0.55 } = {}) {
   }
   for (const ev of ['pointerdown', 'keydown']) addEventListener(ev, start, { once: true, passive: true });
 
-  /** Adım: skafandr gövdesinden iletilen tok vuruş + zemine göre çıtırtı. */
+  /** Adım: skafandr gövdesinden iletilen tok vuruş + zemine göre çıtırtı. surface = 'sand'|'soil'|'bedrock'|'rock' ya da karışım {sand,soil,rock} (walkfeel, katman olasılıkları). */
   function step(surface = 'soil', strength = 1) {
     if (!ctx || !enabled) return;
+    const mix = typeof surface === 'object' ? surface : { sand: surface === 'sand' ? 1 : 0, soil: surface === 'soil' ? 1 : 0, rock: surface === 'bedrock' || surface === 'rock' ? 1 : 0 };
+    const tot = (mix.sand + mix.soil + mix.rock) || 1, ws = mix.sand / tot, wsoil = mix.soil / tot, wr = mix.rock / tot;
     const t = ctx.currentTime;
     const o = ctx.createOscillator(), og = ctx.createGain();
-    o.type = 'sine'; o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.09);
-    og.gain.setValueAtTime(0.0001, t); og.gain.exponentialRampToValueAtTime(0.11 * strength, t + 0.008); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    // Kum: yumuşak, alçak, yavaş atak. Kaya: sert, daha yüksek ve kısa vuruş.
+    const f0 = 82 * ws + 95 * wsoil + 130 * wr, f1 = 42 * ws + 48 * wsoil + 70 * wr, peak = (0.07 * ws + 0.11 * wsoil + 0.14 * wr) * strength, atk = 0.016 * ws + 0.008 * wsoil + 0.004 * wr;
+    o.type = 'sine'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + 0.09);
+    og.gain.setValueAtTime(0.0001, t); og.gain.exponentialRampToValueAtTime(Math.max(0.001, peak), t + atk); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
     o.connect(og).connect(master); o.start(t); o.stop(t + 0.18);
     const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.playbackRate.value = 1.6 + Math.random() * 0.8;
     const f = ctx.createBiquadFilter(), g = ctx.createGain();
-    const crunch = surface === 'sand' ? [520, 0.5, 0.05, 0.22] : surface === 'bedrock' ? [2400, 1.4, 0.06, 0.07] : [1300, 0.9, 0.055, 0.12];   // [frekans, Q, kazanç, süre]
-    f.type = 'bandpass'; f.frequency.value = crunch[0] * (0.9 + Math.random() * 0.2); f.Q.value = crunch[1];
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(crunch[2] * strength, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + crunch[3]);
-    src.connect(f).connect(g).connect(master); src.start(t, Math.random()); src.stop(t + crunch[3] + 0.05);
+    const fq = 520 * ws + 1300 * wsoil + 2400 * wr, q = 0.5 * ws + 0.9 * wsoil + 1.4 * wr, gn = 0.05 * ws + 0.055 * wsoil + 0.06 * wr, dur = 0.22 * ws + 0.12 * wsoil + 0.07 * wr;   // [frekans, Q, kazanç, süre]
+    f.type = 'bandpass'; f.frequency.value = fq * (0.9 + Math.random() * 0.2); f.Q.value = q;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gn * strength, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(f).connect(g).connect(master); src.start(t, Math.random()); src.stop(t + dur + 0.05);
+  }
+
+  /** Tökezleme: kısa kayma çıtırtısı + ağır bir vuruş + tek soluk. */
+  function stumble() {
+    if (!ctx || !enabled) return;
+    const t = ctx.currentTime;
+    const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.playbackRate.value = 2.4;
+    const f = ctx.createBiquadFilter(), g = ctx.createGain();
+    f.type = 'bandpass'; f.frequency.setValueAtTime(3200, t); f.frequency.exponentialRampToValueAtTime(900, t + 0.28); f.Q.value = 0.8;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.09, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    src.connect(f).connect(g).connect(master); src.start(t, Math.random()); src.stop(t + 0.35);
+    const o = ctx.createOscillator(), og = ctx.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(70, t + 0.12); o.frequency.exponentialRampToValueAtTime(34, t + 0.3);
+    og.gain.setValueAtTime(0.0001, t + 0.12); og.gain.exponentialRampToValueAtTime(0.16, t + 0.14); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+    o.connect(og).connect(master); o.start(t + 0.12); o.stop(t + 0.38);
+    if (breath) { breath.g.gain.cancelScheduledValues(t); breath.g.gain.setTargetAtTime(0.11, t + 0.2, 0.02); breathPhase = 0.02; }   // sürpriz soluğu
   }
 
   /** Telsiz/uyarı tonları. */
@@ -71,11 +91,11 @@ export function initAudio({ volume = 0.55 } = {}) {
     }
   }
 
-  function update(dt, { speed = 0, effort = 0.15, moving = false, surface = 'soil' } = {}) {
+  function update(dt, { speed = 0, effort = 0.15, moving = false, surface = 'soil', externalSteps = false } = {}) {
     if (!ctx || !enabled || dt <= 0) return;
     effortS += (Math.min(1, Math.max(0, effort)) - effortS) * (1 - Math.exp(-dt * 0.8));   // nefes eforu gecikmeyle izler
     // Nefes: dinlenmede ~14/dk, yüksek eforda ~34/dk; nefes alma daha parlak, verme daha boğuk
-    const rate = (14 + 20 * effortS) / 60;
+    const rate = (13 + 27 * effortS) / 60;   // dinlenmede ~13/dk, yüksek eforda ~40/dk
     breathPhase = (breathPhase + dt * rate) % 1;
     const inhale = breathPhase < 0.42, x = inhale ? breathPhase / 0.42 : (breathPhase - 0.42) / 0.58;
     const env = Math.sin(Math.PI * x) ** (inhale ? 1.2 : 1.6);
@@ -84,14 +104,15 @@ export function initAudio({ volume = 0.55 } = {}) {
     breath.f.frequency.setTargetAtTime(inhale ? 1500 + 500 * effortS : 650 + 250 * effortS, t, 0.05);
     wind.g.gain.setTargetAtTime(0.012 + 0.012 * Math.sin(t * 0.21) ** 2, t, 0.5);
     // Adım: ~0,7 m'de bir, ama hızlandırılmış gösterimde makineli tüfek olmasın diye en çok ~2,1 adım/sn
-    if (moving && speed > 0.05) {
+    if (externalSteps) stepAcc = 0;   // adımlar walkfeel'den (zemin katmanı + mesafe) gelir
+    else if (moving && speed > 0.05) {
       stepAcc += speed * dt;
       if (stepAcc >= 0.7 && t - lastStepAt > 0.47) { stepAcc = 0; lastStepAt = t; step(surface, 0.8 + 0.4 * effortS); }
     } else stepAcc = 0.5;
   }
 
   return {
-    update, step, alert,
+    update, step, stumble, alert,
     get enabled() { return enabled; },
     setEnabled(on) { enabled = !!on; if (master) master.gain.setTargetAtTime(enabled ? volume : 0, ctx.currentTime, 0.05); },
     get started() { return started && !!ctx; },
