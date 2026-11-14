@@ -1,6 +1,32 @@
 # Tarayıcı kanıtı: 6 durak (2026-11-14)
 
-Issue #45, 2. madde. Her görselde soldan sağa:
+Issue #45. Kask tarayıcısının o duraktaki hücreye verdiği sınıf (API `scan_class`: güvenli / dikkat / geçilmez / bilinmiyor)
+ile o durağın Navcam karesinde gözle görülen zemin.
+
+## Sonuç tablosu (2026-11-14)
+| Durak | `scan_class` (neden) | Navcam'de görülen | Sonuç | Gerekçe |
+|---|---|---|---|---|
+| s118_d0726 | güvenli (eğim 6,5°, kum 0,00) | düz ana kaya, dağınık çakıl | **tuttu** | Düz, kayalık, kumsuz zemin; güvenli doğru. |
+| s118_d2406 | dikkat (eğim 21,8° ≥ 15°) | eğimli ana kaya yüzeyi, üstte sırt | **tuttu** | Karede eğimli yüzey görülüyor; dikkat yerinde. |
+| s120_d2690 | dikkat (eğim 15,8° ≥ 15°) | pürüzlü ana kaya, kenarda toprak | **tuttu** | Pürüzlü ve eğimli; dikkat yerinde. |
+| s118_d1608 | güvenli (eğim 14,8°, kum 0,02) | dalgalı kaya çıkıntıları, arada kum | **kısmen** | Zemin sınıfı doğru (kaya) ama yüzey çok pürüzlü; eğim eşiğin hemen altında kaldığı için güvenli denmiş. |
+| s120_d2366 | güvenli (kum 0,37 < 0,40) | rover izinde kum + çakıl | **tutmadı** | Model kumu gördü (0,37) ama dikkat eşiğinin (0,40) hemen altında kaldı. |
+| s120_d3056 | güvenli (kum 0,21) | kaya plakaları arasında yoğun kum | **tutmadı** | Model kumu ana kaya sandı; tarayıcı kumlu yeri güvenli gösteriyor. |
+
+**Özet: 6 duraktan 3'ünde tuttu, 1'inde kısmen, 2'sinde tutmadı. Tutmayan ikisi de kumlu durak.**
+
+Notlar:
+- `scan_class` öncelik sırası: geçilmez → bilinmiyor → dikkat → güvenli (`api/planner/params.py`). Durak hücrelerinde
+  "bilinmiyor" yok, çünkü durağın kendisi kanıt. Haritanın tamamında hücrelerin %50,6'sı bilinmiyor, %22,7'si güvenli,
+  %7,9'u dikkat, %18,7'si geçilmez.
+- **Bulgu:** Tarayıcı kuralı modelin büyük kaya olasılığını (`p_bigrock`) kullanmıyor; kaya için yalnız yörüngeden ölçülen
+  `rock_cfa` var ve bu 6 hücrede 0. s118_d1608'de model %33 büyük kaya diyor ama tarayıcıya yansımıyor.
+  Bu kural planlayıcı sahibinin kararı; burada yalnız gözlem olarak not edildi.
+- Kum eşiği 0,40. Model bu bölgede kumu az tahmin ettiği için (`LAYERS.md`: 7 kumlu duraktan 2'si) kumlu duraklar
+  güvenli görünebiliyor. Simülatörde yolda kum çıkınca `/replan` devreye giriyor; bu boşluğu o kapatıyor.
+
+## Görseller
+Her görselde soldan sağa:
 1. Navcam karesi
 2. Modelin segmentasyonu (gri = rover gövdesi ve 30 m ötesi, maskeli)
 3. MC Dropout belirsizliği
@@ -21,6 +47,8 @@ Model: 12 epoch, sınıf ağırlıklı (`METRICS.md`). Katmanlar: PR #80 (128 du
 - **Durak (4 kare):** toprak 0,54, kum 0,37. Kum rover izinin olduğu karelerden geliyor.
 - **Harita hücresi:** toprak (entropy 0,41).
 - **Sonuç:** Kumu durak düzeyinde yakaladı. Ama bu karedeki kumlu yüzeye "toprak" dedi; ana kaya şeridini doğru ayırdı.
+- **Maske sınırı:** Bu durağın 2. karesinde (`…826009205…`) maske robot kolunun bir kısmını kaçırıyor ve model oraya kum diyor.
+  Durağın kum payı (0,37) bu yüzden biraz şişkin olabilir. Kolsuz 4. karede (`…826010468…`) kum payı 0,50, yani kum gerçek.
 
 ### s120_d3056 (sol 4834): tutmadı
 ![s120_d3056](../../docs/figures/scan_msl_s120_d3056.jpg)
@@ -64,8 +92,8 @@ Model: 12 epoch, sınıf ağırlıklı (`METRICS.md`). Katmanlar: PR #80 (128 du
 - **Harita hücresi:** ana kaya.
 - **Sonuç:** Tuttu. Pürüzlü, açık tonlu yüzeyde belirsizlik geniş bir alanda orta düzeyde; "emin değilim" demesi yerinde.
 
-## Özet
-| Durak | Grup | Sonuç |
+## Zemin modeli düzeyinde özet (görsellerdeki sınıf karşılaştırması)
+| Durak | Grup | Zemin sınıfı sonucu |
 |---|---|---|
 | s120_d2366 | kumlu | kısmen |
 | s120_d3056 | kumlu | **tutmadı** |
