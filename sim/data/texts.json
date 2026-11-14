@@ -53,5 +53,8 @@
     "actual": "Gerçekleşen",
     "retry": "Görevi tekrarla",
     "close": "Haritaya dön"
+  },
+  "offline": {
+    "badge": "Çevrimdışı yedek: önceden hesaplanmış rota (planlayıcı canlı değil)."
   }
 }
