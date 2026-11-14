@@ -64,6 +64,10 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
   4. **Scan:** the helmet scanner marks terrain as safe, caution, no-go or "model not sure".
   5. **Surprise:** sand ahead; the route is re-planned on the spot.
   6. **Debrief:** planned vs actual, and a grade.
+- **Three missions, three lessons** (`sim/data/missions.json`):
+  - S1, easy: comfortable budget, all three routes GO.
+  - S2, medium, "Sandy shortcut": sand sits on the shortest route, and the re-plan shifts it ~46 m.
+  - S3, hard, "Half O₂ tank": only 80 L of oxygen; every route is NO-GO and the astronaut must decide to turn back.
 - **Görsel:** Canlı demo. Yedek: `[Samet'ten istenecek: 21:00 provasının ekran kaydı]`
 
 ### Slayt 6: Doğrulama ve varsayımlar

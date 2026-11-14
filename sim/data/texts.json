@@ -1,19 +1,19 @@
 {
   "missions": {
     "S1": {
-      "title": "Boxwork'ten Atacama sondaj alanına",
-      "brief": "Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yaklaşık 0,55 km yürüyeceksin. Sırtlar, yeraltı suyunun çatlaklarda bıraktığı minerallerin izini taşıyor. Atacama, boxwork sonrasında katmanlı sülfat biriminde açılan ilk sondajın yeri.",
+      "title": "Boxwork'ten Atacama sondajına",
+      "brief": "Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yaklaşık 0,55 km yürüyeceksin. Sırtlar, yeraltı suyunun çatlaklarda bıraktığı minerallerin izini taşıyor. Bütçen rahat; rotanı seç ve numuneyi al.",
       "objective": "Atacama sondaj alanına ulaş ve numune al."
     },
     "S2": {
-      "title": "Son boxwork durağından Atacama'ya",
-      "brief": "Boxwork kampanyasının en yoğun inceleme alanından Atacama sondaj alanına yaklaşık 0,40 km yürüyeceksin. Kısa bir geçiş, ama zemin her yerde aynı değil. Taramada modelin emin olmadığı bölgeleri izle.",
-      "objective": "Atacama sondaj alanına ulaş ve numune al."
+      "title": "Kumlu kestirme",
+      "brief": "Son boxwork durağından Atacama sondaj alanına yaklaşık 0,4 km yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir. Taramada kumu görürsen rota yeniden planlanacak.",
+      "objective": "Kumu dolaşarak Atacama sondaj alanına ulaş ve numune al."
     },
     "S3": {
-      "title": "Yedek görev: ikinci boxwork durağından Atacama'ya",
-      "brief": "Boxwork'ün ikinci inceleme alanından Atacama sondaj alanına yaklaşık 0,53 km yürüyeceksin. Başlangıç noktası dar bir sırt kenarında. İlk adımlarda eğimi kontrol et.",
-      "objective": "Atacama sondaj alanına ulaş ve numune al."
+      "title": "Yarım O₂ tüpü",
+      "brief": "Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedef yaklaşık 0,55 km uzakta ve oraya varmak garanti değil. Oksijeni izle; dönüş noktasını kaçırma.",
+      "objective": "Oksijen yeterse Atacama'ya ulaş; yetmezse zamanında geri dön."
     }
   },
   "hud": {
