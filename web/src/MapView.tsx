@@ -30,6 +30,7 @@ interface Props {
   onSelectSeg?: (id: number) => void
   science?: ScienceStop[]
   rovers?: RoverStop[]
+  extraRovers?: RoverStop[]
   selectedId?: string | null
   onSelectScience?: (s: ScienceStop) => void
   onSelectRover?: (r: RoverStop) => void
@@ -72,6 +73,13 @@ export default function MapView(p: Props) {
         </>
       )}
 
+      {(p.extraRovers ?? []).map((r) => (
+        <CircleMarker key={'all-' + r.stop_id} center={cont(h, r.px)} radius={2.5}
+          pathOptions={{ stroke: false, fillColor: '#e2e8f0', fillOpacity: 0.8 }}
+          eventHandlers={{ click: () => p.onSelectRover?.(r) }}>
+          <Tooltip>{r.stop_id} · sol {r.sol}</Tooltip>
+        </CircleMarker>
+      ))}
       {rovers.map((r) => (
         <CircleMarker
           key={r.stop_id}
@@ -97,3 +105,4 @@ export default function MapView(p: Props) {
     </MapContainer>
   )
 }
+

@@ -65,7 +65,13 @@ function SegmentCard({ s }: { s: Segment }) {
   )
 }
 
+const toUrl = (u: string) => {
+  if (u.startsWith('http')) return u
+  const m = u.match(/sol_(\d+)\/([^/]+)$/)
+  return m ? 'https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/' + m[1] + '/opgs/edr/ncam/' + m[2] : u
+}
 function Photos({ urls }: { urls: string[] }) {
+  urls = urls.map(toUrl)
   if (!urls.length) return null
   return (
     <div className="mt-3 grid grid-cols-2 gap-2">
@@ -127,6 +133,8 @@ export default function App() {
   const [sel, setSel] = useState<Sel>(null)
   const [routeIdx, setRouteIdx] = useState(0)
   const [segId, setSegId] = useState<number | null>(null)
+  const [allStops, setAllStops] = useState<RoverStop[]>([])
+  const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
     Promise.all([
@@ -137,6 +145,7 @@ export default function App() {
       .then(([grid, science, rovers]) => setReal({ grid, science, rovers }))
       .catch((e) => setError(String(e)))
     getJson<RouteResponse>('/routes/route.example.json').then(setDemo).catch((e) => setError(String(e)))
+    getJson<RoverStop[]>('/data/rover_stops_all.json').then(setAllStops).catch(() => setAllStops([]))
   }, [])
 
   const route = demo?.routes[routeIdx] ?? null
@@ -153,6 +162,7 @@ export default function App() {
             baseUrl="/data/ortho_2m.png"
             science={real.science}
             rovers={real.rovers}
+            extraRovers={showAll ? allStops : []}
             selectedId={selId}
             onSelectScience={(s) => setSel({ kind: 'sci', item: s })}
             onSelectRover={(r) => setSel({ kind: 'rov', item: r })}
@@ -184,6 +194,7 @@ export default function App() {
               <p className="mb-2 text-slate-300">{real.grid.region}</p>
               <p className="flex items-center gap-2"><span className="h-3 w-3 rounded-full" style={{ background: SCI_COLOR }} /> Bilim durağı ({real.science.length})</p>
               <p className="flex items-center gap-2"><span className="h-3 w-3 rounded-full" style={{ background: ROVER_COLOR }} /> Rover kanıt durağı ({real.rovers.length})</p>
+              <label className="mt-2 flex items-center gap-2 text-slate-300"><input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Tüm rover durakları ({allStops.length})</label>
             </section>
             <section className="rounded-xl bg-slate-800 p-2">
               {real.science.map((s) => (
@@ -227,3 +238,4 @@ export default function App() {
     </div>
   )
 }
+
