@@ -605,7 +605,8 @@
     "seg_conf_low": "model güveni düşük ({conf} %)",
     "fog_button": "Model güveni katmanı",
     "fog_hint": "Soluk alan = model emin değil (güven = 1 − normalize entropi). Model tahmini, ölçüm değil.",
-    "seg_title": "Segment açıklamaları (model rotası)"
+    "seg_title": "Segment açıklamaları (model rotası)",
+    "hazard_button": "Yalnız eğim rotasının tehlikeli zemini (3B)"
   },
   "compare": {
     "title": "Zemin modeli ne kazandırıyor?",
@@ -627,12 +628,16 @@
     "delta_same": "fark yok",
     "hazard_note": "Kırmızı: kum ya da kayalık zemin segmenti (naif rota bu zeminden geçiyor)",
     "sentence_full": "Model bu görevde {kcal} kcal ve {o2} L O₂ kazandırdı, {sand} m kumdan kaçındı.",
-    "sentence_risk": "Model bu görevde riski {risk_pct} % azalttı ve {hazard} m kumlu/kayalık zeminden kaçındı; enerji farkı {kcal} kcal, çünkü bu rotada zemin çoğunlukla ana kaya.",
+    "sentence_risk": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
     "sentence_same": "Bu görevde iki planlayıcı aynı yolu seçti; zemin modeli rotayı değiştirmedi.",
     "scope": "Tek yön, {kind} rota. Maliyet gerçek zemin katmanında ölçülür; zemin katmanı model tahminidir.",
     "loading": "Karşılaştırma hesaplanıyor…",
     "error": "Karşılaştırma alınamadı ({why}).",
-    "provisional": "Zemin katmanı geçici (model çıktısı değil); karşılaştırma bunu yansıtır."
+    "provisional": "Zemin katmanı geçici (model çıktısı değil); karşılaştırma bunu yansıtır.",
+    "sentence_risk_nohaz": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
+    "sentence_cost": " Bedeli {cost} kcal ek enerji.",
+    "sentence_other": "Model rotayı değiştirdi; bu görevde risk ve enerji farkı küçük.",
+    "hazard3d_legend": "Kırmızı iz: yalnız eğim rotasının geçeceği kum/kayalık zemin"
   },
   "bilim": {
     "badge_crism": "Spektral: CRISM",

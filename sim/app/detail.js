@@ -127,6 +127,7 @@ export const PBR_MAPS = {
 export const CLASS_TEX = { value: makeDummyTex(0, 0, 0) };
 export const CLASS_BOUNDS = { value: new THREE.Vector4(0, 0, 1, 1) }; // x0, z0, sizeX, sizeZ
 export const HAS_CLASS_TEX = { value: 0.0 };
+export const EXTRA_PATCH = [];   // tur4:veri: dış modüllerin (insight-3d.js) gölgelendiriciye kanca eklemesi
 
 let pbrLoadingPromise = null;
 
@@ -617,4 +618,5 @@ float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance
           normal = normalize(normal - (gr.x * Tx + gr.y * Tz) * uSynth);
         }`
       );
+  for (const f of EXTRA_PATCH) f(shader);   // tur4:veri
 }
