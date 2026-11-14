@@ -75,7 +75,8 @@ export function createStopWatcher({ stops, resM = 2, enterM = 40, leaveM = 70, o
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
 const NOTE_CSS = `
-#bl-note{right:14px;top:14px;width:330px;max-height:calc(100vh - 28px);overflow:auto}
+#bl-note{left:276px;top:72px;width:330px;max-height:calc(100vh - 100px);overflow:auto}
+#bl-note[data-pos=map]{left:auto;right:14px;top:14px;max-height:calc(100vh - 28px)}
 #bl-note h3{margin:0 0 2px;font-size:15px}
 #bl-note .lab{margin-top:8px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#c9b8ff}
 #bl-note p{margin:2px 0 0}
@@ -136,7 +137,7 @@ export function noteBody(stop, texts, onClose) {
 
 // ---------------------------------------------------------------- Leaflet
 /** CRISM HYD browse'u footprint sınırlarında yarı saydam görüntü katmanı (nearest neighbour; 18 m piksel görünür). */
-export function createCrismMapOverlay(L, crism, { opacity = 0.5, base = new URL('../', import.meta.url) } = {}) {
+export function createCrismMapOverlay(L, crism, { opacity = 0.35, base = new URL('../', import.meta.url) } = {}) {
   const f = crism.footprint_latlon;
   return L.imageOverlay(new URL(crism.product.file, base).href, [[f.south, f.west], [f.north, f.east]], { opacity, className: 'bl-crism', interactive: false });
 }
@@ -154,7 +155,7 @@ export function addScienceMarkers(L, map, stops, onPick) {
 
 // ---------------------------------------------------------------- THREE
 /** CRISM HYD'yi arazi üzerine yarı saydam örtü olarak çizer (ızgara kutusu). groundY(x,z) → yükseklik|null. */
-export function createCrismTerrainOverlay(THREE, { crism, grid, pxToWorld, groundY, base = new URL('../', import.meta.url), segments = 200, opacity = 0.5, lift = 0.35 }) {
+export function createCrismTerrainOverlay(THREE, { crism, grid, pxToWorld, groundY, base = new URL('../', import.meta.url), segments = 200, opacity = 0.3, lift = 0.35 }) {
   const mi = crism.map_info, N = segments, pos = new Float32Array((N + 1) ** 2 * 3), uv = new Float32Array((N + 1) ** 2 * 2);
   let k = 0, u = 0, lastY = 0;
   for (let r = 0; r <= N; r++) for (let c = 0; c <= N; c++) {

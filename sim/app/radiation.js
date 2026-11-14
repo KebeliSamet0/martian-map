@@ -78,14 +78,14 @@ export const BL_CSS = `
 .bl-badge.rad{border-color:#5fd0ff;color:#9be1ff}
 .bl-dim{color:var(--dim,#c9b4a2)}.bl-tiny{font-size:10.5px;color:var(--dim,#c9b4a2);margin-top:4px}
 .bl-x{background:none;border:0;color:var(--dim,#c9b4a2);font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
-#bl-rad{right:14px;bottom:14px;width:290px}
+#bl-rad{right:14px;top:300px;width:290px}
 #bl-rad .big{font-size:22px;font-weight:700}
 .bl-bar{position:relative;height:10px;border-radius:5px;background:#2b1f18;border:1px solid #4b3a2c;margin:6px 0 2px;overflow:hidden}
 .bl-bar i{position:absolute;left:0;top:0;bottom:0;background:#5fd0ff;transition:width .3s}
 .bl-bar u{position:absolute;top:0;bottom:0;background:#5fd0ff55;transition:left .3s,width .3s}
 .bl-bar[data-level=warn] i{background:#ffd60a}.bl-bar[data-level=over] i{background:#ff453a}
 .bl-row{display:flex;justify-content:space-between;gap:10px}
-#bl-rad canvas{display:block;width:100%;height:64px;margin-top:6px;background:#0f0b09;border-radius:6px}
+#bl-rad canvas{display:block;width:100%;height:44px;margin-top:6px;background:#0f0b09;border-radius:6px}
 .bl-cmp{margin-top:14px;padding-top:10px;border-top:1px solid #4b3a2c}
 .bl-cmp h4{margin:0 0 6px;font-size:13px}
 .bl-cmp .r{display:grid;grid-template-columns:96px 1fr 84px;gap:8px;align-items:center;margin:4px 0}
@@ -106,8 +106,8 @@ export function createDosePanel(parent, { texts, params, rateUGyH, rateSource })
   const head = el('div', 'bl-head'); head.append(el('span', 'bl-title', T('title')), el('span', 'bl-badge rad', tx(texts, 'bilim.badge_rad')));
   const big = el('div', 'big'); const sub = el('div', 'bl-row bl-dim'); const bar = el('div', 'bl-bar'); const fill = el('i'); const band = el('u'); bar.append(band, fill);
   const budgetRow = el('div', 'bl-row bl-dim'); const canvas = el('canvas'); canvas.width = 540; canvas.height = 128;
-  const meta = el('div', 'bl-tiny'); const cav = el('div', 'bl-tiny', T('caveat'));
-  root.append(head, big, sub, bar, budgetRow, canvas, meta, cav); parent.append(root);
+  const cav = el('div', 'bl-tiny', T('caveat'));
+  root.append(head, big, sub, bar, budgetRow, canvas, cav); parent.append(root);
   const eqLine = el('div', 'bl-tiny'); root.insertBefore(eqLine, canvas);
   const log = createDoseLog({});
   let lastBudget = null, lastPlan = null;
@@ -144,7 +144,6 @@ export function createDosePanel(parent, { texts, params, rateUGyH, rateSource })
       budgetRow.title = `${T('budget_note')}\n${rateSource}`;
       eqLine.textContent = d == null ? '' : `${T('equiv')}: ${fmt((d * params.eqPerGy), 1)} µSv`;
       eqLine.title = T('equiv_note');
-      meta.textContent = T('budget_note');
       draw(budgetUGy, lastPlan);
     },
     destroy() { root.remove(); },

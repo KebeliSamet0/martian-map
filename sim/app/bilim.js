@@ -31,11 +31,17 @@ function mount(mm) {
   const pw = (c, r) => pxToWorld(mm.geo, c, r);
   // Harita katmanları
   if (L && mm.mapView?.map) {
-    mapOv = createCrismMapOverlay(L, crism, { opacity: 0.45 });
-    addScienceMarkers(L, mm.mapView.map, stops, (s) => { note.show(s); note.el.hidden = false; });
+    mapOv = createCrismMapOverlay(L, crism);
+    addScienceMarkers(L, mm.mapView.map, stops, (s) => { note.el.dataset.pos = 'map'; note.show(s); });
+  }
+  let legend = null;
+  if (L && mm.mapView?.map) {
+    legend = L.control({ position: 'bottomright' });
+    legend.onAdd = () => { const d = L.DomUtil.create('div', 'bl-card'); d.style.cssText = 'position:static;max-width:300px;margin:0 10px 24px'; d.innerHTML = `<span class="bl-badge">${texts.bilim.badge_crism}</span><div class="bl-tiny">CRISM ${crism.product.id} · HYD kompoziti: R=SINDEX2, G=BD2100_2, B=BD1900_2 (hidratlı sülfat) · ham browse, 18 m/piksel, göreli</div>`; return d; };
   }
   const setCrism = (on) => {
     S.crismOn = on; const map = mm.mapView?.map;
+    if (legend && map) { on ? legend.addTo(map) : legend.remove(); }
     if (mapOv && map) { on ? mapOv.addTo(map) : map.removeLayer(mapOv); }
     const T = mm.T;
     if (on && T?.scene && !terr) { terr = createCrismTerrainOverlay(THREE, { crism, grid: { ...(S.grid ?? {}), width: 1000, height: 1000, res_m: 2, origin_xy_m: [8142276.492786024, -283815.075189438] }, pxToWorld: pw, groundY: gY }); T.scene.add(terr.mesh); }
@@ -55,7 +61,7 @@ function mount(mm) {
   });
 
   const budget = () => mm.wire?.selected?.limits?.dose_uGy ?? science.radiation.budget_fallback_uGy;
-  const watcher = createStopWatcher({ stops, onEnter: (s, o) => { note.current = s; if (!o.silent && S.screen === 'walk') note.show(s); }, onLeave: () => note.hide() });
+  const watcher = createStopWatcher({ stops, onEnter: (s, o) => { note.current = s; if (!o.silent && S.screen === 'walk') { note.el.dataset.pos = 'walk'; note.show(s); } }, onLeave: () => note.hide() });
   const refresh = () => { const walking = S.screen === 'walk'; if (!walking) note.hide(); dose.setVisible(walking && S.radOn && !!mm.wire?.vitals); };
   addEventListener('mm:screen', (e) => {
     const sc = e.detail?.screen; S.screen = sc === 'resume' ? 'walk' : sc;
@@ -64,7 +70,7 @@ function mount(mm) {
   });
   addEventListener('keydown', (e) => {
     if (e.code !== 'KeyI' || S.screen !== 'walk' || e.target?.closest?.('input,textarea,select')) return;
-    const near = watcher.inside ?? stops[0]; note.toggle(near);
+    const near = watcher.inside ?? stops[0]; note.el.dataset.pos = 'walk'; note.toggle(near);
   });
   // 3B sahnesi hazır olunca ışık sütunları + (açıksa) CRISM örtüsü
   setInterval(() => {
