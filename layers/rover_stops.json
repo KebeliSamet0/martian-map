@@ -10,8 +10,13 @@
       "navcam/sol_04580/NLB_804091074EDR_F1170384NCAM00385M_.JPG",
       "navcam/sol_04580/NLB_804091042EDR_F1170384NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3561,
+      "bedrock": 0.6064,
+      "sand": 0.0033,
+      "bigrock": 0.0342
+    },
+    "entropy": 0.2838,
     "site": 117,
     "drive": 384,
     "sols": [
@@ -43,8 +48,13 @@
       "navcam/sol_04580/NLB_804093331EDR_F1170420NCAM00354M_.JPG",
       "navcam/sol_04580/NLB_804093421EDR_F1170420NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4412,
+      "bedrock": 0.3151,
+      "sand": 0.179,
+      "bigrock": 0.0647
+    },
+    "entropy": 0.447,
     "site": 117,
     "drive": 420,
     "sols": [
@@ -74,8 +84,13 @@
       "navcam/sol_04582/NLB_804266058EDR_F1170456NCAM00485M_.JPG",
       "navcam/sol_04582/NLB_804266023EDR_F1170456NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4031,
+      "bedrock": 0.4776,
+      "sand": 0.0824,
+      "bigrock": 0.0369
+    },
+    "entropy": 0.2645,
     "site": 117,
     "drive": 456,
     "sols": [
@@ -107,8 +122,13 @@
       "navcam/sol_04582/NLB_804267166EDR_F1170492NCAM00354M_.JPG",
       "navcam/sol_04582/NLB_804267248EDR_F1170492NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4864,
+      "bedrock": 0.1792,
+      "sand": 0.2777,
+      "bigrock": 0.0567
+    },
+    "entropy": 0.3334,
     "site": 117,
     "drive": 492,
     "sols": [
@@ -138,8 +158,13 @@
       "navcam/sol_04585/NLB_804532545EDR_F1170672NCAM00385M_.JPG",
       "navcam/sol_04585/NLB_804532513EDR_F1170672NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.8493,
+      "bedrock": 0.1501,
+      "sand": 0.0002,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.2372,
     "site": 117,
     "drive": 672,
     "sols": [
@@ -171,8 +196,13 @@
       "navcam/sol_04585/NLB_804533920EDR_F1170702NCAM00354M_.JPG",
       "navcam/sol_04585/NLB_804534009EDR_F1170702NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3618,
+      "bedrock": 0.6375,
+      "sand": 0.0003,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.1382,
     "site": 117,
     "drive": 702,
     "sols": [
@@ -202,8 +232,13 @@
       "navcam/sol_04587/NLB_804708911EDR_F1170804NCAM00385M_.JPG",
       "navcam/sol_04587/NLB_804708886EDR_F1170804NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9821,
+      "bedrock": 0.0171,
+      "sand": 0.0002,
+      "bigrock": 0.0006
+    },
+    "entropy": 0.0516,
     "site": 117,
     "drive": 804,
     "sols": [
@@ -235,8 +270,13 @@
       "navcam/sol_04587/NLB_804710949EDR_F1170840NCAM00354M_.JPG",
       "navcam/sol_04587/NLB_804711023EDR_F1170840NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9539,
+      "bedrock": 0.0227,
+      "sand": 0.0222,
+      "bigrock": 0.0012
+    },
+    "entropy": 0.0794,
     "site": 117,
     "drive": 840,
     "sols": [
@@ -266,8 +306,13 @@
       "navcam/sol_04588/NLB_804801289EDR_F1170954NCAM00385M_.JPG",
       "navcam/sol_04588/NLB_804801257EDR_F1170954NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9544,
+      "bedrock": 0.0448,
+      "sand": 0.0004,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.1122,
     "site": 117,
     "drive": 954,
     "sols": [
@@ -297,8 +342,13 @@
       "navcam/sol_04588/NLB_804801933EDR_F1170996NCAM00485M_.JPG",
       "navcam/sol_04588/NLB_804801897EDR_F1170996NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6799,
+      "bedrock": 0.3107,
+      "sand": 0.0009,
+      "bigrock": 0.0085
+    },
+    "entropy": 0.2788,
     "site": 117,
     "drive": 996,
     "sols": [
@@ -330,8 +380,13 @@
       "navcam/sol_04588/NLB_804803956EDR_F1171008NCAM00354M_.JPG",
       "navcam/sol_04588/NLB_804804014EDR_F1171008NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.597,
+      "bedrock": 0.3724,
+      "sand": 0.0166,
+      "bigrock": 0.014
+    },
+    "entropy": 0.3538,
     "site": 117,
     "drive": 1008,
     "sols": [
@@ -361,8 +416,13 @@
       "navcam/sol_04591/NLB_805063053EDR_F1171044NCAM00385M_.JPG",
       "navcam/sol_04591/NLB_805063029EDR_F1171044NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9189,
+      "bedrock": 0.0036,
+      "sand": 0.0001,
+      "bigrock": 0.0774
+    },
+    "entropy": 0.0356,
     "site": 117,
     "drive": 1044,
     "sols": [
@@ -392,8 +452,13 @@
       "navcam/sol_04591/NLB_805063904EDR_F1171104NCAM00485M_.JPG",
       "navcam/sol_04591/NLB_805063876EDR_F1171104NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.577,
+      "bedrock": 0.0806,
+      "sand": 0.0037,
+      "bigrock": 0.3387
+    },
+    "entropy": 0.2527,
     "site": 117,
     "drive": 1104,
     "sols": [
@@ -425,8 +490,13 @@
       "navcam/sol_04591/NLB_805066117EDR_F1171122NCAM00354M_.JPG",
       "navcam/sol_04591/NLB_805066092EDR_F1171122NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5915,
+      "bedrock": 0.0423,
+      "sand": 0.0097,
+      "bigrock": 0.3565
+    },
+    "entropy": 0.1057,
     "site": 117,
     "drive": 1122,
     "sols": [
@@ -456,8 +526,13 @@
       "navcam/sol_04594/NLB_805326354EDR_F1171398NCAM00385M_.JPG",
       "navcam/sol_04594/NLB_805326323EDR_F1171398NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1129,
+      "bedrock": 0.8866,
+      "sand": 0.0002,
+      "bigrock": 0.0003
+    },
+    "entropy": 0.1757,
     "site": 117,
     "drive": 1398,
     "sols": [
@@ -489,8 +564,13 @@
       "navcam/sol_04594/NLB_805327887EDR_F1171434NCAM00354M_.JPG",
       "navcam/sol_04594/NLB_805327936EDR_F1171434NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2257,
+      "bedrock": 0.7721,
+      "sand": 0.0003,
+      "bigrock": 0.0019
+    },
+    "entropy": 0.1994,
     "site": 117,
     "drive": 1434,
     "sols": [
@@ -520,8 +600,13 @@
       "navcam/sol_04596/NLB_805501786EDR_F1171854NCAM00385M_.JPG",
       "navcam/sol_04596/NLB_805501762EDR_F1171854NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0051,
+      "bedrock": 0.9934,
+      "sand": 0.0007,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.0221,
     "site": 117,
     "drive": 1854,
     "sols": [
@@ -553,8 +638,13 @@
       "navcam/sol_04596/NLB_805503597EDR_F1171890NCAM00354M_.JPG",
       "navcam/sol_04596/NLB_805503685EDR_F1171890NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0252,
+      "bedrock": 0.9394,
+      "sand": 0.0346,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.0771,
     "site": 117,
     "drive": 1890,
     "sols": [
@@ -584,8 +674,13 @@
       "navcam/sol_04598/NLB_805685970EDR_F1172118NCAM00385M_.JPG",
       "navcam/sol_04598/NLB_805686009EDR_F1172118NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0593,
+      "bedrock": 0.8225,
+      "sand": 0.1077,
+      "bigrock": 0.0105
+    },
+    "entropy": 0.1242,
     "site": 117,
     "drive": 2118,
     "sols": [
@@ -617,8 +712,13 @@
       "navcam/sol_04598/NLB_805688270EDR_F1172166NCAM00354M_.JPG",
       "navcam/sol_04598/NLB_805688360EDR_F1172166NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4826,
+      "bedrock": 0.1304,
+      "sand": 0.3835,
+      "bigrock": 0.0035
+    },
+    "entropy": 0.4135,
     "site": 117,
     "drive": 2166,
     "sols": [
@@ -649,8 +749,13 @@
       "navcam/sol_04600/NLB_805864844EDR_F1172316NCAM00385M_.JPG",
       "navcam/sol_04600/NLB_805864900EDR_F1172316NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6019,
+      "bedrock": 0.3739,
+      "sand": 0.0135,
+      "bigrock": 0.0107
+    },
+    "entropy": 0.2773,
     "site": 117,
     "drive": 2316,
     "sols": [
@@ -680,8 +785,13 @@
       "navcam/sol_04600/NLB_805865475EDR_F1172352NCAM00485M_.JPG",
       "navcam/sol_04600/NLB_805865441EDR_F1172352NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.398,
+      "bedrock": 0.6,
+      "sand": 0.0012,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.2492,
     "site": 117,
     "drive": 2352,
     "sols": [
@@ -713,8 +823,13 @@
       "navcam/sol_04600/NLB_805867593EDR_F1172370NCAM00354M_.JPG",
       "navcam/sol_04600/NLB_805867650EDR_F1172370NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0596,
+      "bedrock": 0.9391,
+      "sand": 0.0004,
+      "bigrock": 0.0009
+    },
+    "entropy": 0.139,
     "site": 117,
     "drive": 2370,
     "sols": [
@@ -744,8 +859,13 @@
       "navcam/sol_04602/NLB_806041279EDR_F1172454NCAM00385M_.JPG",
       "navcam/sol_04602/NLB_806041247EDR_F1172454NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5268,
+      "bedrock": 0.4552,
+      "sand": 0.0116,
+      "bigrock": 0.0064
+    },
+    "entropy": 0.3519,
     "site": 117,
     "drive": 2454,
     "sols": [
@@ -777,8 +897,13 @@
       "navcam/sol_04602/NLB_806042961EDR_F1172490NCAM00354M_.JPG",
       "navcam/sol_04602/NLB_806043010EDR_F1172490NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.7126,
+      "bedrock": 0.2547,
+      "sand": 0.0296,
+      "bigrock": 0.0031
+    },
+    "entropy": 0.3815,
     "site": 117,
     "drive": 2490,
     "sols": [
@@ -810,8 +935,13 @@
       "navcam/sol_04605/NLB_806306477EDR_F1172538NCAM00354M_.JPG",
       "navcam/sol_04605/NLB_806306565EDR_F1172538NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9368,
+      "bedrock": 0.0354,
+      "sand": 0.0268,
+      "bigrock": 0.001
+    },
+    "entropy": 0.1504,
     "site": 117,
     "drive": 2538,
     "sols": [
@@ -841,8 +971,13 @@
       "navcam/sol_04609/NLB_806659865EDR_F1172694NCAM00385M_.JPG",
       "navcam/sol_04609/NLB_806659841EDR_F1172694NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0502,
+      "bedrock": 0.9372,
+      "sand": 0.0073,
+      "bigrock": 0.0053
+    },
+    "entropy": 0.1198,
     "site": 117,
     "drive": 2694,
     "sols": [
@@ -874,8 +1009,13 @@
       "navcam/sol_04609/NLB_806661847EDR_F1172730NCAM00354M_.JPG",
       "navcam/sol_04609/NLB_806661878EDR_F1172730NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0094,
+      "bedrock": 0.9898,
+      "sand": 0.0004,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.0323,
     "site": 117,
     "drive": 2730,
     "sols": [
@@ -905,8 +1045,13 @@
       "navcam/sol_04612/NLB_806928424EDR_F1172814NCAM00385M_.JPG",
       "navcam/sol_04612/NLB_806928392EDR_F1172814NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1501,
+      "bedrock": 0.8432,
+      "sand": 0.0064,
+      "bigrock": 0.0003
+    },
+    "entropy": 0.1755,
     "site": 117,
     "drive": 2814,
     "sols": [
@@ -938,8 +1083,13 @@
       "navcam/sol_04612/NLB_806930607EDR_F1172850NCAM00354M_.JPG",
       "navcam/sol_04612/NLB_806930549EDR_F1172850NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0909,
+      "bedrock": 0.9029,
+      "sand": 0.0039,
+      "bigrock": 0.0023
+    },
+    "entropy": 0.1384,
     "site": 117,
     "drive": 2850,
     "sols": [
@@ -969,8 +1119,13 @@
       "navcam/sol_04614/NLB_807108989EDR_F1173024NCAM00385M_.JPG",
       "navcam/sol_04614/NLB_807109021EDR_F1173024NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9797,
+      "bedrock": 0.011,
+      "sand": 0.0053,
+      "bigrock": 0.004
+    },
+    "entropy": 0.0589,
     "site": 117,
     "drive": 3024,
     "sols": [
@@ -1000,8 +1155,13 @@
       "navcam/sol_04614/NLB_807109491EDR_F1173054NCAM00485M_.JPG",
       "navcam/sol_04614/NLB_807109463EDR_F1173054NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6618,
+      "bedrock": 0.2892,
+      "sand": 0.0443,
+      "bigrock": 0.0047
+    },
+    "entropy": 0.3595,
     "site": 117,
     "drive": 3054,
     "sols": [
@@ -1033,8 +1193,13 @@
       "navcam/sol_04614/NLB_807112406EDR_F1180000CCAM03614M_.JPG",
       "navcam/sol_04614/NLB_807111915EDR_F1180000NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2777,
+      "bedrock": 0.6896,
+      "sand": 0.0301,
+      "bigrock": 0.0026
+    },
+    "entropy": 0.1491,
     "site": 118,
     "drive": 0,
     "sols": [
@@ -1064,8 +1229,13 @@
       "navcam/sol_04616/NLB_807285045EDR_F1180126NCAM00385M_.JPG",
       "navcam/sol_04616/NLB_807285013EDR_F1180126NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9628,
+      "bedrock": 0.035,
+      "sand": 0.0007,
+      "bigrock": 0.0015
+    },
+    "entropy": 0.0985,
     "site": 118,
     "drive": 126,
     "sols": [
@@ -1097,8 +1267,13 @@
       "navcam/sol_04616/NLB_807286889EDR_F1180162NCAM00354M_.JPG",
       "navcam/sol_04616/NLB_807286953EDR_F1180162NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9673,
+      "bedrock": 0.0256,
+      "sand": 0.0014,
+      "bigrock": 0.0057
+    },
+    "entropy": 0.0773,
     "site": 118,
     "drive": 162,
     "sols": [
@@ -1130,8 +1305,13 @@
       "navcam/sol_04618/NLB_807464550EDR_F1180198NCAM00354M_.JPG",
       "navcam/sol_04618/NLB_807464622EDR_F1180198NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9417,
+      "bedrock": 0.0276,
+      "sand": 0.0053,
+      "bigrock": 0.0254
+    },
+    "entropy": 0.1049,
     "site": 118,
     "drive": 198,
     "sols": [
@@ -1161,8 +1341,13 @@
       "navcam/sol_04621/NLB_807728676EDR_F1180342NCAM00385M_.JPG",
       "navcam/sol_04621/NLB_807728644EDR_F1180342NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.7044,
+      "bedrock": 0.1023,
+      "sand": 0.1849,
+      "bigrock": 0.0084
+    },
+    "entropy": 0.3809,
     "site": 118,
     "drive": 342,
     "sols": [
@@ -1194,8 +1379,13 @@
       "navcam/sol_04621/NLB_807730951EDR_F1180372NCAM00354M_.JPG",
       "navcam/sol_04621/NLB_807731040EDR_F1180372NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4615,
+      "bedrock": 0.5047,
+      "sand": 0.0334,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.216,
     "site": 118,
     "drive": 372,
     "sols": [
@@ -1225,8 +1415,13 @@
       "navcam/sol_04623/NLB_807900107EDR_F1180504NCAM00385M_.JPG",
       "navcam/sol_04623/NLB_807900131EDR_F1180504NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1176,
+      "bedrock": 0.8688,
+      "sand": 0.013,
+      "bigrock": 0.0006
+    },
+    "entropy": 0.1286,
     "site": 118,
     "drive": 504,
     "sols": [
@@ -1258,8 +1453,13 @@
       "navcam/sol_04623/NLB_807902098EDR_F1180534NCAM00354M_.JPG",
       "navcam/sol_04623/NLB_807902160EDR_F1180534NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3392,
+      "bedrock": 0.5952,
+      "sand": 0.0622,
+      "bigrock": 0.0034
+    },
+    "entropy": 0.326,
     "site": 118,
     "drive": 534,
     "sols": [
@@ -1289,8 +1489,13 @@
       "navcam/sol_04625/NLB_808082935EDR_F1180726NCAM00385M_.JPG",
       "navcam/sol_04625/NLB_808082903EDR_F1180726NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0811,
+      "bedrock": 0.9183,
+      "sand": 0.0002,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.1191,
     "site": 118,
     "drive": 726,
     "sols": [
@@ -1322,8 +1527,13 @@
       "navcam/sol_04625/NLB_808085068EDR_F1180762NCAM00354M_.JPG",
       "navcam/sol_04625/NLB_808085182EDR_F1180762NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3809,
+      "bedrock": 0.5982,
+      "sand": 0.0157,
+      "bigrock": 0.0052
+    },
+    "entropy": 0.37,
     "site": 118,
     "drive": 762,
     "sols": [
@@ -1353,8 +1563,13 @@
       "navcam/sol_04628/NLB_808342561EDR_F1180876NCAM00385M_.JPG",
       "navcam/sol_04628/NLB_808342537EDR_F1180876NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6898,
+      "bedrock": 0.2967,
+      "sand": 0.0015,
+      "bigrock": 0.012
+    },
+    "entropy": 0.3083,
     "site": 118,
     "drive": 876,
     "sols": [
@@ -1386,8 +1601,13 @@
       "navcam/sol_04628/NLB_808344905EDR_F1180924NCAM00354M_.JPG",
       "navcam/sol_04628/NLB_808344857EDR_F1180924NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5893,
+      "bedrock": 0.3185,
+      "sand": 0.071,
+      "bigrock": 0.0212
+    },
+    "entropy": 0.3593,
     "site": 118,
     "drive": 924,
     "sols": [
@@ -1417,8 +1637,13 @@
       "navcam/sol_04629/NLB_808439067EDR_F1181110NCAM00385M_.JPG",
       "navcam/sol_04629/NLB_808439036EDR_F1181110NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3585,
+      "bedrock": 0.462,
+      "sand": 0.0684,
+      "bigrock": 0.1111
+    },
+    "entropy": 0.2723,
     "site": 118,
     "drive": 1110,
     "sols": [
@@ -1450,8 +1675,13 @@
       "navcam/sol_04629/NLB_808441693EDR_F1181194NCAM00354M_.JPG",
       "navcam/sol_04629/NLB_808441789EDR_F1181194NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3317,
+      "bedrock": 0.3996,
+      "sand": 0.0685,
+      "bigrock": 0.2002
+    },
+    "entropy": 0.3186,
     "site": 118,
     "drive": 1194,
     "sols": [
@@ -1481,8 +1711,13 @@
       "navcam/sol_04633/NLB_808786779EDR_F1181314NCAM00385M_.JPG",
       "navcam/sol_04633/NLB_808786747EDR_F1181314NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.048,
+      "bedrock": 0.9509,
+      "sand": 0.0008,
+      "bigrock": 0.0003
+    },
+    "entropy": 0.118,
     "site": 118,
     "drive": 1314,
     "sols": [
@@ -1514,8 +1749,13 @@
       "navcam/sol_04633/NLB_808788459EDR_F1181350NCAM00354M_.JPG",
       "navcam/sol_04633/NLB_808788435EDR_F1181350NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0124,
+      "bedrock": 0.986,
+      "sand": 0.0005,
+      "bigrock": 0.0011
+    },
+    "entropy": 0.0353,
     "site": 118,
     "drive": 1350,
     "sols": [
@@ -1545,8 +1785,13 @@
       "navcam/sol_04634/NLB_808882068EDR_F1181572NCAM00385M_.JPG",
       "navcam/sol_04634/NLB_808882044EDR_F1181572NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3457,
+      "bedrock": 0.3948,
+      "sand": 0.0033,
+      "bigrock": 0.2562
+    },
+    "entropy": 0.4061,
     "site": 118,
     "drive": 1572,
     "sols": [
@@ -1578,8 +1823,13 @@
       "navcam/sol_04634/NLB_808884436EDR_F1181608NCAM00354M_.JPG",
       "navcam/sol_04634/NLB_808884572EDR_F1181608NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1522,
+      "bedrock": 0.4925,
+      "sand": 0.0211,
+      "bigrock": 0.3342
+    },
+    "entropy": 0.3625,
     "site": 118,
     "drive": 1608,
     "sols": [
@@ -1610,8 +1860,13 @@
       "navcam/sol_04636/NLB_809059696EDR_F1181716NCAM00385M_.JPG",
       "navcam/sol_04636/NLB_809059665EDR_F1181716NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2805,
+      "bedrock": 0.7082,
+      "sand": 0.0104,
+      "bigrock": 0.0009
+    },
+    "entropy": 0.2727,
     "site": 118,
     "drive": 1716,
     "sols": [
@@ -1643,8 +1898,13 @@
       "navcam/sol_04636/NLB_809061806EDR_F1181752NCAM00354M_.JPG",
       "navcam/sol_04636/NLB_809061864EDR_F1181752NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.222,
+      "bedrock": 0.7697,
+      "sand": 0.0013,
+      "bigrock": 0.007
+    },
+    "entropy": 0.1402,
     "site": 118,
     "drive": 1752,
     "sols": [
@@ -1676,8 +1936,13 @@
       "navcam/sol_04639/NLB_809326157EDR_F1181776NCAM00354M_.JPG",
       "navcam/sol_04639/NLB_809326215EDR_F1181776NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1358,
+      "bedrock": 0.7834,
+      "sand": 0.0161,
+      "bigrock": 0.0647
+    },
+    "entropy": 0.267,
     "site": 118,
     "drive": 1776,
     "sols": [
@@ -1707,8 +1972,13 @@
       "navcam/sol_04641/NLB_809503503EDR_F1181908NCAM00385M_.JPG",
       "navcam/sol_04641/NLB_809503479EDR_F1181908NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6308,
+      "bedrock": 0.3585,
+      "sand": 0.0079,
+      "bigrock": 0.0028
+    },
+    "entropy": 0.4017,
     "site": 118,
     "drive": 1908,
     "sols": [
@@ -1740,8 +2010,13 @@
       "navcam/sol_04641/NLB_809505897EDR_F1181944NCAM00354M_.JPG",
       "navcam/sol_04641/NLB_809505868EDR_F1181944NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.8373,
+      "bedrock": 0.0901,
+      "sand": 0.0707,
+      "bigrock": 0.0019
+    },
+    "entropy": 0.2762,
     "site": 118,
     "drive": 1944,
     "sols": [
@@ -1771,8 +2046,13 @@
       "navcam/sol_04643/NLB_809679870EDR_F1181974NCAM00385M_.JPG",
       "navcam/sol_04643/NLB_809679839EDR_F1181974NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0917,
+      "bedrock": 0.9027,
+      "sand": 0.0014,
+      "bigrock": 0.0042
+    },
+    "entropy": 0.1086,
     "site": 118,
     "drive": 1974,
     "sols": [
@@ -1804,8 +2084,13 @@
       "navcam/sol_04643/NLB_809684170EDR_F1182028CCAM04643M_.JPG",
       "navcam/sol_04643/NLB_809681902EDR_F1182028NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1367,
+      "bedrock": 0.831,
+      "sand": 0.0307,
+      "bigrock": 0.0016
+    },
+    "entropy": 0.1822,
     "site": 118,
     "drive": 2028,
     "sols": [
@@ -1835,8 +2120,13 @@
       "navcam/sol_04647/NLB_810033787EDR_F1182208NCAM00385M_.JPG",
       "navcam/sol_04647/NLB_810033811EDR_F1182208NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2067,
+      "bedrock": 0.7925,
+      "sand": 0.0006,
+      "bigrock": 0.0002
+    },
+    "entropy": 0.1303,
     "site": 118,
     "drive": 2208,
     "sols": [
@@ -1868,8 +2158,13 @@
       "navcam/sol_04647/NLB_810036203EDR_F1182268NCAM00354M_.JPG",
       "navcam/sol_04647/NLB_810036266EDR_F1182268NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3516,
+      "bedrock": 0.6292,
+      "sand": 0.0173,
+      "bigrock": 0.0019
+    },
+    "entropy": 0.3277,
     "site": 118,
     "drive": 2268,
     "sols": [
@@ -1901,8 +2196,13 @@
       "navcam/sol_04650/NLB_810299785EDR_F1182304NCAM00354M_.JPG",
       "navcam/sol_04650/NLB_810299761EDR_F1182304NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3073,
+      "bedrock": 0.6828,
+      "sand": 0.0009,
+      "bigrock": 0.009
+    },
+    "entropy": 0.2724,
     "site": 118,
     "drive": 2304,
     "sols": [
@@ -1932,8 +2232,13 @@
       "navcam/sol_04653/NLB_810567116EDR_F1182406NCAM00385M_.JPG",
       "navcam/sol_04653/NLB_810567084EDR_F1182406NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1221,
+      "bedrock": 0.8627,
+      "sand": 0.0119,
+      "bigrock": 0.0033
+    },
+    "entropy": 0.1766,
     "site": 118,
     "drive": 2406,
     "sols": [
@@ -1965,8 +2270,13 @@
       "navcam/sol_04653/NLB_810569365EDR_F1182466NCAM00354M_.JPG",
       "navcam/sol_04653/NLB_810569421EDR_F1182466NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0624,
+      "bedrock": 0.9297,
+      "sand": 0.007,
+      "bigrock": 0.0009
+    },
+    "entropy": 0.1548,
     "site": 118,
     "drive": 2466,
     "sols": [
@@ -1998,8 +2308,13 @@
       "navcam/sol_04655/NLB_810748932EDR_F1182538NCAM00354M_.JPG",
       "navcam/sol_04655/NLB_810748965EDR_F1182538NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.321,
+      "bedrock": 0.6385,
+      "sand": 0.0382,
+      "bigrock": 0.0023
+    },
+    "entropy": 0.2802,
     "site": 118,
     "drive": 2538,
     "sols": [
@@ -2029,8 +2344,13 @@
       "navcam/sol_04660/NLB_811178082EDR_F1182676NCAM00385M_.JPG",
       "navcam/sol_04660/NLB_811178057EDR_F1182676NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1059,
+      "bedrock": 0.8359,
+      "sand": 0.0062,
+      "bigrock": 0.052
+    },
+    "entropy": 0.0894,
     "site": 118,
     "drive": 2676,
     "sols": [
@@ -2062,8 +2382,13 @@
       "navcam/sol_04660/NLB_811180242EDR_F1182742NCAM00354M_.JPG",
       "navcam/sol_04660/NLB_811180297EDR_F1182742NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0807,
+      "bedrock": 0.9171,
+      "sand": 0.0015,
+      "bigrock": 0.0007
+    },
+    "entropy": 0.1235,
     "site": 118,
     "drive": 2742,
     "sols": [
@@ -2093,8 +2418,13 @@
       "navcam/sol_04662/NLB_811353947EDR_F1182796NCAM00385M_.JPG",
       "navcam/sol_04662/NLB_811353915EDR_F1182796NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.9485,
+      "bedrock": 0.05,
+      "sand": 0.0006,
+      "bigrock": 0.0009
+    },
+    "entropy": 0.121,
     "site": 118,
     "drive": 2796,
     "sols": [
@@ -2126,8 +2456,13 @@
       "navcam/sol_04662/NLB_811355949EDR_F1182832NCAM00354M_.JPG",
       "navcam/sol_04662/NLB_811356004EDR_F1182832NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5394,
+      "bedrock": 0.4592,
+      "sand": 0.001,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.2253,
     "site": 118,
     "drive": 2832,
     "sols": [
@@ -2157,8 +2492,13 @@
       "navcam/sol_04664/NLB_811538228EDR_F1183126NCAM00385M_.JPG",
       "navcam/sol_04664/NLB_811538204EDR_F1183126NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1519,
+      "bedrock": 0.8409,
+      "sand": 0.0008,
+      "bigrock": 0.0064
+    },
+    "entropy": 0.1279,
     "site": 118,
     "drive": 3126,
     "sols": [
@@ -2190,8 +2530,13 @@
       "navcam/sol_04664/NLB_811540387EDR_F1183156NCAM00354M_.JPG",
       "navcam/sol_04664/NLB_811540426EDR_F1183156NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0315,
+      "bedrock": 0.9672,
+      "sand": 0.0011,
+      "bigrock": 0.0002
+    },
+    "entropy": 0.0655,
     "site": 118,
     "drive": 3156,
     "sols": [
@@ -2221,8 +2566,13 @@
       "navcam/sol_04667/NLB_811805025EDR_F1183252NCAM00385M_.JPG",
       "navcam/sol_04667/NLB_811805001EDR_F1183252NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0375,
+      "bedrock": 0.9607,
+      "sand": 0.0014,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.0416,
     "site": 118,
     "drive": 3252,
     "sols": [
@@ -2254,8 +2604,13 @@
       "navcam/sol_04667/NLB_811807663EDR_F1190000NCAM00354M_.JPG",
       "navcam/sol_04667/NLB_811807723EDR_F1190000NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0642,
+      "bedrock": 0.9348,
+      "sand": 0.0001,
+      "bigrock": 0.0009
+    },
+    "entropy": 0.1114,
     "site": 119,
     "drive": 0,
     "sols": [
@@ -2285,8 +2640,13 @@
       "navcam/sol_04669/NLB_811978580EDR_F1190162NCAM00385M_.JPG",
       "navcam/sol_04669/NLB_811978549EDR_F1190162NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1867,
+      "bedrock": 0.8066,
+      "sand": 0.0056,
+      "bigrock": 0.0011
+    },
+    "entropy": 0.1643,
     "site": 119,
     "drive": 162,
     "sols": [
@@ -2318,8 +2678,13 @@
       "navcam/sol_04669/NLB_811980193EDR_F1190198NCAM00354M_.JPG",
       "navcam/sol_04669/NLB_811980224EDR_F1190198NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1963,
+      "bedrock": 0.6263,
+      "sand": 0.1753,
+      "bigrock": 0.0021
+    },
+    "entropy": 0.1739,
     "site": 119,
     "drive": 198,
     "sols": [
@@ -2349,8 +2714,13 @@
       "navcam/sol_04671/NLB_812158106EDR_F1190426NCAM00385M_.JPG",
       "navcam/sol_04671/NLB_812158081EDR_F1190426NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0973,
+      "bedrock": 0.8957,
+      "sand": 0.0056,
+      "bigrock": 0.0014
+    },
+    "entropy": 0.1571,
     "site": 119,
     "drive": 426,
     "sols": [
@@ -2382,8 +2752,13 @@
       "navcam/sol_04671/NLB_812160555EDR_F1190486NCAM00354M_.JPG",
       "navcam/sol_04671/NLB_812160669EDR_F1190486NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0353,
+      "bedrock": 0.9004,
+      "sand": 0.0637,
+      "bigrock": 0.0006
+    },
+    "entropy": 0.1072,
     "site": 119,
     "drive": 486,
     "sols": [
@@ -2413,8 +2788,13 @@
       "navcam/sol_04680/NLB_812959261EDR_F1191278NCAM00385M_.JPG",
       "navcam/sol_04680/NLB_812959229EDR_F1191278NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1019,
+      "bedrock": 0.7064,
+      "sand": 0.1898,
+      "bigrock": 0.0019
+    },
+    "entropy": 0.3022,
     "site": 119,
     "drive": 1278,
     "sols": [
@@ -2444,8 +2824,13 @@
       "navcam/sol_04680/NLB_812959750EDR_F1191308NCAM00485M_.JPG",
       "navcam/sol_04680/NLB_812959723EDR_F1191308NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.518,
+      "bedrock": 0.4481,
+      "sand": 0.0333,
+      "bigrock": 0.0006
+    },
+    "entropy": 0.2988,
     "site": 119,
     "drive": 1308,
     "sols": [
@@ -2477,8 +2862,13 @@
       "navcam/sol_04680/NLB_812961786EDR_F1191344NCAM00354M_.JPG",
       "navcam/sol_04680/NLB_812961879EDR_F1191344NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.218,
+      "bedrock": 0.7799,
+      "sand": 0.0018,
+      "bigrock": 0.0003
+    },
+    "entropy": 0.0711,
     "site": 119,
     "drive": 1344,
     "sols": [
@@ -2508,8 +2898,13 @@
       "navcam/sol_04684/NLB_813312656EDR_F1191518NCAM00385M_.JPG",
       "navcam/sol_04684/NLB_813312631EDR_F1191518NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1098,
+      "bedrock": 0.8851,
+      "sand": 0.0034,
+      "bigrock": 0.0017
+    },
+    "entropy": 0.1118,
     "site": 119,
     "drive": 1518,
     "sols": [
@@ -2539,8 +2934,13 @@
       "navcam/sol_04684/NLB_813312996EDR_F1191542NCAM00485M_.JPG",
       "navcam/sol_04684/NLB_813312961EDR_F1191542NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1451,
+      "bedrock": 0.854,
+      "sand": 0.0006,
+      "bigrock": 0.0003
+    },
+    "entropy": 0.0891,
     "site": 119,
     "drive": 1542,
     "sols": [
@@ -2572,8 +2972,13 @@
       "navcam/sol_04684/NLB_813313396EDR_F1191554NCAM00255M_.JPG",
       "navcam/sol_04684/NLB_813313427EDR_F1191554NCAM00255M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.516,
+      "bedrock": 0.4358,
+      "sand": 0.0317,
+      "bigrock": 0.0165
+    },
+    "entropy": 0.2441,
     "site": 119,
     "drive": 1554,
     "sols": [
@@ -2603,8 +3008,13 @@
       "navcam/sol_04687/NLB_813577286EDR_F1191626NCAM00385M_.JPG",
       "navcam/sol_04687/NLB_813577254EDR_F1191626NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6611,
+      "bedrock": 0.1116,
+      "sand": 0.226,
+      "bigrock": 0.0013
+    },
+    "entropy": 0.4349,
     "site": 119,
     "drive": 1626,
     "sols": [
@@ -2636,8 +3046,13 @@
       "navcam/sol_04690/NLB_813840031EDR_F1191722NCAM00353M_.JPG",
       "navcam/sol_04687/NLB_813583196EDR_F1191722NCAM00353M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.8178,
+      "bedrock": 0.1144,
+      "sand": 0.0535,
+      "bigrock": 0.0143
+    },
+    "entropy": 0.2985,
     "site": 119,
     "drive": 1722,
     "sols": [
@@ -2670,8 +3085,13 @@
       "navcam/sol_04709/NLB_815535422EDR_F1191776NCAM00385M_.JPG",
       "navcam/sol_04709/NLB_815535390EDR_F1191776NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2398,
+      "bedrock": 0.7592,
+      "sand": 0.0003,
+      "bigrock": 0.0007
+    },
+    "entropy": 0.1976,
     "site": 119,
     "drive": 1776,
     "sols": [
@@ -2703,8 +3123,13 @@
       "navcam/sol_04709/NLB_815539359EDR_F1200000CCAM03709M_.JPG",
       "navcam/sol_04709/NLB_815538771EDR_F1200000NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0439,
+      "bedrock": 0.9468,
+      "sand": 0.0063,
+      "bigrock": 0.003
+    },
+    "entropy": 0.1145,
     "site": 120,
     "drive": 0,
     "sols": [
@@ -2734,8 +3159,13 @@
       "navcam/sol_04711/NLB_815713825EDR_F1200060NCAM00485M_.JPG",
       "navcam/sol_04711/NLB_815713790EDR_F1200060NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0456,
+      "bedrock": 0.9492,
+      "sand": 0.0044,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.0889,
     "site": 120,
     "drive": 60,
     "sols": [
@@ -2767,8 +3197,13 @@
       "navcam/sol_04711/NLB_815719044EDR_F1200082NCAM00353M_.JPG",
       "navcam/sol_04711/NLB_815715738EDR_F1200082NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0282,
+      "bedrock": 0.9702,
+      "sand": 0.0001,
+      "bigrock": 0.0015
+    },
+    "entropy": 0.0451,
     "site": 120,
     "drive": 82,
     "sols": [
@@ -2802,8 +3237,13 @@
       "navcam/sol_04741/NLB_818375975EDR_F1200232NCAM00353M_.JPG",
       "navcam/sol_04743/NLB_818558644EDR_F1200232NCAM00353M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5195,
+      "bedrock": 0.0299,
+      "sand": 0.4116,
+      "bigrock": 0.039
+    },
+    "entropy": 0.4724,
     "site": 120,
     "drive": 232,
     "sols": [
@@ -2835,8 +3275,13 @@
       "navcam/sol_04748/NLB_818994010EDR_F1200298NCAM00385M_.JPG",
       "navcam/sol_04748/NLB_818993978EDR_F1200298NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.8755,
+      "bedrock": 0.0553,
+      "sand": 0.0123,
+      "bigrock": 0.0569
+    },
+    "entropy": 0.1584,
     "site": 120,
     "drive": 298,
     "sols": [
@@ -2868,8 +3313,13 @@
       "navcam/sol_04748/NLB_818995961EDR_F1200346NCAM00354M_.JPG",
       "navcam/sol_04748/NLB_818995929EDR_F1200346NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.479,
+      "bedrock": 0.5093,
+      "sand": 0.0023,
+      "bigrock": 0.0094
+    },
+    "entropy": 0.0925,
     "site": 120,
     "drive": 346,
     "sols": [
@@ -2899,8 +3349,13 @@
       "navcam/sol_04752/NLB_819357936EDR_F1200520NCAM00485M_.JPG",
       "navcam/sol_04752/NLB_819357900EDR_F1200520NCAM00485M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2077,
+      "bedrock": 0.787,
+      "sand": 0.0049,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.2424,
     "site": 120,
     "drive": 520,
     "sols": [
@@ -2932,8 +3387,13 @@
       "navcam/sol_04755/NLB_819618024EDR_F1200538NCAM00403M_.JPG",
       "navcam/sol_04784/NLB_822187697EDR_F1200538NCAM00400M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0579,
+      "bedrock": 0.9405,
+      "sand": 0.0012,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.1092,
     "site": 120,
     "drive": 538,
     "sols": [
@@ -2994,8 +3454,13 @@
       "navcam/sol_04795/NLB_823167891EDR_F1200574NCAM00309M_.JPG",
       "navcam/sol_04791/NLB_822808241EDR_F1200574NCAM00353M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0082,
+      "bedrock": 0.991,
+      "sand": 0.0002,
+      "bigrock": 0.0006
+    },
+    "entropy": 0.0259,
     "site": 120,
     "drive": 574,
     "sols": [
@@ -3027,8 +3492,13 @@
       "navcam/sol_04805/NLB_824056486EDR_F1200772NCAM00385M_.JPG",
       "navcam/sol_04805/NLB_824056462EDR_F1200772NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0291,
+      "bedrock": 0.9658,
+      "sand": 0.0039,
+      "bigrock": 0.0012
+    },
+    "entropy": 0.0496,
     "site": 120,
     "drive": 772,
     "sols": [
@@ -3060,8 +3530,13 @@
       "navcam/sol_04805/NLB_824058137EDR_F1200808NCAM00354M_.JPG",
       "navcam/sol_04805/NLB_824058192EDR_F1200808NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0669,
+      "bedrock": 0.9313,
+      "sand": 0.0006,
+      "bigrock": 0.0012
+    },
+    "entropy": 0.112,
     "site": 120,
     "drive": 808,
     "sols": [
@@ -3093,8 +3568,13 @@
       "navcam/sol_04810/NLB_824490605EDR_F1200934NCAM00284M_.JPG",
       "navcam/sol_04810/NLB_824490550EDR_F1200934NCAM00284M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3833,
+      "bedrock": 0.5452,
+      "sand": 0.0482,
+      "bigrock": 0.0233
+    },
+    "entropy": 0.3806,
     "site": 120,
     "drive": 934,
     "sols": [
@@ -3124,8 +3604,13 @@
       "navcam/sol_04810/NLB_824492625EDR_F1201000NCAM00385M_.JPG",
       "navcam/sol_04810/NLB_824492580EDR_F1201000NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0863,
+      "bedrock": 0.8514,
+      "sand": 0.0452,
+      "bigrock": 0.0171
+    },
+    "entropy": 0.1505,
     "site": 120,
     "drive": 1000,
     "sols": [
@@ -3157,8 +3642,13 @@
       "navcam/sol_04810/NLB_824495077EDR_F1201042NCAM00354M_.JPG",
       "navcam/sol_04810/NLB_824495101EDR_F1201042NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1774,
+      "bedrock": 0.795,
+      "sand": 0.0271,
+      "bigrock": 0.0005
+    },
+    "entropy": 0.1452,
     "site": 120,
     "drive": 1042,
     "sols": [
@@ -3188,8 +3678,13 @@
       "navcam/sol_04813/NLB_824769750EDR_F1201240NCAM00385M_.JPG",
       "navcam/sol_04813/NLB_824769782EDR_F1201240NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1572,
+      "bedrock": 0.8345,
+      "sand": 0.0068,
+      "bigrock": 0.0015
+    },
+    "entropy": 0.1487,
     "site": 120,
     "drive": 1240,
     "sols": [
@@ -3221,8 +3716,13 @@
       "navcam/sol_04813/NLB_824771898EDR_F1201264NCAM00354M_.JPG",
       "navcam/sol_04813/NLB_824771993EDR_F1201264NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2109,
+      "bedrock": 0.7524,
+      "sand": 0.0245,
+      "bigrock": 0.0122
+    },
+    "entropy": 0.2626,
     "site": 120,
     "drive": 1264,
     "sols": [
@@ -3255,8 +3755,13 @@
       "navcam/sol_04816/NLB_825026427EDR_F1201450NCAM00385M_.JPG",
       "navcam/sol_04816/NLB_825026402EDR_F1201450NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0732,
+      "bedrock": 0.8813,
+      "sand": 0.0431,
+      "bigrock": 0.0024
+    },
+    "entropy": 0.118,
     "site": 120,
     "drive": 1450,
     "sols": [
@@ -3288,8 +3793,13 @@
       "navcam/sol_04816/NLB_825027072EDR_F1201492NCAM00294M_.JPG",
       "navcam/sol_04816/NLB_825027048EDR_F1201492NCAM00294M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1992,
+      "bedrock": 0.7701,
+      "sand": 0.0275,
+      "bigrock": 0.0032
+    },
+    "entropy": 0.208,
     "site": 120,
     "drive": 1492,
     "sols": [
@@ -3321,8 +3831,13 @@
       "navcam/sol_04816/NLB_825029408EDR_F1201546NCAM00354M_.JPG",
       "navcam/sol_04816/NLB_825029439EDR_F1201546NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3479,
+      "bedrock": 0.5692,
+      "sand": 0.0806,
+      "bigrock": 0.0023
+    },
+    "entropy": 0.2792,
     "site": 120,
     "drive": 1546,
     "sols": [
@@ -3352,8 +3867,13 @@
       "navcam/sol_04818/NLB_825216059EDR_F1202000NCAM00385M_.JPG",
       "navcam/sol_04818/NLB_825216028EDR_F1202000NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5751,
+      "bedrock": 0.4145,
+      "sand": 0.0096,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.2668,
     "site": 120,
     "drive": 2000,
     "sols": [
@@ -3385,8 +3905,13 @@
       "navcam/sol_04818/NLB_825218292EDR_F1202030NCAM00354M_.JPG",
       "navcam/sol_04818/NLB_825218349EDR_F1202030NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.7759,
+      "bedrock": 0.1931,
+      "sand": 0.0234,
+      "bigrock": 0.0076
+    },
+    "entropy": 0.201,
     "site": 120,
     "drive": 2030,
     "sols": [
@@ -3416,8 +3941,13 @@
       "navcam/sol_04820/NLB_825389638EDR_F1202066NCAM00385M_.JPG",
       "navcam/sol_04820/NLB_825389614EDR_F1202066NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.2245,
+      "bedrock": 0.7651,
+      "sand": 0.0049,
+      "bigrock": 0.0055
+    },
+    "entropy": 0.1467,
     "site": 120,
     "drive": 2066,
     "sols": [
@@ -3449,8 +3979,13 @@
       "navcam/sol_04820/NLB_825391571EDR_F1202102NCAM00354M_.JPG",
       "navcam/sol_04820/NLB_825391626EDR_F1202102NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0194,
+      "bedrock": 0.7769,
+      "sand": 0.1952,
+      "bigrock": 0.0085
+    },
+    "entropy": 0.162,
     "site": 120,
     "drive": 2102,
     "sols": [
@@ -3482,8 +4017,13 @@
       "navcam/sol_04823/NLB_825652086EDR_F1202192NCAM00354M_.JPG",
       "navcam/sol_04823/NLB_825652158EDR_F1202192NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6774,
+      "bedrock": 0.224,
+      "sand": 0.0594,
+      "bigrock": 0.0392
+    },
+    "entropy": 0.3034,
     "site": 120,
     "drive": 2192,
     "sols": [
@@ -3513,8 +4053,13 @@
       "navcam/sol_04827/NLB_826008612EDR_F1202330NCAM00385M_.JPG",
       "navcam/sol_04827/NLB_826008580EDR_F1202330NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.6513,
+      "bedrock": 0.3136,
+      "sand": 0.022,
+      "bigrock": 0.0131
+    },
+    "entropy": 0.3464,
     "site": 120,
     "drive": 2330,
     "sols": [
@@ -3546,8 +4091,13 @@
       "navcam/sol_04827/NLB_826012520EDR_F1202366CCAM08825M_.JPG",
       "navcam/sol_04827/NLB_826010468EDR_F1202366NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.5391,
+      "bedrock": 0.0868,
+      "sand": 0.3723,
+      "bigrock": 0.0018
+    },
+    "entropy": 0.4119,
     "site": 120,
     "drive": 2366,
     "sols": [
@@ -3577,8 +4127,13 @@
       "navcam/sol_04830/NLB_826274579EDR_F1202690NCAM00385M_.JPG",
       "navcam/sol_04830/NLB_826274548EDR_F1202690NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4408,
+      "bedrock": 0.5561,
+      "sand": 0.0021,
+      "bigrock": 0.001
+    },
+    "entropy": 0.4198,
     "site": 120,
     "drive": 2690,
     "sols": [
@@ -3610,8 +4165,13 @@
       "navcam/sol_04830/NLB_826276504EDR_F1202726NCAM00354M_.JPG",
       "navcam/sol_04830/NLB_826276553EDR_F1202726NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3148,
+      "bedrock": 0.6795,
+      "sand": 0.0042,
+      "bigrock": 0.0015
+    },
+    "entropy": 0.3124,
     "site": 120,
     "drive": 2726,
     "sols": [
@@ -3641,8 +4201,13 @@
       "navcam/sol_04834/NLB_826625369EDR_F1203056NCAM00385M_.JPG",
       "navcam/sol_04834/NLB_826625338EDR_F1203056NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1165,
+      "bedrock": 0.626,
+      "sand": 0.2078,
+      "bigrock": 0.0497
+    },
+    "entropy": 0.2398,
     "site": 120,
     "drive": 3056,
     "sols": [
@@ -3672,8 +4237,13 @@
       "navcam/sol_04834/NLB_826626276EDR_F1203104NCAM00385M_.JPG",
       "navcam/sol_04834/NLB_826626245EDR_F1203104NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1315,
+      "bedrock": 0.6171,
+      "sand": 0.2506,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.3068,
     "site": 120,
     "drive": 3104,
     "sols": [
@@ -3705,8 +4275,13 @@
       "navcam/sol_04834/NLB_826633684EDR_F1210000NCAM00354M_.JPG",
       "navcam/sol_04834/NLB_826633715EDR_F1210000NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0789,
+      "bedrock": 0.8218,
+      "sand": 0.0972,
+      "bigrock": 0.0021
+    },
+    "entropy": 0.2357,
     "site": 121,
     "drive": 0,
     "sols": [
@@ -3736,8 +4311,13 @@
       "navcam/sol_04837/NLB_826894260EDR_F1210120NCAM00385M_.JPG",
       "navcam/sol_04837/NLB_826894236EDR_F1210120NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4833,
+      "bedrock": 0.5031,
+      "sand": 0.0123,
+      "bigrock": 0.0013
+    },
+    "entropy": 0.4529,
     "site": 121,
     "drive": 120,
     "sols": [
@@ -3769,8 +4349,13 @@
       "navcam/sol_04837/NLB_826896219EDR_F1210156NCAM00354M_.JPG",
       "navcam/sol_04837/NLB_826896327EDR_F1210156NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0715,
+      "bedrock": 0.9023,
+      "sand": 0.0234,
+      "bigrock": 0.0028
+    },
+    "entropy": 0.1785,
     "site": 121,
     "drive": 156,
     "sols": [
@@ -3800,8 +4385,13 @@
       "navcam/sol_04839/NLB_827075826EDR_F1210360NCAM00385M_.JPG",
       "navcam/sol_04839/NLB_827075801EDR_F1210360NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.1001,
+      "bedrock": 0.8931,
+      "sand": 0.0031,
+      "bigrock": 0.0037
+    },
+    "entropy": 0.2155,
     "site": 121,
     "drive": 360,
     "sols": [
@@ -3833,8 +4423,13 @@
       "navcam/sol_04839/NLB_827078019EDR_F1210396NCAM00354M_.JPG",
       "navcam/sol_04839/NLB_827077971EDR_F1210396NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0978,
+      "bedrock": 0.8538,
+      "sand": 0.0276,
+      "bigrock": 0.0208
+    },
+    "entropy": 0.2099,
     "site": 121,
     "drive": 396,
     "sols": [
@@ -3864,8 +4459,13 @@
       "navcam/sol_04841/NLB_827252050EDR_F1210726NCAM00385M_.JPG",
       "navcam/sol_04841/NLB_827252026EDR_F1210726NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.073,
+      "bedrock": 0.9149,
+      "sand": 0.0053,
+      "bigrock": 0.0068
+    },
+    "entropy": 0.1551,
     "site": 121,
     "drive": 726,
     "sols": [
@@ -3897,8 +4497,13 @@
       "navcam/sol_04841/NLB_827254139EDR_F1210762NCAM00354M_.JPG",
       "navcam/sol_04841/NLB_827254170EDR_F1210762NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.4178,
+      "bedrock": 0.5157,
+      "sand": 0.0548,
+      "bigrock": 0.0117
+    },
+    "entropy": 0.4769,
     "site": 121,
     "drive": 762,
     "sols": [
@@ -3928,8 +4533,13 @@
       "navcam/sol_04844/NLB_827523969EDR_F1210840NCAM00385M_.JPG",
       "navcam/sol_04844/NLB_827523945EDR_F1210840NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.3304,
+      "bedrock": 0.644,
+      "sand": 0.0022,
+      "bigrock": 0.0234
+    },
+    "entropy": 0.3182,
     "site": 121,
     "drive": 840,
     "sols": [
@@ -3961,8 +4571,13 @@
       "navcam/sol_04844/NLB_827526235EDR_F1210876NCAM00354M_.JPG",
       "navcam/sol_04844/NLB_827526139EDR_F1210876NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0673,
+      "bedrock": 0.9272,
+      "sand": 0.0019,
+      "bigrock": 0.0036
+    },
+    "entropy": 0.1023,
     "site": 121,
     "drive": 876,
     "sols": [
@@ -3994,8 +4609,13 @@
       "navcam/sol_04845/NLB_827607570EDR_F1210948NCAM00276M_.JPG",
       "navcam/sol_04845/NLB_827607649EDR_F1210948NCAM00276M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0363,
+      "bedrock": 0.942,
+      "sand": 0.0208,
+      "bigrock": 0.0009
+    },
+    "entropy": 0.077,
     "site": 121,
     "drive": 948,
     "sols": [
@@ -4025,8 +4645,13 @@
       "navcam/sol_04845/NLB_827608244EDR_F1210960NCAM00385M_.JPG",
       "navcam/sol_04845/NLB_827608209EDR_F1210960NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.011,
+      "bedrock": 0.987,
+      "sand": 0.0016,
+      "bigrock": 0.0004
+    },
+    "entropy": 0.0401,
     "site": 121,
     "drive": 960,
     "sols": [
@@ -4058,8 +4683,13 @@
       "navcam/sol_04846/NLB_827685332EDR_F1210990CCAM01845M_.JPG",
       "navcam/sol_04848/NLB_827862747EDR_F1210990CCAM01847M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.017,
+      "bedrock": 0.9025,
+      "sand": 0.0797,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.0844,
     "site": 121,
     "drive": 990,
     "sols": [
@@ -4091,8 +4721,13 @@
       "navcam/sol_04848/NLB_827874049EDR_F1211410NCAM00385M_.JPG",
       "navcam/sol_04848/NLB_827874025EDR_F1211410NCAM00385M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0018,
+      "bedrock": 0.9965,
+      "sand": 0.0009,
+      "bigrock": 0.0008
+    },
+    "entropy": 0.0161,
     "site": 121,
     "drive": 1410,
     "sols": [
@@ -4124,8 +4759,13 @@
       "navcam/sol_04848/NLB_827876004EDR_F1211446NCAM00354M_.JPG",
       "navcam/sol_04848/NLB_827876028EDR_F1211446NCAM00354M_.JPG"
     ],
-    "class_frac": null,
-    "entropy": null,
+    "class_frac": {
+      "soil": 0.0014,
+      "bedrock": 0.9754,
+      "sand": 0.0052,
+      "bigrock": 0.018
+    },
+    "entropy": 0.0469,
     "site": 121,
     "drive": 1446,
     "sols": [

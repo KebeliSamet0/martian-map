@@ -1,0 +1,114 @@
+{
+ "models/rover_terrain/gate1/last.pt": {
+  "test_min3": {
+   "mIoU": 0.8241,
+   "pixel_acc": 0.9807,
+   "ECE": 0.014,
+   "IoU": {
+    "toprak": 0.9737,
+    "ana kaya": 0.9446,
+    "kum": 0.9572,
+    "büyük kaya": 0.4208
+   },
+   "recall": {
+    "toprak": 0.9827,
+    "ana kaya": 0.976,
+    "kum": 0.9815,
+    "büyük kaya": 0.7501
+   },
+   "bigrock_as_bedrock": 0.1543
+  },
+  "test_min2": {
+   "mIoU": 0.7163,
+   "pixel_acc": 0.9588,
+   "ECE": 0.0047,
+   "IoU": {
+    "toprak": 0.9486,
+    "ana kaya": 0.8843,
+    "kum": 0.9206,
+    "büyük kaya": 0.1119
+   },
+   "recall": {
+    "toprak": 0.9721,
+    "ana kaya": 0.9394,
+    "kum": 0.955,
+    "büyük kaya": 0.5608
+   },
+   "bigrock_as_bedrock": 0.2223
+  },
+  "test_min1": {
+   "mIoU": 0.6643,
+   "pixel_acc": 0.9227,
+   "ECE": 0.0205,
+   "IoU": {
+    "toprak": 0.9053,
+    "ana kaya": 0.8088,
+    "kum": 0.8492,
+    "büyük kaya": 0.0939
+   },
+   "recall": {
+    "toprak": 0.9416,
+    "ana kaya": 0.9191,
+    "kum": 0.8955,
+    "büyük kaya": 0.2935
+   },
+   "bigrock_as_bedrock": 0.3773
+  }
+ },
+ "models/rover_terrain/full/best.pt": {
+  "test_min3": {
+   "mIoU": 0.7984,
+   "pixel_acc": 0.9848,
+   "ECE": 0.0035,
+   "IoU": {
+    "toprak": 0.984,
+    "ana kaya": 0.9415,
+    "kum": 0.9738,
+    "büyük kaya": 0.2944
+   },
+   "recall": {
+    "toprak": 0.9925,
+    "ana kaya": 0.9739,
+    "kum": 0.9793,
+    "büyük kaya": 0.9729
+   },
+   "bigrock_as_bedrock": 0.0
+  },
+  "test_min2": {
+   "mIoU": 0.7159,
+   "pixel_acc": 0.962,
+   "ECE": 0.0182,
+   "IoU": {
+    "toprak": 0.9618,
+    "ana kaya": 0.8812,
+    "kum": 0.9387,
+    "büyük kaya": 0.082
+   },
+   "recall": {
+    "toprak": 0.9799,
+    "ana kaya": 0.9381,
+    "kum": 0.9526,
+    "büyük kaya": 0.8768
+   },
+   "bigrock_as_bedrock": 0.0556
+  },
+  "test_min1": {
+   "mIoU": 0.6688,
+   "pixel_acc": 0.9231,
+   "ECE": 0.0486,
+   "IoU": {
+    "toprak": 0.9138,
+    "ana kaya": 0.8018,
+    "kum": 0.8676,
+    "büyük kaya": 0.0919
+   },
+   "recall": {
+    "toprak": 0.944,
+    "ana kaya": 0.9165,
+    "kum": 0.8935,
+    "büyük kaya": 0.5901
+   },
+   "bigrock_as_bedrock": 0.2084
+  }
+ }
+}
