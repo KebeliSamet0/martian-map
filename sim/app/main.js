@@ -15,6 +15,7 @@ import { worldToPx, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
+import { initAudio } from './audio.js';
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -98,6 +99,7 @@ function ensureScanTex() {
   SCAN_TEX.value = tx; SCAN_DIM.value.set(nav.w * nav.cx, nav.h * nav.cz);
 }
 function scanStart(wide = false) {
+  audio?.alert('scan');
   const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
   scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m) — rota parlar' : `Arazi tarayıcı: ${scanner.source ?? 'eğim yedeği'} · renkler ve çizgiler için lejant. Shift+L: geniş`); }
 function scanUpdate(now) {
@@ -158,6 +160,8 @@ $('sun-az').oninput = () => { if (T) { T.sunAz = Number($('sun-az').value); appl
 $('exp').oninput = () => { if (T) T.renderer.toneMappingExposure = Number($('exp').value); };
 // Saf veri modu: sentetik taş, çakıl/regolit, dik yamaç dokusu ve baş sallaması kapanır (yalnız DTM + ortofoto + aydınlatma kalır)
 let pure = false, fxOn = true;
+const audio = Q.get('ses') === 'off' ? null : initAudio();   // skafandr içi ses (prosedürel); N: aç/kapa
+let auX = null, auZ = null;
 function applyPure() {
   SYNTH.value = pure ? 0 : 1;
   $('pure').checked = pure; $('rocks-on').disabled = pure;
@@ -218,6 +222,7 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyH') { hudHidden = !hudHidden; $('hud').hidden = hudHidden; wire?.setVisible(!hudHidden); }
   if (e.code === 'KeyB' && !pure) { bobOn = !bobOn; toast(bobOn ? 'Baş sallanması açık' : 'Baş sallanması kapalı'); }
   if (e.code === 'KeyP' && T?.fx) { fxOn = !fxOn; toast(fxOn ? 'Ard işlem açık (bloom, ortam gölgesi, kenar yumuşatma, gren)' : 'Ard işlem kapalı'); }
+  if (e.code === 'KeyN' && audio) { audio.setEnabled(!audio.enabled); toast(audio.enabled ? 'Ses açık (skafandr içi: nefes, adım, fan, telsiz)' : 'Ses kapalı'); }
   if (e.code === 'KeyV') { pure = !pure; applyPure(); toast(pure ? 'SAF VERİ modu: yalnız DTM + ortofoto, sentetik ayrıntı yok' : 'Sentetik görünüm ayrıntısı açık'); }
   if (e.code === 'BracketRight') { timeScale = Math.min(40, timeScale * 1.5); toast(`Hız ×${timeScale.toFixed(1)} (×1 = ${SUIT_V.toFixed(2)} m/s skafandr referansı)`); }
   if (e.code === 'BracketLeft') { timeScale = Math.max(1, timeScale / 1.5); toast(`Hız ×${timeScale.toFixed(1)} (×1 = ${SUIT_V.toFixed(2)} m/s skafandr referansı)`); }
@@ -251,6 +256,7 @@ async function fireReplan(S) {
   const R = routeRun; if (!R || R.r.source !== 'api') { toast('API yok: kum uyarısı gösterildi, yerel rotaya devam.'); return; }
   const oldGeneration = R;
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
+  audio?.alert('sand');
   toast('⚠ Kum tespit edildi (kırmızı bölge) — rota yeniden planlanıyor (POST /replan)…');
   try {
     const cur = worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
@@ -282,7 +288,7 @@ function stepPlayer(dt, t) {
       P.yaw += Math.max(-lim, Math.min(lim, step));
     }
     moving = R.s < R.total;
-    if (!moving && !R.done) { R.done = true; toast('Hedefe ulaşıldı. M: haritaya dön.'); }
+    if (!moving && !R.done) { R.done = true; audio?.alert('arrive'); toast('Hedefe ulaşıldı. M: haritaya dön.'); }
   } else {
     const run = keys.has('ShiftLeft') || keys.has('ShiftRight');
     let sp = state === 'fly' ? (run ? 260 : 50) : SUIT_V * timeScale * (run ? 2.5 : 1);
@@ -343,6 +349,11 @@ function frame(now) {
     if (Math.abs(r - T.ratio) > 0.005) { T.ratio = r; T.renderer.setPixelRatio(r); T.renderer.setSize(innerWidth, innerHeight, false); T.fx?.setSize(innerWidth, innerHeight, r); }
   }
   const gy = paused ? groundY(P.x, P.z) : stepPlayer(dt, now / 1000);
+  if (audio) {   // ses: gerçek yer değiştirmeden hız; efor eğim ve hızdan (görsel/işitsel sunum, tüketim modeli değil)
+    const d = auX == null ? 0 : Math.hypot(P.x - auX, P.z - auZ); auX = P.x; auZ = P.z;
+    const sp = d / Math.max(1e-3, dt), sl = state === 'fly' ? 0 : (T.terrain.slopeDegAt(P.x, P.z) ?? 0), mv = !paused && state !== 'fly' && sp > 0.05 && sp < 30;
+    audio.update(dt, { speed: sp, moving: mv, effort: mv ? clamp(0.3 + sl / 28, 0, 1) : 0.12, surface: sl > 18 ? 'bedrock' : 'soil' });
+  }
   if (!paused) wire?.update(dt * timeScale, P);
   if (!paused) T.extras?.update(P);
   deviationCheck(now); scanUpdate(now / 1000);
@@ -438,3 +449,5 @@ window.__mm = {
   scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle
 };
 if (Q.get('mod') === '3d') enter3D('walk');
+
+addEventListener('corridor:stop', () => audio?.alert('stop'));
