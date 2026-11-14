@@ -18,7 +18,7 @@ Bu bir **karne**, model eğitimi değil. Amaç: programın bulduğu kayalara ne 
 
 ## 2. Kaçırdığı kayalar (elle sayım)
 
-Görsel: `docs/data/img/rock_abudance_validation_i_checked_this_one_so_trust_me_real_quick.png`
+Görsel: `docs/data/img/rock_abundance_validation.png`
 (kırmızı = bulduğu, yeşil = kaçırdığı kaya, sarı = şüpheli: tepecik/çukur olabilir)
 
 | | Kırmızı (bulundu) | Yeşil (kaçırdı) | Sarı (şüpheli) |
