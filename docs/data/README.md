@@ -9,7 +9,7 @@ Kural: 60–90 dakika. Bitmeyen her şey "Karar" bölümüne bilinmeyen olarak y
 | Gale HiRISE DTM + ortofoto, Mars Trek katmanları | Elif Rana | `gale_dtm_ortho.md` | |
 | AI4Mars | Emre | `ai4mars.md` | KULLAN |
 | Curiosity konum/rota + Navcam ham görüntüler | Veysel | `msl_traverse_navcam.md` | |
-| HiRISE kaya yoğunluğu kaynakları (Golombek haritaları, MBARS, BoulderNet) | Bora | `rock_abundance.md` | |
+| HiRISE kaya yoğunluğu kaynakları (Golombek haritaları, MBARS, BoulderNet) | Bora | `rock_abundance.md` | KULLAN (klasik gölge yöntemi), B planı MBARS |
 | THEMIS termal atalet + CTX/MOLA bağlam | Batu | `themis_ctx.md` | |
 | CRISM mineraloji + Gale jeoloji haritaları | Elif Nisa | `crism_geology.md` | KULLAN (sınırlı: yalnız bilim durakları) |
 | RAD radyasyon + REMS hava + Mount Sharp önerilen rota | Samet | `rad_rems_route.md` | |

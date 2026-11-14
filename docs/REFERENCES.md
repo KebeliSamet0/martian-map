@@ -4,6 +4,7 @@
 - JPL Mars Trek — https://trek.nasa.gov/mars/
 - USGS-NASA Planetary Geologic Mapping — https://astrogeology-usgs.hub.arcgis.com/pages/interactive-maps-mars
 - Curiosity's proposed path up Mount Sharp — https://science.nasa.gov/resource/curiositys-proposed-path-up-mount-sharp/
+- USGS MSL Gale 25 cm Orthophoto Mosaic v3 — https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif
 - AI4Mars (Zenodo, CC BY 4.0) — https://zenodo.org/records/15995036 · HF: https://huggingface.co/datasets/hassanjbara/AI4MARS
 - MRO CRISM MTRDR (`MRO-M-CRISM-5-RDR-MPTARGETED-V1.0`), PDS Geosciences Node — https://pds-geosciences.wustl.edu/mro/mro-m-crism-5-rdr-mptargeted-v1/ · örnek gözlem FRT0000B6F1 (browse PHY/HYD) · arama: Mars Orbital Data Explorer https://ode.rsl.wustl.edu/mars/
 - Tanaka et al. (2014), Geologic Map of Mars, USGS SIM 3292, 1:20M. https://doi.org/10.3133/sim3292 — yalnız bölgesel bağlam; Gale ölçeği için yetersiz.
@@ -12,9 +13,12 @@
 - NASA/JPL PIA26306, HiRISE Views Mount Sharp's Boxwork — https://photojournal.jpl.nasa.gov/catalog/PIA26306
 
 ## Yazılım
-(eklenecek)
+- MBARS (MIT) — https://github.com/dhood14/MBARS
 
 ## Makaleler
+- Hood et al. 2022, MBARS, Earth and Space Science 9(9), doi:10.1029/2022EA002410
+- Prieur et al. 2023, BoulderNet, JGR Planets, doi:10.1029/2023JE008013
+- Golombek et al. 2012, Selection of the MSL landing site, Space Sci. Rev., doi:10.1007/s11214-012-9892-2
 - Hassler et al. (2014), Mars’ Surface Radiation Environment Measured with the Mars Science Laboratory’s Curiosity Rover. Science 343, 1244797. https://doi.org/10.1126/science.1244797 — Gale yüzeyi GCR soğurulan doz ortalaması 0.210 ± 0.040 mGy/gün; EVA modeli sabit 0.21 kullanır. [Tam metin](https://www.scienceintheclassroom.org/sites/default/files/research-papers/1244797.full_.pdf).
 
 ## Gale DTM, ızgara ve rover durakları (Elif Rana, issue #19)
