@@ -5,7 +5,7 @@ import { Terrain } from './terrain.js';
 import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
-import { SYNTH } from './detail.js';
+import { SYNTH, SCAN, SCAN_TEX, SCAN_DIM } from './detail.js';
 import { MapView } from './mapview.js';
 import { worldToPx, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
@@ -81,6 +81,24 @@ let state = 'map';  // map | auto | walk | fly
 const keys = new Set();
 let view = Q.get('view') === 'fps' ? 'fps' : 'tps';   // 3. şahıs (varsayılan) | fps; T tuşu değiştirir
 let aSpeed = 0, aLastX = null, aLastZ = null;
+// Terrain Scanner (L): çevreye dalga yayılır, zemin eğime göre mavi (≤10°) / sarı (10–20°) / kırmızı (≥20°) boyanır; birkaç sn kalıp söner
+const scanner = { t0: -1, x: 0, z: 0, R: 170, speed: 95, hold: 7, fade: 3 };
+function ensureScanTex() {
+  if (SCAN_TEX.value) return;
+  const sg = nav.slopeGrid(), n = nav.w * nav.h, d = new Uint8Array(n * 4);
+  for (let i = 0; i < n; i++) { const v = sg[i]; if (Number.isNaN(v)) { d[i * 4 + 1] = 0; } else { d[i * 4] = Math.min(255, Math.round((v / 64) * 255)); d[i * 4 + 1] = 255; } d[i * 4 + 3] = 255; }
+  const tx = new THREE.DataTexture(d, nav.w, nav.h, THREE.RGBAFormat); tx.magFilter = THREE.LinearFilter; tx.minFilter = THREE.LinearFilter; tx.needsUpdate = true;
+  SCAN_TEX.value = tx; SCAN_DIM.value.set(nav.w * nav.cx, nav.h * nav.cz);
+}
+function scanStart() {
+  ensureScanTex(); scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast('Terrain Scanner: eğim taraması (mavi kolay · sarı eğimli · kırmızı dik)'); }
+function scanUpdate(now) {
+  if (scanner.t0 < 0) { SCAN.value.w = 0; return; }
+  const e = now - scanner.t0, ramp = scanner.R / scanner.speed, rad = Math.min(scanner.R, e * scanner.speed);
+  const a = e < ramp + scanner.hold ? 1 : Math.max(0, 1 - (e - ramp - scanner.hold) / scanner.fade);
+  SCAN.value.set(scanner.x, scanner.z, rad, a);
+  if (a <= 0) { scanner.t0 = -1; SCAN.value.w = 0; $('scanleg').hidden = true; }
+}
 let routeRun = null, lastLook = 0, hudHidden = false, bobOn = false;   // baş sallanması varsayılan KAPALI (görüntü kararlılığı)
 
 function initThree() {
@@ -182,6 +200,7 @@ addEventListener('keydown', (e) => {
   if (state === 'map' || e.target.tagName === 'INPUT') return;
   keys.add(e.code);
   if (e.code === 'KeyM') enterMap();
+  if (e.code === 'KeyL') scanStart();
   if (e.code === 'KeyT') { view = view === 'tps' ? 'fps' : 'tps'; toast(view === 'tps' ? '3. şahıs görünüm (T: birinci şahıs)' : 'Birinci şahıs görünüm (T: 3. şahıs)'); }
   if (e.code === 'KeyF') { state = state === 'fly' ? 'walk' : 'fly'; toast(state === 'fly' ? 'Serbest uçuş (Space/C yukarı-aşağı)' : 'Yürüyüş'); }
   if (e.code === 'KeyR' && routeRun) { state = 'auto'; }
@@ -311,7 +330,7 @@ function frame(now) {
     if (Math.abs(r - T.ratio) > 0.005) { T.ratio = r; T.renderer.setPixelRatio(r); T.renderer.setSize(innerWidth, innerHeight, false); }
   }
   const gy = stepPlayer(dt, now / 1000);
-  deviationCheck(now);
+  deviationCheck(now); scanUpdate(now / 1000);
   T.terrain.update(T.camera.position);
   if (window.__trace) window.__trace.push({ dt: rdt, y: P.y, gy, yaw: P.yaw, pitch: P.pitch, x: P.x, z: P.z, swaps: T.terrain.swaps, loading: T.terrain.stats.loading, built: T.terrain.builtLast || 0 });
   const nearGround = gy != null && P.y - gy < 80;
@@ -379,6 +398,6 @@ window.__mm = {
   },
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
   stats: () => ({ ...T.terrain.stats, fps, state }),
-  get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
+  scan: () => { scanStart(); }, get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
 };
 if (Q.get('mod') === '3d') enter3D('walk');
