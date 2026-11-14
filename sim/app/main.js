@@ -387,8 +387,10 @@ function hud(gy, now) {
   const s = T.terrain.stats;
   let route = '';
   if (routeRun) {
-    const rem = routeRun.total - routeRun.s, eta = (rem / SUIT_V) / 60;   // gerçek zamanlı skafandr referans hızıyla kalan süre
-    route = `<div class="r"><span>Rota</span><b>${(routeRun.s / 1000).toFixed(2)} / ${(routeRun.total / 1000).toFixed(2)} km</b></div><div class="r"><span>Kalan</span><b>${Math.round(rem)} m · ${eta.toFixed(0)} dk</b></div>`;
+    const rem = routeRun.total - routeRun.s, eta = (rem / SUIT_V) / 60;
+    const ci = routeRun.cum.findIndex((c) => c >= routeRun.s), seg = ci < 0 ? null : routeRun.r.segments?.find((g) => g.idx && ci >= g.idx[0] && ci <= g.idx[1]);
+    const segTxt = seg?.slope_max == null ? '' : `<div class="r"><span title="Rota rengi segmentteki EN DİK hücreye göre (HiRISE DTM, 2 m). Yeşil <5°, kırmızı ≥20°. Segment 40–70 m; tek dik hücre tüm segmenti boyar.">Rota rengi</span><b>maks ${seg.slope_max}° · ort ${seg.slope_mean ?? '—'}°</b></div>`;   // gerçek zamanlı skafandr referans hızıyla kalan süre
+    route = `<div class="r"><span>Rota</span><b>${(routeRun.s / 1000).toFixed(2)} / ${(routeRun.total / 1000).toFixed(2)} km</b></div><div class="r"><span>Kalan</span><b>${Math.round(rem)} m · ${eta.toFixed(0)} dk</b></div>` + segTxt;
   }
   const head = ((P.yaw * 180) / Math.PI + 360) % 360, dirs = ['K', 'KD', 'D', 'GD', 'G', 'GB', 'B', 'KB'];
   $('hud').innerHTML =
