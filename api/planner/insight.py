@@ -20,12 +20,16 @@ HAZARD_ROCK_CFA = 0.10   # segment kayalık sayılır: ortalama rock_cfa ≥ bu 
 
 
 def naive_layers(L: Layers) -> Layers:
-    """Zemin modelsiz görünüm: yalnız elevation/slope kalır."""
+    """Zemin modelsiz görünüm: yalnız elevation/slope kalır (Layers nesnesi başına önbellekli)."""
+    cached = L.__dict__.get("_naive")
+    if cached is not None:
+        return cached
     N = L.copy()
     N.provisional_terrain = False
     N.probs = {c: np.full_like(L.probs[c], 1.0 if c == "bedrock" else 0.0) for c in P.CLASSES}
     N.rock_cfa = np.zeros_like(L.rock_cfa)
     N.entropy = np.zeros_like(L.entropy)
+    L.__dict__["_naive"] = N
     return N
 
 
@@ -43,6 +47,11 @@ def plan_one_naive(L: Layers, start, goal, kind: str, budget: dict | None = None
         "start": {"px": [int(start[0]), int(start[1])]}, "goal": {"px": [int(goal[0]), int(goal[1])]},
         "total": _budget(prof, segs, path, budget), "segments": segs, "_path": path, "_prof": prof,
     }
+
+
+def attach_insight(L: Layers, route: dict) -> None:
+    """Rotanın her segmentine 'insight' ekle (plan() ve compare() ortak kullanır)."""
+    _explain(L, naive_layers(L), route["_path"], route["_prof"], route["segments"])
 
 
 def _explain(L: Layers, N: Layers, path: np.ndarray, prof: dict, segs: list[dict]) -> None:
@@ -97,11 +106,10 @@ def _metrics(route: dict) -> dict:
 
 def compare(L: Layers, start, goal, kind: str = "balanced", budget: dict | None = None) -> dict:
     """Tek rota türü için naif ve model rotası, fark ve tek cümlelik sonuç sayıları."""
-    N = naive_layers(L)
     model = plan_one(L, start, goal, kind, None, budget)
     naive = plan_one_naive(L, start, goal, kind, budget)
     for r in (model, naive):
-        _explain(L, N, r["_path"], r["_prof"], r["segments"])
+        attach_insight(L, r)
     mm, nm = _metrics(model), _metrics(naive)
     keys = ("m", "min", "kcal", "o2_L", "eva_kcal", "eva_o2_L", "risk", "sand_m", "sand_expected_m", "rock_m")
     saved = {k: round(nm[k] - mm[k], 2) for k in keys}   # + = model kazandırdı

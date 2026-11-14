@@ -63,3 +63,13 @@ def test_compare_endpoint_numbers_consistent(client, layers):
 def test_compare_rejects_bad_point(client):
     r = client.post("/compare", json={"start": [-5, 3], "goal": GOAL})
     assert r.status_code == 422
+
+
+def test_terrain_u8_layout(client, layers):
+    r = client.get("/layers/terrain_u8.bin")
+    assert r.status_code == 200
+    arr = np.frombuffer(r.content, np.uint8).reshape(layers.height, layers.width, 5)
+    y, x = 100, 120
+    assert abs(arr[y, x, 2] / 255 - layers.probs["sand"][y, x]) < 0.003
+    assert abs(arr[y, x, 4] / 255 - (1 - layers.entropy[y, x])) < 0.003
+    assert r.headers["x-channels"].endswith("confidence")

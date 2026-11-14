@@ -160,6 +160,18 @@ def layer_array(request: Request, name: str):
     return layers.probs[canonical[2:]] if canonical.startswith("p_") else getattr(layers, canonical)
 
 
+@app.get("/layers/terrain_u8.bin")
+def terrain_u8(request: Request):
+    """Ayak altı okuma için sıkıştırılmış zemin alanı: satır-sütun sırası, hücre başına 5 bayt
+    [p_soil, p_bedrock, p_sand, p_bigrock, güven] (hepsi 0-255 = 0-1). güven = 1 − entropi (normalize)."""
+    L = request.app.state.layers
+    ch = [L.probs[c] for c in params.CLASSES] + [1.0 - L.entropy]
+    data = np.rint(np.clip(np.stack(ch, axis=-1), 0, 1) * 255).astype(np.uint8)
+    return Response(data.tobytes(order="C"), media_type="application/octet-stream",
+                    headers={"X-Channels": "soil,bedrock,sand,bigrock,confidence", "X-Shape": f"{L.height},{L.width},5",
+                             "X-Provisional": str(bool(L.provisional_terrain)).lower()})
+
+
 @app.get("/layers/{name}.bin")
 def layer_binary(name: str, request: Request, dtype: str = "float32"):
     arr = layer_array(request, name)
