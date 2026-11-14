@@ -58,6 +58,7 @@ class RouteInput(Input):
     goal: Pixel
     weights: Weights | None = None
     budget: Budget | None = None
+    terrain_model: bool = True  # False: "yalnız eğim" naif rota (zemin modeli + kaya bilinmez; maliyet gerçek katmanda)
 
 
 class Observation(Input):
@@ -100,7 +101,8 @@ def assumptions(request: Request):
 def result(layers, body: RouteInput):
     routes = planner.plan(layers, body.start, body.goal,
                           weights=body.weights.model_dump() if body.weights else None,
-                          budget=body.budget.model_dump() if body.budget else None)
+                          budget=body.budget.model_dump() if body.budget else None,
+                          terrain_model=body.terrain_model)
     info = layers.grid_info()
     return {"grid": {k: info[k] for k in ("region", "width", "height", "res_m", "synthetic", "px_note")},
             "routes": routes}
@@ -109,6 +111,14 @@ def result(layers, body: RouteInput):
 @app.post("/route")
 def route(body: RouteInput, request: Request):
     return result(request.app.state.layers, body)
+
+
+@app.post("/compare")
+def compare(body: RouteInput, request: Request):
+    """Model açık/kapalı: her rota türü için naif ve model rotası, fark ve segment açıklamaları."""
+    layers = request.app.state.layers
+    return planner.insight.compare_all(layers, body.start, body.goal,
+                                       budget=body.budget.model_dump() if body.budget else None)
 
 
 @app.post("/replan")

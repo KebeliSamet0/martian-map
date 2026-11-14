@@ -337,8 +337,14 @@ def _contrast(chosen: dict, alt: dict, res_m: float, min_dev_m: float = 40.0):
         seg["rejected_alt"] = (seg["rejected_alt"] + " " if seg["rejected_alt"] else "") + txt
 
 
-def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None) -> list[dict]:
-    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget) for k in kinds]
+def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None,
+         terrain_model: bool = True) -> list[dict]:
+    """terrain_model=False: yol zemin sınıfı/kaya bilinmeden (yalnız eğim) aranır, maliyet gerçek katmanlarda ölçülür."""
+    if terrain_model:
+        routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget) for k in kinds]
+    else:
+        from .insight import plan_one_naive
+        routes = [plan_one_naive(L, start, goal, k, budget) for k in kinds]
     for r in routes:
         for alt in routes:
             if alt is not r:
