@@ -5,7 +5,8 @@ import { Terrain } from './terrain.js';
 import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
-import { SYNTH, SCAN, SCAN_E, SCAN_T, SCAN_TEX, SCAN_DIM } from './detail.js';
+import { SYNTH, SCAN, SCAN_E, SCAN_T, SCAN_TEX, SCAN_DIM, PBR } from './detail.js';
+import { makeTerrainUniforms, loadTerrainSet } from '../lib/terrain_patch.js';
 import { MapView } from './mapview.js';
 import { worldToPx, pxToWorld, pxInside, apiReplan, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
@@ -34,6 +35,13 @@ $('sun-src').textContent = SUN0.real
   : 'Güneş varsayılanı kaynaksız (params.json yüklenemedi).';
 // Demo senaryoları (tek kaynak: layers/demo_scenarios.json, Elif Rana #47; kum noktaları Bora #61). Dosya yoksa %45 yedek kum noktası kullanılır.
 const scen = await fetch('../layers/demo_scenarios.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+// Gerçekçi zemin: ?terrain=pbr (CC0 Poly Haven; Dünya malzemesi, Mars ölçümü değil). Varsayılan kapalı; değişince sayfa yeniden yüklenir.
+if (Q.get('terrain') === 'pbr') {
+  try {
+    const maps = await loadTerrainSet(THREE, './assets/terrain', 'terrain_red_01', { capabilities: { getMaxAnisotropy: () => 4 } });
+    PBR.uniforms = makeTerrainUniforms(THREE, maps, { tileMetres: 2, albedo: 0.28, normal: 0.65, roughness: 0.4, ao: 0.25, cavity: 0 }); PBR.stochastic = Q.get('stoch') === '1';
+  } catch (e) { console.warn('PBR zemin yüklenemedi', e); }
+}
 const geo = new Geo(man);
 const nav = await Nav.load(BASE, man, geo);
 nav.suitSpeed = SUIT_V;
@@ -165,6 +173,8 @@ function applyPure() {
   if (T) T.rocks.userOff = pure || !$('rocks-on').checked;
   if (pure) bobOn = false;
 }
+$('pbr').checked = !!PBR.uniforms;
+$('pbr').onchange = () => { const u = new URL(location.href); if ($('pbr').checked) u.searchParams.set('terrain', 'pbr'); else u.searchParams.delete('terrain'); location.href = u.toString(); };
 $('rocks-on').onchange = () => { if (T) T.rocks.userOff = pure || !$('rocks-on').checked; };
 $('pure').onchange = () => { pure = $('pure').checked; applyPure(); toast(pure ? 'SAF VERİ modu: yalnız DTM + ortofoto, sentetik ayrıntı yok' : 'Sentetik görünüm ayrıntısı açık'); };
 

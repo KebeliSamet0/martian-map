@@ -63,6 +63,9 @@ export function makeDetailTexture(N = 512, anisotropy = 8) {
   return t;
 }
 
+import { injectTerrainShader } from '../lib/terrain_patch.js';
+// Gerçekçi zemin (?terrain=pbr): Poly Haven CC0 PBR dokuları (Dünya malzemesi, Mars ölçümü değil); açıkken eski detay albedo/normal kapanır, strata + tarayıcı korunur
+export const PBR = { uniforms: null, stochastic: false };
 export const DETAIL = { value: null };
 export const SYNTH = { value: 1 };   // 1: sentetik görünüm ayrıntısı açık; 0: SAF VERİ (yalnız DTM + ortofoto, aydınlatma hariç hiçbir ekleme yok)
 // Terrain Scanner (DS2 tarzı): merkez xz, yarıçap, görünürlük (0..1); eğim eşikleri (derece). Eşikler BİZİM arayüz ayarıdır (DS2'nin eşikleri kaynakta yok).
@@ -76,15 +79,15 @@ export function ensureDetail(anisotropy) { if (!DETAIL.value) DETAIL.value = mak
 
 // MeshStandardMaterial gölgelendiricisine eklenir: albedo çeşitliliği + normal bozulması + dik yüzeylerde tabakalı kaya dokusu.
 export function patchMaterial(shader) {
-  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH; shader.uniforms.uScan = SCAN; shader.uniforms.uScanTh = SCAN_TH; shader.uniforms.uScanE = SCAN_E; shader.uniforms.uScanT = SCAN_T; shader.uniforms.uScanTex = SCAN_TEX; shader.uniforms.uScanDim = SCAN_DIM;
+  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH; shader.uniforms.uPBROn = { value: PBR.uniforms ? 1 : 0 }; shader.uniforms.uScan = SCAN; shader.uniforms.uScanTh = SCAN_TH; shader.uniforms.uScanE = SCAN_E; shader.uniforms.uScanT = SCAN_T; shader.uniforms.uScanTex = SCAN_TEX; shader.uniforms.uScanDim = SCAN_DIM;
   shader.vertexShader = 'varying vec3 vWP;\nvarying vec3 vWN;\n' + shader.vertexShader.replace(
     '#include <begin_vertex>', '#include <begin_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;\n vWN = normalize(mat3(modelMatrix) * objectNormal);');
-  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nuniform vec4 uScan;\nuniform vec2 uScanTh;\nuniform float uScanE;\nuniform float uScanT;\nuniform sampler2D uScanTex;\nuniform vec2 uScanDim;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
+  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nuniform float uPBROn;\nuniform vec4 uScan;\nuniform vec2 uScanTh;\nuniform float uScanE;\nuniform float uScanT;\nuniform sampler2D uScanTex;\nuniform vec2 uScanDim;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
     .replace('#include <map_fragment>', `#include <map_fragment>
       {
         vec4 a = texture2D(uDetail, vWP.xz / 2.4), b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.81), c = texture2D(uDetail, (vWP.xz + vec2(3.3, 9.9)) / 19.0);
         float peb = (a.r - 0.5)*0.55 + (b.r - 0.5)*0.40 + (b.a - 0.5)*0.30;
-        diffuseColor.rgb *= 1.0 + (peb + (c.r - 0.5)*0.40 + (c.a - 0.5)*0.15) * uSynth;
+        diffuseColor.rgb *= 1.0 + (peb + (c.r - 0.5)*0.40 + (c.a - 0.5)*0.15) * uSynth * (1.0 - uPBROn);
         // Dik yüzeylerde (≈35–60°) yukarıdan çekilmiş ortofoto yatay çekilir: tabakalı kaya dokusuna geç (renk: yerel ortalama).
         float steep = smoothstep(0.18, 0.50, 1.0 - clamp(vWN.y, 0.0, 1.0));
         #ifdef USE_MAP
@@ -142,6 +145,7 @@ export function patchMaterial(shader) {
         vec4 a = texture2D(uDetail, vWP.xz / 2.4), b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.81);
         vec2 gr = (a.gb*2.0 - 1.0)*0.40 + (b.gb*2.0 - 1.0)*0.28;
         vec3 Tx = normalize((viewMatrix*vec4(1.0, 0.0, 0.0, 0.0)).xyz), Tz = normalize((viewMatrix*vec4(0.0, 0.0, 1.0, 0.0)).xyz);
-        normal = normalize(normal - (gr.x*Tx + gr.y*Tz) * uSynth);
+        normal = normalize(normal - (gr.x*Tx + gr.y*Tz) * uSynth * (1.0 - uPBROn));
       }`);
+  if (PBR.uniforms) injectTerrainShader(shader, PBR.uniforms, { worldVaryingsProvided: true, stochastic: PBR.stochastic });
 }
