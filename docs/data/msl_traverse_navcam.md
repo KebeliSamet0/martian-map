@@ -54,7 +54,7 @@ Not: Örnekler aynı site içinde art arda üç durak; drive'lar arası mesafe 1
 - Stereo çiftler (NLB/NRB) aynı anda çekiliyor; tek göz yeterli, sağ kamera atlandı.
 - Sol ~4752–4805 arası veri çok seyrek (muhtemelen Ocak 2026 güneş kavuşumu; doğrulanmadı).
 - Ham JPEG, radyometrik kalibrasyon yok. Segmentasyon için yeterli; AI4Mars karelerine benzerlik Emre ile kontrol edilecek.
-- **Bilinmiyor:** site 117–121 orijinlerinin küresel konumu. Durakları haritaya oturtmak için gerekli. Aday kaynaklar: NASA Curiosity konum haritası (MMGIS) traverse katmanı, PDS MSL localization ürünleri, Mars Trek MSL traverse katmanı. Format ve koordinat sistemi henüz incelenmedi.
+- **Konum: çözüldü.** Küresel konum MMGIS waypoint dosyasından alındı (https://mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json; 1.389 kayıt, alanlar: site, drive, lat, lon, easting, northing, elev_geoid; yalnız günlük sürüş bitiş noktaları). `pipeline/msl/add_latlon.py` ile 128 durağın 63'ü doğrudan (site, drive) eşleşmesiyle, 65'i site orijini (drive 0) + xyz ile konumlandı; konumsuz durak yok. Çapraz kontrol: iki yöntem arasındaki fark <0,5 m (x=kuzey, y=doğu varsayımı doğrulandı). easting/northing projeksiyonunun DTM ile aynı olup olmadığı Elif Rana ile kontrol edilecek. (Kaynağı bulan: Elif Rana)
 
 ## 6. Bizim için kullanımı
 - Besler: `ml/rover_terrain` (AI4Mars modeli girdisi, Emre) → `rover_stops.json` → zemin sınıfı + güven katmanı; arayüzde bilim durağı fotoğrafları (Veysel).
@@ -64,4 +64,5 @@ Not: Örnekler aynı site içinde art arda üç durak; drive'lar arası mesafe 1
 - Tahmini işleme süresi: listeleme ~3 dk, indirme (391 kare, 226,7 MB) etkinlik ağında birkaç dakika.
 
 ## 7. Karar
-**KULLAN** — Görüntü erişimi programla çözüldü ve boxwork bölgesinde 128 durak var. Tek açık risk durakların küresel konumu; site orijinleri MMGIS/PDS'ten alınamazsa duraklar haritaya yaklaşık konumla yerleştirilir.
+**KULLAN** — Görüntü erişimi programla çözüldü, boxwork bölgesinde 128 durak var ve hepsi enlem/boylamla konumlandı. Kalan iş: konumları Elif Rana'nın DTM grid'ine (px) çevirmek.
+
