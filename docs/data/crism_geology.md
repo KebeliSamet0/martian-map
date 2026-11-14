@@ -116,16 +116,29 @@ Analizi yapan: Elif Nisa · Tarih: Cmt 2026-11-14, 13:00 (12:00 hedefinden ~1 sa
   - Bizim birkaç km'lik rotamızda birim değişimi göremeyiz.
 - Yalnız slaytta bölgesel bağlam için kullanılabilir. Gale'deki birim sembolü **kontrol edilmedi**.
 
-**4. Bilim durağı adayları** (Elif Rana ile ızgaraya yerleşecek; koordinatlar Kapı 2'ye kadar netleşecek):
+**4. Bilim durakları** (güncelleme, Elif Rana ile; bkz. #19 ve PR #34)
 
-| # | Durak | Birim | Neden değerli | Kaynak |
-|---|---|---|---|---|
-| 1 | **Boxwork sırtları** | Katmanlı sülfat içi (LSu) | Yeraltı suyunun çatlaklarda mineral bırakarak sırtları sertleştirdiği düşünülüyor. Kuru sülfat döneminde daha ıslak bir ara evreye işaret ediyor; Ca-sülfat damarları ve nodüller var. | NASA/JPL 2025; GSA 2025 |
-| 2 | **Hematit sırtı (Vera Rubin)** | HR | Kristalin hematit oksitleyici sıvı ve yeraltı suyu ile redoks sınırına işaret ediyor. Yörüngeden haritalanıp zeminde test edilmiş ender bir hedef. | Fraeman vd. 2013, 2016, 2020 |
-| 3 | **Kil–sülfat geçişi** (PhU / Glen Torridon → LS) | PhU → LS | Fe/Mg smektitten (sulu, nötr ortam) Mg-sülfata (kuruyan iklim) geçiş, Mars ikliminin değişimini tek kesitte gösteriyor. | Milliken vd. 2010; Fraeman vd. 2016; Sheppard vd. 2021 |
+Ekibin ızgarası boxwork bölgesinde 2×2 km'lik bir kutu: NW −4.788132, 137.365129 · SE −4.821873, 137.398871
+(`contracts/grid.json`). İlk önerdiğim üç adaydan **yalnız boxwork bu kutunun içinde**. Hematit sırtı ve kil–sülfat
+geçişi kutunun kuzeyinde kalıyor; Curiosity bu yerlerden daha önce geçti.
 
-**Kapı 1 notu:** Bu durakların hepsi Gale'de. Jezero'ya geçilirse bu bölüm baştan yazılmalı; Jezero için de
-CRISM kapsaması iyi.
+**Haritadaki duraklar** (`layers/science_stops.json`, PR #34). Konumlar veriden çıkarıldı: Curiosity'nin MAHLI ve
+ChemCam ile en yoğun yakın inceleme yaptığı yerler.
+
+| id | Sol | Neden değerli | Kaynak |
+|---|---|---|---|
+| `sci_1`–`sci_3` | 4617–4803 | **Boxwork.** Yeraltı suyunun çatlaklarda mineral bırakarak sertleştirdiği düşünülen sırt ağı. Katmanlı sülfat birimi içinde, kuru sülfat döneminde daha ıslak bir ara evreye işaret ediyor. | NASA/JPL 2025; GSA 2025 |
+| `sci_4` | 4869–4914 | **Boxwork'ten sonraki ilk sülfat sondajı.** Atacama sondaj kampanyası (sol 4873'ten itibaren), boxwork bölgesinden ayrıldıktan sonra katmanlı sülfat birimindeki ilk ana kayayı inceliyor. Sonuç, ~160 m aşağıdaki Mineral King örneğiyle karşılaştırılarak sülfat biriminin yükseklikle nasıl değiştiği anlaşılacak. Yakındaki açık ve koyu kaya türlerinin (Toro / Inca de Oro) dokanağı oluşum koşullarında bir değişime ya da zaman boşluğuna işaret edebilir. Aynı sol aralığında 10 m'lik, keskin kenarlı Antofagasta kraterinin kenarı da incelendi (sol 4867–4872). | NASA Curiosity blogları, Nisan–Mayıs 2026 |
+
+Not: sci_4 bağlamı **sol aralığına göre** eşlendi; blogların anlattığı noktaların sci_4 konumuna tam denk geldiği
+haritada ayrıca doğrulanmadı.
+
+**Kutu dışında, slaytta bağlam olarak kullanılacak adaylar:**
+
+| Aday | Neden değerli | Kaynak |
+|---|---|---|
+| Hematit sırtı (Vera Rubin) | Kristalin hematit oksitleyici sıvı ve yeraltı suyu ile redoks sınırına işaret ediyor. Yörüngeden haritalanıp zeminde test edilmiş ender bir hedef. | Fraeman vd. 2013, 2016, 2020 |
+| Kil–sülfat geçişi (Glen Torridon → sülfat birimi) | Fe/Mg smektitten (sulu, nötr ortam) Mg-sülfata (kuruyan iklim) geçiş, Mars ikliminin değişimini tek kesitte gösteriyor. | Milliken vd. 2010; Fraeman vd. 2016; Sheppard vd. 2021 |
 
 ## 7. Karar
 **KULLAN (sınırlı)**: CRISM ve yayınlanmış birim haritaları **yalnız bilim durakları ve açıklama metni**

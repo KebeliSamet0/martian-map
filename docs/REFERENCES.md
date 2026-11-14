@@ -28,9 +28,10 @@
 - Pandolf, K. B., Givoni, B., Goldman, R. F. (1977), Predicting energy expenditure with loads while standing or walking very slowly. J. Appl. Physiol. 43(4), 577–581. https://doi.org/10.1152/jappl.1977.43.4.577 — metabolik model formülü.
 - Kim, K. J. et al. (2024), Improving Metabolic Workload Estimation Accuracy for Planning and Analyzing Exploration Traverses. IEEE EMBC 2024, NASA JSC. https://ntrs.nasa.gov/api/citations/20240001423/downloads/IEEE%20EMBC%202024.pdf
 - Santee, W. R. et al. (2001), A proposed model for load carriage on sloped terrain. Aviat. Space Environ. Med. 72(6), 562–566. — iniş düzeltmesi.
-- Soule, R. G., Goldman, R. F. (1972), Terrain coefficients for energy cost prediction. J. Appl. Physiol. 32(5), 706–708. — zemin katsayıları.
-- Richmond, P. W., Potter, A. W., Santee, W. R. (2015), Terrain Factors for Predicting Walking and Load Carriage Energy Costs: Review and Refinement. J. Sport Hum. Perform. 3(3). https://doi.org/10.12922/jshp.v3i3.67
 - Farley, C. T., McMahon, T. A. (1992), Energetics of walking and running: insights from simulated reduced-gravity experiments. J. Appl. Physiol. 73(6), 2709–2712.
 - Ogilvie, R. et al. (2026), Mars Spacesuit Mass Requirements. ICES-2026-127, NASA JSC. https://ntrs.nasa.gov/api/citations/20260003038/downloads/Final_ICES2026_Mars_Mass_1.pdf — skafandr kütlesi, yürüme hızı, eve dönüş sınırı, metabolik hızlar.
 - Waligora, J. M., Horrigan, D. J. (1975), Metabolism and heat dissipation during Apollo EVA periods. Biomedical Results of Apollo, NASA SP-368. https://ntrs.nasa.gov/api/citations/19760005584/downloads/19760005584.pdf — Apollo EVA ortalaması 234 kcal/sa (272 W), PLSS 7 sa / 1800 kcal.
 - Norcross, J. et al. (2009), Feasibility of Performing a Suited 10-km Ambulation on the Moon — Final Report of the EVA Walkback Test (EWT). NASA/TP-2009-214796.
+- NASA Curiosity Blog, Sols 4867–4872: Sand Fill in Antofagasta Crater and Finding Our Next Drill Target (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4867-4872-sand-fill-in-antofagasta-crater-and-finding-our-next-drill-target
+- NASA Curiosity Blog, Sols 4873–4878: Welcome to the Atacama Drill Target (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4873-4878-welcome-to-the-atacama-drill-target/ — boxwork sonrası ilk katmanlı sülfat sondajı (sci_4).
+- NASA Curiosity Blog, Sols 4886–4892: Ingenuity and Perseverance, Curiosity Style (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4886-4892-ingenuity-and-perseverance-curiosity-style/ — Toro / Inca de Oro dokanağı.
