@@ -1,0 +1,5 @@
+[
+  {"name": "synthetic-short", "start": [110, 235], "goal": [110, 227]},
+  {"name": "synthetic-crossing", "start": [110, 235], "goal": [150, 30]},
+  {"name": "synthetic-west", "start": [110, 235], "goal": [50, 87]}
+]

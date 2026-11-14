@@ -14,6 +14,7 @@
 
 ## Yazılım
 - MBARS (MIT) — https://github.com/dhood14/MBARS
+- Hugging Face Docker Spaces — https://huggingface.co/docs/hub/spaces-sdks-docker (Docker SDK ve 7860 portu, 2026-11-14)
 
 ## Makaleler
 - Hood et al. 2022, MBARS, Earth and Space Science 9(9), doi:10.1029/2022EA002410

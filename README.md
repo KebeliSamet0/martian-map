@@ -1,4 +1,16 @@
+---
+title: Martian Map API
+emoji: 🪐
+colorFrom: red
+colorTo: yellow
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # Martian Map (çalışma adı)
+
+Docker/Spaces çalıştırma ve çevrimdışı rota paketi: [deploy rehberi](api/DEPLOY.md).
 
 NASA Space Apps Challenge 2026 · **Interplanetary Survival Guide: Martian Map** · Konya
 
