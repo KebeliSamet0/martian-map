@@ -21,6 +21,7 @@ import { initFlow } from './wire-flow.js';   // tur4:akis
 import { t } from './i18n.js';   // tur4:akis
 import './insight-ui.js';   // tur4:veri
 import './bilim.js'; // tur4:bilim
+import { createWalkFeel } from './walkfeel.js';   // tur4:his
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -120,7 +121,7 @@ function scanUpdate(now) {
   if (T) T.line.mat.color.setScalar(1 + 0.9 * (e < e0 ? 1 : Math.max(0, 1 - (e - e0) / fade)));   // tarama sırasında planlanan rota parlar ('rotada kal' ipucu)
   if (e > e0 + fade) { scanner.t0 = -1; SCAN.value.w = 0; SCAN_E.value = 0; $('scanleg').hidden = true; if (T) T.line.mat.color.setScalar(1); }
 }
-let routeRun = null, lastLook = 0, hudHidden = false, bobOn = false;   // baş sallanması varsayılan KAPALI (görüntü kararlılığı)
+let routeRun = null, lastLook = 0, hudHidden = false, bobOn = Q.get('bob') !== '0';   // tur4:his: sakin baş sallanması varsayılan açık, ?bob=0 kapatır
 
 function initThree() {
   if (T) return T;
@@ -150,6 +151,7 @@ function initThree() {
   const gY = (x, z) => groundY(x, z);
   T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
+  T.wf = Q.get('wf') === 'off' ? null : createWalkFeel({ scene, camera, terrain, geo, audio, apiBase: API_BASE, apiOff: API_OFF, quality, toast, text: (k) => wire?.texts?.walk?.[k] }); T.wf?.load();   // tur4:his
   T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
@@ -301,8 +303,9 @@ function stepPlayer(dt, t) {
     T.camera.position.set(P.x, P.y, P.z); T.camera.lookAt(c[0], cgy + 6, c[1]); T.astro.group.visible = false;
     return cgy;
   }
+  T.wf?.sense(P, dt, state !== 'fly');   // tur4:his
   if (state === 'auto' && routeRun) {
-    const R = routeRun; R.s = Math.min(R.total, R.s + R.speed * timeScale * dt);
+    const R = routeRun; R.s = Math.min(R.total, R.s + R.speed * timeScale * (T.wf?.speedMul ?? 1) * dt);   // tur4:his
     let i = 1; while (i < R.cum.length - 1 && R.cum[i] < R.s) i++;
     const u = (R.s - R.cum[i - 1]) / ((R.cum[i] - R.cum[i - 1]) || 1), a = R.r.dense[i - 1], b = R.r.dense[i];
     P.x = a[0] + (b[0] - a[0]) * u; P.z = a[1] + (b[1] - a[1]) * u;
@@ -320,7 +323,7 @@ function stepPlayer(dt, t) {
     const f = (keys.has('KeyW') ? 1 : 0) - (keys.has('KeyS') ? 1 : 0), r = (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
     if (f || r) {
       const sl = state === 'fly' ? 0 : T.terrain.slopeDegAt(P.x, P.z) ?? 0;
-      sp *= state === 'fly' ? 1 : clamp(1 - sl / 48, 0.2, 1);
+      sp *= state === 'fly' ? 1 : T.wf ? T.wf.speedMul : clamp(1 - sl / 48, 0.2, 1);   // tur4:his
       const cp = state === 'fly' ? Math.cos(P.pitch) : 1;
       let vx = Math.sin(P.yaw) * f * cp + Math.cos(P.yaw) * r, vz = -Math.cos(P.yaw) * f * cp + Math.sin(P.yaw) * r;
       const n = Math.hypot(vx, vz) || 1; P.x += (vx / n) * sp * dt; P.z += (vz / n) * sp * dt;
@@ -330,6 +333,7 @@ function stepPlayer(dt, t) {
     if (state === 'fly') { if (keys.has('Space')) P.y += sp * dt; if (keys.has('KeyC')) P.y -= sp * dt; }
   }
   P.x = clamp(P.x, 1, geo.sizeX - 1); P.z = clamp(P.z, 1, geo.sizeZ - 1);
+  T.wf?.after(P, dt, state !== 'fly' && moving);   // tur4:his
   const gy = groundY(P.x, P.z);
   if (gy != null) {
     if (state === 'fly') P.y = Math.max(P.y, gy + 2);
@@ -353,9 +357,9 @@ function stepPlayer(dt, t) {
     T.camera.position.set(cx, cy, cz); T.camera.lookAt(tgt[0], tgt[1], tgt[2]);
   } else {
     aLastX = null;
-    const bob = bobOn && state !== 'fly' && moving ? Math.sin(t * 7.2) * 0.035 : 0;
-    T.camera.position.set(P.x, P.y + bob, P.z);
-    T.camera.rotation.set(P.pitch, -P.yaw, 0);
+    const wc = T.wf ? T.wf.cam(t, dt, bobOn && state !== 'fly', moving) : { dy: 0, pitch: 0, roll: 0 };   // tur4:his
+    T.camera.position.set(P.x, P.y + wc.dy, P.z);
+    T.camera.rotation.set(P.pitch + wc.pitch, -P.yaw, wc.roll);
   }
   return gy;
 }
@@ -377,8 +381,9 @@ function frame(now) {
   if (audio) {   // ses: gerçek yer değiştirmeden hız; efor eğim ve hızdan (görsel/işitsel sunum, tüketim modeli değil)
     const d = auX == null ? 0 : Math.hypot(P.x - auX, P.z - auZ); auX = P.x; auZ = P.z;
     const sp = d / Math.max(1e-3, dt), sl = state === 'fly' ? 0 : (T.terrain.slopeDegAt(P.x, P.z) ?? 0), mv = !paused && state !== 'fly' && sp > 0.05 && sp < 30;
-    audio.update(dt, { speed: sp, moving: mv, effort: mv ? clamp(0.3 + sl / 28, 0, 1) : 0.12, surface: sl > 18 ? 'bedrock' : 'soil' });
+    audio.update(dt, { speed: sp, moving: mv, effort: mv ? (T.wf ? T.wf.effort : clamp(0.3 + sl / 28, 0, 1)) : 0.12, surface: sl > 18 ? 'bedrock' : 'soil', externalSteps: !!T.wf });   // tur4:his
   }
+  T.wf?.update(dt, innerHeight * T.ratio); T.wf?.applyAstro(T.astro);   // tur4:his
   if (!paused) wire?.update(dt * timeScale, P);
   if (!paused) T.extras?.update(P);
   deviationCheck(now); scanUpdate(now / 1000);
@@ -476,6 +481,7 @@ window.__mm = {
     const gy = groundY(x, z); P.y = (gy ?? 0) + (heightAbove ?? EYE); T.snap = true;
   },
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
+  get wf() { return T?.wf; },   // tur4:his
   stats: () => ({ ...T.terrain.stats, fps, state, paused, scannerSource: scanner.source }),
   scan: (w) => { scanStart(!!w); },
   scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle

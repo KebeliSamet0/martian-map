@@ -500,6 +500,7 @@ export function createAstronaut(options = {}) {
 
   let mixer = null, actions = null, current = null, model = null, bob = null;
   let smooth = 0, phase = 0, marsGravity = options.marsGravity ?? false;
+  let leanT = 0, leanS = 0, stumbleF = -1;   // [his] eğimde gövde eğimi, tökezleme ilerlemesi (0..1; <0 = yok)
 
   if (options.useModel !== false) {
     new GLTFLoader().load(MODEL_URL, (gltf) => {
@@ -541,7 +542,17 @@ export function createAstronaut(options = {}) {
     }, undefined, (err) => console.warn('astronaut.glb yüklenemedi, prosedürel yedek kullanılıyor:', err?.message || err));
   }
 
+  /** Gövde duruşu: lean = eğimde öne(+)/geriye(−) rad; stumble = 0..1 tökezleme ilerlemesi (<0 yok). */
+  function setGait({ lean = 0, stumble = -1 } = {}) { leanT = lean; stumbleF = stumble; }
+  function applyGait(dt) {
+    leanS += (leanT - leanS) * (1 - Math.exp(-dt * 5));
+    const dip = stumbleF >= 0 ? 0.32 * Math.sin(Math.PI * Math.min(1, stumbleF * 1.05)) ** 1.5 : 0;   // öne kapanıp toparlanma
+    const rx = leanS + dip;
+    fallback.group.rotation.x = rx; if (bob) bob.rotation.x = rx;
+  }
+
   function update(dt, speedMps = 0, grounded = true) {
+    applyGait(dt > 0 && dt <= 0.5 ? dt : 0.016);
     if (!mixer) return fallback.update(dt, speedMps, grounded);
     if (dt <= 0 || dt > 0.5) dt = 0.016;
     smooth += (Math.max(0, speedMps) - smooth) * (1 - Math.exp(-8 * dt));
@@ -574,7 +585,7 @@ export function createAstronaut(options = {}) {
 
   return {
     group,
-    update,
+    update, setGait,
     height: totalHeight,
     setMarsGravity(enabled) { marsGravity = !!enabled; fallback.setMarsGravity(enabled); },
     playInteract,

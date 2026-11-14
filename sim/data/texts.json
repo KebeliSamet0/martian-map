@@ -737,5 +737,12 @@
       "crism_warn": "Ham browse: gürültülü, 18 m/piksel. Maliyet haritasına girmez; yalnız bağlam ve saha notu için.",
       "crism_ctx": "Kutunun kuzeyinde kalan bağlam (haritalanmadı): hematit sırtı (Fraeman vd. 2013, 2016, 2020) ve kil–sülfat geçişi (Milliken vd. 2010; Sheppard vd. 2021)."
     }
+  },
+  "walk": {
+    "stumble": "Gevşek kaya: ayağın kaydı, adım yavaşladı.",
+    "sand_drag": "Kumda her adım daha ağır ve daha yavaş.",
+    "layers_fallback": "Zemin katmanları alınamadı; yürüyüş hissi yalnız eğimden hesaplanıyor.",
+    "source_layers": "Zemin: API katmanları (model tahmini)",
+    "source_fallback": "Zemin: yedek (yalnız eğim)"
   }
 }
