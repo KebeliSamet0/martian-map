@@ -33,6 +33,10 @@ curl -X POST http://localhost:8000/replan -H 'Content-Type: application/json' \
   -d '{"start":[110,235],"goal":[150,30],"observations":[{"px":[110,235],"radius_m":600,"cls":"sand"}]}'
 curl http://localhost:8000/layers/slope.png -o /tmp/slope.png
 curl http://localhost:8000/layers/elevation.bin -o /tmp/elevation.bin
+curl http://localhost:8000/layers/speed_mps.bin -o /tmp/speed_mps.bin
+curl http://localhost:8000/layers/scan_class.png -o /tmp/scan_class.png
+curl -X POST http://localhost:8000/step -H 'Content-Type: application/json' \
+  -d '{"path":[[110,235],[111,235],[112,234]],"load_kg":5}'
 ```
 
 `/route` ve `/replan`, `{grid, routes}` döndürür. Üç ön ayar: `shortest`,
