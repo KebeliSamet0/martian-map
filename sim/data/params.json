@@ -1,0 +1,196 @@
+{
+ "source": "docs/data/real_params.json",
+ "params": {
+  "A.apache_test_speed": {
+   "value": 0.67056,
+   "unit": "m/s",
+   "source_url": "https://ntrs.nasa.gov/api/citations/20220010306/downloads/07-13-2022%20ICES%20Presentation%20-%20APACHE%20Physical%20Workload%20Approximation-JSLWL0520074362.pdf?attachment=true",
+   "quote": "1.5 mph",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "A.apache_grade_range": {
+   "value": [
+    -10,
+    30
+   ],
+   "unit": "%",
+   "source_url": "https://ntrs.nasa.gov/api/citations/20220010306/downloads/07-13-2022%20ICES%20Presentation%20-%20APACHE%20Physical%20Workload%20Approximation-JSLWL0520074362.pdf?attachment=true",
+   "quote": "varying grade slopes",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": false
+  },
+  "A.apache_mars_participants": {
+   "value": 1,
+   "unit": "person",
+   "source_url": "https://ntrs.nasa.gov/api/citations/20220010306/downloads/07-13-2022%20ICES%20Presentation%20-%20APACHE%20Physical%20Workload%20Approximation-JSLWL0520074362.pdf?attachment=true",
+   "quote": "N = 1",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": false
+  },
+  "B.ESP_019698_1750.solar_elevation": {
+   "value": 32.506929,
+   "unit": "deg",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+   "quote": "INCIDENCE_ANGLE",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "B.ESP_019698_1750.solar_azimuth_north_clockwise": {
+   "value": 282.527174,
+   "unit": "deg",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+   "quote": "SUB_SOLAR_AZIMUTH",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "B.ESP_019698_1750.solar_longitude": {
+   "value": 161.208019,
+   "unit": "deg",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+   "quote": "SOLAR_LONGITUDE",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "B.ESP_019698_1750.local_time": {
+   "value": 15.74643,
+   "unit": "Mars local hour",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+   "quote": "LOCAL_TIME",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "B.ESP_019698_1750.start_time": {
+   "value": "2010-10-09T09:11:38.350Z",
+   "unit": "UTC",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019600_019699/ESP_019698_1750/ESP_019698_1750_RED.LBL",
+   "quote": "START_TIME",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "B.ESP_019988_1750.solar_elevation": {
+   "value": 35.684925,
+   "unit": "deg",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019900_019999/ESP_019988_1750/ESP_019988_1750_RED.LBL",
+   "quote": "INCIDENCE_ANGLE",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "B.ESP_019988_1750.solar_azimuth_north_clockwise": {
+   "value": 276.94831899999997,
+   "unit": "deg",
+   "source_url": "https://hirise-pds.lpl.arizona.edu/PDS/RDR/ESP/ORB_019900_019999/ESP_019988_1750/ESP_019988_1750_RED.LBL",
+   "quote": "SUB_SOLAR_AZIMUTH",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "G.waypoint_sol_4534": {
+   "value": {
+    "sol": 4534,
+    "site": 116,
+    "drive": 0,
+    "RMC": "116_0",
+    "lon": 137.3864361,
+    "lat": -4.79761763,
+    "elev_geoid": -3657.644,
+    "easting": 8143539.442,
+    "northing": -284377.334
+   },
+   "unit": "deg E, deg N, m",
+   "source_url": "https://mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json",
+   "quote": "RMC",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "G.waypoint_sol_4541": {
+   "value": {
+    "sol": 4541,
+    "site": 116,
+    "drive": 414,
+    "RMC": "116_414",
+    "lon": 137.3859258,
+    "lat": -4.79781585,
+    "elev_geoid": -3654.97,
+    "easting": 8143509.198,
+    "northing": -284389.083
+   },
+   "unit": "deg E, deg N, m",
+   "source_url": "https://mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json",
+   "quote": "RMC",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "G.waypoint_sol_4671": {
+   "value": {
+    "sol": 4671,
+    "site": 119,
+    "drive": 486,
+    "RMC": "119_486",
+    "lon": 137.3812695,
+    "lat": -4.80827103,
+    "elev_geoid": -3608.263,
+    "easting": 8143233.195,
+    "northing": -285008.811
+   },
+   "unit": "deg E, deg N, m",
+   "source_url": "https://mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json",
+   "quote": "RMC",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "G.boxwork_morphology": {
+   "value": {
+    "ridge_width_m": 5,
+    "polygon_width_m": [
+     10,
+     20
+    ],
+    "hollow_depth_m": [
+     1,
+     2
+    ],
+    "west_extent_km": 14
+   },
+   "unit": "m, km",
+   "source_url": "https://www.hou.usra.edu/meetings/lpsc2026/pdf/1716.pdf",
+   "quote": "polygons ~10-20 meters",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": true
+  },
+  "K.gravity_reference": {
+   "value": 3.71,
+   "unit": "m/s^2",
+   "source_url": "https://ssd.jpl.nasa.gov/planets/phys_par.html",
+   "quote": "3.71",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": false
+  },
+  "E.generic_absolute_accuracy": {
+   "value": {
+    "horizontal_m": 100,
+    "vertical_m": 1.3
+   },
+   "unit": "m",
+   "source_url": "https://stac.astrogeology.usgs.gov/docs/data/mars/hirise_dtms/",
+   "quote": "±100m",
+   "accessed": "2026-11-14",
+   "verified": true,
+   "audited": false
+  }
+ }
+}
