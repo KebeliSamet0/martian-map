@@ -1,0 +1,16 @@
+no,col,row,radius_m,alan_m2,rota_uzaklik_m,grup,karar,not
+1,431.9,612.5,8.0,60,14,koridor_adayi,1,
+2,527.0,654.1,8.0,96,35,koridor_adayi,2,cok cakil/kayalik/taslik
+3,487.0,672.0,20.0,0,4,elif_S2,1,
+4,466.1,663.2,15.0,708,0,koridor_adayi,1,
+5,467.0,609.0,20.0,0,10,elif_S1S3,2,cok cakil/kayalik/taslik
+6,472.6,641.6,19.4,1188,0,koridor_adayi,1,
+7,406.3,543.1,8.0,60,14,koridor_adayi,1,
+8,508.8,588.8,16.2,828,0,koridor_adayi,1,
+9,458.6,520.3,8.0,192,41,koridor_adayi,1,
+10,453.9,707.3,8.0,140,23,koridor_adayi,1,
+11,508.0,553.5,8.0,148,35,koridor_adayi,1,
+12,462.1,743.5,8.0,52,24,koridor_adayi,1,
+13,442.8,669.8,8.0,176,22,koridor_adayi,1,
+14,422.0,587.5,8.9,248,16,koridor_adayi,1,
+15,524.2,619.4,8.0,96,2,koridor_adayi,1,

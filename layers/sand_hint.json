@@ -101,6 +101,66 @@
       "radius_m": 15.8,
       "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~112 m.",
       "route_dist_m": 112.0
+    },
+    {
+      "id": "sand_11",
+      "px": [
+        487.0,
+        672.0
+      ],
+      "radius_m": 20.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~4 m. Demo senaryo koridorunda (sci_* -> sci_4); badlands benzeri duz zemin, kumul gibi gorunuyor (gozle).",
+      "route_dist_m": 4.0
+    },
+    {
+      "id": "sand_12",
+      "px": [
+        466.1,
+        663.2
+      ],
+      "radius_m": 15.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~0 m. Demo senaryo koridorunda (sci_* -> sci_4); badlands benzeri duz zemin, kumul gibi gorunuyor (gozle).",
+      "route_dist_m": 0.0
+    },
+    {
+      "id": "sand_13",
+      "px": [
+        472.6,
+        641.6
+      ],
+      "radius_m": 19.4,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~0 m. Demo senaryo koridorunda (sci_* -> sci_4); badlands benzeri duz zemin, kumul gibi gorunuyor (gozle).",
+      "route_dist_m": 0.0
+    },
+    {
+      "id": "sand_14",
+      "px": [
+        508.8,
+        588.8
+      ],
+      "radius_m": 16.2,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~0 m. Demo senaryo koridorunda (sci_* -> sci_4); badlands benzeri duz zemin, kumul gibi gorunuyor (gozle).",
+      "route_dist_m": 0.0
+    },
+    {
+      "id": "sand_15",
+      "px": [
+        458.6,
+        520.3
+      ],
+      "radius_m": 8.0,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~41 m. Demo senaryo koridorunda (sci_* -> sci_4); badlands benzeri duz zemin, kumul gibi gorunuyor (gozle).",
+      "route_dist_m": 41.0
+    },
+    {
+      "id": "sand_16",
+      "px": [
+        422.0,
+        587.5
+      ],
+      "radius_m": 8.9,
+      "reason": "Duz (egim <10 derece), puruzsuz dokulu, kayasiz, cevresinden alcak: kumlu cukur/vadi tabani gorunumu. Ortofotodan aday, gozle dogrulandi. Curiosity rotasina ~16 m. Demo senaryo koridorunda (sci_* -> sci_4); badlands benzeri duz zemin, kumul gibi gorunuyor (gozle).",
+      "route_dist_m": 16.0
     }
   ]
 }
