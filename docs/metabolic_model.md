@@ -4,10 +4,10 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Kullanan kod: `api/planner/cost.py`, `ap
 
 > **Özet.** Formül Pandolf (1977) yük taşıma denklemi. NASA JSC (Kim vd. 2024) aynı denklemi Santee
 > düzeltmesiyle birlikte EVA rota planlamasında kullanıyor. Koddaki formül orijinalle **birebir aynı**.
-> Zemin katsayıları Soule & Goldman (1972) tablosundan geliyor. Bu belgeyle birlikte **toprak η değeri
-> 1.2 → 1.1 oluyor**. NASA 2024 makalesinde zemin katsayısı tablosu **yok**; issue'daki "NASA arazi
-> katsayısı" ifadesi yanlış bir varsayımdı. Mars yerçekimi için doğrulanmış bir formül yok; bu konudaki
-> her şey VARSAYIM olarak işaretli.
+> Dünya zeminlerinden türetilmiş katsayılar kullanılmıyor. Kodun okuduğu zemin tablosu kodun mevcut
+> varsayım değerleriyle aynı; bu belge kodun davranışını **değiştirmiyor**. NASA 2024 makalesinde zemin
+> katsayısı tablosu **yok**. Mars zeminleri için ölçülmüş katsayı da bulunmuyor. Mars yerçekimi için
+> doğrulanmış bir formül yok; bu konudaki her şey VARSAYIM olarak işaretli.
 
 ## 1. Formül (doğrulandı)
 
@@ -24,7 +24,7 @@ M = 1.5·W + 2.0·(W + L)·(L/W)² + η·(W + L)·(1.5·V² + 0.35·V·G)
 | L | Taşınan dış yük (skafandr + ekipman) | kg |
 | V | Yürüme hızı | m/s |
 | G | Eğim | **yüzde** (%), derece değil: `G = 100·tan(θ)` |
-| η | Zemin katsayısı | birimsiz, asfalt/koşu bandı = 1.0 |
+| η | Zemin katsayısı | birimsiz, referans zemin (ana kaya) = 1.0 |
 
 Terimlerin anlamı:
 - `1.5·W`: yüksüz ayakta durma maliyeti
@@ -52,39 +52,25 @@ M_düzeltilmiş = M − CF
   çıkış kadar pahalı sayılıyor. Bu temkinli ve savunulabilir bir seçim. **Önerim:** Kapı 2 için bu hâliyle bırakın, sunumda
   "iniş maliyeti temkinli olarak çıkışla eşit sayıldı" deyin.
 
-## 3. Zemin katsayıları
+## 3. Zemin katsayıları (VARSAYIM)
 
-Kaynak tablo, Soule & Goldman (1972); Richmond, Potter & Santee (2015) tarafından gözden geçirilmiş:
+Mars zeminlerinde (ana kaya, toprak, kum, büyük kaya) ölçülmüş bir Pandolf zemin katsayısı **yok**.
+NASA 2024 makalesi de katsayı tablosu vermiyor. Bu yüzden aşağıdaki değerler kaynaklı değer değil;
+planlayıcının zeminleri **sıralayabilmesi** için kullanılan varsayımlar (kum en pahalı, ana kaya en ucuz).
+Değerler `api/planner/params.py`'deki mevcut kod değerleriyle aynı.
 
-| Zemin (Dünya) | η |
-|---|---|
-| Asfalt / koşu bandı | 1.0 |
-| Toprak yol | 1.1 |
-| Hafif çalılık | 1.2 |
-| Yoğun çalılık | 1.5 |
-| Bataklık | 1.8 |
-| Gevşek kum | 2.1 |
-| Yumuşak kar 15 / 25 / 35 cm | 2.5 / 3.3 / 4.1 |
+**Kodun okuduğu tablo.** `api/planner/terrain.py` bu tabloyu okur. Sütun ve sınıf adlarını değiştirmeyin.
+Tablo silinirse API hata verir. `speed`, düz ana kayadaki temel hıza göre hız çarpanıdır.
 
-Mars zemin sınıflarına (AI4Mars) eşleme:
-
-| Mars sınıfı | Dünya karşılığı | Gerekçe |
-|---|---|---|
-| Ana kaya | asfalt (1.0) | Sert, düz yüzey |
-| Toprak | toprak yol (1.1) | Sıkı, ince taneli yüzey. Önceki kod değeri 1.2 (hafif çalılık) idi; toprak yol daha iyi bir karşılık |
-| Kum | gevşek kum (2.1) | Doğrudan karşılık |
-| Büyük kaya | yoğun çalılık (1.5), **VARSAYIM** | Soule & Goldman tablosunda kaya alanı yok; engelden kaçınma maliyetine en yakın karşılık. Kaynak bulunamadı |
-
-**Kodun okuduğu tablo.** `api/planner/terrain.py` bu tabloyu okur. Sütun adlarını ve sınıf adlarını değiştirmeyin.
-`speed` sütunu düz ana kayadaki temel hıza göre hız çarpanıdır. Bu değerler Samet'in **VARSAYIM**'larıdır,
-kaynak bulunamadı.
-
-| class | eta | speed | eta kaynağı |
+| class | eta | speed | not |
 |---|---|---|---|
-| bedrock | 1.0 | 1.0 | Soule & Goldman 1972: asfalt |
-| soil | 1.1 | 0.95 | Soule & Goldman 1972: toprak yol |
-| sand | 2.1 | 0.6 | Soule & Goldman 1972: gevşek kum |
-| bigrock | 1.5 | 0.5 | VARSAYIM (yoğun çalılık karşılığı) |
+| bedrock | 1.0 | 1.0 | VARSAYIM (referans zemin) |
+| soil | 1.2 | 0.95 | VARSAYIM |
+| sand | 2.1 | 0.6 | VARSAYIM |
+| bigrock | 1.5 | 0.5 | VARSAYIM |
+
+Sunumda söylenecek cümle: *"Zemin katsayıları Mars'ta ölçülmüş değerler değil, zeminleri sıralayan
+varsayımlar. Gerçek değerler Mars'ta ölçülene kadar arayüzde VARSAYIM olarak gösteriliyor."*
 
 ## 4. Mars yerçekimi varsayımı
 
@@ -103,7 +89,7 @@ kaynak bulunamadı.
 ## 5. Açık kalanlar
 - [ ] Santee düzeltmesindeki işaret hatası: orijinal makaleden kontrol edilecek (kod şu an `|G|` kullandığı için acil değil)
 - [ ] Apollo 272 W kalibrasyon değeri: Waligora & Horrigan (1975, NASA SP-368) orijinalinden doğrulanacak (EVA parametreleri işinde)
-- [ ] Büyük kaya η için kaynak aranacak
+- [ ] Mars zeminleri için ölçülmüş zemin katsayısı yok; değerler VARSAYIM kalır
 - [ ] Kim vd. 2024'teki zemin katsayısı ifadesinin issue'dan düzeltilmesi
 
 ## Kaynaklar
@@ -116,9 +102,6 @@ kaynak bulunamadı.
   sloped terrain. *Aviat. Space Environ. Med.* 72(6), 562–566.
 - Santee, W. R., Blanchard, L. A., Speckman, K. L., Gonzalez, J. A., Wallace, R. F. (2003). Load carriage model
   development and testing with field data. USARIEM Tech. Note TN03-3.
-- Soule, R. G., Goldman, R. F. (1972). Terrain coefficients for energy cost prediction. *J. Appl. Physiol.* 32(5), 706–708.
-- Richmond, P. W., Potter, A. W., Santee, W. R. (2015). Terrain Factors for Predicting Walking and Load Carriage
-  Energy Costs: Review and Refinement. *J. Sport Hum. Perform.* 3(3). https://doi.org/10.12922/jshp.v3i3.67
 - Santee düzeltmesinin işaret hatası notu: *Military Medicine* 183(9–10), e357.
   https://academic.oup.com/milmed/article/183/9-10/e357/5025891
 - Farley, C. T., McMahon, T. A. (1992). Energetics of walking and running: insights from simulated
