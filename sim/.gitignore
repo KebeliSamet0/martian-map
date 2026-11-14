@@ -1,0 +1,5 @@
+# Büyük üretilmiş veri repoya girmez (CONTRIBUTING #5): sim/tools/build_tiles.py ile yeniden üretilir.
+data/tiles/
+data/_work/
+data/*.f32
+data/*.glb
