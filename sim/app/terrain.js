@@ -19,7 +19,7 @@ export class Terrain {
     this.loading = 0; this.queue = []; this.pending = []; this.frame = 0; this.active = new Set(); this.version = 0; this.swaps = 0; this.builtLast = 0;
     this.texLoader = new THREE.TextureLoader();
     this.stats = { ready: 0, active: 0, loading: 0 };
-    ensureDetail(Math.min(8, anisotropy * 2));
+    ensureDetail(Math.min(8, anisotropy * 2), this.geo);
   }
   cell(k) { const f = 2 ** k; return [this.geo.resX * f, this.geo.resZ * f]; }
   size(k) { const [a, b] = this.cell(k); return [a * 128, b * 128]; }
@@ -177,7 +177,7 @@ export class Terrain {
     if (tex && this.renderer) this.renderer.initTexture(tex);   // GPU yüklemesi mesh bütçesi içinde yapılır (ilk çizimde takılma olmasın)
     const mat = new THREE.MeshStandardMaterial({ map: tex || null, color: tex ? 0xffffff : 0x8b6a52, roughness: 0.96, metalness: 0, side: THREE.DoubleSide });
     mat.onBeforeCompile = patchMaterial;
-    mat.customProgramCacheKey = () => 'mars-terrain-v3';
+    mat.customProgramCacheKey = () => 'mars-terrain-v4';
     const mesh = new THREE.Mesh(geom, mat);
     mesh.castShadow = this.shadows; mesh.receiveShadow = this.shadows; mesh.visible = false;
     this.group.add(mesh);

@@ -1,9 +1,20 @@
-// Yakın plan regolit/çakıl ayrıntısı: gürültüyü her piksel için hesaplamak yerine BİR KEZ üretilen, döşenebilir (tileable) bir
-// doku olarak örnekler. Mipmap sayesinde uzakta ayrıntı kendiliğinden söner (anti-aliasing), maliyet birkaç doku okumasıdır.
-// R = çakıl yüksekliği (0.5 ortalı), G/B = yükseklik gradyanı (x, z), A = ince tane. SENTETİK görünüm katmanıdır; ölçülmüş veri değildir.
+// Yakın plan PBR zemin ayrıntısı + zemin sınıfı haritası + dik yamaçlarda üç eksenli (triplanar) eşleme (issue #51 — Adım 2):
+// - CC0 PBR dokular (Poly Haven, 1K JPG):
+//   * Regolit/çakıl: red_laterite_soil_stones (Amal Kumar, CC0)
+//   * Kum: aerial_sand (Rob Tuytel, CC0)
+//   * Ana kaya / uçurum: rock_boulder_dry (Dimitrios Savva & Rico Cilliers, CC0)
+// - Veri sadakati: HiRISE ortofoto makro rengi %100 korunur (dokudan yalnız yüksek frekanslı mikro-albedo farkı, normal ve pürüzlülük alınır).
+// - Zemin sınıfı seçimi: API aktifse /layers/p_sand.bin, /layers/p_bedrock.bin, /layers/p_bigrock.bin (yoksa yerel layers/*.npy + sand_zones.json,
+//   o da yoksa eğim tabanlı geçiş).
+// - Saf veri modu (V tuşu, SYNTH.value = 0): tüm sentetik PBR/triplanar katmanları sıfırlanır, yalnız ham DTM + ortofoto kalır.
 import * as THREE from 'three';
+import { API_BASE, API_OFF, GRID, pxToWorld } from './api.js';
 
-const hash = (i, j, s) => { let h = (Math.imul(i, 374761393) + Math.imul(j, 668265263) + Math.imul(s, 1274126177)) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967295; };
+const hash = (i, j, s) => {
+  let h = (Math.imul(i, 374761393) + Math.imul(j, 668265263) + Math.imul(s, 1274126177)) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
+};
 const wrap = (a, P) => ((a % P) + P) % P;
 
 function worley(N, P, seed) {
@@ -11,10 +22,12 @@ function worley(N, P, seed) {
   for (let y = 0; y < N; y++) {
     const v = y / cell, j0 = Math.floor(v);
     for (let x = 0; x < N; x++) {
-      const u = x / cell, i0 = Math.floor(u); let best = 1e9;
+      const u = x / cell, i0 = Math.floor(u);
+      let best = 1e9;
       for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
         const ci = wrap(i0 + di, P), cj = wrap(j0 + dj, P);
-        const px = i0 + di + hash(ci, cj, seed), py = j0 + dj + hash(cj, ci, seed + 101), d = (px - u) ** 2 + (py - v) ** 2;
+        const px = i0 + di + hash(ci, cj, seed), py = j0 + dj + hash(cj, ci, seed + 101);
+        const d = (px - u) ** 2 + (py - v) ** 2;
         if (d < best) best = d;
       }
       const t = Math.min(1, Math.sqrt(best) / 0.6);
@@ -25,7 +38,8 @@ function worley(N, P, seed) {
 }
 
 function vnoise(N, P, seed) {
-  const g = new Float32Array(P * P); for (let k = 0; k < g.length; k++) g[k] = hash(k % P, (k / P) | 0, seed);
+  const g = new Float32Array(P * P);
+  for (let k = 0; k < g.length; k++) g[k] = hash(k % P, (k / P) | 0, seed);
   const out = new Float32Array(N * N), cell = N / P;
   for (let y = 0; y < N; y++) {
     const v = y / cell, j0 = Math.floor(v), fy = v - j0, sy = fy * fy * (3 - 2 * fy);
@@ -41,61 +55,434 @@ function vnoise(N, P, seed) {
 
 export function makeDetailTexture(N = 512, anisotropy = 8) {
   const w1 = worley(N, 8, 1), w2 = worley(N, 16, 2), n1 = vnoise(N, 8, 3), n2 = vnoise(N, 16, 4), n3 = vnoise(N, 32, 5), g1 = vnoise(N, 64, 7), g2 = vnoise(N, 128, 8);
-  const H = new Float32Array(N * N); let lo = Infinity, hi = -Infinity;
-  for (let i = 0; i < H.length; i++) { H[i] = 0.50 * w1[i] + 0.22 * w2[i] + 0.28 * (0.5 * n1[i] + 0.3 * n2[i] + 0.2 * n3[i]); lo = Math.min(lo, H[i]); hi = Math.max(hi, H[i]); }
-  let mean = 0; for (let i = 0; i < H.length; i++) { H[i] = (H[i] - lo) / (hi - lo); mean += H[i]; } mean /= H.length;
-  const gx = new Float32Array(N * N), gz = new Float32Array(N * N); let gm = 1e-6;
+  const H = new Float32Array(N * N);
+  let lo = Infinity, hi = -Infinity;
+  for (let i = 0; i < H.length; i++) {
+    H[i] = 0.50 * w1[i] + 0.22 * w2[i] + 0.28 * (0.5 * n1[i] + 0.3 * n2[i] + 0.2 * n3[i]);
+    lo = Math.min(lo, H[i]);
+    hi = Math.max(hi, H[i]);
+  }
+  let mean = 0;
+  for (let i = 0; i < H.length; i++) { H[i] = (H[i] - lo) / (hi - lo); mean += H[i]; }
+  mean /= H.length;
+  const gx = new Float32Array(N * N), gz = new Float32Array(N * N);
+  let gm = 1e-6;
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
     const i = y * N + x;
-    gx[i] = H[y * N + wrap(x + 1, N)] - H[y * N + wrap(x - 1, N)]; gz[i] = H[wrap(y + 1, N) * N + x] - H[wrap(y - 1, N) * N + x];
+    gx[i] = H[y * N + wrap(x + 1, N)] - H[y * N + wrap(x - 1, N)];
+    gz[i] = H[wrap(y + 1, N) * N + x] - H[wrap(y - 1, N) * N + x];
     gm = Math.max(gm, Math.abs(gx[i]), Math.abs(gz[i]));
   }
   const data = new Uint8Array(N * N * 4), c8 = (v) => Math.max(0, Math.min(255, Math.round(v * 255)));
   for (let i = 0; i < N * N; i++) {
-    data[i * 4] = c8(H[i] - mean + 0.5);                 // ortalama 0.5 → mipmap ile uzakta parlaklık kaymaz
+    data[i * 4] = c8(H[i] - mean + 0.5);
     data[i * 4 + 1] = c8(0.5 + 0.5 * gx[i] / gm);
     data[i * 4 + 2] = c8(0.5 + 0.5 * gz[i] / gm);
     data[i * 4 + 3] = c8(0.6 * g1[i] + 0.4 * g2[i]);
   }
   const t = new THREE.DataTexture(data, N, N, THREE.RGBAFormat);
-  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.magFilter = THREE.LinearFilter; t.minFilter = THREE.LinearMipmapLinearFilter;
-  t.generateMipmaps = true; t.anisotropy = anisotropy; t.needsUpdate = true;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.magFilter = THREE.LinearFilter;
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  t.generateMipmaps = true;
+  t.anisotropy = anisotropy;
+  t.needsUpdate = true;
+  return t;
+}
+
+function makeDummyTex(r = 128, g = 128, b = 255) {
+  const d = new Uint8Array([r, g, b, 255]);
+  const t = new THREE.DataTexture(d, 1, 1, THREE.RGBAFormat);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.needsUpdate = true;
   return t;
 }
 
 export const DETAIL = { value: null };
-export const SYNTH = { value: 1 };   // 1: sentetik görünüm ayrıntısı açık; 0: SAF VERİ (yalnız DTM + ortofoto, aydınlatma hariç hiçbir ekleme yok)
-// Terrain Scanner (DS2 tarzı): merkez xz, yarıçap, görünürlük (0..1); eğim eşikleri (derece). Eşikler BİZİM arayüz ayarıdır (DS2'nin eşikleri kaynakta yok).
+export const SYNTH = { value: 1 };   // 1: sentetik ayrıntı açık; 0: SAF VERİ
 export const SCAN = { value: new THREE.Vector4(0, 0, 0, 0) };
 export const SCAN_E = { value: 0 };   // silme yarıçapı: bu yarıçapın içindeki işaretler söner (merkezden dışa süpürme)
-export const SCAN_TEX = { value: null };   // R: eğim/64 (derece), G: geçerli (nav 4 m ızgara; rota eğimiyle aynı taban)
-export const SCAN_DIM = { value: new THREE.Vector2(1, 1) };   // ızgara dünya boyu (m)
+export const SCAN_TEX = { value: null };
+export const SCAN_DIM = { value: new THREE.Vector2(1, 1) };
 export const SCAN_TH = { value: new THREE.Vector2(10, 20) };
-export function ensureDetail(anisotropy) { if (!DETAIL.value) DETAIL.value = makeDetailTexture(512, anisotropy); return DETAIL.value; }
 
-// MeshStandardMaterial gölgelendiricisine eklenir: albedo çeşitliliği + normal bozulması + dik yüzeylerde tabakalı kaya dokusu.
+// PBR doku üniformaları (regolit/çakıl, kum, ana kaya/uçurum)
+export const PBR_MAPS = {
+  regDiff: { value: makeDummyTex(128, 128, 128) },
+  regNor: { value: makeDummyTex(128, 128, 255) },
+  regRough: { value: makeDummyTex(220, 220, 220) },
+  sandDiff: { value: makeDummyTex(128, 128, 128) },
+  sandNor: { value: makeDummyTex(128, 128, 255) },
+  sandRough: { value: makeDummyTex(235, 235, 235) },
+  rockDiff: { value: makeDummyTex(128, 128, 128) },
+  rockNor: { value: makeDummyTex(128, 128, 255) },
+  rockRough: { value: makeDummyTex(195, 195, 195) },
+  pbrReady: { value: 0.0 },
+};
+
+// Zemin sınıfı haritası: R = p_sand, G = p_bedrock + p_bigrock, B = geçerli (1=API/katman verisi, 0=yok)
+export const CLASS_TEX = { value: makeDummyTex(0, 0, 0) };
+export const CLASS_BOUNDS = { value: new THREE.Vector4(0, 0, 1, 1) }; // x0, z0, sizeX, sizeZ
+export const HAS_CLASS_TEX = { value: 0.0 };
+
+let pbrLoadingPromise = null;
+
+function parseNpyFloat32(buf) {
+  const u8 = new Uint8Array(buf);
+  // .npy başlığı: \x93NUMPY (6 bayt) + major(1) + minor(1) + header_len(2 veya 4)
+  if (u8[0] === 0x93 && u8[1] === 0x4e) {
+    const major = u8[6];
+    const hlen = major >= 2 ? new DataView(buf).getUint32(8, true) : new DataView(buf).getUint16(8, true);
+    const offset = (major >= 2 ? 12 : 10) + hlen;
+    return new Float32Array(buf, offset);
+  }
+  return new Float32Array(buf);
+}
+
+async function fetchLayerFloat32(name) {
+  // 1) Önce API (/layers/<name>.bin) dene
+  if (!API_OFF) {
+    try {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), 1800);
+      const r = await fetch(`${API_BASE}/layers/${name}.bin`, { signal: ctl.signal });
+      clearTimeout(t);
+      if (r.ok) {
+        const buf = await r.arrayBuffer();
+        if (buf.byteLength === GRID.w * GRID.h * 4) return new Float32Array(buf);
+      }
+    } catch { /* API kapalıysa yerel dosyaya düş */ }
+  }
+  // 2) Yerel statik katman (/layers/<name>.npy) yedeği
+  try {
+    const url = new URL(`../../layers/${name}.npy`, import.meta.url);
+    const r = await fetch(url);
+    if (r.ok) {
+      const buf = await r.arrayBuffer();
+      const arr = parseNpyFloat32(buf);
+      if (arr.length === GRID.w * GRID.h) return arr;
+    }
+  } catch { /* yerel katman da yoksa eğim tabanlı seçime düş */ }
+  return null;
+}
+
+export async function loadTerrainClassMap(geo) {
+  if (!geo) return;
+  const [x0, z0] = pxToWorld(geo, 0, 0);
+  const [x1, z1] = pxToWorld(geo, GRID.w, GRID.h);
+  CLASS_BOUNDS.value.set(x0, z0, x1 - x0, z1 - z0);
+
+  const [pSand, pBedrock, pBigrock, sandZones] = await Promise.all([
+    fetchLayerFloat32('p_sand'),
+    fetchLayerFloat32('p_bedrock'),
+    fetchLayerFloat32('p_bigrock'),
+    fetch(new URL('../data/sand_zones.json', import.meta.url)).then((r) => (r.ok ? r.json() : [])).catch(() => []),
+  ]);
+
+  const W = GRID.w, H = GRID.h;
+  if (!pSand && !pBedrock && (!sandZones || !sandZones.length)) return;
+
+  const data = new Uint8Array(W * H * 4);
+  const c8 = (v) => Math.max(0, Math.min(255, Math.round(v * 255)));
+
+  for (let i = 0; i < W * H; i++) {
+    const s = pSand ? pSand[i] : 0;
+    const b = (pBedrock ? pBedrock[i] : 0) + (pBigrock ? pBigrock[i] : 0);
+    // 1-epoch modelde p_sand ~0.12-0.23 aralığında olduğundan kontrastı görünür kılmak için yumuşak ölçekleme
+    const sandWeight = Math.min(1, Math.max(0, (s - 0.08) * 3.2));
+    const rockWeight = Math.min(1, Math.max(0, (b - 0.15) * 1.8));
+    data[i * 4] = c8(sandWeight);
+    data[i * 4 + 1] = c8(rockWeight);
+    data[i * 4 + 2] = (pSand || pBedrock) ? 255 : 0;
+    data[i * 4 + 3] = 255;
+  }
+
+  // Bora'nın kum aday bölgelerini (sand_zones.json) p_sand kanalına yumuşak geçişle işle
+  if (Array.isArray(sandZones)) {
+    for (const z of sandZones) {
+      if (!z.px) continue;
+      const cx = z.px[0], cy = z.px[1], radPx = (z.radius_m || 18) / GRID.res;
+      const rPad = Math.ceil(radPx * 1.35);
+      const xMin = Math.max(0, Math.floor(cx - rPad)), xMax = Math.min(W - 1, Math.ceil(cx + rPad));
+      const yMin = Math.max(0, Math.floor(cy - rPad)), yMax = Math.min(H - 1, Math.ceil(cy + rPad));
+      for (let y = yMin; y <= yMax; y++) {
+        for (let x = xMin; x <= xMax; x++) {
+          const d = Math.hypot(x - cx, y - cy) / Math.max(1, radPx);
+          if (d >= 1.25) continue;
+          const w = 1 - Math.min(1, Math.max(0, (d - 0.5) / 0.75));
+          const idx = (y * W + x) * 4;
+          data[idx] = Math.max(data[idx], c8(w * 0.92));
+          data[idx + 2] = 255;
+        }
+      }
+    }
+  }
+
+  const tex = new THREE.DataTexture(data, W, H, THREE.RGBAFormat);
+  tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+  tex.magFilter = THREE.LinearFilter;
+  tex.minFilter = THREE.LinearFilter;
+  tex.needsUpdate = true;
+  CLASS_TEX.value = tex;
+  HAS_CLASS_TEX.value = 1.0;
+}
+
+export function ensureDetail(anisotropy = 8, geo = null) {
+  if (!DETAIL.value) {
+    DETAIL.value = makeDetailTexture(512, anisotropy);
+  }
+  if (!pbrLoadingPromise && typeof Image !== 'undefined') {
+    const loader = new THREE.TextureLoader();
+    const base = new URL('../assets/textures/', import.meta.url);
+    const loadOne = (file) =>
+      new Promise((resolve) => {
+        loader.load(
+          new URL(file, base).href,
+          (t) => {
+            t.wrapS = t.wrapT = THREE.RepeatWrapping;
+            t.colorSpace = THREE.NoColorSpace;
+            t.magFilter = THREE.LinearFilter;
+            t.minFilter = THREE.LinearMipmapLinearFilter;
+            t.generateMipmaps = true;
+            t.anisotropy = anisotropy;
+            t.needsUpdate = true;
+            resolve(t);
+          },
+          undefined,
+          () => resolve(null)
+        );
+      });
+
+    pbrLoadingPromise = Promise.all([
+      loadOne('regolith_diff.jpg'),
+      loadOne('regolith_nor.jpg'),
+      loadOne('regolith_rough.jpg'),
+      loadOne('sand_diff.jpg'),
+      loadOne('sand_nor.jpg'),
+      loadOne('sand_rough.jpg'),
+      loadOne('bedrock_diff.jpg'),
+      loadOne('bedrock_nor.jpg'),
+      loadOne('bedrock_rough.jpg'),
+      loadTerrainClassMap(geo),
+    ]).then(([rD, rN, rR, sD, sN, sR, bD, bN, bR]) => {
+      if (rD && rN && rR && sD && sN && sR && bD && bN && bR) {
+        PBR_MAPS.regDiff.value = rD;
+        PBR_MAPS.regNor.value = rN;
+        PBR_MAPS.regRough.value = rR;
+        PBR_MAPS.sandDiff.value = sD;
+        PBR_MAPS.sandNor.value = sN;
+        PBR_MAPS.sandRough.value = sR;
+        PBR_MAPS.rockDiff.value = bD;
+        PBR_MAPS.rockNor.value = bN;
+        PBR_MAPS.rockRough.value = bR;
+        PBR_MAPS.pbrReady.value = 1.0;
+      }
+      return DETAIL.value;
+    });
+    DETAIL.ready = pbrLoadingPromise;
+  } else if (geo && HAS_CLASS_TEX.value === 0) {
+    loadTerrainClassMap(geo);
+  }
+  return DETAIL.value;
+}
+
+// MeshStandardMaterial gölgelendiricisine eklenir:
+// - CC0 PBR regolit/kum/kaya mikro-albedo ayrıntısı (HiRISE ortofoto rengini koruyarak, uzaklıkla sönümlenen)
+// - API zemin sınıfı (/layers/p_sand.bin, p_bedrock.bin) veya eğim tabanlı doku seçimi
+// - Dik yamaçlarda (≥25°) 3 eksenli (triplanar) kaya dokusu ve sedimanter tabaka yapısı
+// - PBR pürüzlülük (roughness) ve normal haritası karışımı
 export function patchMaterial(shader) {
-  shader.uniforms.uDetail = DETAIL; shader.uniforms.uSynth = SYNTH; shader.uniforms.uScan = SCAN; shader.uniforms.uScanTh = SCAN_TH; shader.uniforms.uScanE = SCAN_E; shader.uniforms.uScanTex = SCAN_TEX; shader.uniforms.uScanDim = SCAN_DIM;
-  shader.vertexShader = 'varying vec3 vWP;\nvarying vec3 vWN;\n' + shader.vertexShader.replace(
-    '#include <begin_vertex>', '#include <begin_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;\n vWN = normalize(mat3(modelMatrix) * objectNormal);');
-  shader.fragmentShader = 'uniform sampler2D uDetail;\nuniform float uSynth;\nuniform vec4 uScan;\nuniform vec2 uScanTh;\nuniform float uScanE;\nuniform sampler2D uScanTex;\nuniform vec2 uScanDim;\nvarying vec3 vWP;\nvarying vec3 vWN;\n' + shader.fragmentShader
-    .replace('#include <map_fragment>', `#include <map_fragment>
-      {
-        vec4 a = texture2D(uDetail, vWP.xz / 2.4), b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.81), c = texture2D(uDetail, (vWP.xz + vec2(3.3, 9.9)) / 19.0);
-        float peb = (a.r - 0.5)*0.55 + (b.r - 0.5)*0.40 + (b.a - 0.5)*0.30;
-        diffuseColor.rgb *= 1.0 + (peb + (c.r - 0.5)*0.40 + (c.a - 0.5)*0.15) * uSynth;
-        // Dik yüzeylerde (≈35–60°) yukarıdan çekilmiş ortofoto yatay çekilir: tabakalı kaya dokusuna geç (renk: yerel ortalama).
-        float steep = smoothstep(0.18, 0.50, 1.0 - clamp(vWN.y, 0.0, 1.0));
-        #ifdef USE_MAP
-          vec3 avgC = textureLod(map, vMapUv, 4.0).rgb;
-        #else
-          vec3 avgC = diffuseColor.rgb;
-        #endif
-        float lay = 0.5 + 0.5*sin(vWP.y*2.3 + (c.r - 0.5)*9.0 + (texture2D(uDetail, vec2(vWP.x + vWP.z, vWP.y) / 7.0).r - 0.5)*3.5);
-        vec3 cliffC = avgC * (0.60 + 0.65*lay) * (0.85 + 0.30*texture2D(uDetail, vWP.xz / 5.0 + vec2(0.37)).a);
-        diffuseColor.rgb = mix(diffuseColor.rgb, cliffC, steep*0.92*uSynth);
-      }`)
-    .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+  shader.uniforms.uDetail = DETAIL;
+  shader.uniforms.uSynth = SYNTH;
+  shader.uniforms.uScan = SCAN;
+  shader.uniforms.uScanTh = SCAN_TH;
+  shader.uniforms.uScanE = SCAN_E;
+  shader.uniforms.uScanTex = SCAN_TEX;
+  shader.uniforms.uScanDim = SCAN_DIM;
+
+  shader.uniforms.uRegDiff = PBR_MAPS.regDiff;
+  shader.uniforms.uRegNor = PBR_MAPS.regNor;
+  shader.uniforms.uRegRough = PBR_MAPS.regRough;
+  shader.uniforms.uSandDiff = PBR_MAPS.sandDiff;
+  shader.uniforms.uSandNor = PBR_MAPS.sandNor;
+  shader.uniforms.uSandRough = PBR_MAPS.sandRough;
+  shader.uniforms.uRockDiff = PBR_MAPS.rockDiff;
+  shader.uniforms.uRockNor = PBR_MAPS.rockNor;
+  shader.uniforms.uRockRough = PBR_MAPS.rockRough;
+  shader.uniforms.uPbrReady = PBR_MAPS.pbrReady;
+
+  shader.uniforms.uClassTex = CLASS_TEX;
+  shader.uniforms.uClassBounds = CLASS_BOUNDS;
+  shader.uniforms.uHasClassTex = HAS_CLASS_TEX;
+
+  shader.vertexShader =
+    'varying vec3 vWP;\nvarying vec3 vWN;\n' +
+    shader.vertexShader.replace(
+      '#include <begin_vertex>',
+      '#include <begin_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;\n vWN = normalize(mat3(modelMatrix) * objectNormal);'
+    );
+
+  const preamble = /* glsl */ `
+    uniform sampler2D uDetail;
+    uniform float uSynth;
+    uniform vec4 uScan;
+    uniform vec2 uScanTh;
+    uniform float uScanE;
+    uniform sampler2D uScanTex;
+    uniform vec2 uScanDim;
+
+    uniform sampler2D uRegDiff;
+    uniform sampler2D uRegNor;
+    uniform sampler2D uRegRough;
+    uniform sampler2D uSandDiff;
+    uniform sampler2D uSandNor;
+    uniform sampler2D uSandRough;
+    uniform sampler2D uRockDiff;
+    uniform sampler2D uRockNor;
+    uniform sampler2D uRockRough;
+    uniform float uPbrReady;
+
+    uniform sampler2D uClassTex;
+    uniform vec4 uClassBounds;
+    uniform float uHasClassTex;
+
+    varying vec3 vWP;
+    varying vec3 vWN;
+
+    // Karo tekrarını (tiling) kırmak için hafif döndürülmüş ikinci örnekleme
+    vec2 rotUv(vec2 uv) {
+      return vec2(uv.x * 0.866 - uv.y * 0.5, uv.x * 0.5 + uv.y * 0.866);
+    }
+
+    // Üç eksenli (triplanar) doku örnekleme (dik yamaçlarda UV sündürmesini önler)
+    vec3 sampleTriplanar(sampler2D tex, vec3 wp, vec3 wn, float scale) {
+      vec3 w = pow(abs(wn), vec3(4.0));
+      w /= max(w.x + w.y + w.z, 1e-5);
+      vec3 sx = texture2D(tex, wp.zy * scale).rgb;
+      vec3 sy = texture2D(tex, wp.xz * scale).rgb;
+      vec3 sz = texture2D(tex, wp.xy * scale).rgb;
+      return sx * w.x + sy * w.y + sz * w.z;
+    }
+
+    // Konuma ve eğime göre (wSand, wRock, steep) ağırlıklarını hesaplar
+    vec3 getTerrainWeights(vec3 wp, vec3 wn) {
+      float slope = 1.0 - clamp(wn.y, 0.0, 1.0); // 1 - cos(theta)
+      float steep = smoothstep(0.09, 0.34, slope); // ~24°..48° arası dik yamaç geçişi
+      float flatGround = 1.0 - smoothstep(0.015, 0.08, slope); // <10° düz/hafif eğimli çukurlar
+
+      // Eğim tabanlı varsayılan ağırlıklar
+      float wSand = flatGround * 0.35;
+      float wRock = clamp(smoothstep(0.05, 0.22, slope), 0.0, 1.0);
+
+      // API / katman sınıfı verisi varsa (/layers/p_sand.bin, p_bedrock.bin) onunla birleştir
+      if (uHasClassTex > 0.5) {
+        vec2 cuv = (wp.xz - uClassBounds.xy) / uClassBounds.zw;
+        if (cuv.x >= 0.0 && cuv.x <= 1.0 && cuv.y >= 0.0 && cuv.y <= 1.0) {
+          vec4 cl = texture2D(uClassTex, cuv);
+          if (cl.b > 0.5) {
+            wSand = clamp(mix(wSand, cl.r, 0.78) + cl.r * 0.35, 0.0, 1.0);
+            wRock = clamp(mix(wRock, cl.g, 0.65) + steep * 0.6, 0.0, 1.0);
+          }
+        }
+      }
+      wSand *= (1.0 - steep);
+      return vec3(wSand, wRock, steep);
+    }
+  `;
+
+  shader.fragmentShader =
+    preamble +
+    shader.fragmentShader
+      .replace(
+        '#include <map_fragment>',
+        /* glsl */ `#include <map_fragment>
+        {
+          float camDist = distance(vWP, cameraPosition);
+          // Mikro ayrıntı yakında (0-55 m) tam, orta mesafede (55-160 m) yumuşakça sönümlenir → ortofoto rengi bozulmaz
+          float nearFade = 1.0 - smoothstep(14.0, 68.0, camDist);
+          float midFade = 1.0 - smoothstep(45.0, 185.0, camDist);
+
+          vec4 a = texture2D(uDetail, vWP.xz / 2.2);
+          vec4 b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.75);
+          vec4 c = texture2D(uDetail, (vWP.xz + vec2(3.3, 9.9)) / 18.0);
+
+          vec3 tw = getTerrainWeights(vWP, normalize(vWN));
+          float wSand = tw.x, wRock = tw.y, steep = tw.z;
+
+          float microMod = 0.0;
+          if (uPbrReady > 0.5 && midFade > 0.005) {
+            vec2 uvFine = rotUv(vWP.xz / 0.68);
+            vec2 uv1 = vWP.xz / 1.65;
+            vec2 uv2 = rotUv(vWP.xz / 5.8 + vec2(4.1, 7.3));
+
+            // Regolit/çakıl yüksek frekanslı mikro-albedo farkı (ortalama = 0, ortofoto rengini değiştirmez)
+            float regFine = dot(texture2D(uRegDiff, uvFine).rgb, vec3(0.333)) - 0.48;
+            float regHi = dot(texture2D(uRegDiff, uv1).rgb, vec3(0.333)) - 0.48;
+            float regMid = dot(texture2D(uRegDiff, uv2).rgb, vec3(0.333)) - 0.48;
+            float regDet = (regFine * 0.62 + regHi * 0.85) * nearFade + regMid * 0.48 * midFade;
+
+            // Kum dalgacıkları mikro-albedo farkı
+            float sandFine = dot(texture2D(uSandDiff, vWP.xz / 0.75).rgb, vec3(0.333)) - 0.52;
+            float sandHi = dot(texture2D(uSandDiff, vWP.xz / 1.6).rgb, vec3(0.333)) - 0.52;
+            float sandMid = dot(texture2D(uSandDiff, rotUv(vWP.xz / 5.0)).rgb, vec3(0.333)) - 0.52;
+            float sandDet = (sandFine * 0.48 + sandHi * 0.68) * nearFade + sandMid * 0.38 * midFade;
+
+            // Ana kaya mikro-çatlak ve yüzey dokusu (triplanar + düzlemsel karışım)
+            vec3 rockTri = sampleTriplanar(uRockDiff, vWP, normalize(vWN), 0.52);
+            vec3 rockTriFine = sampleTriplanar(uRockDiff, vWP, normalize(vWN), 1.35);
+            float rockHi = (dot(rockTri, vec3(0.333)) - 0.46) * 0.85 + (dot(rockTriFine, vec3(0.333)) - 0.46) * 0.55;
+            float rockMid = dot(texture2D(uRockDiff, uv2).rgb, vec3(0.333)) - 0.46;
+            float rockDet = rockHi * nearFade + rockMid * 0.55 * midFade;
+
+            float blendedPbr = mix(regDet, sandDet, wSand);
+            blendedPbr = mix(blendedPbr, rockDet, wRock);
+            microMod = clamp(blendedPbr * 1.38, -0.38, 0.38);
+          } else {
+            float peb = (a.r - 0.5) * 0.48 * nearFade + (b.r - 0.5) * 0.35 * nearFade;
+            microMod = peb + (c.r - 0.5) * 0.28 * midFade;
+          }
+
+          // Ortofoto makro rengi korunur; yalnız mikro-albedo kontrastı eklenir
+          diffuseColor.rgb *= 1.0 + (microMod + (c.r - 0.5) * 0.22 * midFade) * uSynth;
+
+          // Dik yüzeylerde (≥25°) üç eksenli (triplanar) kaya dokusu + Mount Sharp sedimanter katmanlaşması
+          if (steep > 0.005) {
+            #ifdef USE_MAP
+              vec3 avgC = textureLod(map, vMapUv, 3.5).rgb;
+            #else
+              vec3 avgC = diffuseColor.rgb;
+            #endif
+            vec3 triRock = uPbrReady > 0.5
+              ? sampleTriplanar(uRockDiff, vWP, normalize(vWN), 0.26)
+              : vec3(0.46 + (a.r - 0.5) * 0.3);
+            float triLum = clamp(dot(triRock, vec3(0.333)) / 0.46, 0.62, 1.38);
+            float strata = 0.5 + 0.5 * sin(vWP.y * 2.4 + (c.r - 0.5) * 8.0 + (a.r - 0.5) * 2.5);
+            vec3 cliffC = avgC * triLum * (0.72 + 0.48 * strata);
+            diffuseColor.rgb = mix(diffuseColor.rgb, cliffC, steep * 0.88 * midFade * uSynth);
+          }
+        }`
+      )
+      .replace(
+        '#include <roughnessmap_fragment>',
+        /* glsl */ `#include <roughnessmap_fragment>
+        if (uPbrReady > 0.5 && uSynth > 0.01) {
+          float camDistR = distance(vWP, cameraPosition);
+          float rFade = 1.0 - smoothstep(20.0, 110.0, camDistR);
+          if (rFade > 0.01) {
+            vec3 twR = getTerrainWeights(vWP, normalize(vWN));
+            vec2 uvR = vWP.xz / 2.1;
+            float rReg = texture2D(uRegRough, uvR).r;
+            float rSand = texture2D(uSandRough, vWP.xz / 1.8).r;
+            float rRock = sampleTriplanar(uRockRough, vWP, normalize(vWN), 0.32).r;
+            float pbrR = mix(rReg, rSand, twR.x);
+            pbrR = mix(pbrR, rRock * 0.86, max(twR.y, twR.z));
+            roughnessFactor = mix(roughnessFactor, clamp(0.68 + pbrR * 0.30, 0.65, 0.99), rFade * uSynth);
+          }
+        }`
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        /* glsl */ `#include <emissivemap_fragment>
       if (uScan.w > 0.001) {
         float sd = distance(vWP.xz, uScan.xy);
         if (sd < uScan.z + 3.0) {
@@ -121,12 +508,41 @@ export function patchMaterial(shader) {
           totalEmissiveRadiance += sc * (0.03 * vis + 1.9 * mask) + vec3(0.55, 0.95, 1.0) * (ring * 1.5 + ring2);
           diffuseColor.rgb = mix(diffuseColor.rgb, sc * 0.45, (0.02 * vis + 0.5 * mask));
         }
-      }`)
-    .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
-      {
-        vec4 a = texture2D(uDetail, vWP.xz / 2.4), b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.81);
-        vec2 gr = (a.gb*2.0 - 1.0)*0.40 + (b.gb*2.0 - 1.0)*0.28;
-        vec3 Tx = normalize((viewMatrix*vec4(1.0, 0.0, 0.0, 0.0)).xyz), Tz = normalize((viewMatrix*vec4(0.0, 0.0, 1.0, 0.0)).xyz);
-        normal = normalize(normal - (gr.x*Tx + gr.y*Tz) * uSynth);
-      }`);
+      }`
+      )
+      .replace(
+        '#include <normal_fragment_maps>',
+        /* glsl */ `#include <normal_fragment_maps>
+        {
+          float camDistN = distance(vWP, cameraPosition);
+          float nearFadeN = 1.0 - smoothstep(12.0, 62.0, camDistN);
+          float midFadeN = 1.0 - smoothstep(35.0, 150.0, camDistN);
+          vec4 a = texture2D(uDetail, vWP.xz / 2.2);
+          vec4 b = texture2D(uDetail, (vWP.xz + vec2(13.7, 5.1)) / 0.75);
+          vec2 gr = ((a.gb * 2.0 - 1.0) * 0.32 + (b.gb * 2.0 - 1.0) * 0.22) * midFadeN;
+
+          if (uPbrReady > 0.5 && midFadeN > 0.005) {
+            vec3 twN = getTerrainWeights(vWP, normalize(vWN));
+            vec2 uvFine = rotUv(vWP.xz / 0.68);
+            vec2 uv1 = vWP.xz / 1.65;
+            vec2 uv2 = rotUv(vWP.xz / 5.8 + vec2(4.1, 7.3));
+
+            vec2 nReg = ((texture2D(uRegNor, uvFine).xy * 2.0 - 1.0) * 0.75 + (texture2D(uRegNor, uv1).xy * 2.0 - 1.0) * 1.15) * nearFadeN
+                      + (texture2D(uRegNor, uv2).xy * 2.0 - 1.0) * 0.65 * midFadeN;
+            vec2 nSand = ((texture2D(uSandNor, vWP.xz / 0.75).xy * 2.0 - 1.0) * 0.65 + (texture2D(uSandNor, vWP.xz / 1.6).xy * 2.0 - 1.0) * 0.95) * nearFadeN
+                       + (texture2D(uSandNor, rotUv(vWP.xz / 5.0)).xy * 2.0 - 1.0) * 0.55 * midFadeN;
+            vec3 triN = sampleTriplanar(uRockNor, vWP, normalize(vWN), 0.52) * 2.0 - 1.0;
+            vec3 triNFine = sampleTriplanar(uRockNor, vWP, normalize(vWN), 1.35) * 2.0 - 1.0;
+            vec2 nRock = (triN.xy * 1.15 + triNFine.xy * 0.70) * nearFadeN + (texture2D(uRockNor, uv2).xy * 2.0 - 1.0) * 0.75 * midFadeN;
+
+            vec2 pbrGr = mix(nReg * 1.15, nSand * 0.85, twN.x);
+            pbrGr = mix(pbrGr, nRock * 1.35, max(twN.y, twN.z));
+            gr = mix(gr, pbrGr, 0.90);
+          }
+
+          vec3 Tx = normalize((viewMatrix * vec4(1.0, 0.0, 0.0, 0.0)).xyz);
+          vec3 Tz = normalize((viewMatrix * vec4(0.0, 0.0, 1.0, 0.0)).xyz);
+          normal = normalize(normal - (gr.x * Tx + gr.y * Tz) * uSynth);
+        }`
+      );
 }
