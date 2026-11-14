@@ -6,6 +6,8 @@ import type { Px, Route, RoverStop, ScienceStop } from './types'
 export const CONF_COLOR: Record<string, string> = { high: '#22c55e', mid: '#eab308', low: '#f97316' }
 export const SCI_COLOR = '#a855f7'
 export const ROVER_COLOR = '#22d3ee'
+// Canvas çizim + geniş tıklama toleransı: küçük noktalara kolay tıklanır
+const CANVAS = L.canvas({ tolerance: 10 })
 
 // Tam sayı hücre indeksi -> hücre merkezi (rota yolları, bilim durakları)
 const cell = (h: number, p: Px): L.LatLngTuple => [h - p[1] - 0.5, p[0] + 0.5]
@@ -45,7 +47,7 @@ export default function MapView(p: Props) {
     : [...science.map((s) => cell(h, s.px)), ...rovers.map((r) => cont(h, r.px))]
 
   return (
-    <MapContainer crs={L.CRS.Simple} bounds={[[0, 0], [h, w]]} minZoom={-3} maxZoom={6} zoomSnap={0.25} className="h-full w-full" attributionControl={false}>
+    <MapContainer crs={L.CRS.Simple} bounds={[[0, 0], [h, w]]} minZoom={-3} maxZoom={6} zoomSnap={0.25} className="h-full w-full" attributionControl={false} renderer={CANVAS}>
       <Fit pts={pts} fitKey={p.route ? p.route.kind : 'stops'} pad={p.route ? 1.5 : 0.4} h={h} w={w} />
       <ImageOverlay url={p.baseUrl} bounds={[[0, 0], [h, w]]} />
 
@@ -74,7 +76,7 @@ export default function MapView(p: Props) {
       )}
 
       {(p.extraRovers ?? []).map((r) => (
-        <CircleMarker key={'all-' + r.stop_id} center={cont(h, r.px)} radius={2.5}
+        <CircleMarker key={'all-' + r.stop_id} center={cont(h, r.px)} radius={r.stop_id === p.selectedId ? 7 : 3.5}
           pathOptions={{ stroke: false, fillColor: '#e2e8f0', fillOpacity: 0.8 }}
           eventHandlers={{ click: () => p.onSelectRover?.(r) }}>
           <Tooltip>{r.stop_id} · sol {r.sol}</Tooltip>
@@ -105,4 +107,5 @@ export default function MapView(p: Props) {
     </MapContainer>
   )
 }
+
 
