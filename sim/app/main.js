@@ -5,7 +5,8 @@ import { Terrain } from './terrain.js';
 import { Sky } from './sky.js';
 import { Rocks } from './rocks.js';
 import { Nav } from './nav.js';
-import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM } from './detail.js';
+import { SYNTH, SCAN, SCAN_E, SCAN_TEX, SCAN_DIM, PBR } from './detail.js';
+import { makeTerrainUniforms, loadTerrainSet } from '../lib/terrain_patch.js';
 import { MissionMap as MapView } from './wire-map.js';
 import { initWire } from './wire.js';
 import { initExtras } from './wire-extras.js';
@@ -36,6 +37,13 @@ $('sun-el').value = SUN0.el; $('sun-az').value = SUN0.az;
 $('sun-src').textContent = SUN0.real
   ? `Varsayılan = HiRISE ESP_019698_1750 çekim güneşi (yükseklik ${SUN0.el.toFixed(1)}°, kuzeyden ${SUN0.az.toFixed(1)}°; PDS etiketi). Ortofotodaki gölgeler bu yöne aittir.`
   : 'Güneş varsayılanı kaynaksız (params.json yüklenemedi).';
+// Gerçekçi zemin: ?terrain=pbr (CC0 Poly Haven; Dünya malzemesi, Mars ölçümü değil). Varsayılan KAPALI; panelden değişince sayfa yeniden yüklenir.
+if (Q.get('terrain') === 'pbr') {
+  try {
+    const maps = await loadTerrainSet(THREE, './assets/terrain', 'terrain_red_01', { capabilities: { getMaxAnisotropy: () => 4 } });
+    PBR.uniforms = makeTerrainUniforms(THREE, maps, { tileMetres: 2, albedo: 0.28, normal: 0.65, roughness: 0.4, ao: 0.25, cavity: 0 }); PBR.stochastic = Q.get('stoch') === '1';
+  } catch (e) { console.warn('PBR zemin yüklenemedi', e); }
+}
 const geo = new Geo(man);
 const nav = await Nav.load(BASE, man, geo);
 nav.suitSpeed = SUIT_V;
@@ -160,6 +168,8 @@ function applyPure() {
   if (T) T.rocks.userOff = pure || !$('rocks-on').checked;
   if (pure) bobOn = false;
 }
+$('pbr').checked = !!PBR.uniforms;
+$('pbr').onchange = () => { const u = new URL(location.href); if ($('pbr').checked) u.searchParams.set('terrain', 'pbr'); else u.searchParams.delete('terrain'); location.href = u.toString(); };
 $('rocks-on').onchange = () => { if (T) T.rocks.userOff = pure || !$('rocks-on').checked; };
 $('pure').onchange = () => { pure = $('pure').checked; applyPure(); toast(pure ? 'SAF VERİ modu: yalnız DTM + ortofoto, sentetik ayrıntı yok' : 'Sentetik görünüm ayrıntısı açık'); };
 

@@ -2,7 +2,7 @@
 // Seviye k hücre boyutu = res·2^k. Çatlakları gizlemek için kenar eteği (skirt) kullanılır.
 // Kararlılık: LOD histerezisi (bölme/birleştirme eşikleri farklı), kare başına mesh üretim bütçesi, geçişte ebeveyn görünür kalır.
 import * as THREE from 'three';
-import { patchMaterial, ensureDetail } from './detail.js';
+import { patchMaterial, ensureDetail, PBR } from './detail.js';
 
 const N = 129, S = 131;   // köşe sayısı, taşma+kenarlı pencere genişliği
 const BUILD_BUDGET_MS = 4;  // kare başına mesh üretimi için süre bütçesi (en az 1 döşeme)
@@ -177,7 +177,7 @@ export class Terrain {
     if (tex && this.renderer) this.renderer.initTexture(tex);   // GPU yüklemesi mesh bütçesi içinde yapılır (ilk çizimde takılma olmasın)
     const mat = new THREE.MeshStandardMaterial({ map: tex || null, color: tex ? 0xffffff : 0x8b6a52, roughness: 0.96, metalness: 0, side: THREE.DoubleSide });
     mat.onBeforeCompile = patchMaterial;
-    mat.customProgramCacheKey = () => 'mars-terrain-v3';
+    mat.customProgramCacheKey = () => (PBR.uniforms ? 'mars-terrain-v3-pbr' : 'mars-terrain-v3');
     const mesh = new THREE.Mesh(geom, mat);
     mesh.castShadow = this.shadows; mesh.receiveShadow = this.shadows; mesh.visible = false;
     this.group.add(mesh);
