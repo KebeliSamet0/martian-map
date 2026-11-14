@@ -53,5 +53,539 @@
     "actual": "Gerçekleşen",
     "retry": "Görevi tekrarla",
     "close": "Haritaya dön"
+  },
+  "ui": {
+    "intro.title": {
+      "tr": "MARTIAN MAP",
+      "en": "MARTIAN MAP"
+    },
+    "intro.subtitle": {
+      "tr": "EVA PROVASI",
+      "en": "EVA REHEARSAL"
+    },
+    "intro.tagline": {
+      "tr": "Gerçek Mars verisiyle bir yürüyüşü önce burada prova et: rotayı seç, oksijene ve doza bak, sürprize hazır ol.",
+      "en": "Rehearse a Martian walk on real data first: pick the route, watch oxygen and dose, be ready for surprises."
+    },
+    "intro.place": {
+      "tr": "GALE KRATERİ · MOUNT SHARP",
+      "en": "GALE CRATER · MOUNT SHARP"
+    },
+    "intro.start": {
+      "tr": "Görev seç",
+      "en": "Select mission"
+    },
+    "intro.free": {
+      "tr": "Serbest keşif",
+      "en": "Free explore"
+    },
+    "intro.sources": {
+      "tr": "VERİ: HiRISE DTM 1 m · HiRISE ortofoto · Curiosity Navcam · AI4Mars zemin modeli (tahmin) · NASA APACHE skafandr hızı",
+      "en": "DATA: HiRISE DTM 1 m · HiRISE orthophoto · Curiosity Navcam · AI4Mars terrain model (prediction) · NASA APACHE suit speed"
+    },
+    "intro.synthetic": {
+      "tr": "Taş ve regolit ayrıntısı sentetiktir; model çıktıları ölçüm değildir.",
+      "en": "Rock and regolith detail is synthetic; model outputs are not measurements."
+    },
+    "lang.switch": {
+      "tr": "EN",
+      "en": "TR"
+    },
+    "select.title": {
+      "tr": "GÖREV SEÇ",
+      "en": "SELECT MISSION"
+    },
+    "select.back": {
+      "tr": "Geri",
+      "en": "Back"
+    },
+    "select.difficulty": {
+      "tr": "ZORLUK",
+      "en": "DIFFICULTY"
+    },
+    "select.distance": {
+      "tr": "DÜZ HAT",
+      "en": "STRAIGHT LINE"
+    },
+    "select.time": {
+      "tr": "SÜRE LİMİTİ",
+      "en": "TIME LIMIT"
+    },
+    "select.o2": {
+      "tr": "OKSİJEN",
+      "en": "OXYGEN"
+    },
+    "select.go": {
+      "tr": "Brifinge geç",
+      "en": "Open briefing"
+    },
+    "select.loading": {
+      "tr": "Görevler yükleniyor…",
+      "en": "Loading missions…"
+    },
+    "diff.kolay": {
+      "tr": "KOLAY",
+      "en": "EASY"
+    },
+    "diff.orta": {
+      "tr": "ORTA",
+      "en": "MEDIUM"
+    },
+    "diff.zor": {
+      "tr": "ZOR",
+      "en": "HARD"
+    },
+    "unit.min": {
+      "tr": "dk",
+      "en": "min"
+    },
+    "unit.m": {
+      "tr": "m",
+      "en": "m"
+    },
+    "unit.km": {
+      "tr": "km",
+      "en": "km"
+    },
+    "mission.S1.title": {
+      "tr": "Boxwork'ten Atacama sondajına",
+      "en": "From the boxwork to the Atacama drill site"
+    },
+    "mission.S1.brief": {
+      "tr": "Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yürüyeceksin. Bütçen rahat; rotanı seç ve numuneyi al.",
+      "en": "You will walk from the boxwork ridges Curiosity studied to the Atacama drill site. The budget is comfortable; pick your route and collect the sample."
+    },
+    "mission.S1.objective": {
+      "tr": "Atacama sondaj alanına ulaş ve numune al.",
+      "en": "Reach the Atacama drill site and collect a sample."
+    },
+    "mission.S1.science": {
+      "tr": "Boxwork sırtları, yeraltı suyunun çatlaklarda bıraktığı minerallerin izini taşıyor. Numune, bu suyun geçmişini anlamaya yarar.",
+      "en": "The boxwork ridges carry traces of minerals left in fractures by groundwater. The sample helps reconstruct that water history."
+    },
+    "mission.S2.title": {
+      "tr": "Kumlu kestirme",
+      "en": "The sandy shortcut"
+    },
+    "mission.S2.brief": {
+      "tr": "Son boxwork durağından Atacama sondaj alanına yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir.",
+      "en": "You will walk from the last boxwork stop to the Atacama drill site. The shortest path crosses a sandy patch; sand drains your energy and time budget fast."
+    },
+    "mission.S2.objective": {
+      "tr": "Kumu dolaşarak Atacama sondaj alanına ulaş ve numune al.",
+      "en": "Go around the sand, reach the Atacama drill site and collect a sample."
+    },
+    "mission.S2.science": {
+      "tr": "Gevşek kum, rover ve astronot için en büyük kayma ve batma riskidir. Zemin sınıfı modeli bu yüzden rotayı kumdan uzak tutmaya çalışır.",
+      "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. That is why the terrain-class model tries to keep the route off it."
+    },
+    "mission.S3.title": {
+      "tr": "Yarım O₂ tüpü",
+      "en": "Half an oxygen tank"
+    },
+    "mission.S3.brief": {
+      "tr": "Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedefe varmak garanti değil. Oksijeni izle; dönüş noktasını kaçırma.",
+      "en": "A faulty tank leaves you only 80 L of oxygen for this walk. Reaching the goal is not guaranteed. Watch the oxygen; do not miss your turn-back point."
+    },
+    "mission.S3.objective": {
+      "tr": "Oksijen yeterse Atacama'ya ulaş; yetmezse zamanında geri dön.",
+      "en": "Reach Atacama if the oxygen allows; otherwise turn back in time."
+    },
+    "mission.S3.science": {
+      "tr": "Gerçek EVA planlarında asıl sınır oksijen ve dönüş payıdır. Bu görev, \"gitmek mümkün mü\" değil \"dönmek mümkün mü\" sorusunu prova ettirir.",
+      "en": "In real EVA planning the binding limits are oxygen and the return margin. This mission rehearses \"can I get back\", not just \"can I get there\"."
+    },
+    "briefing.title": {
+      "tr": "GÖREV BRİFİNGİ",
+      "en": "MISSION BRIEFING"
+    },
+    "briefing.start": {
+      "tr": "Rotaları hesapla",
+      "en": "Compute routes"
+    },
+    "briefing.back": {
+      "tr": "Görevlere dön",
+      "en": "Back to missions"
+    },
+    "briefing.objective": {
+      "tr": "HEDEF",
+      "en": "OBJECTIVE"
+    },
+    "briefing.limits": {
+      "tr": "LİMİTLER",
+      "en": "LIMITS"
+    },
+    "briefing.risks": {
+      "tr": "RİSKLER",
+      "en": "RISKS"
+    },
+    "briefing.science": {
+      "tr": "BİLİMSEL NEDEN",
+      "en": "WHY IT MATTERS"
+    },
+    "limit.time": {
+      "tr": "Süre",
+      "en": "Time"
+    },
+    "limit.kcal": {
+      "tr": "Enerji",
+      "en": "Energy"
+    },
+    "limit.o2": {
+      "tr": "Oksijen",
+      "en": "Oxygen"
+    },
+    "limit.dose": {
+      "tr": "Doz",
+      "en": "Dose"
+    },
+    "limit.reserve": {
+      "tr": "Dönüş yedeği",
+      "en": "Return reserve"
+    },
+    "risk.sand": {
+      "tr": "Rota üzerinde yaklaşık {r} m yarıçaplı bir kum cebi çıkabilir; çıkarsa rota yeniden hesaplanır.",
+      "en": "A sand pocket of about {r} m radius may appear on the route; if it does, the route is recomputed."
+    },
+    "risk.o2": {
+      "tr": "Oksijen sınırlı: toplam {o2} L.",
+      "en": "Oxygen is limited: {o2} L in total."
+    },
+    "risk.slope": {
+      "tr": "Eğim sınırı aşan segmentler rota kartında işaretlenir (GO / NO-GO).",
+      "en": "Segments over the slope limit are flagged on the route card (GO / NO-GO)."
+    },
+    "risk.dose": {
+      "tr": "Radyasyon dozu bir bütçe kalemidir ({d} µGy limit). Doz değeri modeldir, ölçüm değildir.",
+      "en": "Radiation dose is a budget item ({d} µGy limit). The dose value is modelled, not measured."
+    },
+    "risk.sample": {
+      "tr": "Numune yükü: {kg} kg. Varışta yük taşırken harcama artar.",
+      "en": "Sample load: {kg} kg. Energy use rises when carrying it after arrival."
+    },
+    "route.title": {
+      "tr": "ROTA SEÇ",
+      "en": "SELECT ROUTE"
+    },
+    "route.pick": {
+      "tr": "Bu rotayı seç",
+      "en": "Select this route"
+    },
+    "route.distance": {
+      "tr": "Mesafe",
+      "en": "Distance"
+    },
+    "route.time": {
+      "tr": "Süre",
+      "en": "Time"
+    },
+    "route.energy": {
+      "tr": "Enerji",
+      "en": "Energy"
+    },
+    "route.o2rt": {
+      "tr": "Oksijen (gidiş-dönüş)",
+      "en": "Oxygen (round trip)"
+    },
+    "route.hint": {
+      "tr": "Oksijen değeri gidiş-dönüş içindir; karnedeki \"planlanan\" ise yalnız gidiş (tek yön) yürüyüşü karşılaştırır. Tüm değerler planlayıcı modelinin çıktısıdır.",
+      "en": "The oxygen value is for the round trip; the \"planned\" figure on the report compares the one-way walk only. All values are planner-model outputs."
+    },
+    "route.caution": {
+      "tr": "DİKKAT",
+      "en": "CAUTION"
+    },
+    "route.fallback": {
+      "tr": "Yedek yerel rota (API yok)",
+      "en": "Local fallback route (no API)"
+    },
+    "hud.mission": {
+      "tr": "GÖREV",
+      "en": "MISSION"
+    },
+    "hud.next": {
+      "tr": "SIRADAKİ HEDEF",
+      "en": "NEXT OBJECTIVE"
+    },
+    "hud.remaining": {
+      "tr": "KALAN",
+      "en": "REMAINING"
+    },
+    "hud.free": {
+      "tr": "Serbest keşif",
+      "en": "Free explore"
+    },
+    "hud.o2": {
+      "tr": "OKSİJEN",
+      "en": "OXYGEN"
+    },
+    "hud.o2.unit": {
+      "tr": "L kaldı",
+      "en": "L left"
+    },
+    "hud.energy": {
+      "tr": "ENERJİ",
+      "en": "ENERGY"
+    },
+    "hud.dose": {
+      "tr": "DOZ (MODEL)",
+      "en": "DOSE (MODEL)"
+    },
+    "hud.time": {
+      "tr": "SÜRE",
+      "en": "TIME"
+    },
+    "hud.return": {
+      "tr": "DÖNÜŞ PAYI",
+      "en": "RETURN MARGIN"
+    },
+    "hud.load": {
+      "tr": "YÜK",
+      "en": "LOAD"
+    },
+    "hud.telemetry": {
+      "tr": "YAŞAM DESTEK",
+      "en": "LIFE SUPPORT"
+    },
+    "hud.o2.over": {
+      "tr": "sınır aşıldı",
+      "en": "over limit"
+    },
+    "tip.walk": {
+      "tr": "W A S D yürü · Fare bak · L tara · Esc menü · ? yardım",
+      "en": "W A S D move · Mouse look · L scan · Esc menu · ? help"
+    },
+    "tip.auto": {
+      "tr": "Rota kendiliğinden yürünür; W A S D ile devral, R ile rotaya dön · L tara · Esc menü · ? yardım",
+      "en": "The route walks itself; take over with W A S D, R returns to route · L scan · Esc menu · ? help"
+    },
+    "help.title": {
+      "tr": "KONTROLLER",
+      "en": "CONTROLS"
+    },
+    "help.close": {
+      "tr": "Kapat",
+      "en": "Close"
+    },
+    "help.rows": {
+      "tr": "W A S D|Yürü|Shift|Koş|Fare (tıkla)|Etrafa bak|R|Rotaya dön|L / Shift+L|Zemin tarayıcı / geniş tarama|T|3. şahıs / 1. şahıs|[ ]|Gösterim hızı|G|Navcam fotoğrafını büyüt|N|Ses aç/kapa|H|HUD aç/kapa|Esc|Duraklat menüsü|?|Bu yardım",
+      "en": "W A S D|Move|Shift|Run|Mouse (click)|Look around|R|Return to route|L / Shift+L|Terrain scan / wide scan|T|Third / first person|[ ]|Display speed|G|Enlarge Navcam photo|N|Sound on/off|H|HUD on/off|Esc|Pause menu|?|This help"
+    },
+    "alert.sand.title": {
+      "tr": "KUM ALGILANDI",
+      "en": "SAND DETECTED"
+    },
+    "alert.sand.body": {
+      "tr": "Önündeki zemin planlanandan yumuşak. Rota yeniden hesaplanıyor.",
+      "en": "The ground ahead is softer than planned. Recomputing the route."
+    },
+    "alert.sand.replan": {
+      "tr": "Yeniden planla",
+      "en": "Replan"
+    },
+    "alert.sand.continue": {
+      "tr": "Devam et",
+      "en": "Continue"
+    },
+    "alert.limit.title": {
+      "tr": "SINIR YAKLAŞIYOR",
+      "en": "LIMIT APPROACHING"
+    },
+    "alert.limit.return": {
+      "tr": "Geri dön",
+      "en": "Turn back"
+    },
+    "alert.limit.continue": {
+      "tr": "Devam et",
+      "en": "Continue"
+    },
+    "alert.replan.done": {
+      "tr": "Yeni rota hazır; kum bölgesi dolaşılıyor.",
+      "en": "New route ready; going around the sand."
+    },
+    "alert.offroute": {
+      "tr": "Rotadan saptın ({d} m) · R: rotaya dön",
+      "en": "Off route ({d} m) · R: return to route"
+    },
+    "alert.arrived": {
+      "tr": "Hedefe ulaşıldı",
+      "en": "Goal reached"
+    },
+    "pause.title": {
+      "tr": "DURAKLATILDI",
+      "en": "PAUSED"
+    },
+    "pause.resume": {
+      "tr": "Devam",
+      "en": "Resume"
+    },
+    "pause.info": {
+      "tr": "Görev bilgisi",
+      "en": "Mission info"
+    },
+    "pause.layers": {
+      "tr": "Veri katmanları",
+      "en": "Data layers"
+    },
+    "pause.sound": {
+      "tr": "Ses",
+      "en": "Sound"
+    },
+    "pause.sound.on": {
+      "tr": "Açık",
+      "en": "On"
+    },
+    "pause.sound.off": {
+      "tr": "Kapalı",
+      "en": "Off"
+    },
+    "pause.language": {
+      "tr": "Dil",
+      "en": "Language"
+    },
+    "pause.exit": {
+      "tr": "Görevden çık",
+      "en": "Exit mission"
+    },
+    "pause.layers.empty": {
+      "tr": "Veri katmanları paneli bu sürümde yüklü değil.",
+      "en": "The data-layers panel is not loaded in this build."
+    },
+    "pause.confirm": {
+      "tr": "Görevden çıkılsın mı? İlerleme kaybolur.",
+      "en": "Exit the mission? Progress will be lost."
+    },
+    "report.title": {
+      "tr": "GÖREV KARNESİ",
+      "en": "MISSION REPORT"
+    },
+    "report.planned": {
+      "tr": "Planlanan (tek yön)",
+      "en": "Planned (one way)"
+    },
+    "report.actual": {
+      "tr": "Gerçekleşen",
+      "en": "Actual"
+    },
+    "report.diff": {
+      "tr": "Fark",
+      "en": "Diff"
+    },
+    "report.grade": {
+      "tr": "Derece",
+      "en": "Grade"
+    },
+    "report.retry": {
+      "tr": "Tekrar oyna",
+      "en": "Play again"
+    },
+    "report.other": {
+      "tr": "Başka görev",
+      "en": "Other mission"
+    },
+    "report.close": {
+      "tr": "Başka görev",
+      "en": "Other mission"
+    },
+    "report.insight": {
+      "tr": "VERİNİN ETKİSİ",
+      "en": "EFFECT OF THE DATA"
+    },
+    "report.insight.none": {
+      "tr": "Bu bölüm veri modülü yüklenince dolar.",
+      "en": "This section fills when the data module is loaded."
+    },
+    "report.row.time": {
+      "tr": "Süre (dk)",
+      "en": "Time (min)"
+    },
+    "report.row.kcal": {
+      "tr": "Enerji (kcal)",
+      "en": "Energy (kcal)"
+    },
+    "report.row.o2": {
+      "tr": "Oksijen, tek yön (L)",
+      "en": "Oxygen, one way (L)"
+    },
+    "report.row.dose": {
+      "tr": "Doz, model (µGy)",
+      "en": "Dose, model (µGy)"
+    },
+    "report.missing": {
+      "tr": "Kaynak verisi eksik · derece hesaplanamadı",
+      "en": "Source data missing · grade not computed"
+    },
+    "report.note.A": {
+      "tr": "Plana çok yakın: süre ve enerji sapması %10’un altında.",
+      "en": "Very close to plan: time and energy deviation under 10%."
+    },
+    "report.note.B": {
+      "tr": "Plandan küçük sapma (%10–25).",
+      "en": "Small deviation from plan (10–25%)."
+    },
+    "report.note.C": {
+      "tr": "Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli.",
+      "en": "Notable deviation (over 25%); the route needs a rethink."
+    },
+    "report.note.D": {
+      "tr": "Bir sınır aşıldı: oksijen, enerji, süre ya da doz.",
+      "en": "A limit was exceeded: oxygen, energy, time or dose."
+    },
+    "report.note.F": {
+      "tr": "Görev tamamlanmadı. Bütçe yetmiyorsa geri dönmek doğru karardır.",
+      "en": "Mission not completed. If the budget does not cover it, turning back is the right call."
+    },
+    "label.synthetic": {
+      "tr": "sentetik",
+      "en": "synthetic"
+    },
+    "label.model": {
+      "tr": "model tahmini",
+      "en": "model prediction"
+    },
+    "dev.hint": {
+      "tr": "Geliştirici paneli: ?dev=1",
+      "en": "Developer panels: ?dev=1"
+    },
+    "alerts.limit_o2": {
+      "tr": "Oksijen sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Oxygen limit reached. Start heading back to base."
+    },
+    "alerts.limit_time": {
+      "tr": "Süre sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Time limit reached. Start heading back to base."
+    },
+    "alerts.limit_kcal": {
+      "tr": "Enerji sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Energy limit reached. Start heading back to base."
+    },
+    "alerts.limit_dose": {
+      "tr": "Doz sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Dose limit reached. Start heading back to base."
+    },
+    "alerts.turn_back": {
+      "tr": "Dönüş payı tükeniyor. Geri dönme zamanı.",
+      "en": "Return margin is running out. Time to turn back."
+    },
+    "alerts.data_missing": {
+      "tr": "Kaynak verisi eksik veya limit yaklaşıyor.",
+      "en": "Source data missing or a limit is near."
+    },
+    "flow.return.prep": {
+      "tr": "Üsse dönüş rotası hazırlanıyor; rotayı seçip yürüyüşü başlat.",
+      "en": "Preparing the return route; pick it and start walking."
+    },
+    "flow.noapi": {
+      "tr": "API yok: kum uyarısı gösterildi, yerel rotaya devam.",
+      "en": "No API: sand warning shown, continuing on the local route."
+    },
+    "flow.replan.toast": {
+      "tr": "Yeni rota ({ms} ms): {km} km · {min} dk · {status} — kum bölgesi kaçınıldı.",
+      "en": "New route ({ms} ms): {km} km · {min} min · {status} — sand area avoided."
+    },
+    "flow.replan.fail": {
+      "tr": "Yeniden planlama başarısız ({why}) — mevcut rota sürüyor.",
+      "en": "Replanning failed ({why}) — continuing on the current route."
+    }
   }
 }

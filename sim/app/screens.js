@@ -1,46 +1,14 @@
-// Ekranlar (Veysel): brifing, rota seçimi, uyarılar, karne.
-// Her ekran bir Promise döndürür; Batu akışı tek satırla bağlar:
-//   const route = await showRoutePicker(container, apiResponse.routes);
+// Ekranlar: brifing, rota seçimi, uyarılar, karne. Metinler i18n.js üzerinden texts.json `ui` bölümünden gelir (tr/en).
+// Her ekran bir Promise döndürür. Diğer desk'ler yuva (slots.js) ile içerik ekler.
 import { ensureUiCss, readSnapshot } from './hud.js';
+import { t, loadTexts, TEXTS } from './i18n.js';
+import { fillSlot } from './slots.js';
 
-// Metinler sim/data/texts.json'dan (Elif Nisa). Gelene kadar yer tutucular.
-const PLACEHOLDER = {
-  'briefing.title': 'Görev brifingi',
-  'briefing.start': 'Göreve başla',
-  'briefing.limits': 'Limitler',
-  'route.title': 'Rota seç',
-  'route.pick': 'Bu rotayı seç',
-  'alert.sand.title': 'Kum algılandı',
-  'alert.sand.body': 'Önündeki zemin planlanandan yumuşak. Rota yeniden hesaplanabilir.',
-  'alert.sand.replan': 'Yeniden planla',
-  'alert.sand.continue': 'Devam et',
-  'alert.limit.title': 'Sınır aşılıyor',
-  'alert.limit.body': '{what} limitine yaklaşıyorsun. Üsse dönüş payını koru.',
-  'alert.limit.return': 'Geri dön',
-  'alert.limit.continue': 'Devam et',
-  'report.title': 'Görev karnesi',
-  'report.planned': 'Planlanan',
-  'report.actual': 'Gerçekleşen',
-  'report.grade': 'Derece',
-  'report.close': 'Kapat',
-  'report.retry': 'Tekrar dene',
-};
-const TEXTS = { ...PLACEHOLDER };
-
-export async function loadTexts(url = new URL('../data/texts.json', import.meta.url)) {
-  try {
-    const r = await fetch(url);
-    if (r.ok) Object.assign(TEXTS, await r.json());
-  } catch { /* yer tutucularla devam */ }
-  return TEXTS;
-}
+export { t, loadTexts, TEXTS };
 loadTexts();
 
-export const t = (key, vars = {}) =>
-  String(TEXTS[key] ?? PLACEHOLDER[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
-
 // --- yardımcılar ---
-function el(tag, cls, text) {
+export function el(tag, cls, text) {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
   if (text != null) e.textContent = text;
@@ -57,54 +25,71 @@ function stat(label, value, unit) {
   r.append(el('span', 'mm-g-label', label), el('span', 'mm-num', value), el('span', 'mm-g-unit', unit ?? ''));
   return r;
 }
-function modal(container, title) {
+function modal(container, title, kicker) {
   ensureUiCss();
   const back = el('div', 'mm-ui mm-modal');
   const card = el('section', 'mm-card');
   card.setAttribute('role', 'dialog');
   card.setAttribute('aria-label', title);
+  if (kicker) card.append(el('div', 'mm-kicker', kicker));
   card.append(el('h2', 'mm-card-title', title));
   back.append(card);
   container.append(back);
+  requestAnimationFrame(() => back.classList.add('mm-in'));
   return { back, card, close: () => back.remove() };
 }
-function button(text, kind = 'primary') {
+export function button(text, kind = 'primary') {
   const b = el('button', `mm-btn mm-btn-${kind}`, text);
   b.type = 'button';
   return b;
 }
+const section = (label) => el('h3', 'mm-sub', label);
 
-// --- Brifing kartı ---
-// mission: { name, target, limits: { time_min, kcal, o2_L, dose_uGy, reserve_min } }
-// limits için API rotasının total.budget.limits nesnesi doğrudan verilebilir.
+// --- Brifing ---
+// mission: { id, name, target, objective, science, limits, risks: string[], sampleKg }
+// Çözümler: true (rotaları hesapla) | false (geri)
 export function showBriefing(container, mission = {}) {
   return new Promise((resolve) => {
-    const m = modal(container, t('briefing.title'));
+    const m = modal(container, t('briefing.title'), mission.id);
+    m.card.classList.add('mm-card-brief');
     const L = mission.limits ?? {};
-    m.card.append(
-      el('div', 'mm-mission', mission.name ?? 'Görev adı'),
-      el('p', 'mm-text', mission.target ?? 'Hedef: —'),
-      el('h3', 'mm-sub', t('briefing.limits')),
-    );
-    const grid = el('div', 'mm-stats');
+    m.card.append(el('div', 'mm-mission', mission.name ?? '—'));
+    if (mission.target) m.card.append(el('p', 'mm-text', mission.target));
+    if (mission.objective) m.card.append(section(t('briefing.objective')), el('p', 'mm-text mm-objective', mission.objective));
+    const cols = el('div', 'mm-brief-cols');
+    const left = el('div'), right = el('div');
+    left.append(section(t('briefing.limits')));
+    const grid = el('div', 'mm-stats mm-stats-col');
     grid.append(
-      stat('Süre', n(L.time_min), 'dk'),
-      stat('Enerji', n(L.kcal), 'kcal'),
-      stat('Oksijen', n(L.o2_L), 'L'),
-      stat('Doz', n(L.dose_uGy), 'µGy'),
-      stat('Yedek', n(L.reserve_min), 'dk'),
+      stat(t('limit.time'), n(L.time_min), t('unit.min')),
+      stat(t('limit.kcal'), n(L.kcal), 'kcal'),
+      stat(t('limit.o2'), n(L.o2_L), 'L'),
+      stat(t('limit.dose'), n(L.dose_uGy), 'µGy'),
     );
-    const go = button(t('briefing.start'));
-    go.onclick = () => { m.close(); resolve(); };
-    m.card.append(grid, go);
+    if (L.reserve_min != null) grid.append(stat(t('limit.reserve'), n(L.reserve_min), t('unit.min')));
+    left.append(grid);
+    right.append(section(t('briefing.risks')));
+    const ul = el('ul', 'mm-risks');
+    (mission.risks ?? []).forEach((r) => ul.append(el('li', null, r)));
+    right.append(ul);
+    cols.append(left, right);
+    m.card.append(cols);
+    if (mission.science) m.card.append(section(t('briefing.science')), el('p', 'mm-text mm-science', mission.science));
+    const acts = el('div', 'mm-alert-acts mm-acts-end');
+    const back = button(t('briefing.back'), 'ghost'), go = button(t('briefing.start'));
+    back.onclick = () => { m.close(); resolve(false); };
+    go.onclick = () => { m.close(); resolve(true); };
+    acts.append(back, go);
+    m.card.append(acts);
     go.focus();
   });
 }
 
-// --- Rota seçim kartı: API /route yanıtındaki routes dizisi ---
-export function showRoutePicker(container, routes = []) {
+// --- Rota seçimi: API /route yanıtındaki routes dizisi ---
+// ctx.call / ctx.geo / ctx.mission yuvalara aktarılır. Geri düğmesi null döndürür.
+export function showRoutePicker(container, routes = [], ctx = {}) {
   return new Promise((resolve) => {
-    const m = modal(container, t('route.title'));
+    const m = modal(container, t('route.title'), ctx.mission?.id);
     m.card.classList.add('mm-card-wide');
     const row = el('div', 'mm-routes');
     routes.forEach((r) => {
@@ -114,10 +99,10 @@ export function showRoutePicker(container, routes = []) {
       top.append(el('span', 'mm-route-name', r.label ?? r.kind), badge(tt.status ?? (tt.go ? 'GO' : 'NO-GO')));
       const s = el('div', 'mm-stats mm-stats-col');
       s.append(
-        stat('Mesafe', n(tt.km, 2), 'km'),
-        stat('Süre', n(tt.min), 'dk'),
-        stat('Enerji', n(tt.kcal), 'kcal'),
-        stat('Oksijen', n(tt.o2_L), 'L'),
+        stat(t('route.distance'), n(tt.km, 2), t('unit.km')),
+        stat(t('route.time'), n(tt.min), t('unit.min')),
+        stat(t('route.energy'), n(tt.kcal), 'kcal'),
+        stat(t('route.o2rt'), n(tt.o2_L), 'L'),
       );
       const pick = button(t('route.pick'), 'ghost');
       pick.onclick = () => { m.close(); resolve(r); };
@@ -125,13 +110,23 @@ export function showRoutePicker(container, routes = []) {
       row.append(c);
     });
     m.card.append(row);
+    // Veri desk'inin "model açık/kapalı" karşılaştırması ve benzerleri buraya girer.
+    const extra = el('div', 'mm-route-extra');
+    m.card.append(extra);
+    void fillSlot('route-extra', { routes, ...ctx, container: extra }, extra);
+    m.card.append(el('p', 'mm-fine', t('route.hint')));
+    const acts = el('div', 'mm-alert-acts mm-acts-end');
+    const back = button(t('briefing.back'), 'ghost');
+    back.onclick = () => { m.close(); resolve(null); };
+    acts.append(back);
+    m.card.append(acts);
     row.querySelector('button')?.focus();
   });
 }
 
 // --- Uyarılar: ekranın üstünde bant; oyun durmaz ---
 // kind: 'sand' → 'replan' | 'continue';  kind: 'limit' → 'return' | 'continue'
-export function showAlert(container, kind, { what = 'Oksijen', timeoutMs = 0 } = {}) {
+export function showAlert(container, kind, { what = '', timeoutMs = 0, actions = true } = {}) {
   ensureUiCss();
   return new Promise((resolve) => {
     container.querySelector(`.mm-alert[data-kind="${kind}"]`)?.remove();
@@ -139,58 +134,74 @@ export function showAlert(container, kind, { what = 'Oksijen', timeoutMs = 0 } =
     a.dataset.kind = kind;
     a.setAttribute('role', 'alert');
     const txt = el('div', 'mm-alert-text');
-    txt.append(el('strong', null, t(`alert.${kind}.title`)), el('span', null, t(`alert.${kind}.body`, { what })));
-    const acts = el('div', 'mm-alert-acts');
-    const choices = kind === 'sand' ? ['replan', 'continue'] : ['return', 'continue'];
+    txt.append(el('strong', null, t(`alert.${kind}.title`)), el('span', null, kind === 'limit' ? what : t(`alert.${kind}.body`, { what })));
+    a.append(txt);
     let timer = 0;
-    const done = (v) => { clearTimeout(timer); a.remove(); resolve(v); };
-    choices.forEach((c, i) => {
-      const b = button(t(`alert.${kind}.${c}`), i === 0 ? 'primary' : 'ghost');
-      b.onclick = () => done(c);
-      acts.append(b);
-    });
-    a.append(txt, acts);
+    const done = (v) => { clearTimeout(timer); a.classList.remove('mm-in'); setTimeout(() => a.remove(), 250); document.body.classList.remove('mm-event'); resolve(v); };
+    if (actions) {
+      const acts = el('div', 'mm-alert-acts');
+      const choices = kind === 'sand' ? ['replan', 'continue'] : ['return', 'continue'];
+      choices.forEach((c, i) => {
+        const b = button(t(`alert.${kind}.${c}`), i === 0 ? 'primary' : 'ghost');
+        b.onclick = () => done(c);
+        acts.append(b);
+      });
+      a.append(acts);
+    }
     container.append(a);
+    requestAnimationFrame(() => a.classList.add('mm-in'));
+    if (kind === 'sand') document.body.classList.add('mm-event');   // kırmızı kenar vurgusu (CSS)
     if (timeoutMs > 0) timer = setTimeout(() => done('continue'), timeoutMs);
   });
 }
 
 // --- Karne ---
-// planned: seçilen rotanın total nesnesi; actual: vitals.snapshot() çıktısı.
+// planned: seçilen rotanın tek yön özeti (walkPlan); actual: hud.js alan adlarıyla anlık görüntü.
 export function gradeMission(planned, actual, { completed = true } = {}) {
   const a = readSnapshot(actual);
-  if (!completed) return { grade: 'F', note: 'Görev tamamlanmadı' };
+  const out = (grade) => ({ grade, note: t(`report.note.${grade}`) });
+  if (!completed) return out('F');
   const over = [[a.o2, a.o2Limit], [a.kcal, a.kcalLimit], [a.elapsed, a.timeLimit], [a.dose, a.doseLimit]]
     .some(([x, l]) => x != null && l > 0 && x > l);
-  if (over) return { grade: 'D', note: 'Bir limit aşıldı' };
+  if (over) return out('D');
   const dev = [[a.elapsed, planned?.eva_min ?? planned?.min], [a.kcal, planned?.eva_kcal ?? planned?.kcal]]
     .filter(([x, p]) => x != null && p > 0).map(([x, p]) => Math.abs(x - p) / p);
   const worst = dev.length ? Math.max(...dev) : 0;
-  if (worst <= 0.1) return { grade: 'A', note: 'Plana çok yakın' };
-  if (worst <= 0.25) return { grade: 'B', note: 'Plandan küçük sapma' };
-  return { grade: 'C', note: 'Plandan belirgin sapma' };
+  return out(worst <= 0.1 ? 'A' : worst <= 0.25 ? 'B' : 'C');
 }
 
-export function showReport(container, { planned = {}, actual = {}, completed = true, title } = {}) {
+// Karne TEK KEZ açılır: açıkken yeniden çağrılırsa aynı Promise döner (AKIS_TESTI sorun 5).
+let activeReport = null;
+export function showReport(container, opts = {}) {
+  if (activeReport) return activeReport;
+  const p = buildReport(container, opts).finally(() => { activeReport = null; });
+  activeReport = p;
+  return p;
+}
+export const reportOpen = () => !!activeReport;
+
+function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission } = {}) {
   return new Promise((resolve) => {
-    const m = modal(container, title ?? t('report.title'));
-    m.card.classList.add('mm-card-wide');
+    const m = modal(container, title ?? t('report.title'), mission?.id);
+    m.card.classList.add('mm-card-wide', 'mm-card-report');
     const a = readSnapshot(actual);
+    const missing = [a.kcal, a.o2, a.dose].some((v) => v == null);
     const g = gradeMission(planned, actual, { completed });
+    if (missing && completed) { g.grade = '—'; g.note = t('report.missing'); }
 
     const head = el('div', 'mm-grade');
-    head.append(el('span', 'mm-grade-letter', g.grade), el('span', 'mm-text', `${t('report.grade')}: ${g.note}`));
+    head.append(el('span', 'mm-grade-letter', g.grade), el('span', 'mm-text', g.note));
     head.dataset.grade = g.grade;
 
     const tbl = el('table', 'mm-table');
     const thead = el('tr');
-    ['', t('report.planned'), t('report.actual'), 'Fark'].forEach((h) => thead.append(el('th', null, h)));
+    ['', t('report.planned'), t('report.actual'), t('report.diff')].forEach((h) => thead.append(el('th', null, h)));
     tbl.append(thead);
     const rows = [
-      ['Süre (dk)', planned.eva_min ?? planned.min, a.elapsed, 0],
-      ['Enerji (kcal)', planned.eva_kcal ?? planned.kcal, a.kcal, 0],
-      ['Oksijen (L)', planned.o2_L, a.o2, 0],
-      ['Doz (µGy)', planned.dose_uGy, a.dose, 1],
+      [t('report.row.time'), planned.eva_min ?? planned.min, a.elapsed, 0],
+      [t('report.row.kcal'), planned.eva_kcal ?? planned.kcal, a.kcal, 0],
+      [t('report.row.o2'), planned.o2_L, a.o2, 0],
+      [t('report.row.dose'), planned.dose_uGy, a.dose, 1],
     ];
     rows.forEach(([label, p, x, d]) => {
       const tr = el('tr');
@@ -201,13 +212,20 @@ export function showReport(container, { planned = {}, actual = {}, completed = t
       tbl.append(tr);
     });
 
-    const acts = el('div', 'mm-alert-acts');
+    // "Verinin etkisi": veri desk'inin yuvası. Boşsa bölüm hiç görünmez (uydurma içerik yok).
+    const insight = el('div', 'mm-insight');
+    insight.hidden = true;
+    const body = el('div', 'mm-insight-body');
+    insight.append(section(t('report.insight')), body);
+    void fillSlot('report-insight', { planned, actual, route, mission, completed, container: body }, body).then(() => { insight.hidden = !body.childNodes.length; });
+
+    const acts = el('div', 'mm-alert-acts mm-acts-end');
     const retry = button(t('report.retry'), 'ghost');
-    const close = button(t('report.close'));
+    const other = button(t('report.other'));
     retry.onclick = () => { m.close(); resolve('retry'); };
-    close.onclick = () => { m.close(); resolve('close'); };
-    acts.append(retry, close);
-    m.card.append(head, tbl, acts);
-    close.focus();
+    other.onclick = () => { m.close(); resolve('other'); };
+    acts.append(retry, other);
+    m.card.append(head, tbl, insight, acts);
+    other.focus();
   });
 }
