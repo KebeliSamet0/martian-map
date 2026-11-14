@@ -5,6 +5,8 @@ Kullanım:
     python train.py <prep_dir> [--epochs 1] [--bs 8] [--lr 3e-4] [--max-steps N] [--out models/rover_terrain]
 
 - Loss: CrossEntropy, ignore_index=255 (etiketsiz / rover / >30 m).
+  --class-weights: train etiketli piksel frekansının ters karekökü (ortalama 1'e normalize);
+  büyük kaya (%0,9) ve kum (%12) kaybı ağırlaşır.
 - Decoder çıkışında Dropout2d (MC Dropout için çıkarımda açık bırakılacak).
 - Her epoch sonunda val üzerinde mIoU + sınıf bazlı IoU; sonuç <out>/metrics.json'a eklenir.
 - Ağırlıklar (<out>/*.pt) git'e girmez.
@@ -18,6 +20,8 @@ import albumentations as A
 import segmentation_models_pytorch as smp
 
 NAMES = ["toprak", "ana kaya", "kum", "büyük kaya"]
+# docs/data/ai4mars.md: train etiketli piksel payları (toprak, ana kaya, kum, büyük kaya)
+LABELED_FREQ = np.array([0.372, 0.498, 0.120, 0.009])
 MEAN, STD = np.array([0.485, 0.456, 0.406], np.float32), np.array([0.229, 0.224, 0.225], np.float32)
 
 
@@ -69,6 +73,7 @@ def main():
     ap.add_argument("--dropout", type=float, default=0.1)
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--max-steps", type=int, default=0, help="duman testi için epoch başına adım sınırı")
+    ap.add_argument("--class-weights", action="store_true", help="ters karekök frekans ağırlıklı CE")
     ap.add_argument("--out", default="models/rover_terrain")
     a = ap.parse_args()
 
@@ -89,7 +94,13 @@ def main():
     steps = (a.max_steps or len(tr)) * a.epochs
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, a.lr, total_steps=steps, pct_start=0.1)
     scaler = torch.amp.GradScaler(enabled=dev.type == "cuda")
-    lossf = nn.CrossEntropyLoss(ignore_index=255)
+    w = None
+    if a.class_weights:
+        w = 1 / np.sqrt(LABELED_FREQ); w = w / w.mean()
+        print("sınıf ağırlıkları:", dict(zip(NAMES, np.round(w, 2).tolist())))
+        w = torch.tensor(w, dtype=torch.float32, device=dev)
+    lossf = nn.CrossEntropyLoss(weight=w, ignore_index=255)
+    best = -1.0
     os.makedirs(a.out, exist_ok=True)
     log = []
 
@@ -118,9 +129,11 @@ def main():
         print(json.dumps(rec, ensure_ascii=False), flush=True)
         log.append(rec)
         torch.save(model.state_dict(), os.path.join(a.out, "last.pt"))
-    json.dump(dict(args=vars(a), gpu=torch.cuda.get_device_name(0) if dev.type == "cuda" else "cpu",
-                   torch=torch.__version__, log=log),
-              open(os.path.join(a.out, "metrics.json"), "w"), indent=1, ensure_ascii=False)
+        if m["mIoU"] > best:
+            best = m["mIoU"]; torch.save(model.state_dict(), os.path.join(a.out, "best.pt"))
+        json.dump(dict(args=vars(a), gpu=torch.cuda.get_device_name(0) if dev.type == "cuda" else "cpu",
+                       torch=torch.__version__, best_val_mIoU=best, log=log),
+                  open(os.path.join(a.out, "metrics.json"), "w"), indent=1, ensure_ascii=False)
 
 
 if __name__ == "__main__":
