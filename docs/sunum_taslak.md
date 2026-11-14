@@ -74,10 +74,10 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
 - **Başlık:** What we checked against reality, and what we assume
 - **Ana mesaj:** We test the model against Curiosity's real images and real path, and label every assumption.
 - **Maddeler:**
-  - Scanner vs Navcam: `[Emre'den gelecek: tarayıcı sınıflarının Navcam görüntüleriyle karşılaştırması, tek cümle + sayı]`
+  - Terrain model vs Curiosity's own Navcam images at 18 stops: the dominant terrain is right at 16 of 18. Sand was caught at only 2 of the 7 stops where it is visible, so the scanner under-reports sand, and we say so. On expert-labelled test images the model finds 97% of large rocks (AI4Mars test set; `ml/rover_terrain/METRICS.md`, `LAYERS.md`).
   - Curiosity's real path: Curiosity crossed our area in 3.89 km; between the same entry and exit our routes are 2.26–2.30 km, 140 m from its track on average. Most of the gap is Curiosity's science detours to the boxwork ridges (PR #65; slope and rocks only, without the terrain model).
   - Assumptions are shown in the app (`/assumptions`): Earth-measured terrain coefficients, Mars gravity scaling, EVA limits. Full text: bölüm 4.
-- **Görsel:** `docs/figures/msl_compare.png` (PR #65, bizim rotalar + Curiosity'nin gerçek yolu) + Emre'nin karşılaştırma görseli `[Emre'den gelecek]`.
+- **Görsel:** `docs/figures/msl_compare.png` (bizim rotalar + Curiosity'nin gerçek yolu) + 18 durak kontrol tablosunun kısaltılmış hâli (`ml/rover_terrain/LAYERS.md`; 2–3 örnek Navcam karesi ve modelin tahmini yan yana).
 
 ### Slayt 7: Etki ve sonraki adım
 - **Başlık:** Rehearse on data today, walk on Mars tomorrow
@@ -96,7 +96,7 @@ Hazırlayan: Elif Nisa · 2026-11-14 · Sunum: Paz ~21:00 · Slayt metinleri İn
 |---|---|---|
 | **Impact** | 1, 7 | "Every step on Mars spends oxygen you cannot get back." / "Astronauts and mission control see the cost and the risk of a route before anyone steps out." |
 | **Creativity** | 2, 5 | "An astronaut mission rehearsal simulator on real Mars terrain." Tarayıcının "model not sure" etiketi: modelin bilmediğini gösteren bir arayüz. |
-| **Validity** | 3, 6 | "Built on real NASA data from where Curiosity explored." / Navcam karşılaştırması ve Curiosity'nin gerçek yoluyla kıyas / "label every assumption". |
+| **Validity** | 3, 6 | "Built on real NASA data from where Curiosity explored." / "The dominant terrain is right at 16 of 18 stops" (Navcam) / Curiosity'nin gerçek yoluyla kıyas / "label every assumption". |
 | **Relevance** | 1, 3, 5 | Challenge "Interplanetary Survival Guide: Martian Map": Mars yüzeyinde insanlı yürüyüşün hazırlığı, gerçek Curiosity bölgesinde, NASA verisiyle. |
 | **Presentation** | 2, 5 | Tek karede ürün; baştan sona tek görev demosu; 30 sn video (bölüm 3). |
 
@@ -136,7 +136,7 @@ Not: Altyazı seslendirme metniyle aynı. Render: Batu. Ekran kaydı 21:00 prova
 - Sourced alternatives in `docs/eva_parameters.md`: 7 h and 1800 kcal (Apollo 15–17 life support), walk-back distance ≤ 3.5 km (NASA Mars suit study, Ogilvie et al. 2026).
 - Radiation dose budget per EVA: demo value; not a NASA limit (`docs/data/rad_rems_route.md`).
 - Rock cover counts only rocks ≥ 1 m (HiRISE resolution), so it is a lower bound.
-- Terrain model is trained on Curiosity images from 2012–2019; it has not seen the boxwork area. Where it is unsure, the scanner says so.
+- Terrain model: trained on AI4Mars (Curiosity Navcam, 2012–2019), applied to 391 Navcam frames at 128 rover stops in our area. About 65% of the area has no nearby Navcam evidence; there the scanner shows "model not sure" instead of guessing. The model under-reports sand (2 of 7 checked stops).
 
 **Sources:** `docs/REFERENCES.md` · `docs/metabolic_model.md` · `docs/eva_parameters.md` · `docs/data/rad_rems_route.md`
 

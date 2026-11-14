@@ -71,3 +71,5 @@
 - Richmond, P. W., Potter, A. W., Santee, W. R. (2015), Terrain Factors for Predicting Walking and Load Carriage Energy Costs: Review and Refinement. J. Sport Hum. Perform. 3(3). https://jhp-ojs-tamucc.tdl.org/jhp/article/view/67
 - Kim, K. J. et al. (2023), Uneven terrain affects metabolic cost and gait in simulated complex lunar surfaces. Physiol. Meas. 44(10), 104001. https://doi.org/10.1088/1361-6579/acf993 — NASA Rock Yard, karışık arazi +%58.
 - Johnson, A. W. et al. (2010), An Integrated Traverse Planner and Analysis Tool for Planetary Exploration (SEXTANT). AIAA SPACE 2010. https://web.mit.edu/aeroastro/www/people/dnewman/pdf2/DJN_AJohnsonSPACEAUG2010.pdf
+- Quaternius, Astronaut (animated glTF model), CC0 1.0 — https://poly.pizza/m/3hC2i0CTuO — simülatördeki astronot modeli (`sim/ASSETS.md`).
+- three.js r160 (GLTFLoader, BufferGeometryUtils), MIT — https://threejs.org/ — simülatör 3D motoru.
