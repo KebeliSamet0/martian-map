@@ -46,7 +46,7 @@ registerSlot('route-extra', async ({ routes, call, geo }) => {
   const host = document.createElement('div');
   try {
     const data = await compareFor(r0.startPx, r0.goalPx, call);
-    let kind = kindsOf(r0.kind);
+    let kind = 'balanced';   // ana karşılaştırma dengeli rota; sekmelerle diğer türler
     const tabs = document.createElement('div'); tabs.style.cssText = 'display:flex;gap:6px;margin:8px 0 0';
     const panel = renderCompare(host, data, C, { kind });
     host.insertBefore(tabs, panel.el);
