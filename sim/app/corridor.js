@@ -38,7 +38,7 @@ export function createStopWatcher(stops, { near = NEAR_M, rearm = REARM_M } = {}
  * opts: groundY(x,z) (ör. main.js groundY; yoksa terrain.heightAt), data (önceden yüklenmiş JSON), url, lift, width.
  * Her karede update(oyuncuKonumu) çağırın.
  */
-export async function initCorridor(scene, terrain, geo, { groundY, data, url, lift = 0.12, width = 0.6 } = {}) {
+export async function initCorridor(scene, terrain, geo, { groundY, data, url, lift = 0.05, width = 0.38, track = 2.8 } = {}) {
   const THREE = await import('three');
   const src = url ?? new URL('../data/curiosity.json', import.meta.url);
   if (!data) { const r = await fetch(src); if (!r.ok) throw new Error(`curiosity.json HTTP ${r.status}`); data = await r.json(); }
@@ -46,27 +46,32 @@ export async function initCorridor(scene, terrain, geo, { groundY, data, url, li
   const gy = groundY ?? ((x, z) => terrain.heightAt(x, z));
   const group = new THREE.Group(); group.name = 'curiosity-corridor'; scene.add(group);
 
-  const lineMat = new THREE.MeshBasicMaterial({ color: 0xf3e7c9, transparent: true, opacity: 0.8, depthWrite: false,
+  const lineMat = new THREE.MeshBasicMaterial({ color: 0x2b1b12, transparent: true, opacity: 0.34, depthWrite: false,
     side: THREE.DoubleSide, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const line = new THREE.Mesh(new THREE.BufferGeometry(), lineMat); line.frustumCulled = false; line.renderOrder = 4; group.add(line);
 
-  const poleGeo = new THREE.CylinderGeometry(0.05, 0.05, 1.6, 6), headGeo = new THREE.SphereGeometry(0.28, 12, 8);
-  const markMat = new THREE.MeshBasicMaterial({ color: 0xffc94d, toneMapped: false });
+  const poleGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.1, 6), headGeo = new THREE.OctahedronGeometry(0.11);
+  const markMat = new THREE.MeshBasicMaterial({ color: 0xe0a23a, toneMapped: false, transparent: true, opacity: 0.85 });
   const markers = stops.map(s => {
     const m = new THREE.Group(), pole = new THREE.Mesh(poleGeo, markMat), head = new THREE.Mesh(headGeo, markMat);
-    pole.position.y = 0.8; head.position.y = 1.75; m.add(pole, head); m.userData.stop = s; group.add(m); return m;
+    pole.position.y = 0.55; head.position.y = 1.22; m.add(pole, head); m.userData.stop = s; group.add(m); return m;
   });
 
-  function build() {  // şerit: her noktada yola dik ±width/2, yükseklik araziden (yoksa son bilinen)
-    const n = trail.length, w = width / 2, pos = new Float32Array(n * 6), idx = [];
+  function build() {  // Curiosity'nin iki tekerlek izi: yol ekseninin ±track/2 yanında, her biri `width` genişlikte ince şerit (temsili; iz genişliği ≈ 2,8 m)
+    const n = trail.length, w = width / 2, pos = new Float32Array(n * 12), idx = [];
     let lastY = 0;
+    const Y = (x, z) => { const y = gy(x, z); if (y != null) lastY = y; return lastY; };
     for (let i = 0; i < n; i++) {
       const a = trail[Math.max(0, i - 1)], b = trail[Math.min(n - 1, i + 1)], p = trail[i];
       let tx = b[0] - a[0], tz = b[1] - a[1]; const tl = Math.hypot(tx, tz) || 1; tx /= tl; tz /= tl;
-      const y = gy(p[0], p[1]); if (y != null) lastY = y;
-      const yl = gy(p[0] - tz * w, p[1] + tx * w) ?? lastY, yr = gy(p[0] + tz * w, p[1] - tx * w) ?? lastY;
-      pos.set([p[0] - tz * w, yl + lift, p[1] + tx * w, p[0] + tz * w, yr + lift, p[1] - tx * w], i * 6);
-      if (i < n - 1) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
+      const nx = -tz, nz = tx;   // yola dik
+      let o = i * 12;
+      for (const side of [-1, 1]) {
+        const cx = p[0] + nx * side * track / 2, cz = p[1] + nz * side * track / 2;
+        const x1 = cx - nx * w, z1 = cz - nz * w, x2 = cx + nx * w, z2 = cz + nz * w;
+        pos.set([x1, Y(x1, z1) + lift, z1, x2, Y(x2, z2) + lift, z2], o); o += 6;
+      }
+      if (i < n - 1) for (const k of [i * 4, i * 4 + 2]) idx.push(k, k + 1, k + 4, k + 1, k + 5, k + 4);
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(idx);
     line.geometry.dispose(); line.geometry = g;

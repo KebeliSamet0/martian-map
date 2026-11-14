@@ -10,6 +10,7 @@ import { pxToWorld } from './api.js';
 
 const SEAT_LIFT = 0.3;       // kaya merkezi: çevre zeminin en alçağından, dikey yarıçapın bu oranı kadar yukarı (gömülü/havada kalmasın)
 const SAND_LIFT = 0.12;      // kum diski zeminden bu kadar (m) yukarıda: z-çakışması olmasın
+const BIG_M = 2.6;           // bu çaptan büyük tespitler tek kaya gibi çizilmez (gölge yöntemi sırt gölgelerini de yakalar)
 const RESEAT_MS = 1000;      // daha ince arazi döşemesi geldiyse en çok bu sıklıkta yeniden otur
 
 function hash(a, s) {   // 0..1, deterministik
@@ -18,20 +19,19 @@ function hash(a, s) {   // 0..1, deterministik
   return (h >>> 0) / 4294967295;
 }
 
-/** Aşınmış, hafif yassı kaya: ikosahedron, köşeler yönüne bağlı çok oktavlı sapma (çatlak yok), pürüzsüz normal. */
+/** Köşeli, kırık yüzeyli kaya: düşük poligonlu ikosahedron, köşeler yönüne bağlı sapma; düz gölgeleme kırık yüzey hissi verir. */
 function rockGeometry() {
-  const g = new THREE.IcosahedronGeometry(1, 2);   // indekssiz: aynı konumdaki köşeler aynı sapmayı alır
-  g.deleteAttribute('uv');
-  const p = g.attributes.position, v = new THREE.Vector3(), nrm = new Float32Array(p.count * 3);
+  const g = new THREE.IcosahedronGeometry(1, 1);
+  const p = g.attributes.position, v = new THREE.Vector3();
   for (let i = 0; i < p.count; i++) {
     v.fromBufferAttribute(p, i).normalize();
-    const k = (a) => Math.round(a * 8);
-    const a = hash(k(v.x) * 31 + k(v.y) * 17 + k(v.z) * 7, 7), b = hash(Math.round(v.x * 21) * 53 + Math.round(v.y * 21) * 29 + Math.round(v.z * 21) * 13, 9);
-    const r = 0.80 + 0.28 * a + 0.12 * b;
-    nrm.set([v.x, v.y, v.z], i * 3);
-    p.setXYZ(i, v.x * r, v.y * r * 0.62, v.z * r);
+    const k = (a) => Math.round(a * 6);
+    const a = hash(k(v.x) * 31 + k(v.y) * 17 + k(v.z) * 7, 7), b = hash(k(v.x) * 53 + k(v.y) * 29 + k(v.z) * 13, 9);
+    const r = 0.62 + 0.46 * a + 0.16 * b;                       // belirgin düzensizlik
+    const flat = v.y < -0.2 ? 0.25 : 0.70 + 0.2 * b;            // alt yarı gömülü, üst yassı
+    p.setXYZ(i, v.x * r, v.y * r * flat, v.z * r);
   }
-  g.setAttribute('normal', new THREE.BufferAttribute(nrm, 3));
+  g.computeVertexNormals();
   return g;
 }
 
@@ -65,6 +65,18 @@ function sandGeometry() {
   return g;
 }
 
+/** Kaya malzemesi: CC0 ana kaya dokusu (sim/assets/textures, bkz. sim/ASSETS.md); doku yoksa düz renk. */
+function rockMaterial() {
+  const m = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.96, metalness: 0, flatShading: true });
+  const L = new THREE.TextureLoader(), base = new URL('../assets/textures/', import.meta.url);
+  const load = (name, srgb, set) => L.load(new URL(name, base).href, (t) => {
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 2); if (srgb) t.colorSpace = THREE.SRGBColorSpace; set(t); m.needsUpdate = true;
+  }, undefined, () => {});
+  load('bedrock_diff.jpg', true, (t) => { m.map = t; });
+  load('bedrock_nor.jpg', false, (t) => { m.normalMap = t; m.normalScale = new THREE.Vector2(0.8, 0.8); });
+  return m;
+}
+
 const NOOP = { setVisible() {}, count: 0, zones: 0, refresh() {} };
 
 export async function initHazards(scene, terrain, geo) {
@@ -85,16 +97,17 @@ export async function initHazards(scene, terrain, geo) {
   const sc = new Float32Array(N * 3), yaw = new Float32Array(N);
   for (let i = 0; i < N; i++) {
     const [x, z] = pxToWorld(geo, rocks[i].px[0], rocks[i].px[1]);
-    rx[i] = x; rz[i] = z; rr[i] = rocks[i].d_m / 2;
-    sc.set([rr[i] * (0.9 + hash(i, 1) * 0.25), rr[i] * 0.95 * (0.85 + hash(i, 2) * 0.3), rr[i] * (0.9 + hash(i, 3) * 0.25)], i * 3);   // çap = d_m (ortalama), yükseklik ~0,6 r
+    rx[i] = x; rz[i] = z; rr[i] = Math.min(rocks[i].d_m, BIG_M) / 2;   // BIG_M üstü: tek kaya değil mostra/sırt gölgesi olabilir → boy sınırlanır
+    const low = rocks[i].d_m > BIG_M ? 0.45 : 1;   // mostra: alçak ve yayvan
+    sc.set([rr[i] * (0.85 + hash(i, 1) * 0.4), rr[i] * low * (0.75 + hash(i, 2) * 0.5), rr[i] * (0.85 + hash(i, 3) * 0.4)], i * 3);
     yaw[i] = hash(i, 4) * Math.PI * 2;
   }
-  const rockMesh = new THREE.InstancedMesh(rockGeometry(), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1.0 }), Math.max(N, 1));
+  const rockMesh = new THREE.InstancedMesh(rockGeometry(), rockMaterial(), Math.max(N, 1));
   rockMesh.name = 'hazard-rocks'; rockMesh.frustumCulled = false; rockMesh.castShadow = true; rockMesh.receiveShadow = true;
   const col = new THREE.Color();
   for (let i = 0; i < N; i++) {
     const t = 0.9 + hash(i, 5) * 0.3, w = hash(i, 6);
-    col.setRGB((0.17 + 0.05 * w) * t, (0.125 + 0.035 * w) * t, (0.095 + 0.02 * w) * t);   // ortofotoda seçilsin diye sentetik taşlardan biraz açık
+    col.setRGB((0.50 + 0.14 * w) * t, (0.35 + 0.09 * w) * t, (0.27 + 0.06 * w) * t);   // tozlu kırmızı-kahve; doku ile çarpılır
     rockMesh.setColorAt(i, col);
   }
   rockMesh.instanceColor.needsUpdate = true;
