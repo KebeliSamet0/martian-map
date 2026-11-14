@@ -1,0 +1,207 @@
+{
+ "description": "Demo senaryolari (issue #47). px = [sutun, satir], contracts/grid.json izgarasi; baslangic/hedef layers/science_stops.json'dan.",
+ "status": "GECICI: p_* = 0.25 ve entropy = 0 dolgusuyla dogrulandi (Emre'nin #45 katmanlari yok). Kum noktalari ortofotodan secildi; Bora'nin sand_hint.json'u (#46) gelince degisecek. Zemin katmanlari gelince yeniden dogrulanacak.",
+ "sand_pick_rule": "ortho_2m.png en karanlik %15 + slope < 8 derece + 3x3 komsulukta rock_cfa = 0; dengeli rotanin orta %30-70 kismina en yakin aday",
+ "curiosity_reference": "layers/msl_proposed_path.json (path_px indeks araligi, ikisi dahil)",
+ "scenarios": [
+  {
+   "id": "S1",
+   "title": "Boxwork'ten Atacama sondajina",
+   "start": {
+    "id": "sci_1_sol4617",
+    "px": [
+     433,
+     525
+    ],
+    "stop_px": [
+     433.5,
+     525.2
+    ]
+   },
+   "goal": {
+    "id": "sci_4_sol4869",
+    "px": [
+     491,
+     774
+    ],
+    "stop_px": [
+     491.3,
+     774.6
+    ]
+   },
+   "surprise_sand": {
+    "px": [
+     467,
+     609
+    ],
+    "radius_m": 20,
+    "cls": "sand",
+    "source": "ortofoto (gecici)"
+   },
+   "curiosity_section": {
+    "path_idx": [
+     430,
+     701
+    ],
+    "length_m": 1229
+   },
+   "checked": {
+    "route_km": [
+     0.55,
+     0.56,
+     0.56
+    ],
+    "route_min": [
+     23.4,
+     23.5,
+     23.7
+    ],
+    "replan_changed": [
+     true,
+     true,
+     true
+    ],
+    "replan_extra_min": [
+     0.3,
+     0.2,
+     0.4
+    ],
+    "balanced_vs_curiosity_mean_m": 29,
+    "balanced_vs_curiosity_max_m": 115
+   }
+  },
+  {
+   "id": "S2",
+   "title": "Son boxwork duragindan Atacama'ya",
+   "start": {
+    "id": "sci_3_sol4668",
+    "px": [
+     470,
+     589
+    ],
+    "stop_px": [
+     470.5,
+     589.1
+    ]
+   },
+   "goal": {
+    "id": "sci_4_sol4869",
+    "px": [
+     491,
+     774
+    ],
+    "stop_px": [
+     491.3,
+     774.6
+    ]
+   },
+   "surprise_sand": {
+    "px": [
+     487,
+     672
+    ],
+    "radius_m": 20,
+    "cls": "sand",
+    "source": "ortofoto (gecici)"
+   },
+   "curiosity_section": {
+    "path_idx": [
+     547,
+     701
+    ],
+    "length_m": 744
+   },
+   "checked": {
+    "route_km": [
+     0.4,
+     0.4,
+     0.41
+    ],
+    "route_min": [
+     16.4,
+     16.5,
+     16.8
+    ],
+    "replan_changed": [
+     true,
+     true,
+     true
+    ],
+    "replan_extra_min": [
+     0.4,
+     0.3,
+     0.3
+    ],
+    "balanced_vs_curiosity_mean_m": 33,
+    "balanced_vs_curiosity_max_m": 109
+   }
+  },
+  {
+   "id": "S3",
+   "title": "Yedek: ikinci boxwork duragindan Atacama'ya",
+   "start": {
+    "id": "sci_2_sol4635",
+    "px": [
+     421,
+     545
+    ],
+    "stop_px": [
+     421.2,
+     545.3
+    ]
+   },
+   "goal": {
+    "id": "sci_4_sol4869",
+    "px": [
+     491,
+     774
+    ],
+    "stop_px": [
+     491.3,
+     774.6
+    ]
+   },
+   "surprise_sand": {
+    "px": [
+     467,
+     609
+    ],
+    "radius_m": 30,
+    "cls": "sand",
+    "source": "ortofoto (gecici)"
+   },
+   "curiosity_section": {
+    "path_idx": [
+     455,
+     701
+    ],
+    "length_m": 1106
+   },
+   "checked": {
+    "route_km": [
+     0.53,
+     0.53,
+     0.55
+    ],
+    "route_min": [
+     22.6,
+     22.8,
+     23.1
+    ],
+    "replan_changed": [
+     true,
+     true,
+     true
+    ],
+    "replan_extra_min": [
+     0.6,
+     0.5,
+     0.6
+    ],
+    "balanced_vs_curiosity_mean_m": 29,
+    "balanced_vs_curiosity_max_m": 117
+   }
+  }
+ ],
+ "px_note": "start/goal px tam sayi hucre (floor): /route ve /replan StrictInt ister. Duragin ondalikli konumu stop_px'te (science_stops.json)."
+}
