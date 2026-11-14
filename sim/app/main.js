@@ -144,7 +144,7 @@ function initThree() {
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
   // Ard işlem (fx.js): ?fx=off ile kapatılır; P tuşu aç/kapa; saf veri modunda kapalı
-  T.fx = Q.get('fx') === 'off' ? null : initFx(renderer, scene, camera, { quality });
+  T.fx = Q.get('fx') === 'off' ? null : initFx(renderer, scene, camera, { quality, ao: Q.get('ao') === '1' || quality === 'ultra' });
   renderer.info.autoReset = false;
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight, false); T.fx?.setSize(innerWidth, innerHeight, renderer.getPixelRatio()); });
   renderer.setAnimationLoop(frame);
