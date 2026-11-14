@@ -29,3 +29,12 @@ test('grid hedefi, API özeti ve snapshot izolasyonu', async () => {
   const s = m.snapshot(); assert.equal(s.summary.remote.score, 42); s.summary.remote.score = 0;
   assert.equal(m.snapshot().summary.remote.score, 42);
 });
+
+test('olay tetik mesafesi trigger_m: radius_m değişmez, rota uzaksa tetiklenmez', () => {
+  const m = createMission({ definition: { id: 't', goal: { world: [200, 0], radius_m: 2 }, events: [{ id: 's', type: 'sand', world: [50, 0], radius_m: 5, trigger_m: 45 }] } });
+  m.plan(); m.start({ total: {} });
+  assert.equal(m.update([0, 0]).state, 'walking'); assert.equal(m.update([10, 0]).state, 'event');
+  assert.equal(m.snapshot().currentEvent.radius_m, 5);
+  const far = createMission({ definition: { id: 'f', goal: { world: [200, 0], radius_m: 2 }, events: [{ id: 's', type: 'sand', world: [50, 100], radius_m: 5, trigger_m: 45 }] } });
+  far.plan(); far.start({ total: {} }); far.update([0, 0]); assert.equal(far.update([100, 0]).state, 'walking');
+});

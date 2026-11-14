@@ -101,6 +101,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     running = false; pause(true); document.exitPointerLock?.();
     root.querySelectorAll('.mm-alert').forEach(e => e.remove());
     machine.collectSample(); await machine.finish();
+    window.dispatchEvent(new CustomEvent('mission:arrived', { detail: machine.snapshot() }));
     if (id !== generation) return;
     sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Görev tamamlandı`;
     const actual = hudSnapshot(vitals.snapshot(), limits);

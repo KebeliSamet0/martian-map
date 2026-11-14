@@ -12,7 +12,7 @@ test('karne gidiş-dönüş toplamını tek yön gerçekleşen ile karıştırma
 });
 test('görev kumu ve 10 m varış yarıçapı veri kaynağından bağlanır', () => {
   const def = missionDefinition({ id: 'S1', sand: { px: [4,5], radius_m: 19.4 } }, { dense: [[0,0],[100,100]] });
-  assert.equal(def.goal.radius_m, 10); assert.deepEqual(def.events[0].grid_px, [4,5]); assert.equal(def.events[0].radius_m, 19.4);
+  assert.equal(def.goal.radius_m, 10); assert.deepEqual(def.events[0].grid_px, [4,5]); assert.equal(def.events[0].radius_m, 19.4); assert.equal(def.events[0].trigger_m, 59.4);
   assert.equal(uiTexts({ alerts: { sand: 'kum' } })['alert.sand.body'], 'kum');
 });
 
