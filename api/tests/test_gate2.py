@@ -135,3 +135,26 @@ def test_terrain_source(tmp_path):
     assert set(eta.values()) == {2} and set(speed.values()) == {.8}
     path.write_text('| class | eta | speed |\n| soil | nan | 1 |')
     with pytest.raises(ValueError): load_terrain(P.TERRAIN_ETA, P.TERRAIN_SPEED, path)
+
+
+def test_real_package_api_and_metadata_objects(monkeypatch, package):
+    root, g = package
+    for name, path in list(g['layers'].items()):
+        g['layers'][name] = {'path': path, 'res_m': 10, 'crs': g['crs'], 'origin_xy_m': [0,0]}
+    (root/'grid.json').write_text(json.dumps(g))
+    monkeypatch.setenv('MARTIAN_LAYERS_DIR', str(root))
+    with TestClient(app) as client:
+        response = client.post('/route', json={'start': [0,0], 'goal': [3,3]})
+        assert response.status_code == 200 and not response.json()['grid']['synthetic']
+        assert len(response.json()['routes']) == 3
+
+
+def test_radiation_is_not_cell_cost(monkeypatch):
+    l = flat()
+    before, _ = cost_surface(l, P.PRESETS['safest'])
+    monkeypatch.setattr(P, 'DOSE_UGY_PER_H', P.DOSE_UGY_PER_H * 100)
+    after, _ = cost_surface(l, P.PRESETS['safest'])
+    np.testing.assert_array_equal(before, after)
+    result = planner.plan(l, [0,0], [3,3])[0]
+    assert not result['total']['go']
+    assert 'dose_uGy' in result['total']['budget']['exceeded']
