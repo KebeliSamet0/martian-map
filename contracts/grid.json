@@ -46,7 +46,7 @@
     "elevation_norm": "layers/elevation_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)",
     "slope_norm": "layers/slope_norm.npy  float32, 0-1 (min-max; gercek deger = v*(max-min)+min, bkz. normalization)",
     "rock_cfa_ge1m": "layers/rock_cfa_ge1m.npy  float32, 0-1 (yalniz >=1 m kayalar)",
-    "rover_stops": "layers/rover_stops_selected.json  json (zemin modeli kaniti: 18 durak, px [sutun, satir] ondalikli; Emre class_frac/entropy doldurur)",
+    "rover_stops": "layers/rover_stops.json  json (zemin modeli kaniti: 128 durak, px [sutun, satir] ondalikli; class_frac/entropy Emre tam model, issue 45)",
     "msl_reference_path": "layers/msl_proposed_path.json  json (Curiosity'nin gercek rotasi, path_px; compare_reference referansi)"
   },
   "normalization": {
