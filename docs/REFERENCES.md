@@ -10,4 +10,4 @@
 (eklenecek)
 
 ## Makaleler
-(eklenecek)
+- Swan, R. M. et al. (2021). AI4MARS: A Dataset for Terrain-Aware Autonomous Driving on Mars. CVPR Workshops (AI4Space).

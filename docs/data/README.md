@@ -7,7 +7,7 @@ Kural: 60–90 dakika. Bitmeyen her şey "Karar" bölümüne bilinmeyen olarak y
 | Veri seti | Sorumlu | Rapor | Karar |
 |---|---|---|---|
 | Gale HiRISE DTM + ortofoto, Mars Trek katmanları | Elif Rana | `gale_dtm_ortho.md` | |
-| AI4Mars | Emre | `ai4mars.md` | |
+| AI4Mars | Emre | `ai4mars.md` | KULLAN |
 | Curiosity konum/rota + Navcam ham görüntüler | Veysel | `msl_traverse_navcam.md` | |
 | HiRISE kaya yoğunluğu kaynakları (Golombek haritaları, MBARS, BoulderNet) | Bora | `rock_abundance.md` | |
 | THEMIS termal atalet + CTX/MOLA bağlam | Batu | `themis_ctx.md` | |
