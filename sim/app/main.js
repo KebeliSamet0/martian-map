@@ -28,7 +28,6 @@ const Q = new URLSearchParams(location.search);
 const quality = Q.get('q') || 'high';
 const DEV = Q.get('dev') === '1';   // tur4:akis: geliştirici panelleri yalnız ?dev=1
 document.body.classList.toggle('dev', DEV);
-MICRO.value = Q.get('ground') === 'rich' && Q.get('micro') !== '0' ? 1 : 0;   // ?ground=rich: tas serpintisi + mikro rolyef
 MICRO.value = Q.get('ground') !== 'plain' && quality !== 'low' && Q.get('micro') !== '0' ? 1 : 0; // tur4:gorsel (varsayılan zengin zemin; ?ground=plain eski)   // ?ground=rich: tas serpintisi + mikro rolyef
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
