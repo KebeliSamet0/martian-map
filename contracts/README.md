@@ -173,3 +173,45 @@ Yanıt (özet):
   "cells": [{"px": [433, 525], "class": "sand", "scan_class": 1, "scan_key": "caution", "scan_name": "dikkat", "slope_deg": 11.2, "step_m": 0.0, "sec": 0.0, "kcal": 0.0}]
 }
 ```
+
+### 3. Ek yük (`load_kg`)
+`/route`, `/replan`, `/step` ve `/debrief` uçları isteğe bağlı `load_kg` (varsayılan `0.0`, negatif olmayan sonlu sayı) kabul eder. Değer Pandolf denklemindeki taşınan kütle terimine (`L = SUIT_KG + TOOLS_KG + load_kg`) eklenir; `load_kg=0` mevcut davranışı birebir korur.
+
+### 4. Görev senaryoları (`GET /missions`)
+`layers/demo_scenarios.json` ve `layers/sand_hint.json` dosyalarını değiştirmeden okur; her görev için `id`, `name` (`title`), `start_px`, `goal_px`, `limits` (`time_min`, `kcal`, `o2_L`, `dose_uGy`, `reserve_min`) ve `sand_events` (`surprise_sand`) döndürür:
+```json
+{
+  "default_limits": {"time_min": 360.0, "kcal": 2000.0, "o2_L": 420.0, "dose_uGy": 60.0, "reserve_min": 30.0},
+  "missions": [
+    {
+      "id": "S1", "name": "Boxwork'ten Atacama sondajina",
+      "start_px": [433, 525], "goal_px": [491, 774],
+      "limits": {"time_min": 360.0, "kcal": 2000.0, "o2_L": 420.0, "dose_uGy": 60.0, "reserve_min": 30.0},
+      "sand_events": [{"px": [472, 641], "radius_m": 19.4, "cls": "sand"}]
+    }
+  ],
+  "sand_points": [{"id": "sand_11", "px": [487, 672], "exact_px": [487.0, 672.0], "radius_m": 20.0, "cls": "sand"}]
+}
+```
+
+### 5. Görev sonu karnesi (`POST /debrief`)
+İstek:
+```json
+{"planned": {"segments": [{"path_px": [[433, 525], [434, 525]]}]}, "actual_path": [[433, 525], [434, 526]], "load_kg": 0.0}
+```
+Yanıt:
+```json
+{
+  "load_kg": 0.0,
+  "planned": {"distance_m": 2.0, "duration_s": 2.5, "min": 0.04, "kcal": 0.16, "o2_L": 0.033, "dose_uGy": 0.006, "eva_used": {"time_min": 60.08, "kcal": 234.32, "o2_L": 48.82, "dose_uGy": 8.76}},
+  "actual": {"distance_m": 2.83, "duration_s": 3.54, "min": 0.06, "kcal": 0.23, "o2_L": 0.048, "dose_uGy": 0.009, "nogo_cells": 0},
+  "deltas": {"distance_m": 0.83, "duration_s": 1.04, "min": 0.02, "kcal": 0.07, "o2_L": 0.015, "dose_uGy": 0.003, "min_pct": 41.6, "kcal_pct": 43.75, "mean_deviation_m": 1.0, "max_deviation_m": 2.0},
+  "remaining": {"time_min": 299.88, "kcal": 1765.54, "o2_L": 367.82, "dose_uGy": 51.24, "exceeded": []},
+  "grade": "C",
+  "reason": "C derecesi: yüksek rota sapması veya ek tüketim (ort. sapma 1.0 m, süre farkı %+41.6, enerji farkı %+43.8)."
+}
+```
+Derece kuralı (`params.py` ve `/assumptions`):
+- **A**: Bütçe ve NOGO ihlali yok, süre/enerji artışı `<= %10`, ortalama sapma `<= 20 m`.
+- **B**: Bütçe ve NOGO ihlali yok, süre/enerji artışı `<= %25`, ortalama sapma `<= 60 m`.
+- **C**: A/B eşiğini aşan sapma/tüketim, geçilmez hücre geçişi veya bütçe aşımı.

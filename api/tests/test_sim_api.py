@@ -145,3 +145,79 @@ def test_step_load_kg_and_observations(client):
 ])
 def test_step_validation_errors(client, bad_body):
     assert client.post("/step", json=bad_body).status_code == 422
+
+
+def test_load_kg_on_route_and_replan(client):
+    base_route = client.post("/route", json={"start": START, "goal": GOAL}).json()["routes"]
+    heavy_route = client.post("/route", json={"start": START, "goal": GOAL, "load_kg": 30.0}).json()["routes"]
+
+    for b, h in zip(base_route, heavy_route):
+        assert h["total"]["kcal"] > b["total"]["kcal"]
+        assert h["total"]["eva_kcal"] > b["total"]["eva_kcal"]
+        assert h["total"]["o2_L"] > b["total"]["o2_L"]
+        assert h["total"]["budget"]["used"]["kcal"] > b["total"]["budget"]["used"]["kcal"]
+
+    obs = [{"px": START, "radius_m": 200.0, "cls": "sand"}]
+    base_replan = client.post("/replan", json={"start": START, "goal": GOAL, "observations": obs}).json()["routes"]
+    heavy_replan = client.post(
+        "/replan", json={"start": START, "goal": GOAL, "observations": obs, "load_kg": 30.0}
+    ).json()["routes"]
+    assert heavy_replan[1]["total"]["kcal"] > base_replan[1]["total"]["kcal"]
+
+    assert client.post("/route", json={"start": START, "goal": GOAL, "load_kg": -1.0}).status_code == 422
+
+
+def test_missions_endpoint(client):
+    resp = client.get("/missions")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert len(data["missions"]) >= 3
+    assert len(data["sand_points"]) >= 1
+    for m in data["missions"]:
+        assert set(m.keys()) >= {"id", "name", "title", "start", "goal", "start_px", "goal_px", "limits", "sand_events"}
+        assert isinstance(m["start_px"][0], int) and isinstance(m["start_px"][1], int)
+        assert isinstance(m["goal_px"][0], int) and isinstance(m["goal_px"][1], int)
+        assert set(m["limits"].keys()) == {"time_min", "kcal", "o2_L", "dose_uGy", "reserve_min"}
+        assert m["limits"]["time_min"] == P.EVA_MAX_H * 60
+        assert m["limits"]["kcal"] == P.EVA_MAX_KCAL
+        assert m["limits"]["o2_L"] == P.EVA_MAX_O2_L
+        assert m["limits"]["dose_uGy"] == P.EVA_MAX_DOSE_UGY
+
+
+def test_debrief_grades_and_deltas(client, layers):
+    routes = client.post("/route", json={"start": START, "goal": GOAL}).json()["routes"]
+    planned = routes[1]
+    pts = []
+    for i, seg in enumerate(planned["segments"]):
+        pts.extend(seg["path_px"][1:] if i else seg["path_px"])
+
+    # 1. Birebir aynı iz -> A derecesi, sıfır sapma
+    res_a = client.post("/debrief", json={"planned": planned, "actual_path": pts})
+    assert res_a.status_code == 200
+    da = res_a.json()
+    assert da["grade"] == "A"
+    assert da["deltas"]["mean_deviation_m"] == 0.0
+    assert da["deltas"]["kcal"] == 0.0
+    assert da["deltas"]["duration_s"] == 0.0
+    assert da["remaining"]["kcal"] > 0
+
+    # 2. Orta düzey sapma (~5 hücre kaydırılmış iz) -> B derecesi
+    shifted_b = [[min(layers.width - 1, max(0, p[0] + 5)), p[1]] for p in pts]
+    res_b = client.post("/debrief", json={"planned": planned, "actual_path": shifted_b})
+    assert res_b.status_code == 200
+    db = res_b.json()
+    assert db["grade"] == "B"
+    assert 20.0 < db["deltas"]["mean_deviation_m"] <= 60.0
+    assert "B derecesi" in db["reason"]
+
+    # 3. Çok büyük sapma veya geçilmez hücre -> C derecesi
+    shifted_c = [[min(layers.width - 1, max(0, p[0] + 15)), p[1]] for p in pts]
+    res_c = client.post("/debrief", json={"planned": planned, "actual_path": shifted_c})
+    assert res_c.status_code == 200
+    dc = res_c.json()
+    assert dc["grade"] == "C"
+    assert "C derecesi" in dc["reason"]
+
+    assumptions = client.get("/assumptions").json()
+    assert any("/debrief" in item["name"] for item in assumptions)
+

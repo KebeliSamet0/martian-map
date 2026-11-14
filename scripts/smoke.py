@@ -68,6 +68,15 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
             if assumptions_resp.status_code != 200:
                 raise RuntimeError(f"/assumptions hatası: {assumptions_resp.status_code}")
 
+            t_missions = time.perf_counter()
+            missions_resp = client.get("/missions")
+            missions_ms = (time.perf_counter() - t_missions) * 1000.0
+            if missions_resp.status_code != 200:
+                raise RuntimeError(f"/missions hatası: {missions_resp.status_code} {missions_resp.text}")
+            missions_data = missions_resp.json()
+            if not missions_data.get("missions") or not missions_data.get("sand_points"):
+                raise RuntimeError(f"/missions boş döndü: {missions_data}")
+
             for lname in ("speed_mps", "kcal_per_m", "o2_l_per_m", "o2_g_per_m", "risk", "scan_class"):
                 b_resp = client.get(f"/layers/{lname}.bin")
                 p_resp = client.get(f"/layers/{lname}.png")
@@ -99,6 +108,24 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
             step_data = step_resp.json()
             if step_data["duration_s"] <= 0 or step_data["kcal"] <= 0:
                 raise RuntimeError(f"/step geçersiz tüketim döndürdü: {step_data}")
+
+            route_loaded = client.post("/route", json={"start": start, "goal": goal, "load_kg": 20.0})
+            if route_loaded.status_code != 200:
+                raise RuntimeError(f"/route (load_kg) hatası: {route_loaded.status_code}")
+            if route_loaded.json()["routes"][1]["total"]["kcal"] <= routes[1]["total"]["kcal"]:
+                raise RuntimeError("load_kg=20 ile rota enerjisi artmadı")
+
+            t_debrief = time.perf_counter()
+            debrief_resp = client.post(
+                "/debrief",
+                json={"planned": routes[1], "actual_path": pts_balanced, "load_kg": 0.0},
+            )
+            debrief_ms = (time.perf_counter() - t_debrief) * 1000.0
+            if debrief_resp.status_code != 200:
+                raise RuntimeError(f"/debrief hatası: {debrief_resp.status_code} {debrief_resp.text}")
+            debrief_data = debrief_resp.json()
+            if debrief_data["grade"] != "A":
+                raise RuntimeError(f"Planlanan rotayı birebir yürüyen iz A almalıydı: {debrief_data}")
             t_replan = time.perf_counter()
             replan_resp = client.post(
                 "/replan",
@@ -173,6 +200,10 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
         "replan_s": round(replan_s, 3),
         "long_route_s": round(long_s, 3),
         "step_ms": round(step_ms, 2),
+        "missions_ms": round(missions_ms, 2),
+        "debrief_ms": round(debrief_ms, 2),
+        "missions_count": len(missions_data["missions"]),
+        "debrief_grade": debrief_data["grade"],
         "route_summary": summarize(routes),
         "replan_summary": summarize(replanned),
         "long_route_summary": summarize(long_routes),
@@ -199,7 +230,8 @@ def main() -> int:
     print(
         f"Süreler: yükleme={summary['load_s']:.3f}s, "
         f"/route={summary['route_s']:.3f}s, /replan={summary['replan_s']:.3f}s, "
-        f"uzun_rota={summary['long_route_s']:.3f}s"
+        f"uzun_rota={summary['long_route_s']:.3f}s, "
+        f"/step={summary['step_ms']:.2f}ms, /missions={summary['missions_ms']:.2f}ms, /debrief={summary['debrief_ms']:.2f}ms"
     )
     for label, key in (
         ("/route (duraklar)", "route_summary"),
