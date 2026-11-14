@@ -1,4 +1,4 @@
-// 3B rota rehberi (Death Stranding tarzı yol işareti): araziye yapışık şerit + akan ok (chevron) animasyonu, segment rengi (eğim bandı),
+// 3B rota rehberi (yol işareti): araziye yapışık şerit + akan ok (chevron) animasyonu, segment rengi (eğim bandı),
 // hedef ışık sütunu ve kum riski bölgesi diski. Veri: rota.dense [[x,z]...], rota.segments[].idx / slope_max. Sentetik değildir: rotanın kendisidir.
 import * as THREE from 'three';
 
