@@ -67,3 +67,7 @@
 - NASA Curiosity Blog, Sols 4873–4878: Welcome to the Atacama Drill Target (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4873-4878-welcome-to-the-atacama-drill-target/ — boxwork sonrası ilk katmanlı sülfat sondajı (sci_4).
 - NASA Curiosity Blog, Sols 4886–4892: Ingenuity and Perseverance, Curiosity Style (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4886-4892-ingenuity-and-perseverance-curiosity-style/ — Toro / Inca de Oro dokanağı.
 - Swan, R. M. et al. (2021). AI4MARS: A Dataset for Terrain-Aware Autonomous Driving on Mars. CVPR Workshops (AI4Space).
+- Soule, R. G., Goldman, R. F. (1972), Terrain coefficients for energy cost prediction. J. Appl. Physiol. 32(5), 706–708. — zemin katsayıları (Dünya ölçümü; Mars için ölçülmüş değer yok).
+- Richmond, P. W., Potter, A. W., Santee, W. R. (2015), Terrain Factors for Predicting Walking and Load Carriage Energy Costs: Review and Refinement. J. Sport Hum. Perform. 3(3). https://jhp-ojs-tamucc.tdl.org/jhp/article/view/67
+- Kim, K. J. et al. (2023), Uneven terrain affects metabolic cost and gait in simulated complex lunar surfaces. Physiol. Meas. 44(10), 104001. https://doi.org/10.1088/1361-6579/acf993 — NASA Rock Yard, karışık arazi +%58.
+- Johnson, A. W. et al. (2010), An Integrated Traverse Planner and Analysis Tool for Planetary Exploration (SEXTANT). AIAA SPACE 2010. https://web.mit.edu/aeroastro/www/people/dnewman/pdf2/DJN_AJohnsonSPACEAUG2010.pdf
