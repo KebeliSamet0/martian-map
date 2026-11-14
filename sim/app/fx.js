@@ -42,14 +42,14 @@ const GradeShader = {
     }`,
 };
 
-export function initFx(renderer, scene, camera, { quality = 'high' } = {}) {
+export function initFx(renderer, scene, camera, { quality = 'high', ao: aoOn = quality === 'ultra' } = {}) {   // GTAO sahneyi İKİNCİ kez çizer (draw call ~2×, üçgen ~2×): yalnız ultra veya ?ao=1
   const size = renderer.getSize(new THREE.Vector2());
   const composer = new EffectComposer(renderer);   // r160: yarım kayan noktalı (HDR) ara hedefler
   composer.addPass(new RenderPass(scene, camera));
 
   // Ortam gölgelemesi: taş diplerinde, kıvrımlarda ve astronotun ayak dibinde temas gölgesi
   let ao = null;
-  if (quality !== 'low') {
+  if (quality !== 'low' && aoOn) {
     ao = new GTAOPass(scene, camera, size.x, size.y);
     ao.output = GTAOPass.OUTPUT.Default;
     ao.blendIntensity = 0.85;
