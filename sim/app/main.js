@@ -90,13 +90,14 @@ function ensureScanTex() {
   const tx = new THREE.DataTexture(d, nav.w, nav.h, THREE.RGBAFormat); tx.magFilter = THREE.LinearFilter; tx.minFilter = THREE.LinearFilter; tx.needsUpdate = true;
   SCAN_TEX.value = tx; SCAN_DIM.value.set(nav.w * nav.cx, nav.h * nav.cz);
 }
-function scanStart() {
-  ensureScanTex(); scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast('Terrain Scanner: eğim taraması (mavi kolay · sarı eğimli · kırmızı dik)'); }
+function scanStart(wide = false) {
+  ensureScanTex(); scanner.R = wide ? 320 : 170; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (320 m) — rota parlar' : 'Terrain Scanner: eğim taraması (mavi kolay · sarı eğimli · kırmızı dik); rota parlar. Shift+L: geniş'); }
 function scanUpdate(now) {
   if (scanner.t0 < 0) { SCAN.value.w = 0; return; }
   const e = now - scanner.t0, ramp = scanner.R / scanner.speed, rad = Math.min(scanner.R, e * scanner.speed);
   const a = e < ramp + scanner.hold ? 1 : Math.max(0, 1 - (e - ramp - scanner.hold) / scanner.fade);
   SCAN.value.set(scanner.x, scanner.z, rad, a);
+  if (T) { const b = 1 + 0.9 * a; T.line.mat.color.setScalar(b); }   // tarama sırasında planlanan rota parlar (DS2: 'rotada kal')
   if (a <= 0) { scanner.t0 = -1; SCAN.value.w = 0; $('scanleg').hidden = true; }
 }
 let routeRun = null, lastLook = 0, hudHidden = false, bobOn = false;   // baş sallanması varsayılan KAPALI (görüntü kararlılığı)
@@ -200,7 +201,7 @@ addEventListener('keydown', (e) => {
   if (state === 'map' || e.target.tagName === 'INPUT') return;
   keys.add(e.code);
   if (e.code === 'KeyM') enterMap();
-  if (e.code === 'KeyL') scanStart();
+  if (e.code === 'KeyL') scanStart(e.shiftKey);
   if (e.code === 'KeyT') { view = view === 'tps' ? 'fps' : 'tps'; toast(view === 'tps' ? '3. şahıs görünüm (T: birinci şahıs)' : 'Birinci şahıs görünüm (T: 3. şahıs)'); }
   if (e.code === 'KeyF') { state = state === 'fly' ? 'walk' : 'fly'; toast(state === 'fly' ? 'Serbest uçuş (Space/C yukarı-aşağı)' : 'Yürüyüş'); }
   if (e.code === 'KeyR' && routeRun) { state = 'auto'; }
@@ -398,6 +399,6 @@ window.__mm = {
   },
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
   stats: () => ({ ...T.terrain.stats, fps, state }),
-  scan: () => { scanStart(); }, get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
+  scan: (w) => { scanStart(!!w); }, get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
 };
 if (Q.get('mod') === '3d') enter3D('walk');
