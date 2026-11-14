@@ -45,3 +45,15 @@ function updateResources(dtSec) { // yürüyüş karesinden, timeScale uygulanm�
 }
 // Yeniden planlamada vitals.setRoute(newRoute); görev sonunda await vitals.flush();
 ```
+
+- `await loadMissions({api?,apiBase?,fetcher?,missionsUrl?})` → `{missions,source}`.
+  Sıra: GET /missions → sim/data/missions.json → etiketli gömülü demo.
+- `createMission({definition,vitals,coords?,api?,apiBase?,fetcher?,source})` →
+  `plan()`, `start(route)`, `update(worldPos)`, `resume(route?)`, `collectSample()`,
+  `await finish()`, `snapshot()`, `on(event,cb)`. Olaylar: state/event/arrived/sample/debrief.
+  Akış: briefing → planning → walking ↔ event → arrived → debrief.
+  Tanım: `{id,goal:{world:[x,z],radius_m},events:[{id,type:'sand',world,radius_m}],sample_kg}`;
+  world yerine grid_px hücre indeksi + coords verilebilir. API/dosya: dizi veya `{missions:[]}`.
+  `api.missions()` ve `api.debrief(summary)` opsiyonel adaptörler; aksi halde fetch kullanılır.
+  Karede önce vitals.update, sonra mission.update; event sonrası yeniden planlayıp resume çağırın.
+  Hedefte collectSample bir kez yük ekler; finish plan/gerçek farkını ve API/yerel özetini döndürür.

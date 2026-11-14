@@ -98,7 +98,7 @@ export function createVitals({ api, assumptions = [], route, loadKg, stepInterva
     const s = segmentAt(p, gridPx), f = loadFactor();
     const kcal = dm > 0 && s?.len_m > 0 && valid(s.kcal) ? mul(s.kcal * dm / s.len_m, f) : mul(dtSec / 4184, mul(stopW(), f));
     const o2 = dm > 0 && s?.len_m > 0 && valid(s.o2_L) ? mul(s.o2_L * dm / s.len_m, f) : mul(kcal, o2PerKcal());
-    const dose = mul(dtSec / 3600, doseRate());
+    const dose = s?.min > 0 && valid(s.dose_uGy) ? s.dose_uGy * dtSec / (s.min * 60) : mul(dtSec / 3600, doseRate());
     const estimate = { kcal, o2_L: o2, dose_uGy: dose };
     for (const k of Object.keys(used)) {
       if (dtSec === 0 && dm === 0) continue;
@@ -117,7 +117,9 @@ export function createVitals({ api, assumptions = [], route, loadKg, stepInterva
     previous = p;
     check(gridPx);
     const goal = route?.dense?.at(-1);
-    if (!arrived && goal && Math.hypot(p[0] - goal[0], p[1] - goal[1]) <= arrivalRadiusM) { arrived = true; emit('arrived', snapshot()); }
+    const atGoal = goal ? Math.hypot(p[0] - goal[0], p[1] - goal[1]) <= arrivalRadiusM
+      : gridPx && rt?.goal?.px?.every((v, i) => Math.floor(gridPx[i]) === v);
+    if (!arrived && atGoal) { arrived = true; emit('arrived', snapshot()); }
     if (batchSec >= stepIntervalSec && !flight) void flush();
     return snapshot();
   }
