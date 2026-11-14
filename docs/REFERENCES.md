@@ -14,3 +14,4 @@
 - Hood et al. 2022, MBARS, Earth and Space Science 9(9), doi:10.1029/2022EA002410
 - Prieur et al. 2023, BoulderNet, JGR Planets, doi:10.1029/2023JE008013
 - Golombek et al. 2012, Selection of the MSL landing site, Space Sci. Rev., doi:10.1007/s11214-012-9892-2
+- Hassler et al. (2014), Mars’ Surface Radiation Environment Measured with the Mars Science Laboratory’s Curiosity Rover. Science 343, 1244797. https://doi.org/10.1126/science.1244797 — Gale yüzeyi GCR soğurulan doz ortalaması 0.210 ± 0.040 mGy/gün; EVA modeli sabit 0.21 kullanır. [Tam metin](https://www.scienceintheclassroom.org/sites/default/files/research-papers/1244797.full_.pdf).

@@ -43,10 +43,19 @@ class Weights(Input):
         return self
 
 
+class Budget(Input):
+    time_min: Nonnegative = params.EVA_MAX_H * 60
+    kcal: Nonnegative = params.EVA_MAX_KCAL
+    o2_L: Nonnegative = params.EVA_MAX_O2_L
+    dose_uGy: Nonnegative = params.EVA_MAX_DOSE_UGY
+    reserve_min: Nonnegative = params.RESERVE_MIN
+
+
 class RouteInput(Input):
     start: Pixel
     goal: Pixel
     weights: Weights | None = None
+    budget: Budget | None = None
 
 
 class Observation(Input):
@@ -81,7 +90,8 @@ def assumptions():
 
 def result(layers, body: RouteInput):
     routes = planner.plan(layers, body.start, body.goal,
-                          weights=body.weights.model_dump() if body.weights else None)
+                          weights=body.weights.model_dump() if body.weights else None,
+                          budget=body.budget.model_dump() if body.budget else None)
     info = layers.grid_info()
     return {"grid": {k: info[k] for k in ("region", "width", "height", "res_m", "synthetic", "px_note")},
             "routes": routes}
