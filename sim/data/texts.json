@@ -53,5 +53,109 @@
     "actual": "Gerçekleşen",
     "retry": "Görevi tekrarla",
     "close": "Haritaya dön"
+  },
+  "bilim": {
+    "badge_crism": "Spektral: CRISM",
+    "badge_rad": "Radyasyon: RAD",
+    "note_title": "Saha notu",
+    "note_hint": "I: notu aç/kapat",
+    "note_close": "Kapat",
+    "sig_label": "Mineral imzası",
+    "why_label": "Neden önemli",
+    "src_label": "Kaynak",
+    "pixel_label": "Bu durağın CRISM pikseli (18 m, ham browse)",
+    "pixel_note": "Göreli 0–255 indeks, gözlem içinde gerilmiş; mutlak değil, gürültülü. Pikselin tamamı bir rota segmentinden büyüktür. Rover ölçümü değil, yörünge verisidir.",
+    "pixel_invalid": "Bu durak CRISM browse'ında geçersiz (nodata) piksele düşüyor.",
+    "unit_label": "Jeolojik birim",
+    "stops": {
+      "sci_1_sol4617": {
+        "title": "Boxwork sırtları, 1. durak",
+        "unit": "Katmanlı sülfat birimi (LSu) içinde boxwork",
+        "signature": "Hidratlı sülfat. CRISM HYD kompozitinde bu bölgede sülfat parametreleri (SINDEX2, BD2100_2, BD1900_2) görünür. Boxwork kayasının kendisi, çevresindeki sülfatlı kayaya göre Si ve Al'ce zengin, Mg ve S'ce fakir ince taneli bir çamurtaşıdır (GSA 2025).",
+        "why": "Sırtlar, yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleşmiş olabilir. Kuru sülfat döneminde daha ıslak bir ara evreye işaret ediyor."
+      },
+      "sci_2_sol4635": {
+        "title": "Boxwork sırtları, 2. durak",
+        "unit": "Katmanlı sülfat birimi (LSu) içinde boxwork",
+        "signature": "Hidratlı sülfat. Aynı CRISM birimi; bu durağın pikselinde sülfat indeksleri 1. duraktan daha zayıf. 2 m DEM bu hücrede sırt kenarı eğimini abartıyor olabilir.",
+        "why": "Sırt ağının ikinci ucu: boxwork'ün tek bir nokta değil, kilometrelerce uzanan bir yapı olduğunu gösterir."
+      },
+      "sci_3_sol4668": {
+        "title": "Boxwork sırtları, 3. durak",
+        "unit": "Katmanlı sülfat birimi (LSu) içinde boxwork",
+        "signature": "Hidratlı sülfat. Bu durağın pikselinde SINDEX2 ve BD2100_2, kutudaki dört durak arasında ikinci en yüksek değerde. Kaya MAHLI ve ChemCam ile incelendi (sol 4668–4803).",
+        "why": "Kutudaki yakın inceleme görüntülerinin yaklaşık %19'u bu durağa ait (sol 4668–4803). Boxwork'ün bileşimini en çok bu durak anlatıyor."
+      },
+      "sci_4_sol4869": {
+        "title": "Atacama sondaj alanı",
+        "unit": "Katmanlı sülfat birimi (LSu), boxwork sonrası ilk ana kaya",
+        "signature": "Sülfat. Bu durağın pikselinde çok hidratlı sülfat indeksi (SINDEX2) kutudaki diğer duraklardan belirgin yüksek.",
+        "why": "Boxwork'ten ayrıldıktan sonra katmanlı sülfat birimindeki ilk sondaj. Yaklaşık 160 m aşağıdaki Mineral King örneğiyle karşılaştırılarak sülfatın yükseklikle nasıl değiştiği anlaşılacak."
+      }
+    },
+    "rad": {
+      "title": "Radyasyon (RAD)",
+      "dose": "Birikmiş doz",
+      "budget": "EVA doz bütçesi",
+      "budget_note": "Bütçe varsayımdır (planlayıcı demo sınırı); biyolojik güvenlik eşiği değil.",
+      "rate": "Yüzey doz hızı",
+      "rate_src": "Curiosity RAD, Hassler vd. 2014: 0,21 ± 0,04 mGy/gün (ölçüm), saatlik değere çevrildi.",
+      "range": "Belirsizlik bandı",
+      "equiv": "Doz eşdeğeri (türetilmiş)",
+      "equiv_note": "Hassler 2014'ün 0,64 mSv/gün değerinden türetildi; organ ya da etkin doz değildir.",
+      "caveat": "RAD rover içinde ölçülür; skafandr zırhı farklıdır. Veride arazi gölgelemesi ya da konuma bağlı doz haritası yok; doz yalnız süreye bağlıdır.",
+      "sep": "Güneş parçacığı olayı (SEP) bu hesapta yok; olay olursa doz hızı yükselir (Zeitlin vd. 2018).",
+      "no_run": "Yürüyüş başlayınca doz burada birikir.",
+      "compare_title": "Rotaların radyasyon farkı",
+      "compare_note": "Tek yön yürüyüş süresi × yüzey doz hızı. Uzun rota daha çok doz demektir.",
+      "compare_chosen": "seçilen",
+      "unit_ugy": "µGy"
+    },
+    "layers": {
+      "button": "Veri katmanları",
+      "title": "Bu ürünün kullandığı NASA verisi",
+      "intro": "Dört veri türü, beşinci katman model tahminidir. Her satırın kaynağı ve ekrandaki yeri yazılı.",
+      "toggle": "Göster",
+      "always": "Her zaman açık",
+      "info_only": "Bilgi",
+      "source": "Kaynak",
+      "where": "Ekranda",
+      "close": "Kapat",
+      "kind_measured": "ölçüm",
+      "kind_model": "model tahmini",
+      "kind_synth": "sentetik",
+      "dtm": {
+        "type": "Topografik",
+        "name": "HiRISE DTM, 1 m (USGS Gale birleşik)",
+        "where": "3B arazi ve eğim; planlayıcı 2 m ızgara.",
+        "kind": "ölçüm"
+      },
+      "optic": {
+        "type": "Optik",
+        "name": "HiRISE ortofoto 25 cm ve Curiosity Navcam",
+        "where": "Arazi dokusu, harita zemini, durak fotoğrafları.",
+        "kind": "ölçüm"
+      },
+      "crism": {
+        "type": "Spektral",
+        "name": "CRISM MTRDR FRT0000B6F1, HYD kompoziti, 18 m",
+        "where": "Haritada ve 3B arazide yarı saydam katman; bilim duraklarında saha notu.",
+        "kind": "ölçüm"
+      },
+      "rad": {
+        "type": "Radyasyon",
+        "name": "MSL RAD yüzey dozu (Hassler 2014)",
+        "where": "Yürürken doz çubuğu ve doz grafiği; karnede rota farkı.",
+        "kind": "ölçüm (yayın ortalaması)"
+      },
+      "model": {
+        "type": "Model",
+        "name": "AI4Mars zemin sınıfı + kaya yoğunluğu (rock_cfa)",
+        "where": "Arazi tarayıcı (L), rota segment açıklamaları, güven (entropy).",
+        "kind": "model tahmini"
+      },
+      "crism_warn": "Ham browse: gürültülü, 18 m/piksel. Maliyet haritasına girmez; yalnız bağlam ve saha notu için.",
+      "crism_ctx": "Kutunun kuzeyinde kalan bağlam (haritalanmadı): hematit sırtı (Fraeman vd. 2013, 2016, 2020) ve kil–sülfat geçişi (Milliken vd. 2010; Sheppard vd. 2021)."
+    }
   }
 }

@@ -17,6 +17,7 @@ import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
 import { initAudio } from './audio.js';
+import './bilim.js'; // tur4:bilim
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
