@@ -18,6 +18,7 @@ from . import params as P
 
 REPO = Path(__file__).resolve().parents[2]
 LAYERS_DIR = Path(os.environ.get("MM_LAYERS_DIR", REPO / "layers"))
+PROVISIONAL_TERRAIN_NOTE = "geçici zemin katmanı (model çıktısı değil)"
 
 
 @dataclass
@@ -34,6 +35,7 @@ class Layers:
     science_stops: list = field(default_factory=list)
     synthetic: bool = False
     region: str = ""
+    provisional_terrain: bool = False
 
     def __post_init__(self):
         mask = np.zeros((self.height, self.width), bool)
@@ -56,7 +58,7 @@ class Layers:
             self.width, self.height, self.res_m, self.elevation, self.slope.copy(),
             self.rock_cfa.copy(), {k: v.copy() for k, v in self.probs.items()},
             self.entropy.copy(), list(self.rover_stops), list(self.science_stops),
-            self.synthetic, self.region,
+            self.synthetic, self.region, self.provisional_terrain,
         )
 
     def grid_info(self) -> dict:
@@ -66,6 +68,8 @@ class Layers:
             "height": self.height,
             "res_m": self.res_m,
             "synthetic": self.synthetic,
+            "provisional_terrain": self.provisional_terrain,
+            "terrain_note": PROVISIONAL_TERRAIN_NOTE if self.provisional_terrain else None,
             "px_note": "Koordinatlar [x, y] = [sütun, satır]; (0,0) sol üst köşe",
             "layers": ["elevation", "slope", "rock_cfa", "p_soil", "p_bedrock", "p_sand", "p_bigrock", "entropy"],
             "rover_stops": self.rover_stops,
@@ -145,6 +149,35 @@ class LayerError(ValueError):
     """Gerçek katman paketi yüklenemedi; sentetiğe sessiz geçiş yapılmaz."""
 
 
+def _provisional_terrain(slope: np.ndarray, rock_cfa: np.ndarray) -> tuple[dict[str, np.ndarray], np.ndarray]:
+    """Zemin model çıktıları henüz yokken eğim + rock_cfa'dan geçici olasılık ve yüksek entropi üretir.
+
+    Kural:
+    - p_bigrock: kaya kaplama oranı (rock_cfa) ve dik eğimle artar [0.05, 0.65].
+    - p_sand: düşük eğim (<10°) ve düşük kayalık (<0.10) alanlarda artar [0.05, 0.50].
+    - Kalan olasılık (1 - p_bigrock - p_sand), eğime göre ana kaya (bedrock) ve toprak (soil) arasında paylaştırılır.
+    - Entropi: normalize Shannon entropisi ile en az 0.75 (düşük güven / CONF_LOW = 0.60 üstü) olacak şekilde ayarlanır.
+    """
+    p_bigrock = np.clip(0.10 + 0.45 * np.clip(rock_cfa / 0.25, 0.0, 1.0)
+                        + 0.15 * np.clip((slope - 15.0) / 10.0, 0.0, 1.0), 0.05, 0.65)
+    p_sand = np.clip(0.10 + 0.35 * np.clip((10.0 - slope) / 10.0, 0.0, 1.0)
+                     * (1.0 - np.clip(rock_cfa / 0.10, 0.0, 1.0)), 0.05, 0.50)
+    rem = np.clip(1.0 - p_bigrock - p_sand, 0.10, 1.0)
+    bed_share = np.clip((slope - 5.0) / 15.0, 0.30, 0.70)
+    p_bedrock = rem * bed_share
+    p_soil = rem * (1.0 - bed_share)
+    probs = {
+        "soil": p_soil.astype(np.float32),
+        "bedrock": p_bedrock.astype(np.float32),
+        "sand": p_sand.astype(np.float32),
+        "bigrock": p_bigrock.astype(np.float32),
+    }
+    arr = np.stack([probs[c] for c in P.CLASSES])
+    shannon = -(arr * np.log(arr + 1e-9)).sum(0) / np.log(4)
+    ent = np.clip(np.maximum(shannon, 0.75), 0.0, 1.0).astype(np.float32)
+    return probs, ent
+
+
 def load(layers_dir: Path | None = None) -> Layers:
     selected = layers_dir or os.environ.get("MARTIAN_LAYERS_DIR") or os.environ.get("MM_LAYERS_DIR")
     if selected is None:
@@ -202,8 +235,23 @@ def load(layers_dir: Path | None = None) -> Layers:
                 raise LayerError(f"{name}: float32 aralığı aşıldı")
             return a
 
-        elev, slope, rock, ent = (ld(n) for n in ("elevation", "slope", "rock_cfa", "entropy"))
-        probs = {c: ld(f"p_{c}") for c in P.CLASSES}
+        elev, slope, rock = (ld(n) for n in ("elevation", "slope", "rock_cfa"))
+        terrain_names = [*(f"p_{c}" for c in P.CLASSES), "entropy"]
+        existing_terrain = [n for n in terrain_names if n in g["layers"] and path_for(n)[0].exists()]
+        if not existing_terrain:
+            probs, ent = _provisional_terrain(slope, rock)
+            provisional = True
+        elif len(existing_terrain) < len(terrain_names):
+            missing = [n for n in terrain_names if n not in existing_terrain]
+            raise LayerError(
+                f"Kısmi zemin katmanı paketi: {existing_terrain} mevcut ancak {missing} eksik; "
+                "ya tüm zemin katmanları (p_soil, p_bedrock, p_sand, p_bigrock, entropy) hazır olmalı "
+                "ya da geçici dolgu için hiçbiri olmamalı"
+            )
+        else:
+            ent = ld("entropy")
+            probs = {c: ld(f"p_{c}") for c in P.CLASSES}
+            provisional = False
         if not np.allclose(sum(probs.values()), 1, atol=1e-3, rtol=0):
             raise LayerError("Sınıf olasılıkları her hücrede toplam 1 olmalı")
         def stops(name, fallback):
@@ -218,7 +266,7 @@ def load(layers_dir: Path | None = None) -> Layers:
             return values
         return Layers(w, h, float(res), elev, slope, rock, probs, ent,
                       stops("rover_stops", "rover_stops.json"), stops("science", "science_stops.json"),
-                      synthetic=False, region=g.get("region", ""))
+                      synthetic=False, region=g.get("region", ""), provisional_terrain=provisional)
     except LayerError:
         raise
     except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:

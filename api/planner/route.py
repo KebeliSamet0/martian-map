@@ -8,7 +8,7 @@ from skimage.graph import MCP_Geometric
 
 from . import params as P
 from .cost import cost_surface, flat_bedrock_kcal_per_m
-from .layers import Layers
+from .layers import PROVISIONAL_TERRAIN_NOTE, Layers
 
 
 class PlanError(ValueError):
@@ -91,7 +91,7 @@ def _conf(ent: float) -> str:
     return "low" if ent >= P.CONF_LOW else ("mid" if ent >= P.CONF_MID else "high")
 
 
-def _reason(seg: dict, base_kcal_m: float) -> str:
+def _reason(seg: dict, base_kcal_m: float, provisional_terrain: bool = False) -> str:
     parts = []
     extra = (seg["kcal"] / max(seg["len_m"], 1) / base_kcal_m - 1) * 100
     if seg["p_sand"] >= 0.4:
@@ -109,6 +109,10 @@ def _reason(seg: dict, base_kcal_m: float) -> str:
     if seg["conf"] == "low":
         ev = seg["nearest_evidence_m"]
         txt += ". Model emin değil" + (f": en yakın rover kanıtı {ev:.0f} m uzakta" if ev is not None else "")
+        if provisional_terrain:
+            txt += f"; {PROVISIONAL_TERRAIN_NOTE}"
+    elif provisional_terrain:
+        txt += f". {PROVISIONAL_TERRAIN_NOTE.capitalize()}"
     return txt + "."
 
 
@@ -139,7 +143,7 @@ def _segments(L: Layers, path: np.ndarray, prof) -> list[dict]:
             "risk": round(float(prof["risk"][a + 1:b + 1].sum()), 2),
             "rejected_alt": None,
         }
-        seg["reason"] = _reason(seg, base)
+        seg["reason"] = _reason(seg, base, L.provisional_terrain)
         segs.append(seg)
     return segs
 

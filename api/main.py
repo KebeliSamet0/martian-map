@@ -84,8 +84,9 @@ def grid(request: Request):
 
 
 @app.get("/assumptions")
-def assumptions():
-    return params.assumptions()
+def assumptions(request: Request):
+    layers = getattr(request.app.state, "layers", None)
+    return params.assumptions(provisional_terrain=bool(layers and layers.provisional_terrain))
 
 
 def result(layers, body: RouteInput):

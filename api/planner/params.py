@@ -72,9 +72,9 @@ CONF_LOW = 0.6
 CONF_MID = 0.35
 
 
-def assumptions():
+def assumptions(provisional_terrain: bool = False):
     """Arayüzde gösterilecek varsayım tablosu."""
-    return [
+    items = [
         {"name": "Astronot kütlesi", "value": BODY_KG, "unit": "kg", "source": "VARSAYIM"},
         {"name": "Skafandr + yaşam destek", "value": SUIT_KG, "unit": "kg", "source": "VARSAYIM (doğrulanacak)"},
         {"name": "Ekipman", "value": TOOLS_KG, "unit": "kg", "source": "VARSAYIM"},
@@ -88,6 +88,14 @@ def assumptions():
         {"name": "Yüzey doz hızı", "value": round(DOSE_UGY_PER_H, 2), "unit": "µGy/saat", "source": "Curiosity RAD, Hassler et al. 2014"},
         {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir"},
     ]
+    if provisional_terrain:
+        items.append({
+            "name": "Zemin olasılık ve belirsizlik katmanları",
+            "value": "geçici zemin katmanı (model çıktısı değil)",
+            "unit": "-",
+            "source": "VARSAYIM: p_soil, p_bedrock, p_sand, p_bigrock ve entropy eğim + rock_cfa'dan geçici kuralla üretildi (entropi ≥ 0.75)",
+        })
+    return items
 
 
 # Tek yükleme noktası; belge yoksa yukarıdaki varsayılanlar korunur.

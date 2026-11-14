@@ -10,8 +10,14 @@ uvicorn api.main:app --reload --port 8000
 
 Katmanlar uygulama başlangıcında `planner.load()` ile bir kez yüklenir. Ortam değişkeni yoksa deterministik 250×250 sentetik arazi kullanılır.
 Gerçek katman dizini `MARTIAN_LAYERS_DIR=/tam/yol` ile seçilir; eski
-`MM_LAYERS_DIR` de desteklenir. Klasörün `grid.json` manifesti ve sekiz katmanı
-doğrulanır; hatalı pakette Türkçe hata verilir. Ayrıntılar contracts/README.md içinde. Her worker kendi
+`MM_LAYERS_DIR` de desteklenir. Klasörün `grid.json` manifesti ve katmanları
+doğrulanır; hatalı veya kısmi zemin paketinde Türkçe hata verilir. Zemin olasılık
+(`p_soil`, `p_bedrock`, `p_sand`, `p_bigrock`) ve `entropy` dosyalarının tamamı
+henüz yoksa yükleyici bunları eğim ve `rock_cfa`'dan bellekte geçici kuralla
+üretir (`entropy >= 0.75`) ve `/grid`, `/assumptions` ile segment `reason`
+alanlarında `"geçici zemin katmanı (model çıktısı değil)"` olarak işaretler;
+gerçek dosyalar geldiğinde kod değişikliği olmadan otomatik kullanılır.
+Ayrıntılar contracts/README.md içinde. Her worker kendi
 katmanını yükler; reload yeni yaşam döngüsü başlatır. CORS tüm origin'lere açıktır.
 OpenAPI ve deneme arayüzü: `http://localhost:8000/docs`.
 
