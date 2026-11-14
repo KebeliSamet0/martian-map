@@ -44,6 +44,20 @@ CRISM / jeoloji ──► bilim durakları ────────────�
 | Paz 16:00 | **Kapı 4 – Kod dondurma** | Sonrası yalnız video, slayt, proje sayfası |
 | Paz 22:00 | **Teslim** | Resmî son 23:59 |
 
+## Demo cihazında çalıştırma
+
+Repo kökünden tüm servisleri (API `:8000`, Web `:5173`, Sim `:8001`) gerçek Gale katmanlarıyla tek komutla başlatmak için:
+
+```sh
+./scripts/dev.sh
+```
+
+Gerçek katmanlarla uçtan uca duman testini (`/route` + kum gözlemiyle `/replan`) çalıştırmak için:
+
+```sh
+.venv/bin/python scripts/smoke.py
+```
+
 Veri keşfi: [docs/data/README.md](docs/data/README.md)
 
 Eğitim makineleri: **RTX 4070** (Emre) ve **M5 Pro** (Samet). Diğer herkes ağır iş için Google Colab kullanır.

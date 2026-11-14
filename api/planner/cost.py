@@ -59,10 +59,17 @@ def flat_bedrock_kcal_per_m() -> float:
 
 
 def risk_per_m(L: Layers) -> np.ndarray:
-    """0-1 civarı risk: eşik üstü eğim, kaya yoğunluğu, model belirsizliği."""
-    slope_r = np.clip((L.slope - 10.0) / (P.SLOPE_NOGO_DEG - 10.0), 0, 1)
-    rock_r = np.clip(L.rock_cfa / 0.2, 0, 1)
-    return 0.5 * slope_r + 0.3 * rock_r + 0.2 * L.entropy
+    """0-1 civarı risk: eğim (doğrusal + dik yamaçta karesel), kaya yoğunluğu ve model belirsizliği."""
+    if L.synthetic:
+        slope_r = np.clip((L.slope - 10.0) / (P.SLOPE_NOGO_DEG - 10.0), 0, 1)
+        rock_r = np.clip(L.rock_cfa / 0.2, 0, 1)
+        return 0.5 * slope_r + 0.3 * rock_r + 0.2 * L.entropy
+    s_lin = np.clip(L.slope / P.SLOPE_NOGO_DEG, 0.0, 1.0)
+    s_steep = np.clip((L.slope - P.RISK_STEER_SLOPE_DEG) / (P.SLOPE_NOGO_DEG - P.RISK_STEER_SLOPE_DEG), 0.0, 1.0) ** 2
+    slope_r = 0.40 * s_lin + 0.60 * s_steep
+    rock_r = np.clip(L.rock_cfa / P.RISK_ROCK_SCALE, 0.0, 1.0)
+    ent_r = np.clip((L.entropy - P.CONF_MID) / (1.0 - P.CONF_MID), 0.0, 1.0)
+    return 0.65 * slope_r + 0.25 * rock_r + 0.10 * ent_r
 
 
 def cost_surface(L: Layers, w: dict) -> tuple[np.ndarray, dict]:

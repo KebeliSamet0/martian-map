@@ -105,7 +105,16 @@ hücre maliyetinde/riskte radyasyon terimi yoktur. Doz µGy, eşdeğer doz µSv 
 bulunan klasörü gösterir. İkisi de yoksa sentetik veri üretilir. Açıkça seçilmiş
 paket hatalı/eksikse başlangıç Türkçe hata ile durur; sentetiğe dönmez.
 `grid.example.json` örnek manifesttir; dosya adları manifest klasörüne görelidir.
-Sekiz sayısal katmanın tümü zorunludur; şekil `(height,width)`, değerler sonlu,
+Sekiz sayısal katmanın tümü mevcut olduğunda doğrudan yüklenir (`elevation`,
+`slope`, `rock_cfa` her zaman zorunludur). Zemin model çıktıları (`p_soil`,
+`p_bedrock`, `p_sand`, `p_bigrock`, `entropy`) henüz üretilmemişse ve beşinin
+tamamı eksikse, yükleyici bunları `slope` + `rock_cfa` üzerinden bellekte
+geçici kuralla türetir (`entropy >= 0.75`, düşük güven) ve `/grid` yanıtında
+`provisional_terrain: true`, `terrain_note: "geçici zemin katmanı (model çıktısı değil)"`
+döndürür; aynı ibare `/assumptions` ve segment `reason` açıklamalarında da yer alır.
+Zemin dosyalarının yalnız bir kısmı mevcutsa kısmi paket Türkçe `LayerError` ile
+reddedilir; tamamı mevcut olduğunda geçici dolgu devre dışı kalır ve gerçek
+dosyalar kullanılır. Şekil `(height,width)`, değerler sonlu,
 olasılıkların toplamı hücre başına 1 (tolerans 0.001) olmalıdır.
 NaN/Inf ve manifestteki `nodata` değeri reddedilir; önce doldurun veya kırpın.
 `res_m` pozitif sonlu metre, `origin_xy_m` iki sonlu sayı, `crs` veya eski
