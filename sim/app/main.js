@@ -17,7 +17,7 @@ import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
 import { initAudio } from './audio.js';
-import { initInsight } from './insight-ui.js';   // tur4:veri
+import './insight-ui.js';   // tur4:veri
 
 const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
@@ -46,10 +46,9 @@ const nav = await Nav.load(BASE, man, geo);
 nav.suitSpeed = SUIT_V;
 $('status').textContent = `HiRISE DTM ${man.W}×${man.H} @ ${man.res_p.toFixed(3)} m · ${(geo.sizeX / 1000).toFixed(1)}×${(geo.sizeZ / 1000).toFixed(1)} km · USGS/NASA`;
 
-let mapView, wire, ins;   // ins: tur4:veri
+let mapView, wire;
 let paused = false;
 function onRouteChange(r) {
-  ins?.onRoute(r);   // tur4:veri
   $('btn-routes').disabled = !r; $('btn-walk').disabled = !r; $('btn-json').disabled = !r;
   $('route-info').hidden = !r;
   if (!r) return;
@@ -360,7 +359,6 @@ function frame(now) {
   }
   if (!paused) wire?.update(dt * timeScale, P);
   if (!paused) T.extras?.update(P);
-  if (ins) void ins.frame(P, state);   // tur4:veri
   deviationCheck(now); scanUpdate(now / 1000);
   T.terrain.update(T.camera.position);
   if (window.__trace) window.__trace.push({ dt: rdt, y: P.y, gy, yaw: P.yaw, pitch: P.pitch, x: P.x, z: P.z, swaps: T.terrain.swaps, loading: T.terrain.stats.loading, built: T.terrain.builtLast || 0 });
@@ -422,7 +420,6 @@ function minimap() {
 }
 
 wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: value => { paused = value; keys.clear(); }, replan: fireReplan, toast });
-ins = initInsight({ mapView, geo, texts: wire.texts, getRouteRun: () => routeRun, toast });   // tur4:veri
 
 ensureScanTex();
 scanner.source = 'yalnız eğim';
