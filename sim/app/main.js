@@ -434,3 +434,5 @@ window.__mm = {
   get routeRun() { return routeRun; }, fireReplan: () => routeRun?.sand && fireReplan(),
 };
 if (Q.get('mod') === '3d') enter3D('walk');
+// ?perf=1: 30 sn FPS/performans ölçüm probu (sim/tools/qa/perf_probe.js; docs: sim/README.md)
+if (Q.get('perf')) { const s = document.createElement('script'); s.src = './tools/qa/perf_probe.js'; document.body.append(s); }
