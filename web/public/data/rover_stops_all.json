@@ -1,0 +1,4147 @@
+[
+  {
+    "stop_id": "msl_s117_d0384",
+    "sol": 4580,
+    "px": [
+      479.8,
+      419.5
+    ],
+    "images": [
+      "navcam/sol_04580/NLB_804091074EDR_F1170384NCAM00385M_.JPG",
+      "navcam/sol_04580/NLB_804091042EDR_F1170384NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 384,
+    "sols": [
+      4580
+    ],
+    "xyz_site_m": [
+      -22.1594,
+      -47.1068,
+      0.521123
+    ],
+    "n_full_frames": 2,
+    "northing": -284653.8264,
+    "easting": 8143236.0992,
+    "lat": -4.802282222481294,
+    "lon": 137.3813156805549,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0420",
+    "sol": 4580,
+    "px": [
+      477.8,
+      420.8
+    ],
+    "images": [
+      "navcam/sol_04580/NLB_804091782EDR_F1170420NCAM00353M_.JPG",
+      "navcam/sol_04580/NLB_804091814EDR_F1170420NCAM00353M_.JPG",
+      "navcam/sol_04580/NLB_804093331EDR_F1170420NCAM00354M_.JPG",
+      "navcam/sol_04580/NLB_804093421EDR_F1170420NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 420,
+    "sols": [
+      4580
+    ],
+    "xyz_site_m": [
+      -25.176,
+      -51.0933,
+      0.354482
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80232637,
+    "lon": 137.3812512,
+    "easting": 8143232.113,
+    "northing": -284656.443,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0456",
+    "sol": 4582,
+    "px": [
+      478.4,
+      420.8
+    ],
+    "images": [
+      "navcam/sol_04582/NLB_804266058EDR_F1170456NCAM00485M_.JPG",
+      "navcam/sol_04582/NLB_804266023EDR_F1170456NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 456,
+    "sols": [
+      4582
+    ],
+    "xyz_site_m": [
+      -24.7559,
+      -50.0045,
+      0.345955
+    ],
+    "n_full_frames": 2,
+    "northing": -284656.4229,
+    "easting": 8143233.2015,
+    "lat": -4.802326027006807,
+    "lon": 137.38126662241265,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0492",
+    "sol": 4582,
+    "px": [
+      477.8,
+      421.4
+    ],
+    "images": [
+      "navcam/sol_04582/NLB_804270137EDR_F1170492NCAM00353M_.JPG",
+      "navcam/sol_04582/NLB_804270170EDR_F1170492NCAM00353M_.JPG",
+      "navcam/sol_04582/NLB_804267166EDR_F1170492NCAM00354M_.JPG",
+      "navcam/sol_04582/NLB_804267248EDR_F1170492NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 492,
+    "sols": [
+      4582
+    ],
+    "xyz_site_m": [
+      -26.3944,
+      -51.0117,
+      0.255219
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80234626,
+    "lon": 137.3812526,
+    "easting": 8143232.195,
+    "northing": -284657.622,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0672",
+    "sol": 4585,
+    "px": [
+      473.1,
+      426.3
+    ],
+    "images": [
+      "navcam/sol_04585/NLB_804532545EDR_F1170672NCAM00385M_.JPG",
+      "navcam/sol_04585/NLB_804532513EDR_F1170672NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 672,
+    "sols": [
+      4585
+    ],
+    "xyz_site_m": [
+      -35.8274,
+      -60.5306,
+      0.376471
+    ],
+    "n_full_frames": 2,
+    "northing": -284667.4944,
+    "easting": 8143222.6754,
+    "lat": -4.802512809908494,
+    "lon": 137.38108841524445,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0702",
+    "sol": 4585,
+    "px": [
+      471.9,
+      427.9
+    ],
+    "images": [
+      "navcam/sol_04585/NLB_804539724EDR_F1170702NCAM00353M_.JPG",
+      "navcam/sol_04585/NLB_804539768EDR_F1170702NCAM00353M_.JPG",
+      "navcam/sol_04585/NLB_804533920EDR_F1170702NCAM00354M_.JPG",
+      "navcam/sol_04585/NLB_804534009EDR_F1170702NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 702,
+    "sols": [
+      4585
+    ],
+    "xyz_site_m": [
+      -39.6553,
+      -62.7771,
+      0.131947
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80256772,
+    "lon": 137.381053,
+    "easting": 8143220.363,
+    "northing": -284670.749,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0804",
+    "sol": 4587,
+    "px": [
+      466.3,
+      431.9
+    ],
+    "images": [
+      "navcam/sol_04587/NLB_804708911EDR_F1170804NCAM00385M_.JPG",
+      "navcam/sol_04587/NLB_804708886EDR_F1170804NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 804,
+    "sols": [
+      4587
+    ],
+    "xyz_site_m": [
+      -47.1175,
+      -74.1546,
+      -0.0826652
+    ],
+    "n_full_frames": 2,
+    "northing": -284678.7845,
+    "easting": 8143209.0514,
+    "lat": -4.802703280724403,
+    "lon": 137.38085776054237,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0840",
+    "sol": 4587,
+    "px": [
+      464.1,
+      432.9
+    ],
+    "images": [
+      "navcam/sol_04587/NLB_804709447EDR_F1170840NCAM00353M_.JPG",
+      "navcam/sol_04587/NLB_804709479EDR_F1170840NCAM00353M_.JPG",
+      "navcam/sol_04587/NLB_804710949EDR_F1170840NCAM00354M_.JPG",
+      "navcam/sol_04587/NLB_804711023EDR_F1170840NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 840,
+    "sols": [
+      4587
+    ],
+    "xyz_site_m": [
+      -49.8401,
+      -78.3599,
+      -0.388787
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80273617,
+    "lon": 137.3807901,
+    "easting": 8143204.78,
+    "northing": -284680.734,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0954",
+    "sol": 4588,
+    "px": [
+      460.0,
+      425.9
+    ],
+    "images": [
+      "navcam/sol_04588/NLB_804801289EDR_F1170954NCAM00385M_.JPG",
+      "navcam/sol_04588/NLB_804801257EDR_F1170954NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 954,
+    "sols": [
+      4588
+    ],
+    "xyz_site_m": [
+      -35.0849,
+      -86.6637,
+      1.17538
+    ],
+    "n_full_frames": 2,
+    "northing": -284666.75190000003,
+    "easting": 8143196.5423,
+    "lat": -4.802500283484387,
+    "lon": 137.38064598112857,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d0996",
+    "sol": 4588,
+    "px": [
+      458.8,
+      423.7
+    ],
+    "images": [
+      "navcam/sol_04588/NLB_804801933EDR_F1170996NCAM00485M_.JPG",
+      "navcam/sol_04588/NLB_804801897EDR_F1170996NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 996,
+    "sols": [
+      4588
+    ],
+    "xyz_site_m": [
+      -30.6766,
+      -89.085,
+      1.54512
+    ],
+    "n_full_frames": 2,
+    "northing": -284662.3436,
+    "easting": 8143194.121,
+    "lat": -4.802425912796991,
+    "lon": 137.38060498845167,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1008",
+    "sol": 4588,
+    "px": [
+      458.4,
+      423.8
+    ],
+    "images": [
+      "navcam/sol_04588/NLB_804802267EDR_F1171008NCAM00353M_.JPG",
+      "navcam/sol_04588/NLB_804802235EDR_F1171008NCAM00353M_.JPG",
+      "navcam/sol_04588/NLB_804803956EDR_F1171008NCAM00354M_.JPG",
+      "navcam/sol_04588/NLB_804804014EDR_F1171008NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1008,
+    "sols": [
+      4588
+    ],
+    "xyz_site_m": [
+      -31.6705,
+      -89.7975,
+      1.44375
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80242965,
+    "lon": 137.3805951,
+    "easting": 8143193.222,
+    "northing": -284662.565,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1044",
+    "sol": 4591,
+    "px": [
+      457.0,
+      425.7
+    ],
+    "images": [
+      "navcam/sol_04591/NLB_805063053EDR_F1171044NCAM00385M_.JPG",
+      "navcam/sol_04591/NLB_805063029EDR_F1171044NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1044,
+    "sols": [
+      4591
+    ],
+    "xyz_site_m": [
+      -34.6035,
+      -92.6781,
+      0.940438
+    ],
+    "n_full_frames": 2,
+    "northing": -284666.27050000004,
+    "easting": 8143190.5279,
+    "lat": -4.802492161975208,
+    "lon": 137.3805441571679,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1104",
+    "sol": 4591,
+    "px": [
+      454.8,
+      426.3
+    ],
+    "images": [
+      "navcam/sol_04591/NLB_805063904EDR_F1171104NCAM00485M_.JPG",
+      "navcam/sol_04591/NLB_805063876EDR_F1171104NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1104,
+    "sols": [
+      4591
+    ],
+    "xyz_site_m": [
+      -35.7434,
+      -97.0799,
+      0.745066
+    ],
+    "n_full_frames": 2,
+    "northing": -284667.4104,
+    "easting": 8143186.1261,
+    "lat": -4.802511392777686,
+    "lon": 137.38046963457043,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1122",
+    "sol": 4591,
+    "px": [
+      454.1,
+      426.2
+    ],
+    "images": [
+      "navcam/sol_04591/NLB_805064336EDR_F1171122NCAM00353M_.JPG",
+      "navcam/sol_04591/NLB_805064307EDR_F1171122NCAM00353M_.JPG",
+      "navcam/sol_04591/NLB_805066117EDR_F1171122NCAM00354M_.JPG",
+      "navcam/sol_04591/NLB_805066092EDR_F1171122NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1122,
+    "sols": [
+      4591
+    ],
+    "xyz_site_m": [
+      -36.418,
+      -98.4896,
+      0.459933
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80250974,
+    "lon": 137.3804498,
+    "easting": 8143184.61,
+    "northing": -284667.312,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1398",
+    "sol": 4594,
+    "px": [
+      453.7,
+      437.5
+    ],
+    "images": [
+      "navcam/sol_04594/NLB_805326354EDR_F1171398NCAM00385M_.JPG",
+      "navcam/sol_04594/NLB_805326323EDR_F1171398NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1398,
+    "sols": [
+      4594
+    ],
+    "xyz_site_m": [
+      -58.285,
+      -99.3056,
+      -1.44309
+    ],
+    "n_full_frames": 2,
+    "northing": -284689.952,
+    "easting": 8143183.900400001,
+    "lat": -4.802891683204155,
+    "lon": 137.38043195340703,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1434",
+    "sol": 4594,
+    "px": [
+      453.5,
+      439.6
+    ],
+    "images": [
+      "navcam/sol_04594/NLB_805326949EDR_F1171434NCAM00346M_.JPG",
+      "navcam/sol_04594/NLB_805327863EDR_F1171434NCAM00354M_.JPG",
+      "navcam/sol_04594/NLB_805327887EDR_F1171434NCAM00354M_.JPG",
+      "navcam/sol_04594/NLB_805327936EDR_F1171434NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1434,
+    "sols": [
+      4594
+    ],
+    "xyz_site_m": [
+      -63.2851,
+      -99.0882,
+      -1.85293
+    ],
+    "n_full_frames": 18,
+    "lat": -4.802963,
+    "lon": 137.3804319,
+    "easting": 8143183.545,
+    "northing": -284694.179,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1854",
+    "sol": 4596,
+    "px": [
+      442.1,
+      457.1
+    ],
+    "images": [
+      "navcam/sol_04596/NLB_805501786EDR_F1171854NCAM00385M_.JPG",
+      "navcam/sol_04596/NLB_805501762EDR_F1171854NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1854,
+    "sols": [
+      4596
+    ],
+    "xyz_site_m": [
+      -97.4912,
+      -122.603,
+      -3.53901
+    ],
+    "n_full_frames": 2,
+    "northing": -284729.1582,
+    "easting": 8143160.603,
+    "lat": -4.803553115512344,
+    "lon": 137.38003752777166,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d1890",
+    "sol": 4596,
+    "px": [
+      442.9,
+      458.7
+    ],
+    "images": [
+      "navcam/sol_04596/NLB_805502446EDR_F1171890NCAM00353M_.JPG",
+      "navcam/sol_04596/NLB_805502477EDR_F1171890NCAM00353M_.JPG",
+      "navcam/sol_04596/NLB_805503597EDR_F1171890NCAM00354M_.JPG",
+      "navcam/sol_04596/NLB_805503685EDR_F1171890NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 1890,
+    "sols": [
+      4596
+    ],
+    "xyz_site_m": [
+      -101.852,
+      -120.151,
+      -3.8565
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80360579,
+    "lon": 137.3800743,
+    "easting": 8143162.349,
+    "northing": -284732.28,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2118",
+    "sol": 4598,
+    "px": [
+      434.8,
+      468.4
+    ],
+    "images": [
+      "navcam/sol_04598/NLB_805685970EDR_F1172118NCAM00385M_.JPG",
+      "navcam/sol_04598/NLB_805686009EDR_F1172118NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2118,
+    "sols": [
+      4598
+    ],
+    "xyz_site_m": [
+      -120.042,
+      -137.154,
+      -7.98062
+    ],
+    "n_full_frames": 2,
+    "northing": -284751.70900000003,
+    "easting": 8143146.052,
+    "lat": -4.803933561148378,
+    "lon": 137.37979117893357,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2166",
+    "sol": 4598,
+    "px": [
+      433.5,
+      470.8
+    ],
+    "images": [
+      "navcam/sol_04598/NLB_805686697EDR_F1172166NCAM00353M_.JPG",
+      "navcam/sol_04598/NLB_805686665EDR_F1172166NCAM00353M_.JPG",
+      "navcam/sol_04598/NLB_805688270EDR_F1172166NCAM00354M_.JPG",
+      "navcam/sol_04598/NLB_805688360EDR_F1172166NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2166,
+    "sols": [
+      4598
+    ],
+    "xyz_site_m": [
+      -126.522,
+      -138.359,
+      -9.39631
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80401601,
+    "lon": 137.3797556,
+    "easting": 8143143.461,
+    "northing": -284756.596,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2316",
+    "sol": 4600,
+    "px": [
+      431.1,
+      474.2
+    ],
+    "images": [
+      "navcam/sol_04600/NLB_805864869EDR_F1172316NCAM00385M_.JPG",
+      "navcam/sol_04600/NLB_805864844EDR_F1172316NCAM00385M_.JPG",
+      "navcam/sol_04600/NLB_805864900EDR_F1172316NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2316,
+    "sols": [
+      4600
+    ],
+    "xyz_site_m": [
+      -131.711,
+      -144.513,
+      -10.9506
+    ],
+    "n_full_frames": 3,
+    "northing": -284763.378,
+    "easting": 8143138.693,
+    "lat": -4.804130424236468,
+    "lon": 137.3796665908572,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2352",
+    "sol": 4600,
+    "px": [
+      431.8,
+      475.9
+    ],
+    "images": [
+      "navcam/sol_04600/NLB_805865475EDR_F1172352NCAM00485M_.JPG",
+      "navcam/sol_04600/NLB_805865441EDR_F1172352NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2352,
+    "sols": [
+      4600
+    ],
+    "xyz_site_m": [
+      -135.076,
+      -143.173,
+      -11.9598
+    ],
+    "n_full_frames": 2,
+    "northing": -284766.743,
+    "easting": 8143140.033,
+    "lat": -4.804187193821815,
+    "lon": 137.3796892770948,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2370",
+    "sol": 4600,
+    "px": [
+      431.4,
+      476.0
+    ],
+    "images": [
+      "navcam/sol_04600/NLB_805865896EDR_F1172370NCAM00353M_.JPG",
+      "navcam/sol_04600/NLB_805865864EDR_F1172370NCAM00353M_.JPG",
+      "navcam/sol_04600/NLB_805867593EDR_F1172370NCAM00354M_.JPG",
+      "navcam/sol_04600/NLB_805867650EDR_F1172370NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2370,
+    "sols": [
+      4600
+    ],
+    "xyz_site_m": [
+      -136.542,
+      -142.818,
+      -12.4231
+    ],
+    "n_full_frames": 20,
+    "lat": -4.804189,
+    "lon": 137.3796858,
+    "easting": 8143139.321,
+    "northing": -284766.85,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2454",
+    "sol": 4602,
+    "px": [
+      432.1,
+      480.4
+    ],
+    "images": [
+      "navcam/sol_04602/NLB_806041279EDR_F1172454NCAM00385M_.JPG",
+      "navcam/sol_04602/NLB_806041247EDR_F1172454NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2454,
+    "sols": [
+      4602
+    ],
+    "xyz_site_m": [
+      -144.03,
+      -142.417,
+      -13.644
+    ],
+    "n_full_frames": 2,
+    "northing": -284775.69700000004,
+    "easting": 8143140.789,
+    "lat": -4.804338253217715,
+    "lon": 137.379702076196,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2490",
+    "sol": 4602,
+    "px": [
+      429.6,
+      481.2
+    ],
+    "images": [
+      "navcam/sol_04602/NLB_806046352EDR_F1172490NCAM00353M_.JPG",
+      "navcam/sol_04602/NLB_806046384EDR_F1172490NCAM00353M_.JPG",
+      "navcam/sol_04602/NLB_806042961EDR_F1172490NCAM00354M_.JPG",
+      "navcam/sol_04602/NLB_806043010EDR_F1172490NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2490,
+    "sols": [
+      4602
+    ],
+    "xyz_site_m": [
+      -147.042,
+      -146.496,
+      -14.2461
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80436679,
+    "lon": 137.3796237,
+    "easting": 8143135.643,
+    "northing": -284777.388,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2538",
+    "sol": 4605,
+    "px": [
+      427.6,
+      483.2
+    ],
+    "images": [
+      "navcam/sol_04605/NLB_806308618EDR_F1172538NCAM00353M_.JPG",
+      "navcam/sol_04605/NLB_806308650EDR_F1172538NCAM00353M_.JPG",
+      "navcam/sol_04605/NLB_806306477EDR_F1172538NCAM00354M_.JPG",
+      "navcam/sol_04605/NLB_806306565EDR_F1172538NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2538,
+    "sols": [
+      4605
+    ],
+    "xyz_site_m": [
+      -150.993,
+      -150.031,
+      -14.3533
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80443344,
+    "lon": 137.3795572,
+    "easting": 8143131.699,
+    "northing": -284781.339,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2694",
+    "sol": 4609,
+    "px": [
+      423.6,
+      491.7
+    ],
+    "images": [
+      "navcam/sol_04609/NLB_806659865EDR_F1172694NCAM00385M_.JPG",
+      "navcam/sol_04609/NLB_806659841EDR_F1172694NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2694,
+    "sols": [
+      4609
+    ],
+    "xyz_site_m": [
+      -166.674,
+      -159.45,
+      -18.3468
+    ],
+    "n_full_frames": 2,
+    "northing": -284798.341,
+    "easting": 8143123.756,
+    "lat": -4.804720271194122,
+    "lon": 137.3794137070283,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2730",
+    "sol": 4609,
+    "px": [
+      420.6,
+      492.3
+    ],
+    "images": [
+      "navcam/sol_04609/NLB_806660485EDR_F1172730NCAM00353M_.JPG",
+      "navcam/sol_04609/NLB_806660460EDR_F1172730NCAM00353M_.JPG",
+      "navcam/sol_04609/NLB_806661847EDR_F1172730NCAM00354M_.JPG",
+      "navcam/sol_04609/NLB_806661878EDR_F1172730NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2730,
+    "sols": [
+      4609
+    ],
+    "xyz_site_m": [
+      -169.306,
+      -163.734,
+      -19.4459
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80474015,
+    "lon": 137.3793204,
+    "easting": 8143117.662,
+    "northing": -284799.519,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2814",
+    "sol": 4612,
+    "px": [
+      419.9,
+      496.7
+    ],
+    "images": [
+      "navcam/sol_04612/NLB_806928424EDR_F1172814NCAM00385M_.JPG",
+      "navcam/sol_04612/NLB_806928392EDR_F1172814NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2814,
+    "sols": [
+      4612
+    ],
+    "xyz_site_m": [
+      -176.638,
+      -166.843,
+      -20.7409
+    ],
+    "n_full_frames": 2,
+    "northing": -284808.305,
+    "easting": 8143116.363,
+    "lat": -4.804888369900929,
+    "lon": 137.37928854333097,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d2850",
+    "sol": 4612,
+    "px": [
+      419.9,
+      498.4
+    ],
+    "images": [
+      "navcam/sol_04612/NLB_806929032EDR_F1172850NCAM00353M_.JPG",
+      "navcam/sol_04612/NLB_806929064EDR_F1172850NCAM00353M_.JPG",
+      "navcam/sol_04612/NLB_806930607EDR_F1172850NCAM00354M_.JPG",
+      "navcam/sol_04612/NLB_806930549EDR_F1172850NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 2850,
+    "sols": [
+      4612
+    ],
+    "xyz_site_m": [
+      -181.321,
+      -165.054,
+      -21.1433
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80494509,
+    "lon": 137.3792959,
+    "easting": 8143116.209,
+    "northing": -284811.667,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d3024",
+    "sol": 4614,
+    "px": [
+      422.9,
+      506.7
+    ],
+    "images": [
+      "navcam/sol_04614/NLB_807108989EDR_F1173024NCAM00385M_.JPG",
+      "navcam/sol_04614/NLB_807109021EDR_F1173024NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 3024,
+    "sols": [
+      4614
+    ],
+    "xyz_site_m": [
+      -196.625,
+      -160.924,
+      -21.9476
+    ],
+    "n_full_frames": 2,
+    "northing": -284828.292,
+    "easting": 8143122.282000001,
+    "lat": -4.805225562680227,
+    "lon": 137.37938875216696,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s117_d3054",
+    "sol": 4614,
+    "px": [
+      424.6,
+      506.6
+    ],
+    "images": [
+      "navcam/sol_04614/NLB_807109491EDR_F1173054NCAM00485M_.JPG",
+      "navcam/sol_04614/NLB_807109463EDR_F1173054NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 117,
+    "drive": 3054,
+    "sols": [
+      4614
+    ],
+    "xyz_site_m": [
+      -196.355,
+      -157.596,
+      -22.2596
+    ],
+    "n_full_frames": 2,
+    "northing": -284828.022,
+    "easting": 8143125.61,
+    "lat": -4.8052210076169155,
+    "lon": 137.3794450953003,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0000",
+    "sol": 4614,
+    "px": [
+      424.4,
+      506.1
+    ],
+    "images": [
+      "navcam/sol_04614/NLB_807110310EDR_F1180000NCAM00353M_.JPG",
+      "navcam/sol_04614/NLB_807110348EDR_F1180000NCAM00353M_.JPG",
+      "navcam/sol_04614/NLB_807112406EDR_F1180000CCAM03614M_.JPG",
+      "navcam/sol_04614/NLB_807111915EDR_F1180000NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 0,
+    "sols": [
+      4614
+    ],
+    "xyz_site_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80520603,
+    "lon": 137.3794477,
+    "easting": 8143125.209,
+    "northing": -284827.134,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0126",
+    "sol": 4616,
+    "px": [
+      425.2,
+      511.3
+    ],
+    "images": [
+      "navcam/sol_04616/NLB_807285045EDR_F1180126NCAM00385M_.JPG",
+      "navcam/sol_04616/NLB_807285013EDR_F1180126NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 126,
+    "sols": [
+      4616
+    ],
+    "xyz_site_m": [
+      -10.3247,
+      1.64616,
+      -0.419975
+    ],
+    "n_full_frames": 2,
+    "northing": -284837.4587,
+    "easting": 8143126.85516,
+    "lat": -4.8053802139339785,
+    "lon": 137.37947556966975,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0162",
+    "sol": 4616,
+    "px": [
+      426.6,
+      513.4
+    ],
+    "images": [
+      "navcam/sol_04616/NLB_807285772EDR_F1180162NCAM00353M_.JPG",
+      "navcam/sol_04616/NLB_807285804EDR_F1180162NCAM00353M_.JPG",
+      "navcam/sol_04616/NLB_807286889EDR_F1180162NCAM00354M_.JPG",
+      "navcam/sol_04616/NLB_807286953EDR_F1180162NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 162,
+    "sols": [
+      4616
+    ],
+    "xyz_site_m": [
+      -14.4193,
+      4.50982,
+      -0.929542
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80545276,
+    "lon": 137.3795247,
+    "easting": 8143129.77,
+    "northing": -284841.759,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0198",
+    "sol": 4618,
+    "px": [
+      427.0,
+      514.7
+    ],
+    "images": [
+      "navcam/sol_04618/NLB_807466728EDR_F1180198NCAM00353M_.JPG",
+      "navcam/sol_04618/NLB_807466760EDR_F1180198NCAM00353M_.JPG",
+      "navcam/sol_04618/NLB_807464550EDR_F1180198NCAM00354M_.JPG",
+      "navcam/sol_04618/NLB_807464622EDR_F1180198NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 198,
+    "sols": [
+      4618
+    ],
+    "xyz_site_m": [
+      -16.8873,
+      5.20883,
+      -1.31678
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80549507,
+    "lon": 137.3795358,
+    "easting": 8143130.43,
+    "northing": -284844.267,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0342",
+    "sol": 4621,
+    "px": [
+      424.1,
+      513.4
+    ],
+    "images": [
+      "navcam/sol_04621/NLB_807728676EDR_F1180342NCAM00385M_.JPG",
+      "navcam/sol_04621/NLB_807728644EDR_F1180342NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 342,
+    "sols": [
+      4621
+    ],
+    "xyz_site_m": [
+      -14.6165,
+      -0.563034,
+      -0.937843
+    ],
+    "n_full_frames": 2,
+    "northing": -284841.7505,
+    "easting": 8143124.645966,
+    "lat": -4.805452619195909,
+    "lon": 137.37943816777246,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0372",
+    "sol": 4621,
+    "px": [
+      426.3,
+      512.3
+    ],
+    "images": [
+      "navcam/sol_04621/NLB_807729229EDR_F1180372NCAM00353M_.JPG",
+      "navcam/sol_04621/NLB_807729253EDR_F1180372NCAM00353M_.JPG",
+      "navcam/sol_04621/NLB_807730951EDR_F1180372NCAM00354M_.JPG",
+      "navcam/sol_04621/NLB_807731040EDR_F1180372NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 372,
+    "sols": [
+      4621
+    ],
+    "xyz_site_m": [
+      -12.1437,
+      3.76332,
+      -0.734369
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80541391,
+    "lon": 137.3795125,
+    "easting": 8143129.051,
+    "northing": -284839.456,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0504",
+    "sol": 4623,
+    "px": [
+      435.8,
+      513.6
+    ],
+    "images": [
+      "navcam/sol_04623/NLB_807900107EDR_F1180504NCAM00385M_.JPG",
+      "navcam/sol_04623/NLB_807900131EDR_F1180504NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 504,
+    "sols": [
+      4623
+    ],
+    "xyz_site_m": [
+      -14.9367,
+      22.926,
+      -0.743558
+    ],
+    "n_full_frames": 2,
+    "northing": -284842.07070000004,
+    "easting": 8143148.135,
+    "lat": -4.8054580211635844,
+    "lon": 137.3798358397002,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0534",
+    "sol": 4623,
+    "px": [
+      438.3,
+      514.4
+    ],
+    "images": [
+      "navcam/sol_04623/NLB_807900732EDR_F1180534NCAM00353M_.JPG",
+      "navcam/sol_04623/NLB_807900701EDR_F1180534NCAM00353M_.JPG",
+      "navcam/sol_04623/NLB_807902098EDR_F1180534NCAM00354M_.JPG",
+      "navcam/sol_04623/NLB_807902160EDR_F1180534NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 534,
+    "sols": [
+      4623
+    ],
+    "xyz_site_m": [
+      -16.2925,
+      27.7557,
+      -0.714131
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80548391,
+    "lon": 137.3799173,
+    "easting": 8143153.043,
+    "northing": -284843.605,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0726",
+    "sol": 4625,
+    "px": [
+      434.6,
+      523.1
+    ],
+    "images": [
+      "navcam/sol_04625/NLB_808082935EDR_F1180726NCAM00385M_.JPG",
+      "navcam/sol_04625/NLB_808082903EDR_F1180726NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 726,
+    "sols": [
+      4625
+    ],
+    "xyz_site_m": [
+      -33.9211,
+      20.5562,
+      -3.64238
+    ],
+    "n_full_frames": 2,
+    "northing": -284861.0551,
+    "easting": 8143145.7652,
+    "lat": -4.8057782994744525,
+    "lon": 137.3797957187257,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0762",
+    "sol": 4625,
+    "px": [
+      433.6,
+      525.5
+    ],
+    "images": [
+      "navcam/sol_04625/NLB_808083584EDR_F1180762NCAM00353M_.JPG",
+      "navcam/sol_04625/NLB_808083553EDR_F1180762NCAM00353M_.JPG",
+      "navcam/sol_04625/NLB_808085068EDR_F1180762NCAM00354M_.JPG",
+      "navcam/sol_04625/NLB_808085182EDR_F1180762NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 762,
+    "sols": [
+      4625
+    ],
+    "xyz_site_m": [
+      -38.4003,
+      18.3327,
+      -4.38565
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80585913,
+    "lon": 137.3797583,
+    "easting": 8143143.62,
+    "northing": -284865.846,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0876",
+    "sol": 4628,
+    "px": [
+      427.1,
+      528.8
+    ],
+    "images": [
+      "navcam/sol_04628/NLB_808342561EDR_F1180876NCAM00385M_.JPG",
+      "navcam/sol_04628/NLB_808342537EDR_F1180876NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 876,
+    "sols": [
+      4628
+    ],
+    "xyz_site_m": [
+      -45.3776,
+      5.48122,
+      -6.31566
+    ],
+    "n_full_frames": 2,
+    "northing": -284872.5116,
+    "easting": 8143130.69022,
+    "lat": -4.80597157755901,
+    "lon": 137.37954049765713,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d0924",
+    "sol": 4628,
+    "px": [
+      424.7,
+      529.4
+    ],
+    "images": [
+      "navcam/sol_04628/NLB_808343280EDR_F1180924NCAM00353M_.JPG",
+      "navcam/sol_04628/NLB_808343249EDR_F1180924NCAM00353M_.JPG",
+      "navcam/sol_04628/NLB_808344905EDR_F1180924NCAM00354M_.JPG",
+      "navcam/sol_04628/NLB_808344857EDR_F1180924NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 924,
+    "sols": [
+      4628
+    ],
+    "xyz_site_m": [
+      -46.034,
+      0.729977,
+      -6.67484
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80599016,
+    "lon": 137.3794602,
+    "easting": 8143125.951,
+    "northing": -284873.613,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1110",
+    "sol": 4629,
+    "px": [
+      434.1,
+      533.0
+    ],
+    "images": [
+      "navcam/sol_04629/NLB_808439067EDR_F1181110NCAM00385M_.JPG",
+      "navcam/sol_04629/NLB_808439036EDR_F1181110NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1110,
+    "sols": [
+      4629
+    ],
+    "xyz_site_m": [
+      -53.6973,
+      19.4732,
+      -6.62103
+    ],
+    "n_full_frames": 2,
+    "northing": -284880.8313,
+    "easting": 8143144.6822,
+    "lat": -4.8061119359302475,
+    "lon": 137.37977738341664,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1194",
+    "sol": 4629,
+    "px": [
+      432.5,
+      534.6
+    ],
+    "images": [
+      "navcam/sol_04629/NLB_808440166EDR_F1181194NCAM00353M_.JPG",
+      "navcam/sol_04629/NLB_808440142EDR_F1181194NCAM00353M_.JPG",
+      "navcam/sol_04629/NLB_808441693EDR_F1181194NCAM00354M_.JPG",
+      "navcam/sol_04629/NLB_808441789EDR_F1181194NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1194,
+    "sols": [
+      4629
+    ],
+    "xyz_site_m": [
+      -56.8372,
+      15.8401,
+      -7.14232
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80616679,
+    "lon": 137.379723,
+    "easting": 8143141.528,
+    "northing": -284884.083,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1314",
+    "sol": 4633,
+    "px": [
+      431.3,
+      540.7
+    ],
+    "images": [
+      "navcam/sol_04633/NLB_808786779EDR_F1181314NCAM00385M_.JPG",
+      "navcam/sol_04633/NLB_808786747EDR_F1181314NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1314,
+    "sols": [
+      4633
+    ],
+    "xyz_site_m": [
+      -69.0794,
+      13.9565,
+      -9.10939
+    ],
+    "n_full_frames": 2,
+    "northing": -284896.2134,
+    "easting": 8143139.1655,
+    "lat": -4.806371441261236,
+    "lon": 137.3796839850792,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1350",
+    "sol": 4633,
+    "px": [
+      431.1,
+      543.2
+    ],
+    "images": [
+      "navcam/sol_04633/NLB_808787393EDR_F1181350NCAM00353M_.JPG",
+      "navcam/sol_04633/NLB_808787362EDR_F1181350NCAM00353M_.JPG",
+      "navcam/sol_04633/NLB_808788459EDR_F1181350NCAM00354M_.JPG",
+      "navcam/sol_04633/NLB_808788435EDR_F1181350NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1350,
+    "sols": [
+      4633
+    ],
+    "xyz_site_m": [
+      -74.0289,
+      13.128,
+      -10.1028
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80645796,
+    "lon": 137.3796739,
+    "easting": 8143138.615,
+    "northing": -284901.342,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1572",
+    "sol": 4634,
+    "px": [
+      417.1,
+      539.5
+    ],
+    "images": [
+      "navcam/sol_04634/NLB_808882068EDR_F1181572NCAM00385M_.JPG",
+      "navcam/sol_04634/NLB_808882044EDR_F1181572NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1572,
+    "sols": [
+      4634
+    ],
+    "xyz_site_m": [
+      -66.8222,
+      -14.5169,
+      -11.2781
+    ],
+    "n_full_frames": 2,
+    "northing": -284893.9562,
+    "easting": 8143110.6921,
+    "lat": -4.80633336093195,
+    "lon": 137.37920192728717,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1608",
+    "sol": 4634,
+    "px": [
+      414.5,
+      540.2
+    ],
+    "images": [
+      "navcam/sol_04634/NLB_808882774EDR_F1181608NCAM00353M_.JPG",
+      "navcam/sol_04634/NLB_808882742EDR_F1181608NCAM00353M_.JPG",
+      "navcam/sol_04634/NLB_808884436EDR_F1181608NCAM00354M_.JPG",
+      "navcam/sol_04634/NLB_808884572EDR_F1181608NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1608,
+    "sols": [
+      4634,
+      4635
+    ],
+    "xyz_site_m": [
+      -67.6622,
+      -19.4965,
+      -12.059
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80635617,
+    "lon": 137.3791167,
+    "easting": 8143105.591,
+    "northing": -284895.308,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1716",
+    "sol": 4636,
+    "px": [
+      419.6,
+      543.4
+    ],
+    "images": [
+      "navcam/sol_04636/NLB_809059696EDR_F1181716NCAM00385M_.JPG",
+      "navcam/sol_04636/NLB_809059665EDR_F1181716NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1716,
+    "sols": [
+      4636
+    ],
+    "xyz_site_m": [
+      -74.5383,
+      -9.44436,
+      -11.8807
+    ],
+    "n_full_frames": 2,
+    "northing": -284901.67230000003,
+    "easting": 8143115.76464,
+    "lat": -4.8064635362060955,
+    "lon": 137.37928780594697,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1752",
+    "sol": 4636,
+    "px": [
+      421.1,
+      545.6
+    ],
+    "images": [
+      "navcam/sol_04636/NLB_809060285EDR_F1181752NCAM00353M_.JPG",
+      "navcam/sol_04636/NLB_809060317EDR_F1181752NCAM00353M_.JPG",
+      "navcam/sol_04636/NLB_809061806EDR_F1181752NCAM00354M_.JPG",
+      "navcam/sol_04636/NLB_809061864EDR_F1181752NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1752,
+    "sols": [
+      4636
+    ],
+    "xyz_site_m": [
+      -78.4943,
+      -6.33766,
+      -12.7568
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80653823,
+    "lon": 137.3793381,
+    "easting": 8143118.71,
+    "northing": -284906.1,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1776",
+    "sol": 4639,
+    "px": [
+      420.5,
+      546.0
+    ],
+    "images": [
+      "navcam/sol_04639/NLB_809328532EDR_F1181776NCAM00353M_.JPG",
+      "navcam/sol_04639/NLB_809328564EDR_F1181776NCAM00353M_.JPG",
+      "navcam/sol_04639/NLB_809326157EDR_F1181776NCAM00354M_.JPG",
+      "navcam/sol_04639/NLB_809326215EDR_F1181776NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1776,
+    "sols": [
+      4639
+    ],
+    "xyz_site_m": [
+      -79.3881,
+      -7.57881,
+      -13.0733
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80655332,
+    "lon": 137.3793171,
+    "easting": 8143117.469,
+    "northing": -284906.994,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1908",
+    "sol": 4641,
+    "px": [
+      423.1,
+      547.7
+    ],
+    "images": [
+      "navcam/sol_04641/NLB_809503503EDR_F1181908NCAM00385M_.JPG",
+      "navcam/sol_04641/NLB_809503479EDR_F1181908NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1908,
+    "sols": [
+      4641
+    ],
+    "xyz_site_m": [
+      -83.2644,
+      -2.53587,
+      -12.5598
+    ],
+    "n_full_frames": 2,
+    "northing": -284910.3984,
+    "easting": 8143122.67313,
+    "lat": -4.8066107507911475,
+    "lon": 137.3794047674421,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1944",
+    "sol": 4641,
+    "px": [
+      421.6,
+      550.1
+    ],
+    "images": [
+      "navcam/sol_04641/NLB_809504123EDR_F1181944NCAM00353M_.JPG",
+      "navcam/sol_04641/NLB_809504091EDR_F1181944NCAM00353M_.JPG",
+      "navcam/sol_04641/NLB_809505897EDR_F1181944NCAM00354M_.JPG",
+      "navcam/sol_04641/NLB_809505868EDR_F1181944NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1944,
+    "sols": [
+      4641
+    ],
+    "xyz_site_m": [
+      -87.3597,
+      -5.41214,
+      -13.3608
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80669051,
+    "lon": 137.3793537,
+    "easting": 8143119.635,
+    "northing": -284915.126,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d1974",
+    "sol": 4643,
+    "px": [
+      422.1,
+      550.7
+    ],
+    "images": [
+      "navcam/sol_04643/NLB_809679870EDR_F1181974NCAM00385M_.JPG",
+      "navcam/sol_04643/NLB_809679839EDR_F1181974NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 1974,
+    "sols": [
+      4643
+    ],
+    "xyz_site_m": [
+      -89.2045,
+      -4.43359,
+      -13.4618
+    ],
+    "n_full_frames": 2,
+    "northing": -284916.3385,
+    "easting": 8143120.77541,
+    "lat": -4.8067109638710654,
+    "lon": 137.3793726388339,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2028",
+    "sol": 4643,
+    "px": [
+      423.3,
+      553.3
+    ],
+    "images": [
+      "navcam/sol_04643/NLB_809680815EDR_F1182028NCAM00353M_.JPG",
+      "navcam/sol_04643/NLB_809680847EDR_F1182028NCAM00353M_.JPG",
+      "navcam/sol_04643/NLB_809684170EDR_F1182028CCAM04643M_.JPG",
+      "navcam/sol_04643/NLB_809681902EDR_F1182028NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2028,
+    "sols": [
+      4643
+    ],
+    "xyz_site_m": [
+      -93.5633,
+      -2.03124,
+      -14.3383
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80679651,
+    "lon": 137.3794121,
+    "easting": 8143123.096,
+    "northing": -284921.409,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2208",
+    "sol": 4647,
+    "px": [
+      433.5,
+      554.2
+    ],
+    "images": [
+      "navcam/sol_04647/NLB_810033787EDR_F1182208NCAM00385M_.JPG",
+      "navcam/sol_04647/NLB_810033811EDR_F1182208NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2208,
+    "sols": [
+      4647
+    ],
+    "xyz_site_m": [
+      -96.1146,
+      18.3577,
+      -12.3105
+    ],
+    "n_full_frames": 2,
+    "northing": -284923.2486,
+    "easting": 8143143.566699999,
+    "lat": -4.806827541437696,
+    "lon": 137.379758497879,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2268",
+    "sol": 4647,
+    "px": [
+      435.2,
+      556.0
+    ],
+    "images": [
+      "navcam/sol_04647/NLB_810034693EDR_F1182268NCAM00353M_.JPG",
+      "navcam/sol_04647/NLB_810034661EDR_F1182268NCAM00353M_.JPG",
+      "navcam/sol_04647/NLB_810036203EDR_F1182268NCAM00354M_.JPG",
+      "navcam/sol_04647/NLB_810036266EDR_F1182268NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2268,
+    "sols": [
+      4647
+    ],
+    "xyz_site_m": [
+      -99.4082,
+      21.8165,
+      -12.7074
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80689063,
+    "lon": 137.3798121,
+    "easting": 8143146.811,
+    "northing": -284926.988,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2304",
+    "sol": 4650,
+    "px": [
+      436.0,
+      556.1
+    ],
+    "images": [
+      "navcam/sol_04650/NLB_810298214EDR_F1182304NCAM00353M_.JPG",
+      "navcam/sol_04650/NLB_810298182EDR_F1182304NCAM00353M_.JPG",
+      "navcam/sol_04650/NLB_810299785EDR_F1182304NCAM00354M_.JPG",
+      "navcam/sol_04650/NLB_810299761EDR_F1182304NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2304,
+    "sols": [
+      4650
+    ],
+    "xyz_site_m": [
+      -99.5377,
+      23.5755,
+      -12.6551
+    ],
+    "n_full_frames": 20,
+    "lat": -4.8068928,
+    "lon": 137.3798418,
+    "easting": 8143148.57,
+    "northing": -284927.117,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2406",
+    "sol": 4653,
+    "px": [
+      438.9,
+      559.4
+    ],
+    "images": [
+      "navcam/sol_04653/NLB_810567116EDR_F1182406NCAM00385M_.JPG",
+      "navcam/sol_04653/NLB_810567084EDR_F1182406NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2406,
+    "sols": [
+      4653
+    ],
+    "xyz_site_m": [
+      -106.613,
+      29.1239,
+      -13.1753
+    ],
+    "n_full_frames": 2,
+    "northing": -284933.74700000003,
+    "easting": 8143154.3329,
+    "lat": -4.807004655795738,
+    "lon": 137.37994077082854,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2466",
+    "sol": 4653,
+    "px": [
+      437.6,
+      561.7
+    ],
+    "images": [
+      "navcam/sol_04653/NLB_810567913EDR_F1182466NCAM00353M_.JPG",
+      "navcam/sol_04653/NLB_810567882EDR_F1182466NCAM00353M_.JPG",
+      "navcam/sol_04653/NLB_810569365EDR_F1182466NCAM00354M_.JPG",
+      "navcam/sol_04653/NLB_810569421EDR_F1182466NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2466,
+    "sols": [
+      4653
+    ],
+    "xyz_site_m": [
+      -110.649,
+      26.1315,
+      -14.1228
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80708025,
+    "lon": 137.3798962,
+    "easting": 8143151.792,
+    "northing": -284938.228,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2538",
+    "sol": 4655,
+    "px": [
+      437.6,
+      564.3
+    ],
+    "images": [
+      "navcam/sol_04655/NLB_810747365EDR_F1182538NCAM00353M_.JPG",
+      "navcam/sol_04655/NLB_810747333EDR_F1182538NCAM00353M_.JPG",
+      "navcam/sol_04655/NLB_810748932EDR_F1182538NCAM00354M_.JPG",
+      "navcam/sol_04655/NLB_810748965EDR_F1182538NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2538,
+    "sols": [
+      4655
+    ],
+    "xyz_site_m": [
+      -115.789,
+      26.1358,
+      -14.3377
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80716832,
+    "lon": 137.3798956,
+    "easting": 8143151.757,
+    "northing": -284943.448,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2676",
+    "sol": 4660,
+    "px": [
+      442.5,
+      570.0
+    ],
+    "images": [
+      "navcam/sol_04660/NLB_811178082EDR_F1182676NCAM00385M_.JPG",
+      "navcam/sol_04660/NLB_811178057EDR_F1182676NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2676,
+    "sols": [
+      4660
+    ],
+    "xyz_site_m": [
+      -127.67,
+      36.1912,
+      -15.2212
+    ],
+    "n_full_frames": 2,
+    "northing": -284954.804,
+    "easting": 8143161.4002,
+    "lat": -4.807359900122235,
+    "lon": 137.38006042099443,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2742",
+    "sol": 4660,
+    "px": [
+      442.5,
+      572.7
+    ],
+    "images": [
+      "navcam/sol_04660/NLB_811178828EDR_F1182742NCAM00353M_.JPG",
+      "navcam/sol_04660/NLB_811178803EDR_F1182742NCAM00353M_.JPG",
+      "navcam/sol_04660/NLB_811180242EDR_F1182742NCAM00354M_.JPG",
+      "navcam/sol_04660/NLB_811180297EDR_F1182742NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2742,
+    "sols": [
+      4660
+    ],
+    "xyz_site_m": [
+      -132.745,
+      36.0366,
+      -15.9905
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80745212,
+    "lon": 137.3800604,
+    "easting": 8143161.524,
+    "northing": -284960.27,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2796",
+    "sol": 4662,
+    "px": [
+      444.8,
+      575.6
+    ],
+    "images": [
+      "navcam/sol_04662/NLB_811353947EDR_F1182796NCAM00385M_.JPG",
+      "navcam/sol_04662/NLB_811353915EDR_F1182796NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2796,
+    "sols": [
+      4662
+    ],
+    "xyz_site_m": [
+      -138.992,
+      40.8087,
+      -16.4465
+    ],
+    "n_full_frames": 2,
+    "northing": -284966.12600000005,
+    "easting": 8143166.0177,
+    "lat": -4.807550909110439,
+    "lon": 137.38013859577703,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d2832",
+    "sol": 4662,
+    "px": [
+      446.3,
+      577.9
+    ],
+    "images": [
+      "navcam/sol_04662/NLB_811354545EDR_F1182832NCAM00353M_.JPG",
+      "navcam/sol_04662/NLB_811354520EDR_F1182832NCAM00353M_.JPG",
+      "navcam/sol_04662/NLB_811355949EDR_F1182832NCAM00354M_.JPG",
+      "navcam/sol_04662/NLB_811356004EDR_F1182832NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 2832,
+    "sols": [
+      4662
+    ],
+    "xyz_site_m": [
+      -143.079,
+      43.6815,
+      -16.8339
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80762759,
+    "lon": 137.3801893,
+    "easting": 8143169.169,
+    "northing": -284970.671,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d3126",
+    "sol": 4664,
+    "px": [
+      445.5,
+      587.3
+    ],
+    "images": [
+      "navcam/sol_04664/NLB_811538228EDR_F1183126NCAM00385M_.JPG",
+      "navcam/sol_04664/NLB_811538204EDR_F1183126NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 3126,
+    "sols": [
+      4664
+    ],
+    "xyz_site_m": [
+      -162.268,
+      42.2692,
+      -18.644
+    ],
+    "n_full_frames": 2,
+    "northing": -284989.402,
+    "easting": 8143167.4782,
+    "lat": -4.807943589309117,
+    "lon": 137.38016332220258,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d3156",
+    "sol": 4664,
+    "px": [
+      448.1,
+      586.7
+    ],
+    "images": [
+      "navcam/sol_04664/NLB_811538777EDR_F1183156NCAM00353M_.JPG",
+      "navcam/sol_04664/NLB_811538801EDR_F1183156NCAM00353M_.JPG",
+      "navcam/sol_04664/NLB_811540387EDR_F1183156NCAM00354M_.JPG",
+      "navcam/sol_04664/NLB_811540426EDR_F1183156NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 3156,
+    "sols": [
+      4664
+    ],
+    "xyz_site_m": [
+      -160.92,
+      47.0761,
+      -18.237
+    ],
+    "n_full_frames": 19,
+    "lat": -4.8079252,
+    "lon": 137.3802489,
+    "easting": 8143172.697,
+    "northing": -284988.312,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s118_d3252",
+    "sol": 4667,
+    "px": [
+      453.8,
+      587.9
+    ],
+    "images": [
+      "navcam/sol_04667/NLB_811805025EDR_F1183252NCAM00385M_.JPG",
+      "navcam/sol_04667/NLB_811805001EDR_F1183252NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 118,
+    "drive": 3252,
+    "sols": [
+      4667
+    ],
+    "xyz_site_m": [
+      -163.528,
+      58.8582,
+      -17.7292
+    ],
+    "n_full_frames": 2,
+    "northing": -284990.662,
+    "easting": 8143184.0671999995,
+    "lat": -4.807964846271238,
+    "lon": 137.38044417579619,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d0000",
+    "sol": 4667,
+    "px": [
+      455.8,
+      589.6
+    ],
+    "images": [
+      "navcam/sol_04667/NLB_811806173EDR_F1190000NCAM00353M_.JPG",
+      "navcam/sol_04667/NLB_811806204EDR_F1190000NCAM00353M_.JPG",
+      "navcam/sol_04667/NLB_811807663EDR_F1190000NCAM00354M_.JPG",
+      "navcam/sol_04667/NLB_811807723EDR_F1190000NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 0,
+    "sols": [
+      4667
+    ],
+    "xyz_site_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80802327,
+    "lon": 137.3805074,
+    "easting": 8143188.021,
+    "northing": -284994.125,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d0162",
+    "sol": 4669,
+    "px": [
+      464.6,
+      592.0
+    ],
+    "images": [
+      "navcam/sol_04669/NLB_811978580EDR_F1190162NCAM00385M_.JPG",
+      "navcam/sol_04669/NLB_811978549EDR_F1190162NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 162,
+    "sols": [
+      4669
+    ],
+    "xyz_site_m": [
+      -4.77126,
+      17.75,
+      2.14739
+    ],
+    "n_full_frames": 2,
+    "northing": -284998.89626,
+    "easting": 8143205.771,
+    "lat": -4.808103764042135,
+    "lon": 137.38080791069373,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d0198",
+    "sol": 4669,
+    "px": [
+      466.9,
+      590.5
+    ],
+    "images": [
+      "navcam/sol_04669/NLB_811979218EDR_F1190198NCAM00353M_.JPG",
+      "navcam/sol_04669/NLB_811979195EDR_F1190198NCAM00353M_.JPG",
+      "navcam/sol_04669/NLB_811980193EDR_F1190198NCAM00354M_.JPG",
+      "navcam/sol_04669/NLB_811980224EDR_F1190198NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 198,
+    "sols": [
+      4669
+    ],
+    "xyz_site_m": [
+      -1.71536,
+      22.4629,
+      2.67547
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80805222,
+    "lon": 137.380883,
+    "easting": 8143210.284,
+    "northing": -284995.841,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d0426",
+    "sol": 4671,
+    "px": [
+      475.6,
+      596.6
+    ],
+    "images": [
+      "navcam/sol_04671/NLB_812158106EDR_F1190426NCAM00385M_.JPG",
+      "navcam/sol_04671/NLB_812158081EDR_F1190426NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 426,
+    "sols": [
+      4671
+    ],
+    "xyz_site_m": [
+      -13.9432,
+      39.6916,
+      2.94337
+    ],
+    "n_full_frames": 2,
+    "northing": -285008.0682,
+    "easting": 8143227.712599999,
+    "lat": -4.808258500217657,
+    "lon": 137.38117938592967,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d0486",
+    "sol": 4671,
+    "px": [
+      478.3,
+      597.0
+    ],
+    "images": [
+      "navcam/sol_04671/NLB_812159069EDR_F1190486NCAM00353M_.JPG",
+      "navcam/sol_04671/NLB_812159093EDR_F1190486NCAM00353M_.JPG",
+      "navcam/sol_04671/NLB_812160555EDR_F1190486NCAM00354M_.JPG",
+      "navcam/sol_04671/NLB_812160669EDR_F1190486NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 486,
+    "sols": [
+      4671
+    ],
+    "xyz_site_m": [
+      -14.4457,
+      45.5607,
+      3.22577
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80827103,
+    "lon": 137.3812695,
+    "easting": 8143233.195,
+    "northing": -285008.811,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1278",
+    "sol": 4680,
+    "px": [
+      477.7,
+      600.1
+    ],
+    "images": [
+      "navcam/sol_04680/NLB_812959261EDR_F1191278NCAM00385M_.JPG",
+      "navcam/sol_04680/NLB_812959229EDR_F1191278NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1278,
+    "sols": [
+      4680
+    ],
+    "xyz_site_m": [
+      -20.9192,
+      43.9448,
+      3.0562
+    ],
+    "n_full_frames": 2,
+    "northing": -285015.0442,
+    "easting": 8143231.965799999,
+    "lat": -4.808376189557148,
+    "lon": 137.38125139337095,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1308",
+    "sol": 4680,
+    "px": [
+      477.9,
+      597.7
+    ],
+    "images": [
+      "navcam/sol_04680/NLB_812959750EDR_F1191308NCAM00485M_.JPG",
+      "navcam/sol_04680/NLB_812959723EDR_F1191308NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1308,
+    "sols": [
+      4680
+    ],
+    "xyz_site_m": [
+      -16.2433,
+      44.3064,
+      2.7261
+    ],
+    "n_full_frames": 2,
+    "northing": -285010.3683,
+    "easting": 8143232.3274,
+    "lat": -4.808297304295891,
+    "lon": 137.381257515324,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1344",
+    "sol": 4680,
+    "px": [
+      477.7,
+      597.0
+    ],
+    "images": [
+      "navcam/sol_04680/NLB_812960355EDR_F1191344NCAM00353M_.JPG",
+      "navcam/sol_04680/NLB_812960332EDR_F1191344NCAM00353M_.JPG",
+      "navcam/sol_04680/NLB_812961786EDR_F1191344NCAM00354M_.JPG",
+      "navcam/sol_04680/NLB_812961879EDR_F1191344NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1344,
+    "sols": [
+      4680
+    ],
+    "xyz_site_m": [
+      -14.4449,
+      44.2653,
+      2.908
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80827147,
+    "lon": 137.3812465,
+    "easting": 8143231.833,
+    "northing": -285008.837,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1518",
+    "sol": 4684,
+    "px": [
+      471.6,
+      591.7
+    ],
+    "images": [
+      "navcam/sol_04684/NLB_813312656EDR_F1191518NCAM00385M_.JPG",
+      "navcam/sol_04684/NLB_813312631EDR_F1191518NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1518,
+    "sols": [
+      4684
+    ],
+    "xyz_site_m": [
+      -4.1886,
+      31.6191,
+      2.84494
+    ],
+    "n_full_frames": 2,
+    "northing": -284998.3136,
+    "easting": 8143219.6400999995,
+    "lat": -4.808093934215508,
+    "lon": 137.3810427170522,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1542",
+    "sol": 4684,
+    "px": [
+      471.2,
+      590.0
+    ],
+    "images": [
+      "navcam/sol_04684/NLB_813312996EDR_F1191542NCAM00485M_.JPG",
+      "navcam/sol_04684/NLB_813312961EDR_F1191542NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1542,
+    "sols": [
+      4684
+    ],
+    "xyz_site_m": [
+      -0.748032,
+      30.9016,
+      3.2728
+    ],
+    "n_full_frames": 2,
+    "northing": -284994.873032,
+    "easting": 8143218.9226,
+    "lat": -4.808035889752293,
+    "lon": 137.3810305696481,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1554",
+    "sol": 4684,
+    "px": [
+      470.9,
+      589.2
+    ],
+    "images": [
+      "navcam/sol_04684/NLB_813314846EDR_F1191554NCAM00354M_.JPG",
+      "navcam/sol_04684/NLB_813314894EDR_F1191554NCAM00354M_.JPG",
+      "navcam/sol_04684/NLB_813313396EDR_F1191554NCAM00255M_.JPG",
+      "navcam/sol_04684/NLB_813313427EDR_F1191554NCAM00255M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1554,
+    "sols": [
+      4684
+    ],
+    "xyz_site_m": [
+      0.716632,
+      30.5462,
+      3.44703
+    ],
+    "n_full_frames": 4,
+    "lat": -4.80801097,
+    "lon": 137.3810178,
+    "easting": 8143218.274,
+    "northing": -284993.396,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1626",
+    "sol": 4687,
+    "px": [
+      472.8,
+      586.1
+    ],
+    "images": [
+      "navcam/sol_04687/NLB_813577286EDR_F1191626NCAM00385M_.JPG",
+      "navcam/sol_04687/NLB_813577254EDR_F1191626NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1626,
+    "sols": [
+      4687
+    ],
+    "xyz_site_m": [
+      7.07782,
+      34.1636,
+      5.11559
+    ],
+    "n_full_frames": 2,
+    "northing": -284987.04718,
+    "easting": 8143222.184599999,
+    "lat": -4.807903862895523,
+    "lon": 137.38108579589502,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1722",
+    "sol": 4687,
+    "px": [
+      471.4,
+      584.2
+    ],
+    "images": [
+      "navcam/sol_04693/NLB_814107368EDR_F1191722NCAM00309M_.JPG",
+      "navcam/sol_04687/NLB_813583164EDR_F1191722NCAM00353M_.JPG",
+      "navcam/sol_04690/NLB_813840031EDR_F1191722NCAM00353M_.JPG",
+      "navcam/sol_04687/NLB_813583196EDR_F1191722NCAM00353M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1722,
+    "sols": [
+      4687,
+      4690,
+      4693,
+      4696
+    ],
+    "xyz_site_m": [
+      11.3676,
+      31.5214,
+      5.79685
+    ],
+    "n_full_frames": 29,
+    "lat": -4.80783916,
+    "lon": 137.3810353,
+    "easting": 8143219.316,
+    "northing": -284983.212,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s119_d1776",
+    "sol": 4709,
+    "px": [
+      471.6,
+      586.4
+    ],
+    "images": [
+      "navcam/sol_04709/NLB_815535422EDR_F1191776NCAM00385M_.JPG",
+      "navcam/sol_04709/NLB_815535390EDR_F1191776NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 119,
+    "drive": 1776,
+    "sols": [
+      4709
+    ],
+    "xyz_site_m": [
+      6.38459,
+      31.6903,
+      4.83849
+    ],
+    "n_full_frames": 2,
+    "northing": -284987.74041,
+    "easting": 8143219.7113,
+    "lat": -4.807915558104929,
+    "lon": 137.38104392248098,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0000",
+    "sol": 4709,
+    "px": [
+      471.8,
+      588.9
+    ],
+    "images": [
+      "navcam/sol_04709/NLB_815536812EDR_F1200000NCAM00353M_.JPG",
+      "navcam/sol_04709/NLB_815536837EDR_F1200000NCAM00353M_.JPG",
+      "navcam/sol_04709/NLB_815539359EDR_F1200000CCAM03709M_.JPG",
+      "navcam/sol_04709/NLB_815538771EDR_F1200000NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 0,
+    "sols": [
+      4709
+    ],
+    "xyz_site_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80799931,
+    "lon": 137.3810495,
+    "easting": 8143220.156,
+    "northing": -284992.705,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0060",
+    "sol": 4711,
+    "px": [
+      471.0,
+      588.5
+    ],
+    "images": [
+      "navcam/sol_04711/NLB_815713825EDR_F1200060NCAM00485M_.JPG",
+      "navcam/sol_04711/NLB_815713790EDR_F1200060NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 60,
+    "sols": [
+      4711
+    ],
+    "xyz_site_m": [
+      0.742827,
+      -1.75297,
+      0.0054478
+    ],
+    "n_full_frames": 2,
+    "northing": -284991.96217300004,
+    "easting": 8143218.403030001,
+    "lat": -4.807986778059204,
+    "lon": 137.38101982190352,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0082",
+    "sol": 4711,
+    "px": [
+      470.5,
+      589.1
+    ],
+    "images": [
+      "navcam/sol_04718/NLB_816331121EDR_F1200082NCAM00309M_.JPG",
+      "navcam/sol_04711/NLB_815719013EDR_F1200082NCAM00353M_.JPG",
+      "navcam/sol_04711/NLB_815719044EDR_F1200082NCAM00353M_.JPG",
+      "navcam/sol_04711/NLB_815715738EDR_F1200082NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 82,
+    "sols": [
+      4711,
+      4718,
+      4728
+    ],
+    "xyz_site_m": [
+      -0.488259,
+      -2.65085,
+      -0.312269
+    ],
+    "n_full_frames": 22,
+    "lat": -4.80800755,
+    "lon": 137.3810041,
+    "easting": 8143217.465,
+    "northing": -284993.193,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0232",
+    "sol": 4741,
+    "px": [
+      470.8,
+      581.9
+    ],
+    "images": [
+      "navcam/sol_04743/NLB_818558612EDR_F1200232NCAM00353M_.JPG",
+      "navcam/sol_04741/NLB_818376006EDR_F1200232NCAM00353M_.JPG",
+      "navcam/sol_04741/NLB_818375975EDR_F1200232NCAM00353M_.JPG",
+      "navcam/sol_04743/NLB_818558644EDR_F1200232NCAM00353M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 232,
+    "sols": [
+      4741,
+      4743,
+      4744
+    ],
+    "xyz_site_m": [
+      14.3817,
+      -2.11031,
+      2.7776
+    ],
+    "n_full_frames": 25,
+    "lat": -4.80776275,
+    "lon": 137.3810137,
+    "easting": 8143218.032,
+    "northing": -284978.683,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0298",
+    "sol": 4748,
+    "px": [
+      472.7,
+      583.8
+    ],
+    "images": [
+      "navcam/sol_04748/NLB_818994010EDR_F1200298NCAM00385M_.JPG",
+      "navcam/sol_04748/NLB_818993978EDR_F1200298NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 298,
+    "sols": [
+      4748
+    ],
+    "xyz_site_m": [
+      10.2686,
+      1.8225,
+      1.95624
+    ],
+    "n_full_frames": 2,
+    "northing": -284982.4364,
+    "easting": 8143221.9785,
+    "lat": -4.807826072506954,
+    "lon": 137.3810803552518,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0346",
+    "sol": 4748,
+    "px": [
+      473.9,
+      586.2
+    ],
+    "images": [
+      "navcam/sol_04748/NLB_818994763EDR_F1200346NCAM00353M_.JPG",
+      "navcam/sol_04748/NLB_818994739EDR_F1200346NCAM00353M_.JPG",
+      "navcam/sol_04748/NLB_818995961EDR_F1200346NCAM00354M_.JPG",
+      "navcam/sol_04748/NLB_818995929EDR_F1200346NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 346,
+    "sols": [
+      4748
+    ],
+    "xyz_site_m": [
+      5.81835,
+      4.11143,
+      1.22657
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80790799,
+    "lon": 137.3811194,
+    "easting": 8143224.299,
+    "northing": -284987.292,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0520",
+    "sol": 4752,
+    "px": [
+      469.4,
+      588.5
+    ],
+    "images": [
+      "navcam/sol_04752/NLB_819357936EDR_F1200520NCAM00485M_.JPG",
+      "navcam/sol_04752/NLB_819357900EDR_F1200520NCAM00485M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 520,
+    "sols": [
+      4752
+    ],
+    "xyz_site_m": [
+      0.743453,
+      -4.83743,
+      -0.547204
+    ],
+    "n_full_frames": 2,
+    "northing": -284991.96154700004,
+    "easting": 8143215.31857,
+    "lat": -4.807986767498206,
+    "lon": 137.38096760144256,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0538",
+    "sol": 4752,
+    "px": [
+      470.1,
+      589.9
+    ],
+    "images": [
+      "navcam/sol_04752/NLB_819362128EDR_F1200538NCAM00353M_.JPG",
+      "navcam/sol_04752/NLB_819362161EDR_F1200538NCAM00353M_.JPG",
+      "navcam/sol_04755/NLB_819618024EDR_F1200538NCAM00403M_.JPG",
+      "navcam/sol_04784/NLB_822187697EDR_F1200538NCAM00400M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 538,
+    "sols": [
+      4752,
+      4755,
+      4757,
+      4758,
+      4759,
+      4760,
+      4761,
+      4762,
+      4763,
+      4764,
+      4765,
+      4766,
+      4767,
+      4769,
+      4772,
+      4773,
+      4774,
+      4775,
+      4776,
+      4777,
+      4778,
+      4779,
+      4780,
+      4781,
+      4782,
+      4783,
+      4784,
+      4785,
+      4786,
+      4787
+    ],
+    "xyz_site_m": [
+      -1.87437,
+      -3.2687,
+      -0.693337
+    ],
+    "n_full_frames": 51,
+    "lat": -4.80803169,
+    "lon": 137.3809929,
+    "easting": 8143216.799,
+    "northing": -284994.624,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0574",
+    "sol": 4789,
+    "px": [
+      470.1,
+      589.1
+    ],
+    "images": [
+      "navcam/sol_04791/NLB_822807586EDR_F1200574NCAM00225M_.JPG",
+      "navcam/sol_04791/NLB_822806498EDR_F1200574NCAM00225M_.JPG",
+      "navcam/sol_04795/NLB_823167891EDR_F1200574NCAM00309M_.JPG",
+      "navcam/sol_04791/NLB_822808241EDR_F1200574NCAM00353M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 574,
+    "sols": [
+      4789,
+      4791,
+      4795
+    ],
+    "xyz_site_m": [
+      -0.315481,
+      -3.25603,
+      -0.480936
+    ],
+    "n_full_frames": 24,
+    "lat": -4.80800539,
+    "lon": 137.3809924,
+    "easting": 8143216.772,
+    "northing": -284993.065,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0772",
+    "sol": 4805,
+    "px": [
+      480.6,
+      585.2
+    ],
+    "images": [
+      "navcam/sol_04805/NLB_824056486EDR_F1200772NCAM00385M_.JPG",
+      "navcam/sol_04805/NLB_824056462EDR_F1200772NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 772,
+    "sols": [
+      4805
+    ],
+    "xyz_site_m": [
+      7.33585,
+      17.6439,
+      1.37738
+    ],
+    "n_full_frames": 2,
+    "northing": -284985.36915000004,
+    "easting": 8143237.7999,
+    "lat": -4.807875549773351,
+    "lon": 137.38134821439112,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0808",
+    "sol": 4805,
+    "px": [
+      482.8,
+      584.1
+    ],
+    "images": [
+      "navcam/sol_04805/NLB_824057125EDR_F1200808NCAM00353M_.JPG",
+      "navcam/sol_04805/NLB_824057094EDR_F1200808NCAM00353M_.JPG",
+      "navcam/sol_04805/NLB_824058137EDR_F1200808NCAM00354M_.JPG",
+      "navcam/sol_04805/NLB_824058192EDR_F1200808NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 808,
+    "sols": [
+      4805
+    ],
+    "xyz_site_m": [
+      9.73532,
+      22.0545,
+      1.72173
+    ],
+    "n_full_frames": 19,
+    "lat": -4.8078367,
+    "lon": 137.38142,
+    "easting": 8143242.116,
+    "northing": -284983.066,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d0934",
+    "sol": 4810,
+    "px": [
+      488.8,
+      579.8
+    ],
+    "images": [
+      "navcam/sol_04810/NLB_824490660EDR_F1200934NCAM00284M_.JPG",
+      "navcam/sol_04810/NLB_824490629EDR_F1200934NCAM00284M_.JPG",
+      "navcam/sol_04810/NLB_824490605EDR_F1200934NCAM00284M_.JPG",
+      "navcam/sol_04810/NLB_824490550EDR_F1200934NCAM00284M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 934,
+    "sols": [
+      4810
+    ],
+    "xyz_site_m": [
+      18.2866,
+      33.8744,
+      3.47847
+    ],
+    "n_full_frames": 5,
+    "northing": -284974.4184,
+    "easting": 8143254.0304000005,
+    "lat": -4.807690803997201,
+    "lon": 137.3816229996668,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1000",
+    "sol": 4810,
+    "px": [
+      486.3,
+      577.6
+    ],
+    "images": [
+      "navcam/sol_04810/NLB_824492625EDR_F1201000NCAM00385M_.JPG",
+      "navcam/sol_04810/NLB_824492580EDR_F1201000NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1000,
+    "sols": [
+      4810
+    ],
+    "xyz_site_m": [
+      22.6756,
+      29.0183,
+      3.9942
+    ],
+    "n_full_frames": 2,
+    "northing": -284970.0294,
+    "easting": 8143249.1743,
+    "lat": -4.807616758912479,
+    "lon": 137.38154078502293,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1042",
+    "sol": 4810,
+    "px": [
+      485.3,
+      575.2
+    ],
+    "images": [
+      "navcam/sol_04810/NLB_824493333EDR_F1201042NCAM00353M_.JPG",
+      "navcam/sol_04810/NLB_824493309EDR_F1201042NCAM00353M_.JPG",
+      "navcam/sol_04810/NLB_824495077EDR_F1201042NCAM00354M_.JPG",
+      "navcam/sol_04810/NLB_824495101EDR_F1201042NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1042,
+    "sols": [
+      4810
+    ],
+    "xyz_site_m": [
+      27.3203,
+      27.014,
+      4.0722
+    ],
+    "n_full_frames": 19,
+    "lat": -4.8075379,
+    "lon": 137.3815047,
+    "easting": 8143247.139,
+    "northing": -284965.355,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1240",
+    "sol": 4813,
+    "px": [
+      489.7,
+      571.3
+    ],
+    "images": [
+      "navcam/sol_04813/NLB_824769750EDR_F1201240NCAM00385M_.JPG",
+      "navcam/sol_04813/NLB_824769782EDR_F1201240NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1240,
+    "sols": [
+      4813
+    ],
+    "xyz_site_m": [
+      35.2209,
+      35.7164,
+      7.24891
+    ],
+    "n_full_frames": 2,
+    "northing": -284957.4841,
+    "easting": 8143255.872400001,
+    "lat": -4.8074051121133525,
+    "lon": 137.38165418505713,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1264",
+    "sol": 4813,
+    "px": [
+      490.2,
+      569.7
+    ],
+    "images": [
+      "navcam/sol_04813/NLB_824770253EDR_F1201264NCAM00353M_.JPG",
+      "navcam/sol_04813/NLB_824770284EDR_F1201264NCAM00353M_.JPG",
+      "navcam/sol_04813/NLB_824771898EDR_F1201264NCAM00354M_.JPG",
+      "navcam/sol_04813/NLB_824771993EDR_F1201264NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1264,
+    "sols": [
+      4813,
+      4815
+    ],
+    "xyz_site_m": [
+      38.7654,
+      36.6929,
+      8.03684
+    ],
+    "n_full_frames": 25,
+    "lat": -4.80734998,
+    "lon": 137.381668,
+    "easting": 8143256.818,
+    "northing": -284954.216,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1450",
+    "sol": 4816,
+    "px": [
+      496.3,
+      574.1
+    ],
+    "images": [
+      "navcam/sol_04816/NLB_825026473EDR_F1201450NCAM00385M_.JPG",
+      "navcam/sol_04816/NLB_825026451EDR_F1201450NCAM00385M_.JPG",
+      "navcam/sol_04816/NLB_825026427EDR_F1201450NCAM00385M_.JPG",
+      "navcam/sol_04816/NLB_825026402EDR_F1201450NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1450,
+    "sols": [
+      4816
+    ],
+    "xyz_site_m": [
+      29.5107,
+      48.851,
+      6.6479
+    ],
+    "n_full_frames": 4,
+    "northing": -284963.19430000003,
+    "easting": 8143269.007,
+    "lat": -4.807501446641213,
+    "lon": 137.3818765561906,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1492",
+    "sol": 4816,
+    "px": [
+      498.7,
+      573.8
+    ],
+    "images": [
+      "navcam/sol_04816/NLB_825027121EDR_F1201492NCAM00294M_.JPG",
+      "navcam/sol_04816/NLB_825027097EDR_F1201492NCAM00294M_.JPG",
+      "navcam/sol_04816/NLB_825027072EDR_F1201492NCAM00294M_.JPG",
+      "navcam/sol_04816/NLB_825027048EDR_F1201492NCAM00294M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1492,
+    "sols": [
+      4816
+    ],
+    "xyz_site_m": [
+      30.2777,
+      53.7536,
+      6.42955
+    ],
+    "n_full_frames": 5,
+    "northing": -284962.42730000004,
+    "easting": 8143273.909600001,
+    "lat": -4.807488506887287,
+    "lon": 137.3819595580878,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d1546",
+    "sol": 4816,
+    "px": [
+      498.2,
+      574.9
+    ],
+    "images": [
+      "navcam/sol_04816/NLB_825028063EDR_F1201546NCAM00353M_.JPG",
+      "navcam/sol_04816/NLB_825028032EDR_F1201546NCAM00353M_.JPG",
+      "navcam/sol_04816/NLB_825029408EDR_F1201546NCAM00354M_.JPG",
+      "navcam/sol_04816/NLB_825029439EDR_F1201546NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 1546,
+    "sols": [
+      4816
+    ],
+    "xyz_site_m": [
+      28.4146,
+      52.6781,
+      6.12193
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80752572,
+    "lon": 137.38194,
+    "easting": 8143272.936,
+    "northing": -284964.633,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2000",
+    "sol": 4818,
+    "px": [
+      515.5,
+      587.6
+    ],
+    "images": [
+      "navcam/sol_04818/NLB_825216059EDR_F1202000NCAM00385M_.JPG",
+      "navcam/sol_04818/NLB_825216028EDR_F1202000NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2000,
+    "sols": [
+      4818
+    ],
+    "xyz_site_m": [
+      2.56853,
+      87.2988,
+      5.52552
+    ],
+    "n_full_frames": 2,
+    "northing": -284990.13647,
+    "easting": 8143307.4548,
+    "lat": -4.807955977345303,
+    "lon": 137.38252748433956,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2030",
+    "sol": 4818,
+    "px": [
+      516.7,
+      586.1
+    ],
+    "images": [
+      "navcam/sol_04818/NLB_825216640EDR_F1202030NCAM00353M_.JPG",
+      "navcam/sol_04818/NLB_825216608EDR_F1202030NCAM00353M_.JPG",
+      "navcam/sol_04818/NLB_825218292EDR_F1202030NCAM00354M_.JPG",
+      "navcam/sol_04818/NLB_825218349EDR_F1202030NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2030,
+    "sols": [
+      4818
+    ],
+    "xyz_site_m": [
+      6.01625,
+      89.9043,
+      6.04926
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80790359,
+    "lon": 137.3825624,
+    "easting": 8143309.829,
+    "northing": -284987.031,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2066",
+    "sol": 4820,
+    "px": [
+      518.4,
+      584.3
+    ],
+    "images": [
+      "navcam/sol_04820/NLB_825389638EDR_F1202066NCAM00385M_.JPG",
+      "navcam/sol_04820/NLB_825389614EDR_F1202066NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2066,
+    "sols": [
+      4820
+    ],
+    "xyz_site_m": [
+      9.25646,
+      93.2146,
+      6.63296
+    ],
+    "n_full_frames": 2,
+    "northing": -284983.44854,
+    "easting": 8143313.3706,
+    "lat": -4.807843147920955,
+    "lon": 137.38262763989448,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2102",
+    "sol": 4820,
+    "px": [
+      519.9,
+      582.5
+    ],
+    "images": [
+      "navcam/sol_04820/NLB_825394227EDR_F1202102NCAM00353M_.JPG",
+      "navcam/sol_04820/NLB_825394259EDR_F1202102NCAM00353M_.JPG",
+      "navcam/sol_04820/NLB_825391571EDR_F1202102NCAM00354M_.JPG",
+      "navcam/sol_04820/NLB_825391626EDR_F1202102NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2102,
+    "sols": [
+      4820
+    ],
+    "xyz_site_m": [
+      13.1236,
+      96.4098,
+      6.86479
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80778482,
+    "lon": 137.382671,
+    "easting": 8143316.268,
+    "northing": -284979.991,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2192",
+    "sol": 4823,
+    "px": [
+      518.6,
+      585.4
+    ],
+    "images": [
+      "navcam/sol_04823/NLB_825655080EDR_F1202192NCAM00353M_.JPG",
+      "navcam/sol_04823/NLB_825655111EDR_F1202192NCAM00353M_.JPG",
+      "navcam/sol_04823/NLB_825652086EDR_F1202192NCAM00354M_.JPG",
+      "navcam/sol_04823/NLB_825652158EDR_F1202192NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2192,
+    "sols": [
+      4823
+    ],
+    "xyz_site_m": [
+      7.2073,
+      93.8094,
+      6.33033
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80788259,
+    "lon": 137.3826281,
+    "easting": 8143313.728,
+    "northing": -284985.786,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2330",
+    "sol": 4827,
+    "px": [
+      524.1,
+      590.7
+    ],
+    "images": [
+      "navcam/sol_04827/NLB_826008612EDR_F1202330NCAM00385M_.JPG",
+      "navcam/sol_04827/NLB_826008580EDR_F1202330NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2330,
+    "sols": [
+      4827
+    ],
+    "xyz_site_m": [
+      -3.6635,
+      104.516,
+      5.73861
+    ],
+    "n_full_frames": 2,
+    "northing": -284996.36850000004,
+    "easting": 8143324.672,
+    "lat": -4.808061115460897,
+    "lon": 137.38281897462318,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2366",
+    "sol": 4827,
+    "px": [
+      525.3,
+      592.9
+    ],
+    "images": [
+      "navcam/sol_04827/NLB_826009236EDR_F1202366NCAM00353M_.JPG",
+      "navcam/sol_04827/NLB_826009205EDR_F1202366NCAM00353M_.JPG",
+      "navcam/sol_04827/NLB_826012520EDR_F1202366CCAM08825M_.JPG",
+      "navcam/sol_04827/NLB_826010468EDR_F1202366NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2366,
+    "sols": [
+      4827
+    ],
+    "xyz_site_m": [
+      -7.77317,
+      107.389,
+      5.49015
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80813306,
+    "lon": 137.3828539,
+    "easting": 8143327.108,
+    "northing": -285000.633,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2690",
+    "sol": 4830,
+    "px": [
+      519.7,
+      610.7
+    ],
+    "images": [
+      "navcam/sol_04830/NLB_826274579EDR_F1202690NCAM00385M_.JPG",
+      "navcam/sol_04830/NLB_826274548EDR_F1202690NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2690,
+    "sols": [
+      4830
+    ],
+    "xyz_site_m": [
+      -43.5988,
+      95.7891,
+      0.317522
+    ],
+    "n_full_frames": 2,
+    "northing": -285036.3038,
+    "easting": 8143315.9451,
+    "lat": -4.808734848127088,
+    "lon": 137.38267122664115,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d2726",
+    "sol": 4830,
+    "px": [
+      519.3,
+      613.3
+    ],
+    "images": [
+      "navcam/sol_04830/NLB_826275149EDR_F1202726NCAM00353M_.JPG",
+      "navcam/sol_04830/NLB_826275126EDR_F1202726NCAM00353M_.JPG",
+      "navcam/sol_04830/NLB_826276504EDR_F1202726NCAM00354M_.JPG",
+      "navcam/sol_04830/NLB_826276553EDR_F1202726NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 2726,
+    "sols": [
+      4830
+    ],
+    "xyz_site_m": [
+      -48.6101,
+      95.5328,
+      -0.60142
+    ],
+    "n_full_frames": 20,
+    "lat": -4.80882201,
+    "lon": 137.3826516,
+    "easting": 8143315.118,
+    "northing": -285041.47,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d3056",
+    "sol": 4834,
+    "px": [
+      520.9,
+      631.8
+    ],
+    "images": [
+      "navcam/sol_04834/NLB_826625369EDR_F1203056NCAM00385M_.JPG",
+      "navcam/sol_04834/NLB_826625338EDR_F1203056NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 3056,
+    "sols": [
+      4834
+    ],
+    "xyz_site_m": [
+      -85.8253,
+      98.1525,
+      -4.10121
+    ],
+    "n_full_frames": 2,
+    "northing": -285078.53030000004,
+    "easting": 8143318.3085,
+    "lat": -4.8094472347231285,
+    "lon": 137.382711239427,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s120_d3104",
+    "sol": 4834,
+    "px": [
+      521.1,
+      634.5
+    ],
+    "images": [
+      "navcam/sol_04834/NLB_826626276EDR_F1203104NCAM00385M_.JPG",
+      "navcam/sol_04834/NLB_826626245EDR_F1203104NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 120,
+    "drive": 3104,
+    "sols": [
+      4834
+    ],
+    "xyz_site_m": [
+      -91.2535,
+      98.6209,
+      -4.81789
+    ],
+    "n_full_frames": 2,
+    "northing": -285083.9585,
+    "easting": 8143318.776900001,
+    "lat": -4.80953881174042,
+    "lon": 137.382719169523,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0000",
+    "sol": 4834,
+    "px": [
+      520.7,
+      634.7
+    ],
+    "images": [
+      "navcam/sol_04834/NLB_826632155EDR_F1210000NCAM00353M_.JPG",
+      "navcam/sol_04834/NLB_826632186EDR_F1210000NCAM00353M_.JPG",
+      "navcam/sol_04834/NLB_826633684EDR_F1210000NCAM00354M_.JPG",
+      "navcam/sol_04834/NLB_826633715EDR_F1210000NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 0,
+    "sols": [
+      4834
+    ],
+    "xyz_site_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80954314,
+    "lon": 137.3826974,
+    "easting": 8143317.832,
+    "northing": -285084.215,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0120",
+    "sol": 4837,
+    "px": [
+      512.8,
+      638.8
+    ],
+    "images": [
+      "navcam/sol_04837/NLB_826894260EDR_F1210120NCAM00385M_.JPG",
+      "navcam/sol_04837/NLB_826894236EDR_F1210120NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 120,
+    "sols": [
+      4837
+    ],
+    "xyz_site_m": [
+      -8.30494,
+      -15.7297,
+      -1.14466
+    ],
+    "n_full_frames": 2,
+    "northing": -285092.51994,
+    "easting": 8143302.1023,
+    "lat": -4.80968324936111,
+    "lon": 137.3824310927545,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0156",
+    "sol": 4837,
+    "px": [
+      510.6,
+      639.8
+    ],
+    "images": [
+      "navcam/sol_04837/NLB_826894837EDR_F1210156NCAM00353M_.JPG",
+      "navcam/sol_04837/NLB_826894806EDR_F1210156NCAM00353M_.JPG",
+      "navcam/sol_04837/NLB_826896219EDR_F1210156NCAM00354M_.JPG",
+      "navcam/sol_04837/NLB_826896327EDR_F1210156NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 156,
+    "sols": [
+      4837
+    ],
+    "xyz_site_m": [
+      -10.1999,
+      -20.3554,
+      -1.56605
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80971635,
+    "lon": 137.3823585,
+    "easting": 8143297.743,
+    "northing": -285094.482,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0360",
+    "sol": 4839,
+    "px": [
+      497.7,
+      644.2
+    ],
+    "images": [
+      "navcam/sol_04839/NLB_827075826EDR_F1210360NCAM00385M_.JPG",
+      "navcam/sol_04839/NLB_827075801EDR_F1210360NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 360,
+    "sols": [
+      4839
+    ],
+    "xyz_site_m": [
+      -19.175,
+      -45.9293,
+      -4.38385
+    ],
+    "n_full_frames": 2,
+    "northing": -285103.39,
+    "easting": 8143271.9027,
+    "lat": -4.809866633848154,
+    "lon": 137.38191980695171,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0396",
+    "sol": 4839,
+    "px": [
+      495.9,
+      645.6
+    ],
+    "images": [
+      "navcam/sol_04839/NLB_827076368EDR_F1210396NCAM00353M_.JPG",
+      "navcam/sol_04839/NLB_827076393EDR_F1210396NCAM00353M_.JPG",
+      "navcam/sol_04839/NLB_827078019EDR_F1210396NCAM00354M_.JPG",
+      "navcam/sol_04839/NLB_827077971EDR_F1210396NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 396,
+    "sols": [
+      4839
+    ],
+    "xyz_site_m": [
+      -21.9072,
+      -50.1085,
+      -5.67987
+    ],
+    "n_full_frames": 19,
+    "lat": -4.80991273,
+    "lon": 137.3818621,
+    "easting": 8143268.324,
+    "northing": -285106.122,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0726",
+    "sol": 4841,
+    "px": [
+      494.8,
+      659.6
+    ],
+    "images": [
+      "navcam/sol_04841/NLB_827252050EDR_F1210726NCAM00385M_.JPG",
+      "navcam/sol_04841/NLB_827252026EDR_F1210726NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 726,
+    "sols": [
+      4841
+    ],
+    "xyz_site_m": [
+      -49.8098,
+      -51.7846,
+      -8.2883
+    ],
+    "n_full_frames": 2,
+    "northing": -285134.0248,
+    "easting": 8143266.0474000005,
+    "lat": -4.810383461453862,
+    "lon": 137.38182067544795,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0762",
+    "sol": 4841,
+    "px": [
+      492.8,
+      660.7
+    ],
+    "images": [
+      "navcam/sol_04841/NLB_827252616EDR_F1210762NCAM00353M_.JPG",
+      "navcam/sol_04841/NLB_827252585EDR_F1210762NCAM00353M_.JPG",
+      "navcam/sol_04841/NLB_827254139EDR_F1210762NCAM00354M_.JPG",
+      "navcam/sol_04841/NLB_827254170EDR_F1210762NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 762,
+    "sols": [
+      4841
+    ],
+    "xyz_site_m": [
+      -51.7968,
+      -56.3831,
+      -9.03743
+    ],
+    "n_full_frames": 19,
+    "lat": -4.81042121,
+    "lon": 137.3817563,
+    "easting": 8143262.049,
+    "northing": -285136.262,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0840",
+    "sol": 4844,
+    "px": [
+      490.9,
+      661.6
+    ],
+    "images": [
+      "navcam/sol_04844/NLB_827523969EDR_F1210840NCAM00385M_.JPG",
+      "navcam/sol_04844/NLB_827523945EDR_F1210840NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 840,
+    "sols": [
+      4844
+    ],
+    "xyz_site_m": [
+      -53.9488,
+      -59.4799,
+      -9.67675
+    ],
+    "n_full_frames": 2,
+    "northing": -285138.16380000004,
+    "easting": 8143258.352100001,
+    "lat": -4.810453288887369,
+    "lon": 137.38169039234361,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0876",
+    "sol": 4844,
+    "px": [
+      490.4,
+      664.1
+    ],
+    "images": [
+      "navcam/sol_04844/NLB_827524625EDR_F1210876NCAM00353M_.JPG",
+      "navcam/sol_04844/NLB_827524600EDR_F1210876NCAM00353M_.JPG",
+      "navcam/sol_04844/NLB_827526235EDR_F1210876NCAM00354M_.JPG",
+      "navcam/sol_04844/NLB_827526139EDR_F1210876NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 876,
+    "sols": [
+      4844
+    ],
+    "xyz_site_m": [
+      -58.5062,
+      -61.0946,
+      -10.6514
+    ],
+    "n_full_frames": 20,
+    "lat": -4.81053581,
+    "lon": 137.3816768,
+    "easting": 8143257.338,
+    "northing": -285143.055,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0948",
+    "sol": 4845,
+    "px": [
+      488.3,
+      668.1
+    ],
+    "images": [
+      "navcam/sol_04845/NLB_827607594EDR_F1210948NCAM00276M_.JPG",
+      "navcam/sol_04845/NLB_827607625EDR_F1210948NCAM00276M_.JPG",
+      "navcam/sol_04845/NLB_827607570EDR_F1210948NCAM00276M_.JPG",
+      "navcam/sol_04845/NLB_827607649EDR_F1210948NCAM00276M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 948,
+    "sols": [
+      4845
+    ],
+    "xyz_site_m": [
+      -66.8065,
+      -64.8037,
+      -11.7556
+    ],
+    "n_full_frames": 5,
+    "northing": -285151.02150000003,
+    "easting": 8143253.0283,
+    "lat": -4.810670206063453,
+    "lon": 137.38160025925058,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0960",
+    "sol": 4845,
+    "px": [
+      488.2,
+      668.1
+    ],
+    "images": [
+      "navcam/sol_04845/NLB_827608244EDR_F1210960NCAM00385M_.JPG",
+      "navcam/sol_04845/NLB_827608209EDR_F1210960NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 960,
+    "sols": [
+      4845
+    ],
+    "xyz_site_m": [
+      -66.7873,
+      -64.8438,
+      -11.7606
+    ],
+    "n_full_frames": 2,
+    "northing": -285151.00230000005,
+    "easting": 8143252.9882000005,
+    "lat": -4.81066988214784,
+    "lon": 137.38159958034885,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d0990",
+    "sol": 4845,
+    "px": [
+      489.5,
+      666.0
+    ],
+    "images": [
+      "navcam/sol_04845/NLB_827612995EDR_F1210990NCAM00353M_.JPG",
+      "navcam/sol_04845/NLB_827613027EDR_F1210990NCAM00353M_.JPG",
+      "navcam/sol_04846/NLB_827685332EDR_F1210990CCAM01845M_.JPG",
+      "navcam/sol_04848/NLB_827862747EDR_F1210990CCAM01847M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 990,
+    "sols": [
+      4845,
+      4846,
+      4848
+    ],
+    "xyz_site_m": [
+      -62.2886,
+      -62.966,
+      -11.3605
+    ],
+    "n_full_frames": 21,
+    "lat": -4.81060029,
+    "lon": 137.3816452,
+    "easting": 8143255.466,
+    "northing": -285146.877,
+    "loc_source": "waypoint",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d1410",
+    "sol": 4848,
+    "px": [
+      492.5,
+      691.9
+    ],
+    "images": [
+      "navcam/sol_04848/NLB_827874049EDR_F1211410NCAM00385M_.JPG",
+      "navcam/sol_04848/NLB_827874025EDR_F1211410NCAM00385M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 1410,
+    "sols": [
+      4848
+    ],
+    "xyz_site_m": [
+      -114.547,
+      -56.2785,
+      -14.6747
+    ],
+    "n_full_frames": 2,
+    "northing": -285198.76200000005,
+    "easting": 8143261.5535,
+    "lat": -4.811475617174683,
+    "lon": 137.3817445927426,
+    "loc_source": "origin+xyz",
+    "in_grid": true
+  },
+  {
+    "stop_id": "msl_s121_d1446",
+    "sol": 4848,
+    "px": [
+      494.4,
+      694.2
+    ],
+    "images": [
+      "navcam/sol_04848/NLB_827874591EDR_F1211446NCAM00353M_.JPG",
+      "navcam/sol_04848/NLB_827874566EDR_F1211446NCAM00353M_.JPG",
+      "navcam/sol_04848/NLB_827876004EDR_F1211446NCAM00354M_.JPG",
+      "navcam/sol_04848/NLB_827876028EDR_F1211446NCAM00354M_.JPG"
+    ],
+    "class_frac": null,
+    "entropy": null,
+    "site": 121,
+    "drive": 1446,
+    "sols": [
+      4848
+    ],
+    "xyz_site_m": [
+      -118.908,
+      -53.7583,
+      -15.1723
+    ],
+    "n_full_frames": 19,
+    "lat": -4.81155245,
+    "lon": 137.3818117,
+    "easting": 8143265.333,
+    "northing": -285203.316,
+    "loc_source": "waypoint",
+    "in_grid": true
+  }
+]
