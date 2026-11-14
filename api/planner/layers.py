@@ -82,6 +82,35 @@ class Layers:
         return self.connectivity()[3]
 
     @property
+    def speed_mps(self) -> np.ndarray:
+        from . import cost
+        return cost.speed_ms(self).astype(np.float32)
+
+    @property
+    def kcal_per_m(self) -> np.ndarray:
+        from . import cost
+        return cost.kcal_per_m(self).astype(np.float32)
+
+    @property
+    def o2_l_per_m(self) -> np.ndarray:
+        from . import cost
+        return cost.o2_l_per_m(self).astype(np.float32)
+
+    @property
+    def o2_g_per_m(self) -> np.ndarray:
+        from . import cost
+        return cost.o2_g_per_m(self).astype(np.float32)
+
+    @property
+    def risk(self) -> np.ndarray:
+        from . import cost
+        return cost.risk_per_m(self).astype(np.float32)
+
+    @property
+    def scan_class(self) -> np.ndarray:
+        return P.classify_scan(self.slope, self.probs["sand"], self.entropy, self.rock_cfa)
+
+    @property
     def dominant(self) -> np.ndarray:
         stack = np.stack([self.probs[c] for c in P.CLASSES])
         return np.argmax(stack, axis=0)
@@ -110,7 +139,8 @@ class Layers:
             "terrain_note": PROVISIONAL_TERRAIN_NOTE if self.provisional_terrain else None,
             "px_note": "Koordinatlar [x, y] = [sütun, satır]; (0,0) sol üst köşe",
             "layers": ["elevation", "slope", "rock_cfa", "p_soil", "p_bedrock", "p_sand", "p_bigrock", "entropy"],
-            "aux_layers": ["reachable"],
+            "aux_layers": ["reachable", "speed_mps", "kcal_per_m", "o2_l_per_m", "o2_g_per_m", "risk", "scan_class"],
+            "scan_legend": P.SCAN_LEGEND,
             "reachability": {
                 "passable_cells": passable_cells,
                 "passable_pct": round(passable_cells / total_cells * 100, 2),

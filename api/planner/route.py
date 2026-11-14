@@ -1,6 +1,7 @@
 """Rota planlama, segmentleme, açıklama ve EVA bütçesi."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 import math
 
 import numpy as np
@@ -8,7 +9,7 @@ from scipy.ndimage import uniform_filter1d
 from skimage.graph import MCP_Geometric
 
 from . import params as P
-from .cost import cost_surface, flat_bedrock_kcal_per_m
+from .cost import cost_surface, flat_bedrock_kcal_per_m, kcal_per_m, metabolic_w, o2_g_per_m, o2_l_per_m, risk_per_m, speed_ms
 from .layers import PROVISIONAL_TERRAIN_NOTE, Layers
 
 
@@ -358,3 +359,205 @@ def apply_observation(L: Layers, px, radius_m: float, cls: str) -> Layers:
         L2.probs[c][m] = 1.0 if c == cls else 0.0
     L2.entropy[m] = 0.0
     return L2
+
+
+@dataclass
+class _CellView:
+    slope: np.ndarray
+    rock_cfa: np.ndarray
+    probs: dict[str, np.ndarray]
+    entropy: np.ndarray
+    synthetic: bool
+
+
+def _sample_path(L: Layers, path) -> np.ndarray:
+    if not isinstance(path, (list, tuple, np.ndarray)) or len(path) == 0:
+        raise PlanError("Yol boş olamaz; en az bir [x,y] noktası gerekli")
+    raw = []
+    for pt in path:
+        if not isinstance(pt, (list, tuple, np.ndarray)) or len(pt) != 2:
+            raise PlanError(f"Geçersiz nokta biçimi: {pt}")
+        x, y = pt[0], pt[1]
+        if (isinstance(x, bool) or isinstance(y, bool)
+                or not isinstance(x, (int, float, np.number))
+                or not isinstance(y, (int, float, np.number))
+                or not (math.isfinite(float(x)) and math.isfinite(float(y)))):
+            raise PlanError(f"Nokta sonlu sayısal [x,y] olmalı: {pt}")
+        fx, fy = float(x), float(y)
+        if not (0 <= math.floor(fx) < L.width and 0 <= math.floor(fy) < L.height):
+            raise PlanError(f"Nokta ızgara dışında: [{fx}, {fy}] (genişlik {L.width}, yükseklik {L.height})")
+        raw.append([fx, fy])
+    pts_in = np.asarray(raw, dtype=float)
+    is_int = bool(np.all(pts_in == np.floor(pts_in)))
+    pts_list = [pts_in[0]]
+    for a, b in zip(pts_in[:-1], pts_in[1:]):
+        diff_max = float(np.abs(b - a).max())
+        if is_int:
+            n = int(diff_max)
+            if n > 0:
+                pts_list.extend(np.rint(np.linspace(a, b, n + 1)[1:]))
+        else:
+            n = int(math.ceil(diff_max))
+            if n > 1:
+                pts_list.extend(np.linspace(a, b, n + 1)[1:])
+            elif diff_max > 0:
+                pts_list.append(b)
+    return np.asarray(pts_list, dtype=float)
+
+
+def evaluate_step(
+    L: Layers,
+    path,
+    load_kg: float = P.DEFAULT_LOAD_KG,
+    observations: list[dict] | None = None,
+) -> dict:
+    """Verilen yürüyüş izi (path) için süre (sn), kcal, O₂, doz ve hücre sınıfı dökümünü hesaplar."""
+    if isinstance(load_kg, bool) or not isinstance(load_kg, (int, float)) or not math.isfinite(load_kg) or load_kg < 0:
+        raise PlanError("load_kg negatif olmayan sonlu bir sayı olmalı")
+    pts = _sample_path(L, path)
+    c = np.clip(np.floor(pts[:, 0]).astype(int), 0, L.width - 1)
+    r = np.clip(np.floor(pts[:, 1]).astype(int), 0, L.height - 1)
+    if len(pts) > 1:
+        d = np.diff(pts, axis=0)
+        step_m = np.concatenate([[0.0], np.hypot(d[:, 0], d[:, 1]) * L.res_m])
+    else:
+        step_m = np.array([0.0], dtype=float)
+
+    slope = L.slope[r, c].astype(np.float32)
+    elev = L.elevation[r, c].astype(np.float32)
+    rock = L.rock_cfa[r, c].astype(np.float32)
+    ent = L.entropy[r, c].astype(np.float32).copy()
+    probs = {k: L.probs[k][r, c].astype(np.float32).copy() for k in P.CLASSES}
+
+    if observations:
+        for obs in observations:
+            ox, oy = obs["px"]
+            if not (0 <= math.floor(ox) < L.width and 0 <= math.floor(oy) < L.height):
+                raise PlanError(f"Gözlem noktası ızgara dışında: {obs['px']}")
+            cls = obs["cls"]
+            if cls not in P.CLASSES:
+                raise PlanError(f"Bilinmeyen sınıf: {cls}")
+            rad = float(obs["radius_m"])
+            if not math.isfinite(rad) or rad < 0:
+                raise PlanError("Gözlem yarıçapı negatif olamaz")
+            m = np.hypot(c - ox, r - oy) * L.res_m <= rad
+            for k in P.CLASSES:
+                probs[k][m] = 1.0 if k == cls else 0.0
+            ent[m] = 0.0
+
+    view = _CellView(slope=slope, rock_cfa=rock, probs=probs, entropy=ent, synthetic=L.synthetic)
+    v_arr = speed_ms(view)
+    s_per_m = 1.0 / v_arr
+    k_per_m = kcal_per_m(view, v_arr, load_kg=float(load_kg))
+    o2_l_m = o2_l_per_m(view, v_arr, load_kg=float(load_kg))
+    o2_g_m = o2_g_per_m(view, v_arr, load_kg=float(load_kg))
+    r_per_m = risk_per_m(view)
+    scan_arr = P.classify_scan(slope, probs["sand"], ent, rock).astype(int)
+    dom_arr = np.argmax(np.stack([probs[k] for k in P.CLASSES]), axis=0)
+
+    sec_arr = s_per_m * step_m
+    kcal_arr = k_per_m * step_m
+    o2_l_arr = o2_l_m * step_m
+    o2_g_arr = o2_g_m * step_m
+    risk_arr = r_per_m * step_m
+
+    dist_m = float(step_m.sum())
+    sec_total = float(sec_arr.sum())
+    min_total = sec_total / 60.0
+    kcal_total = float(kcal_arr.sum())
+    o2_l_total = float(o2_l_arr.sum())
+    o2_g_total = float(o2_g_arr.sum())
+    dose_total = (sec_total / 3600.0) * P.DOSE_UGY_PER_H
+    risk_total = float(risk_arr.sum())
+
+    if len(elev) > 1:
+        dz = np.diff(elev).astype(float)
+        ascent_m = float(np.maximum(dz, 0.0).sum())
+        descent_m = float(np.maximum(-dz, 0.0).sum())
+        ds_pos = np.maximum(step_m[1:], 1e-6)
+        tan_dir = np.where(step_m[1:] > 1e-6, dz / ds_pos, 0.0)
+        terrain_mult = sum(probs[k][1:] * P.TERRAIN_SPEED[k] for k in P.CLASSES)
+        tobler_dir = np.exp(-3.5 * np.abs(tan_dir + 0.05)) / np.exp(-3.5 * 0.05)
+        v_dir = np.clip(P.BASE_SPEED_MS * terrain_mult * tobler_dir, 0.05, None)
+        eta_dir = sum(probs[k][1:] * P.TERRAIN_ETA[k] for k in P.CLASSES)
+        grade_dir = np.maximum(tan_dir * 100.0, 0.0)
+        watts_dir = metabolic_w(v_dir, grade_dir, eta_dir, load_kg=float(load_kg))
+        sec_dir = float((step_m[1:] / v_dir).sum())
+        kcal_dir = float(((watts_dir / v_dir / 4184.0) * step_m[1:]).sum())
+    else:
+        ascent_m, descent_m, sec_dir, kcal_dir = 0.0, 0.0, 0.0, 0.0
+
+    n_cells = len(pts)
+    terrain_classes = {}
+    class_counts = {}
+    for idx, cname in enumerate(P.CLASSES):
+        m = dom_arr == idx
+        cnt = int(m.sum())
+        dm = float(step_m[m].sum())
+        pct = (dm / dist_m * 100.0) if dist_m > 0 else (cnt / n_cells * 100.0)
+        terrain_classes[cname] = {"cells": cnt, "distance_m": round(dm, 2), "pct": round(pct, 1)}
+        class_counts[cname] = cnt
+
+    scan_classes = {}
+    scan_counts = {}
+    for _, meta in P.SCAN_LEGEND.items():
+        code = meta["code"]
+        key = meta["key"]
+        m = scan_arr == code
+        cnt = int(m.sum())
+        dm = float(step_m[m].sum())
+        pct = (dm / dist_m * 100.0) if dist_m > 0 else (cnt / n_cells * 100.0)
+        scan_classes[key] = {
+            "code": code,
+            "name": meta["name"],
+            "cells": cnt,
+            "distance_m": round(dm, 2),
+            "pct": round(pct, 1),
+        }
+        scan_counts[key] = cnt
+
+    dom_overall = P.CLASSES[int(np.bincount(dom_arr, minlength=len(P.CLASSES)).argmax())]
+    cells = [
+        {
+            "px": [int(c[i]), int(r[i])],
+            "class": P.CLASSES[int(dom_arr[i])],
+            "scan_class": int(scan_arr[i]),
+            "scan_key": P.SCAN_LEGEND[str(int(scan_arr[i]))]["key"],
+            "scan_name": P.SCAN_LEGEND[str(int(scan_arr[i]))]["name"],
+            "slope_deg": round(float(slope[i]), 1),
+            "step_m": round(float(step_m[i]), 2),
+            "sec": round(float(sec_arr[i]), 2),
+            "kcal": round(float(kcal_arr[i]), 3),
+        }
+        for i in range(n_cells)
+    ]
+
+    return {
+        "distance_m": round(dist_m, 2),
+        "km": round(dist_m / 1000.0, 4),
+        "duration_s": round(sec_total, 2),
+        "sec": round(sec_total, 2),
+        "min": round(min_total, 2),
+        "kcal": round(kcal_total, 2),
+        "o2_L": round(o2_l_total, 3),
+        "o2_g": round(o2_g_total, 2),
+        "dose_uGy": round(dose_total, 3),
+        "risk": round(risk_total, 3),
+        "load_kg": float(load_kg),
+        "slope_max": round(float(slope.max()), 1),
+        "slope_mean": round(float(slope.mean()), 1),
+        "ascent_m": round(ascent_m, 2),
+        "descent_m": round(descent_m, 2),
+        "directional": {
+            "duration_s": round(sec_dir, 2),
+            "kcal": round(kcal_dir, 2),
+            "o2_L": round(kcal_dir / P.KCAL_PER_L_O2, 3),
+            "o2_g": round((kcal_dir / P.KCAL_PER_L_O2) * P.O2_G_PER_L, 2),
+        },
+        "dominant_class": dom_overall,
+        "terrain_classes": terrain_classes,
+        "scan_classes": scan_classes,
+        "class_counts": class_counts,
+        "scan_counts": scan_counts,
+        "cells": cells,
+    }

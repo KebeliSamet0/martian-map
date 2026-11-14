@@ -68,6 +68,12 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
             if assumptions_resp.status_code != 200:
                 raise RuntimeError(f"/assumptions hatası: {assumptions_resp.status_code}")
 
+            for lname in ("speed_mps", "kcal_per_m", "o2_l_per_m", "o2_g_per_m", "risk", "scan_class"):
+                b_resp = client.get(f"/layers/{lname}.bin")
+                p_resp = client.get(f"/layers/{lname}.png")
+                if b_resp.status_code != 200 or p_resp.status_code != 200:
+                    raise RuntimeError(f"/layers/{lname} hatası: bin={b_resp.status_code}, png={p_resp.status_code}")
+
             t_route = time.perf_counter()
             route_resp = client.post("/route", json={"start": start, "goal": goal})
             route_s = time.perf_counter() - t_route
@@ -82,6 +88,17 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
                 raise RuntimeError("Kısa ve güvenli rotalar yeterince ayrışmadı")
 
             mid = midpoint_px(routes[1])
+            pts_balanced = [[p[0], p[1]] for p in route_cells(routes[1])]
+            t_step = time.perf_counter()
+            step_resp = client.post("/step", json={"path": pts_balanced[:40]})
+            step_ms = (time.perf_counter() - t_step) * 1000.0
+            if step_resp.status_code != 200:
+                raise RuntimeError(f"/step hatası: {step_resp.status_code} {step_resp.text}")
+            if step_ms >= 50.0:
+                raise RuntimeError(f"/step 50 ms hedefini aştı: {step_ms:.2f} ms")
+            step_data = step_resp.json()
+            if step_data["duration_s"] <= 0 or step_data["kcal"] <= 0:
+                raise RuntimeError(f"/step geçersiz tüketim döndürdü: {step_data}")
             t_replan = time.perf_counter()
             replan_resp = client.post(
                 "/replan",
@@ -155,6 +172,7 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
         "route_s": round(route_s, 3),
         "replan_s": round(replan_s, 3),
         "long_route_s": round(long_s, 3),
+        "step_ms": round(step_ms, 2),
         "route_summary": summarize(routes),
         "replan_summary": summarize(replanned),
         "long_route_summary": summarize(long_routes),
