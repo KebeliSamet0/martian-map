@@ -61,3 +61,4 @@
 - NASA Curiosity Blog, Sols 4867–4872: Sand Fill in Antofagasta Crater and Finding Our Next Drill Target (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4867-4872-sand-fill-in-antofagasta-crater-and-finding-our-next-drill-target
 - NASA Curiosity Blog, Sols 4873–4878: Welcome to the Atacama Drill Target (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4873-4878-welcome-to-the-atacama-drill-target/ — boxwork sonrası ilk katmanlı sülfat sondajı (sci_4).
 - NASA Curiosity Blog, Sols 4886–4892: Ingenuity and Perseverance, Curiosity Style (2026) — https://science.nasa.gov/blog/curiosity-blog-sols-4886-4892-ingenuity-and-perseverance-curiosity-style/ — Toro / Inca de Oro dokanağı.
+- Swan, R. M. et al. (2021). AI4MARS: A Dataset for Terrain-Aware Autonomous Driving on Mars. CVPR Workshops (AI4Space).
