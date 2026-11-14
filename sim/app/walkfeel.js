@@ -12,7 +12,7 @@ import { createFootprints, createDust } from './footprints.js';
 import * as C from './walkfeel_core.js';
 
 const STRIDE_M = 0.75;          // adım boyu (m): yaklaşık, görsel ayarı (VARSAYIM; ayak izi aralığını belirler)
-const FOOT_OFFSET_M = 0.13;     // sağ/sol ayak yanal ofseti
+const FOOT_OFFSET_M = 0.10;     // sağ/sol ayak yanal ofseti
 const STUMBLE_S = 0.9;          // tökezleme süresi
 const STUMBLE_COOLDOWN_S = 6;
 const TONE = { sand: [0.74, 0.52, 0.34], soil: [0.55, 0.37, 0.27], rock: [0.46, 0.41, 0.38] };   // toz tonu (sunum; ortofoto renginden türetilmedi)
@@ -96,9 +96,10 @@ export function createWalkFeel({ scene, camera, terrain, geo, audio = null, apiB
     if (depth > 0) {
       const d = 0.4, nx = hAt(x - d, z) - hAt(x + d, z), nz = hAt(x, z - d) - hAt(x, z + d);
       tmpN.set(nx, 2 * d, nz).normalize();
-      prints.add(x, z, yaw, depth, y, tmpN);
+      const gm = wf.mix, tone = [0, 1, 2].map((k) => ((TONE.sand[k] * gm.sand + TONE.soil[k] * gm.soil + TONE.rock[k] * gm.rock) ** 2.2) * 0.85);   // zemin tonunun doğrusal (linear) ve koyu hâli: ard işlem sRGB'ye çevirir
+      prints.add(x, z, yaw, depth, y, tmpN, tone);
     }
-    const m = wf.mix, n = Math.round((m.sand * 8 + m.soil * 4 + m.rock * 1.2) * (0.6 + 0.8 * wf.effort));
+    const m = wf.mix, n = Math.round((m.sand * 5 + m.soil * 3 + m.rock * 0.8) * (0.6 + 0.8 * wf.effort));
     if (n > 0) {
       const rgb = [0, 1, 2].map((k) => TONE.sand[k] * m.sand + TONE.soil[k] * m.soil + TONE.rock[k] * m.rock);
       dust.emit(n, x, y, z, rgb, 0.6 + 0.8 * Math.min(1, m.sand * 1.4), hx, hz);
