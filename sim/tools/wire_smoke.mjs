@@ -1,0 +1,56 @@
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+const profile=await mkdtemp(tmpdir()+'/wire-chrome-');
+const exe=process.env.CHROME_BIN;
+if (!exe) throw new Error('CHROME_BIN: Chromium/Chrome çalıştırılabilir dosyasını belirtin');
+const base=process.env.SIM_URL ?? 'http://127.0.0.1:8017/sim/';
+const child=spawn(exe,['--headless=new','--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader','--remote-debugging-port=9237','--window-size=1440,900','--user-data-dir='+profile,'about:blank'],{stdio:'ignore'});
+let ws; const errors=[]; let id=0;const pending=new Map();
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+try {
+let targets; for(let i=0;i<100;i++){try { targets=await (await fetch('http://127.0.0.1:9237/json')).json();break;}catch{await delay(100);}}
+ws=new WebSocket(targets.find(t=>t.type==='page').webSocketDebuggerUrl); await new Promise(r=>ws.onopen=r);
+ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(m.error):p.resolve(m.result);} else if(m.method==='Log.entryAdded' && m.params.entry.level==='error' && !/ERR_BLOCKED_BY_CLIENT|trek.nasa.gov|astro.arcgis.com/.test(JSON.stringify(m.params.entry)))errors.push(m.params.entry);else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails);else if(m.method==='Runtime.consoleAPICalled'&&m.params.type==='error')errors.push(m.params.args);};
+const send=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;pending.set(n,{resolve,reject});ws.send(JSON.stringify({id:n,method,params}));});
+const ev=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(JSON.stringify(r.exceptionDetails));return r.result?.value;};
+const until=async expr=>{for(let i=0;i<400;i++){if(await ev(expr))return; await delay(150);}throw new Error('Timeout: '+expr);};
+await send('Runtime.enable');await send('Log.enable');await send('Network.enable');
+await send('Network.setBlockedURLs',{urls:['*trek.nasa.gov*','*astro.arcgis.com*']});
+await send('Page.navigate',{url:base+'?q=low&fixedres=1'+(process.argv.includes('--off')?'&api=off':'')});
+await until('!!window.__mm?.wire');
+console.log('READY');
+await ev("document.querySelector('[data-mission=S1]').click()");await until("!!document.querySelector('.mm-modal button')");
+await ev("document.querySelector('.mm-modal button').click()");
+await until("!!document.querySelector('.mm-route button')");
+console.log('ROUTES',await ev('window.__mm.mapView.alternatives.map(r=>({kind:r.kind,source:r.source}))'));
+await ev("document.querySelector('.mm-route button').click(); document.querySelector('#btn-walk').click(); window.__mm.setTimeScale(1600)");
+await until("window.__mm.wire.machine?.snapshot().state==='debrief'");
+const result=await ev('({state:window.__mm.wire.machine.snapshot().state,triggered:window.__mm.wire.machine.snapshot().triggered,sampled:window.__mm.wire.machine.snapshot().sampled,source:window.__mm.wire.vitals.snapshot().source,replanned:!!window.__mm.routeRun?.replanned})');
+assert.equal(result.state,'debrief'); assert.equal(result.sampled,true); assert.ok(result.triggered.includes('S1-sand'));
+assert.equal(result.source,process.argv.includes('--off')?'fallback':'api-step');
+if(!process.argv.includes('--off'))assert.equal(result.replanned,true);
+console.log('RESULT',result);
+await until("!!document.querySelector('.mm-table')");
+await writeFile('/tmp/wire-report.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
+await ev("document.querySelector('.mm-modal .mm-btn-ghost').click(); window.__mm.setTimeScale(1)");
+assert.equal(await ev('window.__mm.wire.machine.snapshot().state'),'walking');
+assert.ok(await ev('window.__mm.wire.vitals.snapshot().elapsedSec < 10'));
+await ev("window.__mm.enterMap(); document.querySelector('#btn-free').click()");
+await ev('window.__mm.T.extrasReady');
+const extra=await ev('({rocks:window.__mm.T.extras.hazards.count,stops:window.__mm.T.extras.corridor.stops.length,scanner:window.__mm.stats().scannerSource})');
+assert.ok(extra.rocks>0 && extra.stops>0);
+assert.equal(extra.scanner.includes('API'),!process.argv.includes('--off'));
+await ev('window.__mm.teleport(...window.__mm.T.extras.corridor.stops[0].world)');
+await until("!document.querySelector('#stop-photo').hidden && document.querySelector('#stop-photo img').naturalWidth>0");
+await ev("dispatchEvent(new KeyboardEvent('keydown',{code:'Escape'}))");
+assert.equal(await ev("document.querySelector('#stop-photo').hidden"),true);
+await ev("dispatchEvent(new KeyboardEvent('keydown',{code:'KeyK'}));dispatchEvent(new KeyboardEvent('keydown',{code:'KeyV'}));dispatchEvent(new KeyboardEvent('keydown',{code:'KeyK'}));window.__mm.scan();window.__mm.scanAt(2)");
+assert.equal(await ev("window.__mm.T.scene.getObjectByName('hazards').visible && window.__mm.T.rocks.userOff"),true);
+await delay(400);await writeFile('/tmp/wire-scan.png',Buffer.from((await send('Page.captureScreenshot')).data,'base64'));
+await until('window.__mm.T.extras.hazards.placed > 0');
+console.log('EXTRAS',extra);
+console.log('ERRORS',JSON.stringify(errors));assert.equal(errors.length,0);
+} catch(e){console.error(e);console.error('ERRORS',JSON.stringify(errors));process.exitCode=1;}
+finally{ws?.close();child.kill();await delay(300);await rm(profile,{recursive:true,force:true,maxRetries:3});}

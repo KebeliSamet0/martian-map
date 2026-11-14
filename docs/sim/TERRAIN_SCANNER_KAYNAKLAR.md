@@ -16,3 +16,12 @@ Sayısal eğim eşiği, tarama yarıçapı ve bekleme süresi bu kaynaklarda **y
 - Tarama zemini eğim sınıfına göre boyar (mavi/sarı/kırmızı + çizgili desen); #1 "rotada kal": tarama sırasında **planlanan rota parlar**; tehlike işaretleri rota üstünde zaten görünür.
 - #3 analoğu: kırmızı = basma/kaçın (dik veya kum riskli) — kum riski için API `p_sand` işaretleri.
 - #4: **Shift+L = geniş tarama** (320 m).
+
+## `gercek` raporu denetimi ve sim'e yansıyanlar (2026-11-14)
+Denetim (alıntıları kaynakta aradım): **doğrulandı** Shacknews ("A flash will run down the terrain in front of you", "red Xs"), Akhil Arora, GamesFuze (Proximity Scanner 20 m; Faster Scanner Recharging), Reverse Shot ("blue dots"), PlayStation/Kojima (yukarıda). **Bana 403 verdi, doğrulayamadım:** Push Square, KeenGamer, Nexus Mods. Sayısal değerler (>45°, 20 s mod, 20 m) raporun kendisinde zaten "doğrulanmadı/mod/ayrı özellik" diye ayrılmış; sim'e alınmadı.
+
+Sim'e yansıyan (bulgu → değişiklik):
+- DS işaretleri ayrı zemin glifleridir (mavi nokta/sarı üçgen/kırmızı çarpı), yüzeyi tek renge boyamaz → **tarayıcı 3 m ızgarada ○/△/✕/■ glifleri çiziyor**, ortofotoyu boyamıyor.
+- "Güvenli sanma" (Akhil Arora: renk işaretleri tam güvenilmez) → efsane ve ipucu metni "yalnız eğim; zemin bilinmiyor; yokluk/sönme güvenli değildir".
+- Süre/yarıçap raporun **tasarım önerisi**: 0,8 s yayılma + 4,2 s tutma + 1 s solma, 1 s bekleme, 90 m (Shift+L 220 m). DS'nin değeri değil.
+- Veri yok → gri ■ (rapor §5.1).
