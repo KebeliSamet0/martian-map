@@ -2,11 +2,24 @@
 // Seviye k hücre boyutu = res·2^k. Çatlakları gizlemek için kenar eteği (skirt) kullanılır.
 // Kararlılık: LOD histerezisi (bölme/birleştirme eşikleri farklı), kare başına mesh üretim bütçesi, geçişte ebeveyn görünür kalır.
 import * as THREE from 'three';
-import { patchMaterial, ensureDetail } from './detail.js';
+import { patchMaterial, ensureDetail, MICRO } from './detail.js';
 
 const N = 129, S = 131;   // köşe sayısı, taşma+kenarlı pencere genişliği
 const BUILD_BUDGET_MS = 4;  // kare başına mesh üretimi için süre bütçesi (en az 1 döşeme)
 
+const fract = (v) => v - Math.floor(v);
+function mhJS(cx, cy) {   // Dave Hoskins hash12 (GLSL mh ile ayni)
+  let a = fract(cx * 0.1031), b = fract(cy * 0.1031), c = fract(cx * 0.1031);
+  const d = a * (b + 33.33) + b * (c + 33.33) + c * (a + 33.33);
+  a += d; b += d; c += d;
+  return fract((a + b) * c);
+}
+function mnJS(px, py) {
+  const ix = Math.floor(px), iy = Math.floor(py), fx = px - ix, fy = py - iy, ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
+  const l = (a, b, k) => a + (b - a) * k;
+  return l(l(mhJS(ix, iy), mhJS(ix + 1, iy), ux), l(mhJS(ix, iy + 1), mhJS(ix + 1, iy + 1), ux), uy);
+}
+const smoothstepJS = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
 export class Terrain {
   constructor(scene, man, geo, { base = './data/tiles', maxLoads = 8, splitFactor = 2.3, cacheMax = 420, shadows = true, anisotropy = 4, renderer = null } = {}) {
     this.renderer = renderer;
@@ -195,7 +208,18 @@ export class Terrain {
   }
 
   /** En ince hazır döşemeden bilineer yükseklik (Y, dünya). Veri yoksa null. */
+  /** Mikro rolyef (detail.js GLSL microD ile ayni); kamera uzakligiyla soner. Astronot/tas/rota yuzeyle ayni yuksekligi gorur. */
+  microRelief(x, z) {
+    if (!MICRO.value || !this.camPos) return 0;
+    const fade = MICRO.value * (1 - smoothstepJS(25, 70, Math.hypot(this.camPos.x - x, this.camPos.z - z)));
+    if (fade <= 0) return 0;
+    return ((mnJS(x / 5.3, z / 5.3) - 0.5) * 0.34 + (mnJS(x / 2.7 + 17.1, z / 2.7 + 3.7) - 0.5) * 0.16) * fade;
+  }
   heightAt(x, z) {
+    const h = this.heightAtRaw(x, z);
+    return h == null ? null : h + this.microRelief(x, z);
+  }
+  heightAtRaw(x, z) {
     for (let k = 0; k <= this.K; k++) {
       const [sx, sz] = this.size(k), cx = Math.floor(x / sx), cy = Math.floor(z / sz);
       const n = this.nodes.get(k + '/' + cx + '/' + cy);

@@ -102,6 +102,8 @@ export const DETAIL = { value: null };
 export const SYNTH = { value: 1 };   // 1: sentetik ayrıntı açık; 0: SAF VERİ
 export const SCAN = { value: new THREE.Vector4(0, 0, 0, 0) };
 export const SCAN_E = { value: 0 };   // silme yarıçapı: bu yarıçapın içindeki işaretler söner (merkezden dışa süpürme)
+// Mikro rölyef (?ground=rich): zemin mesh'ine yakında 10–30 cm düşük frekanslı kabarıklık (SENTETİK; DTM 1 m'nin altında bilgi vermez). CPU (terrain.js microRelief) ile AYNI işlev.
+export const MICRO = { value: 0 };
 export const SCAN_TEX = { value: null };
 export const SCAN_DIM = { value: new THREE.Vector2(1, 1) };
 export const SCAN_TH = { value: new THREE.Vector2(10, 20) };
@@ -298,6 +300,7 @@ export function patchMaterial(shader) {
   shader.uniforms.uScanTh = SCAN_TH;
   shader.uniforms.uScanE = SCAN_E;
   shader.uniforms.uScanTex = SCAN_TEX;
+  shader.uniforms.uMicro = MICRO;
   shader.uniforms.uScanDim = SCAN_DIM;
 
   shader.uniforms.uRegDiff = PBR_MAPS.regDiff;
@@ -315,12 +318,30 @@ export function patchMaterial(shader) {
   shader.uniforms.uClassBounds = CLASS_BOUNDS;
   shader.uniforms.uHasClassTex = HAS_CLASS_TEX;
 
+  const MICRO_GLSL = /* glsl */ `
+uniform float uMicro;
+float mh(vec2 c) { vec3 p3 = fract(vec3(c.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+float mn(vec2 p) { vec2 i = floor(p), f = p - i, u = f * f * (3.0 - 2.0 * f); return mix(mix(mh(i), mh(i + vec2(1.0, 0.0)), u.x), mix(mh(i + vec2(0.0, 1.0)), mh(i + vec2(1.0, 1.0)), u.x), u.y); }
+float microD(vec2 w) { return (mn(w / 5.3) - 0.5) * 0.34 + (mn(w / 2.7 + vec2(17.1, 3.7)) - 0.5) * 0.16; }
+float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance(cameraPosition, w))); }
+`;
   shader.vertexShader =
-    'varying vec3 vWP;\nvarying vec3 vWN;\n' +
-    shader.vertexShader.replace(
-      '#include <begin_vertex>',
-      '#include <begin_vertex>\n vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;\n vWN = normalize(mat3(modelMatrix) * objectNormal);'
-    );
+    'varying vec3 vWP;\nvarying vec3 vWN;\n' + MICRO_GLSL +
+    shader.vertexShader
+      .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
+      if (uMicro > 0.001) {
+        vec3 wp0 = (modelMatrix * vec4(position, 1.0)).xyz;
+        float mf = microFade(wp0);
+        if (mf > 0.001) {
+          float e = 0.35; vec2 w = wp0.xz;
+          vec2 g = vec2(microD(w + vec2(e, 0.0)) - microD(w - vec2(e, 0.0)), microD(w + vec2(0.0, e)) - microD(w - vec2(0.0, e))) / (2.0 * e) * mf;
+          objectNormal = normalize(vec3(objectNormal.x - g.x * objectNormal.y, objectNormal.y, objectNormal.z - g.y * objectNormal.y));
+        }
+      }`)
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+      if (uMicro > 0.001) { vec3 wp1 = (modelMatrix * vec4(transformed, 1.0)).xyz; transformed.y += microD(wp1.xz) * microFade(wp1); }
+      vWP = (modelMatrix * vec4(transformed, 1.0)).xyz;
+      vWN = normalize(mat3(modelMatrix) * objectNormal);`);
 
   const preamble = /* glsl */ `
     uniform sampler2D uDetail;
