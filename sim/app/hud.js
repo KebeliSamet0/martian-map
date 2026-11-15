@@ -118,7 +118,7 @@ export function initHud(container, vitals, { position = 'tl', hz = 5 } = {}) {
   head.append(title, status);
 
   const g = {
-    time: gauge(t('hud.time'), 'sa:dk'),
+    time: gauge(t('hud.time'), t('unit.hm')),
     o2: gauge(t('hud.o2'), t('hud.o2.unit')),
     kcal: gauge(t('hud.energy'), 'kcal'),
     dose: gauge(t('hud.dose'), 'µGy'),
