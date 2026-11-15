@@ -603,7 +603,7 @@ float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance
 
             // Kumda rüzgâr dalgacığı (sentetik): iki yönlü sinüs, kum ağırlığıyla; yalnız yakında
             float rp = dot(vWP.xz, vec2(0.94, 0.34)) * 5.2 + sin(dot(vWP.xz, vec2(-0.34, 0.94)) * 0.9) * 1.6;
-            vec2 nRip = vec2(0.94, 0.34) * cos(rp) * 0.55 * nearFadeN;
+            vec2 nRip = vec2(0.94, 0.34) * cos(rp) * 0.32 * (1.0 - smoothstep(4.0, 18.0, camDistN));   // yalnız yakında: uzakta çizgi deseni (aliasing) görünmesin
             nSand += nRip * smoothstep(0.25, 0.7, twN.x);
             float closeFadeN = 1.0 - smoothstep(2.5, 10.0, camDistN);
             nReg += (texture2D(uRegNor, rotUv(vWP.xz / 0.24 + vec2(7.7, 2.9))).xy * 2.0 - 1.0) * 1.0 * closeFadeN;

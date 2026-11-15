@@ -1,27 +1,38 @@
-// 3B rota rehberi (yol işareti): araziye yapışık şerit + akan ok (chevron) animasyonu, segment rengi (eğim bandı),
+// 3B rota rehberi (yol işareti): araziye yapışık, ince (~10 cm), yarı saydam tek kesikli çizgi; segment rengi (eğim bandı, beyaza yumuşatılmış), mesafeyle sönme,
 // hedef ışık sütunu ve kum riski bölgesi diski. Veri: rota.dense [[x,z]...], rota.segments[].idx / slope_max. Sentetik değildir: rotanın kendisidir.
 import * as THREE from 'three';
 
 const BAND = [0x30d158, 0xa4d12a, 0xffd60a, 0xff9f0a, 0xff3b30];
+const WHITE = new THREE.Color(1, 1, 1);
 const bandOf = (s) => (s < 5 ? 0 : s < 10 ? 1 : s < 15 ? 2 : s < 20 ? 3 : 4);
 
-function chevronTexture() {
-  const c = document.createElement('canvas'); c.width = 64; c.height = 128;
-  const g = c.getContext('2d');
-  g.clearRect(0, 0, 64, 128);
-  // Sade saha işareti: iki ince kenar çizgisi + seyrek, küçük V işareti (kalın ok yok). v yönü = rota yönü.
-  g.fillStyle = 'rgba(255,255,255,0.85)'; g.fillRect(1, 0, 5, 128); g.fillRect(58, 0, 5, 128);
-  g.strokeStyle = '#fff'; g.lineWidth = 4; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath();
-  g.moveTo(16, 80); g.lineTo(32, 52); g.lineTo(48, 80); g.stroke();
-  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4; t.colorSpace = THREE.SRGBColorSpace;
+// Kesikli çizgi dokusu: v yönü = rota yönü; ~%58 dolu, uçları yumuşak (yumuşak kenar ince şeritte titremeyi azaltır).
+function dashTexture() {
+  const c = document.createElement('canvas'); c.width = 8; c.height = 64;
+  const g = c.getContext('2d'); g.clearRect(0, 0, 8, 64);
+  const gr = g.createLinearGradient(0, 0, 0, 64);
+  gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.06, 'rgba(255,255,255,1)'); gr.addColorStop(0.58, 'rgba(255,255,255,1)'); gr.addColorStop(0.66, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 8, 64);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
 
+const DASH_M = 1.1;          // kesik periyodu (m)
+const NEAR_M = 30, FAR_M = 95;   // kameraya 30 m içinde tam, 95 m'de sönmüş
+
 export class RouteLine {
-  constructor(scene, groundY, { width = 0.7, lift = 0.07, gray = false, opacity = 1 } = {}) {
+  // width: görünür çizgi genişliği (m). Tek, ince, yarı saydam, kesikli saha işareti; önündeki ~30 m belirgin, uzağı solar.
+  constructor(scene, groundY, { width = 0.10, lift = 0.05, gray = false, opacity = 0.62 } = {}) {
+    width = Math.min(width, 0.12);   // çağıranlar eski kalın genişlik verse de çizgi ince kalır (main.js'e dokunmadan)
     this.scene = scene; this.groundY = groundY; this.width = width; this.lift = lift; this.gray = gray;
-    this.tex = chevronTexture();
+    this.tex = dashTexture();
     this.mat = new THREE.MeshBasicMaterial({ map: this.tex, vertexColors: true, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    this.mat.onBeforeCompile = (sh) => {
+      sh.uniforms.uNear = { value: NEAR_M }; sh.uniforms.uFar = { value: FAR_M };
+      sh.vertexShader = 'varying float vRlDist;\n' + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>\n      vRlDist = length(mvPosition.xyz);');
+      sh.fragmentShader = 'varying float vRlDist; uniform float uNear; uniform float uFar;\n' + sh.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n      diffuseColor.a *= mix(1.0, 0.0, smoothstep(uNear, uFar, vRlDist)) * (0.55 + 0.45 * (1.0 - smoothstep(uNear * 0.6, uNear * 1.6, vRlDist)));');
+    };
+    this.mat.customProgramCacheKey = () => 'routeline-dash-v1';
     this.mesh = new THREE.Mesh(new THREE.BufferGeometry(), this.mat); this.mesh.frustumCulled = false; this.mesh.renderOrder = 5; this.mesh.visible = false;
     scene.add(this.mesh);
     this.dense = null; this.segments = null; this.built = -1; this.lastBuild = 0;
@@ -31,7 +42,7 @@ export class RouteLine {
   /** arazi LOD'u değişince (version) ya da yeni rota gelince şeridi yeniden örnekle */
   update(dt, version) {
     if (!this.dense) return;
-    this.tex.offset.y -= dt * 0.35;                       // oklar rota yönünde akar
+    this.tex.offset.y -= dt * 0.2;                       // oklar rota yönünde akar
     const now = performance.now();
     if (version !== this.built && now - this.lastBuild > 900) { this.build(); this.built = version; this.lastBuild = now; }
   }
@@ -51,8 +62,8 @@ export class RouteLine {
       const ym = this.groundY(d[i][0], d[i][1]);
       if (ym != null) lastY = ym;
       pos.set([lx, (yl ?? lastY) + this.lift, lz, rx, (yr ?? lastY) + this.lift, rz], i * 6);
-      const v = dist / 5.5; uv.set([0, v, 1, v], i * 4);
-      if (this.gray) c.setHex(0x8a8f98); else c.setHex(BAND[segBand[i]]);
+      const v = dist / DASH_M; uv.set([0, v, 1, v], i * 4);
+      if (this.gray) c.setHex(0x8a8f98); else c.setHex(BAND[segBand[i]]).lerp(WHITE, 0.35);
       col.set([c.r, c.g, c.b, c.r, c.g, c.b], i * 6);
       if (i < n - 1) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
     }
