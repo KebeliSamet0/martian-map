@@ -3,7 +3,7 @@
 // Hiçbir şey uydurulmaz: eğim ve belirsizlik planlayıcı katmanlarından; durak bilgisi /grid yanıtından. API yoksa seçim yapılabilir, uyarı verilmez.
 import { el, button } from './screens.js';
 import { t } from './i18n.js';
-import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, mainComponentMask, lineImpassable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
+import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, mainComponentMask, sameRegion, lineImpassable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
 
 const ZOOM_MAX = 8, TILE_ZOOM_MIN = 1.5;   // 8× → 0,25 m/piksel karo dokusu (HiRISE)
 const CSS = `
@@ -201,7 +201,10 @@ export function openMapPicker(opts) {
     let warn = '', blocked = false;
     for (const [name, p] of [['A', st.a], ['B', st.b]]) {
       if (!p || !layers.slope) continue;
-      const mask = mainMask();
+      // A ve B aynı rota bileşenindeyse (ana bölge olmasa da, örn. 7 bin hücrelik bölge) planlayıcı rota verir: ada engeli uygulanmaz.
+      // Aksi hâlde yalnız ana bölge geçerli: ayrık/küçük bölgedeki uç ya da farklı bölgedeki çift engellenir.
+      const together = st.a && st.b && sameRegion(layers.slope, st.a, st.b).same;
+      const mask = together ? null : mainMask();
       const ci = cellInfo(layers.slope, p, mask);
       if (!ci.ok) {
         blocked = true;
@@ -223,7 +226,7 @@ export function openMapPicker(opts) {
     }
     st.line = null; st.reach = null; reachBox.textContent = ''; reachBox.dataset.lvl = '';
     if (st.a && st.b && layers.slope && !blocked) {
-      st.line = lineImpassable(layers.slope, st.a, st.b); st.reach = true;   // iki uç da ana bileşende (mainComponentMask) → eğim açısından erişilebilir; ayrı BFS gerekmez
+      st.line = lineImpassable(layers.slope, st.a, st.b); st.reach = true;   // iki uç geçilebilir ve aynı rota bileşeninde (köşe kesmeme kuralıyla) → eğim açısından erişilebilir
       const pct = Math.round(st.line.fraction * 100);
       if (pct > 0) { reachBox.dataset.lvl = 'warn'; reachBox.textContent = t('custom.reach.detour', { pct }); }
       else { reachBox.dataset.lvl = 'ok'; reachBox.textContent = t('custom.reach.clear'); }
