@@ -65,7 +65,7 @@
     },
     "intro.tagline": {
       "tr": "Gerçek Mars verisiyle bir yürüyüşü önce burada prova et: rotayı seç, oksijene ve doza bak, sürprize hazır ol.",
-      "en": "Rehearse a Martian walk on real data first: pick the route, watch oxygen and dose, be ready for surprises."
+      "en": "Rehearse a Mars walk on real data before you take it: pick your route, watch oxygen and dose, and be ready for surprises."
     },
     "intro.place": {
       "tr": "GALE KRATERİ · MOUNT SHARP",
@@ -153,7 +153,7 @@
     },
     "mission.S1.brief": {
       "tr": "Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yürüyeceksin. Bütçen rahat; rotanı seç ve numuneyi al.",
-      "en": "You will walk from the boxwork ridges Curiosity studied to the Atacama drill site. The budget is comfortable; pick your route and collect the sample."
+      "en": "You'll walk from the boxwork ridges Curiosity studied to the Atacama drill site. The budget is comfortable — pick your route and collect the sample."
     },
     "mission.S1.objective": {
       "tr": "Atacama sondaj alanına ulaş ve numune al.",
@@ -169,7 +169,7 @@
     },
     "mission.S2.brief": {
       "tr": "Son boxwork durağından Atacama sondaj alanına yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir.",
-      "en": "You will walk from the last boxwork stop to the Atacama drill site. The shortest path crosses a sandy patch; sand drains your energy and time budget fast."
+      "en": "You'll walk from the last boxwork stop to the Atacama drill site. The shortest path cuts across sand, and sand burns through your energy and time fast."
     },
     "mission.S2.objective": {
       "tr": "Kumu dolaşarak Atacama sondaj alanına ulaş ve numune al.",
@@ -185,7 +185,7 @@
     },
     "mission.S3.brief": {
       "tr": "Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedefe varmak garanti değil. Oksijeni izle; dönüş noktasını kaçırma.",
-      "en": "A faulty tank leaves you only 80 L of oxygen for this walk. Reaching the goal is not guaranteed. Watch the oxygen; do not miss your turn-back point."
+      "en": "A faulty tank leaves you just 80 L of oxygen for this walk. Reaching the goal isn't guaranteed — watch the oxygen and don't miss your turn-back point."
     },
     "mission.S3.objective": {
       "tr": "Oksijen yeterse Atacama'ya ulaş; yetmezse zamanında geri dön.",
@@ -193,7 +193,7 @@
     },
     "mission.S3.science": {
       "tr": "Gerçek EVA planlarında asıl sınır oksijen ve dönüş payıdır. Bu görev, \"gitmek mümkün mü\" değil \"dönmek mümkün mü\" sorusunu prova ettirir.",
-      "en": "In real EVA planning the binding limits are oxygen and the return margin. This mission rehearses \"can I get back\", not just \"can I get there\"."
+      "en": "In real EVA planning the binding limits are oxygen and the return margin. This mission rehearses \"can I get back?\", not just \"can I get there?\"."
     },
     "briefing.title": {
       "tr": "GÖREV BRİFİNGİ",
@@ -245,7 +245,7 @@
     },
     "risk.sand": {
       "tr": "Rota üzerinde yaklaşık {r} m yarıçaplı bir kum cebi çıkabilir; çıkarsa rota yeniden hesaplanır.",
-      "en": "A sand pocket of about {r} m radius may appear on the route; if it does, the route is recomputed."
+      "en": "A sand pocket about {r} m across may turn up on the route; if it does, the route is recomputed."
     },
     "risk.o2": {
       "tr": "Oksijen sınırlı: toplam {o2} L.",
@@ -257,11 +257,11 @@
     },
     "risk.dose": {
       "tr": "Radyasyon dozu bir bütçe kalemidir ({d} µGy limit). Doz değeri modeldir, ölçüm değildir.",
-      "en": "Radiation dose is a budget item ({d} µGy limit). The dose value is modelled, not measured."
+      "en": "Radiation dose is a budget item ({d} µGy limit). The dose value is modeled, not measured."
     },
     "risk.sample": {
       "tr": "Numune yükü: {kg} kg. Varışta yük taşırken harcama artar.",
-      "en": "Sample load: {kg} kg. Energy use rises when carrying it after arrival."
+      "en": "Sample load: {kg} kg. Once you collect it, the extra mass raises your energy use."
     },
     "route.title": {
       "tr": "ROTA SEÇ",
@@ -357,7 +357,7 @@
     },
     "tip.auto": {
       "tr": "Rota kendiliğinden yürünür; W A S D ile devral, R ile rotaya dön · L tara · Esc menü · ? yardım",
-      "en": "The route walks itself; take over with W A S D, R returns to route · L scan · Esc menu · ? help"
+      "en": "Walking the route for you · W A S D to take over, R to rejoin · L scan · Esc menu · ? help"
     },
     "help.title": {
       "tr": "KONTROLLER",
@@ -369,7 +369,7 @@
     },
     "help.rows": {
       "tr": "W A S D|Yürü|Shift|Koş|Fare (tıkla)|Etrafa bak|R|Rotaya dön|L / Shift+L|Zemin tarayıcı / geniş tarama|T|3. şahıs / 1. şahıs|[ ]|Gösterim hızı|G|Navcam fotoğrafını büyüt|N|Ses aç/kapa|H|HUD aç/kapa|Esc|Duraklat menüsü|?|Bu yardım",
-      "en": "W A S D|Move|Shift|Run|Mouse (click)|Look around|R|Return to route|L / Shift+L|Terrain scan / wide scan|T|Third / first person|[ ]|Display speed|G|Enlarge Navcam photo|N|Sound on/off|H|HUD on/off|Esc|Pause menu|?|This help"
+      "en": "W A S D|Move|Shift|Run|Mouse (click)|Look around|R|Return to route|L / Shift+L|Terrain scan / wide scan|T|Third / first person|[ ]|Playback speed|G|Enlarge Navcam photo|N|Sound on/off|H|HUD on/off|Esc|Pause menu|?|This help"
     },
     "alert.sand.title": {
       "tr": "KUM ALGILANDI",
@@ -489,11 +489,11 @@
     },
     "report.insight": {
       "tr": "VERİNİN ETKİSİ",
-      "en": "EFFECT OF THE DATA"
+      "en": "WHAT THE DATA CHANGED"
     },
     "report.insight.none": {
       "tr": "Bu bölüm veri modülü yüklenince dolar.",
-      "en": "This section fills when the data module is loaded."
+      "en": "This section fills in once the data module loads."
     },
     "report.row.time": {
       "tr": "Süre (dk)",
@@ -533,7 +533,7 @@
     },
     "report.note.F": {
       "tr": "Görev tamamlanmadı. Bütçe yetmiyorsa geri dönmek doğru karardır.",
-      "en": "Mission not completed. If the budget does not cover it, turning back is the right call."
+      "en": "Mission not completed. If the budget doesn't cover it, turning back is the right call."
     },
     "label.synthetic": {
       "tr": "sentetik",
