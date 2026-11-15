@@ -11,7 +11,7 @@ import { SYNTH } from './detail.js';
 
 const SEAT_LIFT = 0.12;      // kaya merkezi: çevre zeminin en alçağından, dikey yarıçapın bu oranı kadar yukarı (gömülü/havada kalmasın)
 const SAND_LIFT = 0.12;      // kum diski zeminden bu kadar (m) yukarıda: z-çakışması olmasın
-const BIG_M = 2.6;           // bu çaptan büyük tespitler tek kaya gibi çizilmez (gölge yöntemi sırt gölgelerini de yakalar)
+const OUTCROP_H = 0.13;      // outcrop (sırt yüzleği) yüksekliği ≈ çapın bu oranı: alçak, yayvan, zemine gömülü (veri: rocks.json kind)
 const RESEAT_MS = 1000;      // daha ince arazi döşemesi geldiyse en çok bu sıklıkta yeniden otur
 
 function hash(a, s) {   // 0..1, deterministik
@@ -100,14 +100,21 @@ export async function initHazards(scene, terrain, geo) {
   const group = new THREE.Group(); group.name = 'hazards'; scene.add(group);
 
   // --- kayalar: tek InstancedMesh; px → dünya bir kez, yükseklik arazi geldikçe ---
+  // rocks.json `kind`: 'rock' tek kaya (olduğu gibi), 'outcrop' sırt yüzleği/mostra (alçak yayvan parça), 'shadow' gölge yöntemi artığı (ÇİZİLMEZ).
+  // `kind` yoksa (eski veri) rock sayılır.
+  rocks = rocks.filter((r) => r.kind !== 'shadow');
   const N = rocks.length;
+  const isOut = new Uint8Array(N);
   const rx = new Float32Array(N), rz = new Float32Array(N), rr = new Float32Array(N);   // dünya x, z, yarıçap (m)
   const sc = new Float32Array(N * 3), yaw = new Float32Array(N);
   for (let i = 0; i < N; i++) {
     const [x, z] = pxToWorld(geo, rocks[i].px[0], rocks[i].px[1]);
-    rx[i] = x; rz[i] = z; rr[i] = Math.min(rocks[i].d_m, BIG_M) / 2;   // BIG_M üstü: tek kaya değil mostra/sırt gölgesi olabilir → boy sınırlanır
-    const low = rocks[i].d_m > BIG_M ? 0.45 : 1;   // mostra: alçak ve yayvan
-    sc.set([rr[i] * (0.85 + hash(i, 1) * 0.4), rr[i] * low * (0.75 + hash(i, 2) * 0.5), rr[i] * (0.85 + hash(i, 3) * 0.4)], i * 3);
+    const out = rocks[i].kind === 'outcrop'; isOut[i] = out ? 1 : 0;
+    rx[i] = x; rz[i] = z; rr[i] = rocks[i].d_m / 2;
+    if (out) {   // yüzlek: tam çapta yayvan (bir yönde uzamış), yükseklik çapın ~%13'ü
+      const el = 0.55 + 0.35 * hash(i, 2);
+      sc.set([rr[i] * 1.0, rocks[i].d_m * OUTCROP_H, rr[i] * el], i * 3);
+    } else sc.set([rr[i] * (0.85 + hash(i, 1) * 0.4), rr[i] * (0.75 + hash(i, 2) * 0.5), rr[i] * (0.85 + hash(i, 3) * 0.4)], i * 3);
     yaw[i] = hash(i, 4) * Math.PI * 2;
   }
   const rockMesh = new THREE.InstancedMesh(rockGeometry(), rockMaterial(), Math.max(N, 1));
@@ -146,13 +153,13 @@ export async function initHazards(scene, terrain, geo) {
     placed = 0;
     for (let i = 0; i < N; i++) {
       let lo = Infinity;
-      for (const [ax, az] of AX) { const y = terrain.heightAt(rx[i] + ax * rr[i], rz[i] + az * rr[i]); if (y != null && y < lo) lo = y; }
+      const ext = isOut[i] ? 0.8 : 1; for (const [ax, az] of AX) { const y = terrain.heightAt(rx[i] + ax * rr[i] * ext, rz[i] + az * rr[i] * ext); if (y != null && y < lo) lo = y; }
       if (lo === Infinity) { m.compose(pos.set(rx[i], 0, rz[i]), q.identity(), zero); rockMesh.setMatrixAt(i, m); dustMesh.setMatrixAt(i, m); continue; }   // karo yok: sıfır ölçek, gizli
       e.set(0, yaw[i], 0); q.setFromEuler(e);
       s.set(sc[i * 3], sc[i * 3 + 1], sc[i * 3 + 2]);
-      pos.set(rx[i], lo + s.y * SEAT_LIFT, rz[i]);
+      pos.set(rx[i], lo + s.y * (isOut[i] ? 0.12 : SEAT_LIFT), rz[i]);   // outcrop: daha gömülü
       m.compose(pos, q, s); rockMesh.setMatrixAt(i, m); placed++;
-      const dr = rr[i] * (1.55 + 0.4 * hash(i, 8));   // toz halkası: yarıçapın ~1,5–2 katı; en yüksek çevre zemin yüksekliğine oturur
+      const dr = rr[i] * (isOut[i] ? 1.12 : 1.55 + 0.4 * hash(i, 8));   // toz halkası: yarıçapın ~1,5–2 katı; en yüksek çevre zemin yüksekliğine oturur
       let hi = lo; for (const [ax, az] of AX) { const y = terrain.heightAt(rx[i] + ax * dr, rz[i] + az * dr); if (y != null && y > hi) hi = y; }
       e.set(0, yaw[i], 0); q.setFromEuler(e); pos.set(rx[i], hi + 0.03, rz[i]); s.set(dr, 1, dr * (0.85 + 0.2 * hash(i, 9)));
       m.compose(pos, q, s); dustMesh.setMatrixAt(i, m);
