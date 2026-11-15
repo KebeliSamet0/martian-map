@@ -954,6 +954,10 @@
       "tr": "Bu yöne bak (V)",
       "en": "Look this way (V)"
     },
+    "align_loading": {
+      "tr": "Arazi ayrıntısı yükleniyor…",
+      "en": "Loading terrain detail…"
+    },
     "btn_back": {
       "tr": "Geri dön (V)",
       "en": "Back (V)"

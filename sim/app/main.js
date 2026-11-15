@@ -24,6 +24,7 @@ import './insight-ui.js';   // tur4:veri
 import './helmetcam.js';   // tur4:veri
 import './bilim.js'; // tur4:bilim
 import { createWalkFeel } from './walkfeel.js';   // tur4:his
+import { initCollide } from './collide.js';   // tur4:fizik
 import { pickTiles } from './tiles-base.js';
 import { startPrefetch } from './prefetch.js';
 import { createDynRoute, proposeVia, oneWay, deltaOf } from './dynroute.js';   // batu:dyn   // tur4:dogrula
@@ -197,6 +198,7 @@ function initThree() {
   T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 0.7 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
   T.wf = Q.get('wf') === 'off' ? null : createWalkFeel({ scene, camera, terrain, geo, audio, apiBase: API_BASE, apiOff: API_OFF, quality, toast, text: (k) => wire?.texts?.walk?.[k] }); T.wf?.load();   // tur4:his
+  initCollide(geo, () => T.wf?.stumble(0.5)).then((c) => { T.collide = c; });   // tur4:fizik: gerçek kayalar engel; temas → tökezleme/ses
   T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
@@ -390,6 +392,7 @@ function stepPlayer(dt, t) {
     return gx;
   }
   T.wf?.sense(P, dt, state !== 'fly');   // tur4:his
+  const pv = [P.x, P.z];   // tur4:fizik
   if (state === 'auto' && routeRun) {
     const R = routeRun; if (!window.__viewLock) R.s = Math.min(R.total, R.s + R.speed * timeScale * (T.wf?.speedMul ?? 1) * dt);   // tur4:his, tur4:veri (hizalama sırasında ilerleme donar)
     let i = 1; while (i < R.cum.length - 1 && R.cum[i] < R.s) i++;
@@ -419,6 +422,7 @@ function stepPlayer(dt, t) {
     if (state === 'fly') { if (keys.has('Space')) P.y += sp * dt; if (keys.has('KeyC')) P.y -= sp * dt; }
   }
   P.x = clamp(P.x, 1, geo.sizeX - 1); P.z = clamp(P.z, 1, geo.sizeZ - 1);
+  if (T.collide && state !== 'fly') { const c = T.collide.step(pv, [P.x, P.z]); P.x = c.x; P.z = c.z; }   // tur4:fizik
   T.wf?.after(P, dt, state !== 'fly' && moving);   // tur4:his
   const gy = groundY(P.x, P.z);
   if (gy != null) {
