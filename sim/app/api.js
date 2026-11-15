@@ -22,10 +22,23 @@ export function worldToPx(geo, X, Z) {
 }
 export const pxInside = (p) => p[0] >= 0 && p[1] >= 0 && p[0] < GRID.w && p[1] < GRID.h;
 
+let firstRoute = true;   // tur4:veri: ilk /route soğuk başlangıçta yavaş olabilir → uzun zaman aşımı + bir kez yeniden deneme
 async function call(path, body, ms = 8000) {
+  if (path === '/route' && firstRoute) {   // tur4:veri: offline.js ilk hatada yedeğe düşer (X-MM-Offline); yedek geldiyse bir kez daha canlı dene
+    firstRoute = false; const h = {}; let r = null;
+    try { r = await call1(path, body, 25000, h); } catch (e) { if (!/abort|timeout|fetch|network/i.test(String(e?.name) + String(e?.message))) throw e; h.offline = '1'; }
+    if (r && !h.offline) return r;
+    const h2 = {}, r2 = await call1(path, body, 25000, h2).catch(() => null);
+    if (r2 && !h2.offline) { document.getElementById('offline-badge')?.remove(); window.__mmOffline = null; return r2; }   // tur4:veri
+    if (r) return r; throw new Error('API yanıt vermedi (25 sn, 2 deneme)');
+  }
+  return call1(path, body, ms);
+}
+async function call1(path, body, ms, hdr) {
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
   try {
     const res = await fetch(API_BASE + path, { method: body ? 'POST' : 'GET', headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal });
+    if (hdr) hdr.offline = res.headers.get('X-MM-Offline');   // tur4:veri
     if (!res.ok) { let d = ''; try { d = (await res.json()).detail; } catch { /* yut */ } throw new Error(`API ${res.status}${d ? ': ' + (typeof d === 'string' ? d : JSON.stringify(d)) : ''}`); }
     return await res.json();
   } finally { clearTimeout(t); }
