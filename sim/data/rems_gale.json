@@ -1,0 +1,57 @@
+{
+ "source": "NASA PDS4 msl_rems_bundle, kalibre RMD (REMS), docs/data/ekip/rems_gercek_veri.md",
+ "note": "Ölçülmüş örnek solleri; sim anının hava durumu değildir. Zemin = parlaklık sıcaklığı p01–p99 (aykırı örnekler dışlandı); hava 1.5 m min–max; basınç min–max.",
+ "sols": [
+  {
+   "sol": 53,
+   "ls": 180,
+   "mars_year": 31,
+   "ground_c": [
+    -85.4,
+    7.5
+   ],
+   "air_c": [
+    -69.8,
+    -4.7
+   ],
+   "pressure_pa": [
+    716,
+    807
+   ]
+  },
+  {
+   "sol": 191,
+   "ls": 267,
+   "mars_year": 31,
+   "ground_c": [
+    -78.8,
+    4.4
+   ],
+   "air_c": [
+    -67.9,
+    -3.9
+   ],
+   "pressure_pa": [
+    863,
+    961
+   ]
+  },
+  {
+   "sol": 533,
+   "ls": 85,
+   "mars_year": 32,
+   "ground_c": [
+    -121.0,
+    -11.1
+   ],
+   "air_c": [
+    -88.0,
+    -32.1
+   ],
+   "pressure_pa": [
+    838,
+    895
+   ]
+  }
+ ]
+}

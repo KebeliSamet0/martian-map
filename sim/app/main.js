@@ -443,7 +443,7 @@ function hud(gy, now) {
     (state === 'fly' ? '' : `<div class="tiny">×1 = ${SUIT_V.toFixed(2)} m/s (NASA APACHE skafandr, N=1); ×${timeScale.toFixed(1)} hızlandırılmış gösterim</div>`) +
     `<div class="r"><span>Konum</span><b>${lat.toFixed(5)}°, ${lon.toFixed(5)}°</b></div>` +
     `<div class="r"><span>Yükseklik</span><b>${gy == null ? '—' : (gy + geo.zref).toFixed(1) + ' m'} (areoid)</b></div>` +
-    `<div class="r"><span>Eğim</span><b>${sl == null ? '—' : sl.toFixed(1) + '°'}</b></div>` +
+    `<div class="r"><span>Eğim</span><b>${sl == null ? '—' : sl.toFixed(1) + '°'}</b></div>` + groundRow() + envRow() +
     (pure ? '<div class="tiny" style="color:#7ee787">SAF VERİ: yalnız HiRISE DTM + ortofoto (taş/regolit/yamaç dokusu yok)</div>'
       : sl != null && sl >= 35 ? '<div class="tiny" style="color:#ffb27a">≥35° yamaç: doku kısmen PROSEDÜREL (ortofoto yerine); gerçek görüntü değil</div>' : '') +
     `<div class="r"><span>Yön</span><b>${Math.round(head)}° ${dirs[Math.round(head / 45) % 8]}</b></div>` + route +
@@ -461,9 +461,38 @@ function minimap() {
   g.beginPath(); g.moveTo(0, -8); g.lineTo(5, 6); g.lineTo(-5, 6); g.closePath(); g.fill(); g.stroke(); g.restore();
 }
 
+// Oyuncunun bulunduğu hücrede planlayıcı katmanları (model tahmini): eğim, p_kum, p_iri taş, belirsizlik. API yoksa satır gösterilmez.
+let ground = null;
+async function loadGroundLayers() {
+  if (API_OFF) return;
+  try {
+    const names = ['slope', 'p_sand', 'p_bigrock', 'entropy'];
+    const bufs = await Promise.all(names.map((n) => fetch(`${API_BASE}/layers/${n}.bin`, { signal: AbortSignal.timeout(8000) }).then((r) => { if (!r.ok) throw new Error(n); return r.arrayBuffer(); })));
+    const out = Object.fromEntries(names.map((n, i) => [n, new Float32Array(bufs[i])]));
+    if (names.every((n) => out[n].length === GRID.w * GRID.h)) ground = out;
+  } catch { /* katman yoksa satır görünmez */ }
+}
+// Gale ortamı: NASA PDS REMS ölçümü (3 örnek sol). Sim anının hava durumu değildir; ölçülmüş aralık olarak etiketlenir.
+let rems = null;
+fetch('./data/rems_gale.json').then((r) => (r.ok ? r.json() : null)).then((j) => { rems = j?.sols?.length ? j : null; }).catch(() => {});
+const envRow = () => {
+  if (!rems) return '';
+  const s = rems.sols, lo = (k, i) => Math.min(...s.map((x) => x[k][i])), hi = (k, i) => Math.max(...s.map((x) => x[k][i]));
+  const tip = `${rems.note} Örnek sollar: ` + s.map((x) => `sol ${x.sol} (Ls ${x.ls}°): hava ${x.air_c[0]}…${x.air_c[1]} °C, zemin ${x.ground_c[0]}…${x.ground_c[1]} °C, basınç ${x.pressure_pa[0]}–${x.pressure_pa[1]} Pa`).join('; ') + '. Kaynak: ' + rems.source;
+  return `<div class="r"><span title="${tip.replace(/"/g, '&quot;')}">Gale ortam (REMS)</span></div><div class="tiny">hava ${lo('air_c', 0)}…${hi('air_c', 1)} °C · zemin ${lo('ground_c', 0)}…${hi('ground_c', 1)} °C · ${lo('pressure_pa', 0)}–${hi('pressure_pa', 1)} Pa<br>3 ölçülmüş sol (53/191/533); anlık hava durumu değil</div>`;
+};
+const groundRow = () => {
+  if (!ground) return '';
+  const [c, r] = worldToPx(geo, P.x, P.z).map(Math.floor);
+  if (!(c >= 0 && r >= 0 && c < GRID.w && r < GRID.h)) return '<div class="r"><span>Zemin (model)</span><b>ızgara dışı</b></div>';
+  const i = r * GRID.w + c, f = (v) => v.toFixed(2);
+  return `<div class="r"><span title="${(wire.texts.hud?.ground_model_hint ?? 'Planlayıcı katmanları (2 m hücre). Model tahmini: Navcam durak çıkarımının uzaklığa göre yayılması; ölçüm değildir. Belirsizlik yüksekse tahmine güvenme.').replace(/"/g, '&quot;')}">Zemin (model)</span></div><div class="tiny">eğim ${ground.slope[i].toFixed(0)}° · kum ${f(ground.p_sand[i])} · iri taş ${f(ground.p_bigrock[i])} · belirsizlik ${f(ground.entropy[i])}</div>`;
+};
+
 const pauseFn = (value) => { paused = value; keys.clear(); };
 wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: pauseFn, replan: fireReplan, toast, flow: flowHooks });
 
+void loadGroundLayers();
 ensureScanTex();
 scanner.source = 'yalnız eğim';
 if (!API_OFF && wire.grid.aux_layers?.includes('scan_class')) {
