@@ -4,12 +4,12 @@ import { createGridGeo } from './gridgeo.js';
 import { createVitals } from './vitals.js';
 import { createMission, loadMissions } from './mission.js';
 import { initHud } from './hud.js';
-import { showBriefing, showRoutePicker, showAlert, showReport } from './screens.js';
+import { showBriefing, showRoutePicker, showAlert, showReport, showHold } from './screens.js';
 import { loadTexts, t, has, missionText } from './i18n.js';
 import { hudSnapshot, missionDefinition, walkPlan, uiTexts } from './wire-adapters.js';
 import { sandForRoute } from './custommission.js';   // batu:custom
 
-export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast, flow = {} }) {
+export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast, flow = {}, returnToBase, audio }) {
   const root = document.getElementById('mission-ui'), buttons = document.getElementById('missions');
   const call = async (path, body) => {
     if (API_OFF) throw new Error('API kapalı');
@@ -30,12 +30,12 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const catalog = await loadMissions({ api });
   const sandZones = await fetch(new URL('../data/sand_zones.json', import.meta.url)).then(r => (r.ok ? r.json() : [])).catch(() => []);   // batu:custom: özel görevde kum olayı yalnız gerçek aday yakınında
   let observations = [];
-  let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false;
+  let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false, hold = null;
   const sourceLabel = document.getElementById('vitals-source');
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
-  function clearRun() { generation++; running = false; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  function clearRun() { generation++; running = false; hold?.cancel?.(); hold = null; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
   const missionTitle = m => missionText(m.id, 'title') || m.title;
   function briefingInfo(m) {
     const L = m.limits ?? {}, risks = [];
@@ -115,7 +115,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
         try { await replan({ ...event, px: selected.sand.px }); }
         finally { if (id === generation && running) { machine.resume(); pause(false); } }
       });
-      machine.on('arrived', () => { void finish(id); });
+      machine.on('arrived', () => { void onArrived(id); });
     }
     vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? t('alerts.turn_back') : t('alerts.data_missing')); });
     vitals.on('limit', e => { if (id === generation && running) alertLimit(limitText(e.resource)); });
@@ -123,6 +123,24 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
     machine?.update(position); lastPosition = [position.x, position.z];
+  }
+  // #125 A.1: hedefte E ile numune al, sonra üsse dönüş ayağını aç. Dönüşte varınca karne.
+  async function onArrived(id) {
+    if (id !== generation || !running) return;
+    const snap = machine.snapshot();
+    const kg = selected?.sample_kg ?? 0;
+    if (snap.leg !== 'outbound' || !(kg > 0) || !returnToBase) return void finish(id);
+    hold = showHold(root, { title: t('sample.hold.title'), hint: t('sample.hold.hint'), seconds: 6 });
+    const ok = await hold; hold = null;
+    if (!ok || id !== generation || !running) return;
+    machine.collectSample();
+    audio?.alert?.('arrive');
+    toast(t('sample.done', { kg }), true);
+    const back = await returnToBase();
+    if (id !== generation || !running) return;
+    if (!back) return void finish(id);   // dönüş rotası alınamadı: görevi burada bitir
+    machine.beginReturn({ world: back.home, radius_m: 10 });
+    flow.setObjective?.(t('objective.return'));
   }
   async function finish(id) {
     if (!running) return;   // tek giriş: varış olayı çift gelse de karne bir kez açılır

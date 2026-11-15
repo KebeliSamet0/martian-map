@@ -345,6 +345,8 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
       if (name === 'briefing' || name === 'route') { clearLayer(); setScreen(name, { mission: m?.id }); }
       else if (name === 'select') { /* onBack gösterir */ } else setScreen(name, { mission: m?.id });
     },
+    // #125 A.1: dönüş ayağında HUD hedef satırı değişir
+    setObjective: (text) => { if (hudRefs) hudRefs.obj.textContent = text; },
     onError: showError,
     onBack: () => { exitToTour(); showSelect(); },
     onReport: (action) => { hudLayer.hidden = true; exitToTour(); showSelect(); },
