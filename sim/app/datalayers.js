@@ -18,15 +18,15 @@ export const countMeasuredTypes = (rows) => new Set(rows.filter((r) => !/model|s
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
 const CSS = `
-.bl-layers{font:13px/1.4 system-ui,sans-serif;color:var(--ink,#f3e3d3);max-width:640px}
-.bl-layers .intro{color:var(--dim,#c9b4a2);margin:0 0 10px}
-.bl-layers .row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;padding:9px 0;border-top:1px solid #4b3a2c;align-items:start}
+.bl-layers{font:12px/1.35 system-ui,sans-serif;color:var(--ink,#f3e3d3);max-width:100%;overflow-wrap:anywhere}.bl-layers h3{margin:0 0 4px;font-size:14px}
+.bl-layers .intro{color:var(--dim,#c9b4a2);margin:0 0 6px}
+.bl-layers .row{display:grid;grid-template-columns:78px minmax(0,1fr) auto;gap:8px;padding:6px 0;border-top:1px solid #4b3a2c;align-items:start}
 .bl-layers .type{font-weight:700}
 .bl-layers .kind{display:inline-block;font-size:10px;padding:0 7px;border-radius:99px;border:1px solid #8a7766;color:#c9b4a2;margin-left:6px}
 .bl-layers .kind.m{border-color:#5ee08a;color:#8cf0ab}.bl-layers .kind.mod{border-color:#ffd60a;color:#ffe55c}
 .bl-layers a{color:#9be1ff}.bl-layers .sm{font-size:11px;color:var(--dim,#c9b4a2)}
 .bl-layers label{display:flex;gap:6px;align-items:center;white-space:nowrap;cursor:pointer}
-.bl-layers .warn{margin-top:10px;font-size:11.5px;color:#ffd7a0}
+.bl-layers .warn{margin-top:6px;font-size:11px;color:#ffd7a0}
 `;
 
 export function renderDataLayers(container, { science, texts, toggles }) {
@@ -42,7 +42,7 @@ export function renderDataLayers(container, { science, texts, toggles }) {
     const name = el('div'); name.append(el('b', null, r.name), k);
     mid.append(name, el('div', 'sm', `${T('where')}: ${r.where}`));
     const src = el('div', 'sm'); src.append(`${T('source')}: `);
-    if (r.url) { const a = el('a', null, r.url.replace(/^https?:\/\//, '').slice(0, 56)); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; src.append(a); }
+    if (r.url) { const a = el('a', null, new URL(r.url).hostname); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; src.append(a); }
     src.append(` · ${r.doc}`); mid.append(src);
     if (r.mode === 'toggle') {
       const lab = el('label'), cb = el('input'); cb.type = 'checkbox'; cb.checked = !!r.toggle.get(); cb.onchange = () => r.toggle.set(cb.checked);

@@ -75,9 +75,9 @@ export function createStopWatcher({ stops, resM = 2, enterM = 40, leaveM = 70, o
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
 const NOTE_CSS = `
-#bl-note{left:276px;top:72px;width:330px;max-height:calc(100vh - 100px);overflow:auto}
+#bl-note{left:14px;top:168px;width:312px;max-height:min(350px,calc(100vh - 168px - 230px));overflow:auto;font-size:11.5px}
 #bl-note[data-pos=map]{left:auto;right:14px;top:14px;max-height:calc(100vh - 28px)}
-#bl-note h3{margin:0 0 2px;font-size:15px}
+#bl-note h3{margin:0 0 2px;font-size:14px}
 #bl-note .lab{margin-top:8px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#c9b8ff}
 #bl-note p{margin:2px 0 0}
 #bl-note .idx{display:grid;grid-template-columns:78px 1fr 30px;gap:6px;align-items:center;margin:3px 0}

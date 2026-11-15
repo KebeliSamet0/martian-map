@@ -77,6 +77,7 @@ function mount(mm) {
     const T = mm.T; if (!T?.scene) return;
     if (!beacons) { beacons = createStopBeacons(THREE, { stops, pxToWorld: pw, groundY: gY }); T.scene.add(beacons.group); }
     if (S.crismOn && !terr) setCrism(true);
+    for (const m of beacons.group.children) { const st = stops.find((x) => x.id === m.userData.stopId), px = worldToPx(mm.geo, mm.P.x, mm.P.z); m.material.opacity = Math.hypot(px[0] - st.px[0], px[1] - st.px[1]) * 2 < 45 ? 0.1 : 0.4; }
     const v = mm.wire?.vitals;
     if (v !== wasVitals) { wasVitals = v; dose.reset(); watcher.reset(); }
     if (S.screen !== 'walk' || !v) return;
