@@ -394,7 +394,8 @@ function installLive(rt, info) {
   const nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind });
   nr.goalPx = R.r.goalPx; nr.startPx = info.startPx; nr.start = { world: [P.x, P.z] }; nr.goal = R.r.goal; nr.source = 'api'; nr.computeMs = info.ms; nr.live = true;
   const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
-  if (!R.livePlan) { R.livePlan = { dense: R.r.dense, segments: R.r.segments }; T.oldLine.set(R.r.dense, R.r.segments); }   // gri: ilk plan
+  if (!R.livePlan) R.livePlan = { dense: R.r.dense, segments: R.r.segments };
+  T.oldLine.clear();   // canlı modda tek çizgi: eski plan şeridi havada asılı görünüyordu (Samet: sabit çizgi istemiyor)
   T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
   routeRun = { ...R, r: nr, cum, total: cum[cum.length - 1], s: 0, replanned: true, livePlan: R.livePlan, baseWorld: R.baseWorld ?? R.r.start?.world };
   wire?.setRoute(nr);
