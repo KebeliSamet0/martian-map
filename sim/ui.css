@@ -220,6 +220,16 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #103 B.9: ayak altı satırı yaşam destek + radyasyon şeridiyle tek sağ alt kümede, hizalı.
+   insight.js konumu satır içi veriyor (left:50%, bottom:46px), bu yüzden !important gerekiyor;
+   #103 "veri/bilim modüllerinin görünümünü gerekirse CSS ile değiştir" diyor.
+   Yığın aşağıdan yukarı: yaşam destek (16) → radyasyon (~230) → ayak altı (274). */
+@media (min-width: 1000px) {
+  .mm-foot {
+    left: auto !important; right: 18px !important; bottom: 274px !important;
+    transform: none !important; width: 214px !important; max-width: 214px !important;
+    border-radius: 0 !important; text-align: left; line-height: 1.35 !important;
+  }
 @media (prefers-reduced-motion: reduce) { .mm-flow, .mm-modal, .mm-mcard, .mm-arrow, body.mm-event::after { transition: none; animation: none; } .mm-mcard { opacity: 1; transform: none; } }
 
 /* entegre yuvalar: rota ekranı küçük ekranda taşmasın, karşılaştırma sekmeleri konsol diline uysun */
