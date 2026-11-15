@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseAB, shareQuery, straightMeters, etaMinutes, cellInfo, nearestPassable, mainComponentMask, buildCustomMission, sandForRoute, GRID_W, GRID_H, O2_LIMITED_L } from '../app/custommission.js';
+import { parseAB, shareQuery, straightMeters, etaMinutes, cellInfo, nearestPassable, mainComponentMask, routeComponents, sameRegion, componentMask, buildCustomMission, sandForRoute, GRID_W, GRID_H, O2_LIMITED_L } from '../app/custommission.js';
 import { createMission } from '../app/mission.js';
 
 const flat = (deg = 5) => new Float32Array(GRID_W * GRID_H).fill(deg);
@@ -71,7 +71,7 @@ test('kum olayı mission.js ile uyumlu: yalnız sand tanımlıysa tetiklenir (uy
   assert.equal(withSand.update([0, 200]).state, 'walking'); assert.equal(withSand.update([150, 200]).state, 'event');
 });
 
-test('mainComponentMask: ayrik ada ana bolge degil; nearestPassable maskeyle adayi atlar, 8 komsuluk (capraz) baglar', () => {
+test('mainComponentMask: ayrik ada ana bolge degil; nearestPassable maskeyle adayi atlar; capraz tek baglanti bagli SAYILMAZ (kose kesme yok)', () => {
   const s = flat(40);
   for (let c = 100; c < 200; c++) for (let r = 100; r < 200; r++) s[r * GRID_W + c] = 5;      // ana bölge 100×100
   for (let c = 10; c < 13; c++) for (let r = 10; r < 13; r++) s[r * GRID_W + c] = 5;          // 3×3 ada
@@ -83,5 +83,20 @@ test('mainComponentMask: ayrik ada ana bolge degil; nearestPassable maskeyle ada
   assert.equal(nearestPassable(s, [11, 11], 150, null).px.join(), '11,11');                  // maskesiz: ada hücresi
   const np = nearestPassable(s, [11, 11], 150, m); assert.equal(np.px.join(), '100,100');      // maskeli: ana bölge
   const diag = flat(40); diag[50 * GRID_W + 50] = 5; diag[51 * GRID_W + 51] = 5;
-  assert.equal(mainComponentMask(diag)[51 * GRID_W + 51], 1);                                 // çapraz komşu aynı bileşen (API ile aynı kural)
+  assert.equal(mainComponentMask(diag)[51 * GRID_W + 51], 0);                                 // yalnız çapraz bağlı: köşe kesme yok (planlayıcı route.py ile aynı kural) → ayrı bileşen
+});
+
+test('sameRegion / routeComponents: köşe kesmeden bağlanamayan çift ayrı bölge (AB01 türü), kenar bağlıysa aynı', () => {
+  const s = flat(40);
+  for (let c = 100; c < 110; c++) for (let r = 100; r < 110; r++) s[r * GRID_W + c] = 5;        // blok 1: 10×10
+  for (let c = 110; c < 120; c++) for (let r = 110; r < 120; r++) s[r * GRID_W + c] = 5;        // blok 2: yalnız (109,109)-(110,110) köşesinden değer
+  assert.equal(sameRegion(s, [105, 105], [115, 115]).same, false);                              // köşe kesme yok → ayrı
+  const s2 = new Float32Array(s);   // bileşenler dizi kimliğine göre önbelleklenir: değiştirilmiş kopya yeni dizi olmalı
+  s2[109 * GRID_W + 110] = 5;                                                                    // (110,109) açılınca yatay + dikey kenar yolu var
+  assert.equal(sameRegion(s2, [105, 105], [115, 115]).same, true);                               // kenar bağlantısı → aynı bölge
+  const apartA = flat(40); apartA[50 * GRID_W + 50] = 5; apartA[50 * GRID_W + 80] = 5;
+  const rg = sameRegion(apartA, [50, 50], [80, 50]); assert.equal(rg.same, false); assert.ok(rg.a > 0 && rg.b > 0 && rg.a !== rg.b);
+  assert.equal(sameRegion(flat(40), [1, 1], [2, 2]).same, false);                               // geçilemez hücre → aynı sayılmaz (id 0)
+  const m = componentMask(s2, sameRegion(s2, [105, 105], [105, 105]).a); assert.equal(m[105 * GRID_W + 105], 1); assert.equal(m[0], 0);
+  assert.ok(routeComponents(s2).main > 0);
 });

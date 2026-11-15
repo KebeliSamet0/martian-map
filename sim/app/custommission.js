@@ -35,17 +35,19 @@ export const straightMeters = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]) * R
 export const etaMinutes = (meters) => meters / SUIT_SPEED_MS / 60;
 
 /**
- * Ana geçilebilir bölge maskesi (Uint8Array, 1 = ana bileşen): planlayıcı layers.py ile aynı kural, 8 komşulukla bağlı
- * geçilebilir (< IMPASSABLE_DEG) hücrelerin EN BÜYÜK bileşeni. Başlangıç ve hedef aynı bileşende değilse /route
- * "geçilebilir yol yok" (422) verir; küçük ayrık adalar bu yüzden hedef/öneri olamaz. Bir kez hesaplanır, önbelleğe alınır.
+ * Rota bağlantı bileşenleri: planlayıcının yönlendirme kuralıyla AYNI (api/planner/route.py `_window_search`):
+ * 8 komşuluk, ama ÇAPRAZ adım yalnız iki yan hücre de geçilebilirse (köşe kesme yok). Planlayıcı layers.py'deki 8-komşuluk etiketi
+ * "aynı bölge" der ama bu kural daha katıdır: aynı 8-komşuluk bileşeninde olup rota bulunamayan çiftler (örn. AB01: «aynı geçilebilir
+ * bölgede ama köşe kesmeden bağlanamıyor») ancak bu etiketle yakalanır. {label: Int32Array (0 = geçilemez), main: en büyük bileşenin kimliği}.
+ * Bir kez hesaplanır (~0,2 sn), önbelleğe alınır.
  */
-const maskCache = new WeakMap();
-export function mainComponentMask(slope) {
-  if (maskCache.has(slope)) return maskCache.get(slope);
-  const n = GRID_W * GRID_H, label = new Int32Array(n), stack = new Int32Array(n);
+const compCache = new WeakMap();
+export function routeComponents(slope) {
+  if (compCache.has(slope)) return compCache.get(slope);
+  const n = GRID_W * GRID_H, label = new Int32Array(n), stack = new Int32Array(n), ok = (k) => slope[k] < IMPASSABLE_DEG;
   let best = 0, bestSize = 0, next = 0;
   for (let i = 0; i < n; i++) {
-    if (label[i] || !(slope[i] < IMPASSABLE_DEG)) continue;
+    if (label[i] || !ok(i)) continue;
     const id = ++next; let sp = 0, size = 0; stack[sp++] = i; label[i] = id;
     while (sp) {
       const j = stack[--sp]; size++;
@@ -55,14 +57,33 @@ export function mainComponentMask(slope) {
         for (let dc = -1; dc <= 1; dc++) {
           const cc = c + dc; if ((!dr && !dc) || cc < 0 || cc >= GRID_W) continue;
           const k = rr * GRID_W + cc;
-          if (!label[k] && slope[k] < IMPASSABLE_DEG) { label[k] = id; stack[sp++] = k; }
+          if (label[k] || !ok(k)) continue;
+          if (dr && dc && !(ok(rr * GRID_W + c) && ok(r * GRID_W + cc))) continue;   // köşe kesme yok
+          label[k] = id; stack[sp++] = k;
         }
       }
     }
     if (size > bestSize) { bestSize = size; best = id; }
   }
-  const mask = new Uint8Array(n); if (best) for (let i = 0; i < n; i++) if (label[i] === best) mask[i] = 1;
-  maskCache.set(slope, mask); return mask;
+  const out = { label, main: best }; compCache.set(slope, out); return out;
+}
+
+/** Bir bileşenin 0/1 maskesi (id verilmezse ana bileşen). nearestPassable/cellInfo `mask` parametresi için. */
+export function componentMask(slope, id = null) {
+  const { label, main } = routeComponents(slope), want = id ?? main, mask = new Uint8Array(label.length);
+  if (want) for (let i = 0; i < label.length; i++) if (label[i] === want) mask[i] = 1;
+  return mask;
+}
+const maskCache = new WeakMap();
+/** Ana geçilebilir bölge maskesi (rota bağlantısına göre en büyük bileşen). Bir kez hesaplanır. */
+export function mainComponentMask(slope) {
+  if (!maskCache.has(slope)) maskCache.set(slope, componentMask(slope));
+  return maskCache.get(slope);
+}
+/** İki hücre aynı rota bileşeninde mi? Değilse /route "geçilebilir yol yok" (422) verir. {same, a: kimlik, b: kimlik}; geçilemez hücre kimlik 0. */
+export function sameRegion(slope, a, b) {
+  const { label } = routeComponents(slope), la = label[a[1] * GRID_W + a[0]], lb = label[b[1] * GRID_W + b[0]];
+  return { same: la !== 0 && la === lb, a: la, b: lb };
 }
 
 /**
