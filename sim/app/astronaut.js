@@ -191,6 +191,13 @@ function createProceduralAstronaut(options = {}) {
   antenna.position.set(0.16, 0.40, -0.06);
   plssGroup.add(antenna);
 
+  // NASA Space Apps yamaları (ön: sol göğüs; arka: PLSS sırt çantası) — batu:yama
+  loadPatchTexture().then((tex) => {
+    if (!tex) return;
+    const front = makePatchMesh(tex, 0.10, 0.24); front.position.set(-0.13, 0.30, 0.16); front.rotation.y = -0.5; torso.add(front);   // elips yüzey z = 0,82·√(R²−x²) ≈ 0,156 (x=−0,13); gövdeye teğet
+    const back = makePatchMesh(tex, 0.17, 0.30); back.position.set(0, 0.22, -0.22 - 0.10 - 0.004); back.rotation.y = Math.PI; torso.add(back);
+  });
+
   // Boyun Halkası (Neck Ring)
   const neckRingGeom = new THREE.TorusGeometry(0.14, 0.018, 8, 24);
   neckRingGeom.rotateX(Math.PI / 2);
@@ -477,6 +484,70 @@ function createProceduralAstronaut(options = {}) {
 // Mars 0,38 g: adım frekansı Dünya'ya göre düşük, gövde dikey salınımı belirgin (görsel yaklaşım; hız sim'den gelir).
 // =====================================================================
 const MODEL_URL = new URL('../assets/characters/astronaut.glb', import.meta.url).href;
+const PATCH_URL = new URL('../assets/characters/nasa_n.jpg', import.meta.url).href;   // NASA Space Apps Challenge amblemi (ekibin verdiği görsel)
+
+/**
+ * Skafandr yaması: kare amblem görselinden daire kesilmiş, ince beyaz çerçeveli doku (CanvasTexture). Tek doku iki yamada paylaşılır.
+ * Görsel yüklenemezse null döner (yama eklenmez, oyun bozulmaz).
+ */
+export function loadPatchTexture(url = PATCH_URL) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const N = 512, c = document.createElement('canvas'); c.width = c.height = N;
+        const g = c.getContext('2d'), r = N / 2;
+        g.beginPath(); g.arc(r, r, r - 10, 0, Math.PI * 2); g.closePath(); g.save(); g.clip();
+        const sc = (N - 20) / Math.min(img.width, img.height) * 1.02;   // dairenin içini doldur (kare kaynak, çevre boşluğu kırpılır)
+        g.drawImage(img, r - img.width * sc / 2, r - img.height * sc / 2, img.width * sc, img.height * sc);
+        g.restore();
+        g.lineWidth = 12; g.strokeStyle = '#f2f2f2'; g.beginPath(); g.arc(r, r, r - 10, 0, Math.PI * 2); g.stroke();   // beyaz dikiş çerçevesi
+        const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4; tex.needsUpdate = true;
+        resolve(tex);
+      } catch { resolve(null); }
+    };
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+/** Hafif eğimli (silindir kesiti, yarıçap R) kare yama: düz bir düzlem göğüste kenarlarda gömülürdü. +Z'ye bakar. */
+export function makePatchMesh(tex, size, R = 0.26) {
+  const geo = new THREE.PlaneGeometry(size, size, 16, 1), pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) { const x = pos.getX(i); pos.setZ(i, R - Math.sqrt(Math.max(1e-6, R * R - x * x))); }   // kenarlar gövdeye doğru geri çekilir
+  geo.computeVertexNormals();
+  const mat = new THREE.MeshStandardMaterial({ map: tex, transparent: true, alphaTest: 0.02, roughness: 0.85, metalness: 0, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const m = new THREE.Mesh(geo, mat); m.name = 'NasaPatch'; m.frustumCulled = false; m.renderOrder = 2;
+  return m;
+}
+
+/** glTF astronotta ön (göğüs) ve arka (sırt) yama: ışın atılarak gövde yüzeyine oturtulur, Chest kemiğine bağlanır (animasyonla birlikte oynar). */
+function attachPatches(model, tex, { castShadow = true } = {}) {
+  let chest = null; model.traverse((o) => { if (o.isBone && o.name === 'Chest') chest = o; });
+  if (!chest || !tex) return [];
+  model.updateWorldMatrix(true, true);
+  const skinned = []; model.traverse((o) => { if (o.isSkinnedMesh) skinned.push(o); });
+  const ray = new THREE.Raycaster(), box = new THREE.Box3().setFromObject(model, true);
+  const fwd = new THREE.Vector3(0, 0, 1).transformDirection(model.matrixWorld), lat = new THREE.Vector3(1, 0, 0).transformDirection(model.matrixWorld);   // model +Z = ön, +X = giyen kişinin solu (dünya konum/yönü yüklemede ne olursa olsun)
+  const center = box.getCenter(new THREE.Vector3()), out = [];
+  for (const [side, dirZ, yFrac, size, x] of [['front', +1, 0.70, 0.105, +0.035], ['back', -1, 0.72, 0.17, 0]]) {   // ön: sol göğüs, küçük; arka: sırt çantası, daha büyük
+    const y = box.min.y + (box.max.y - box.min.y) * yFrac;
+    const f = fwd.clone().multiplyScalar(dirZ), org = new THREE.Vector3(center.x, y, center.z).addScaledVector(lat, x).addScaledVector(f, 3);
+    ray.set(org, f.clone().negate()); ray.far = 6;
+    const hit = ray.intersectObjects(skinned, false)[0];
+    if (!hit) continue;
+    const n = (hit.face?.normal ? hit.face.normal.clone().transformDirection(hit.object.matrixWorld) : f.clone());
+    if (n.dot(f) < 0) n.negate();
+    const nz = f.clone().lerp(n, 0.6); nz.y = 0; nz.normalize();   // yalnız yatay eğimi izle: yama dik kalır (dönme/yuvarlanma yok)   // yüzey normaline kısmen uy (yamalar eğik yüzeyde de düz durur)
+    const patch = makePatchMesh(tex, size);
+    patch.position.copy(hit.point).addScaledVector(nz, 0.014);
+    patch.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), nz);
+    patch.castShadow = false; patch.receiveShadow = true; patch.userData.side = side;
+    chest.attach(patch);   // patch ebeveynsiz: konumu zaten dünya koordinatı; attach dünya dönüşümünü koruyarak kemiğe bağlar
+    out.push(patch);
+  }
+  return out;
+}
 const CLIP = { idle: 'CharacterArmature|Idle_Neutral', walk: 'CharacterArmature|Walk', run: 'CharacterArmature|Run', interact: 'CharacterArmature|Interact' };
 // Klipteki doğal hızlar (m/s; model 1,75 m'ye ölçeklendikten sonra görsel eşleştirme). Ayak kaymasını azaltmak için klip hızı = gerçek hız / doğal hız.
 const CLIP_NATURAL_MPS = { walk: 1.25, run: 3.2 };
@@ -498,6 +569,7 @@ export function createAstronaut(options = {}) {
   group.name = 'AstronautRoot';
   group.add(fallback.group);
 
+  const patchTexP = loadPatchTexture();   // batu:yama
   let mixer = null, actions = null, current = null, model = null, bob = null;
   let smooth = 0, phase = 0, marsGravity = options.marsGravity ?? false;
   let leanT = 0, leanS = 0, stumbleF = -1;   // [his] eğimde gövde eğimi, tökezleme ilerlemesi (0..1; <0 = yok)
@@ -528,6 +600,8 @@ export function createAstronaut(options = {}) {
       });
       bob = new THREE.Group(); bob.add(model);
       group.add(bob);
+      group.updateMatrixWorld(true);
+      patchTexP.then((tex) => { try { attachPatches(model, tex, { castShadow }); } catch (e) { console.warn('NASA yaması eklenemedi:', e?.message || e); } });   // batu:yama
       mixer = new THREE.AnimationMixer(model);
       const byName = Object.fromEntries(gltf.animations.map((c) => [c.name, c]));
       actions = {};
