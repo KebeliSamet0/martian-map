@@ -56,12 +56,20 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       flow.onScreen?.('computing', m);
       await map.compute();
       if (!await pickRoute()) { flow.onScreen?.('select'); flow.onBack?.(); }
-    } catch (e) { toast(e.message); flow.onBack?.(); } finally { busy = false; }
+    } catch (e) {
+      // #103 A.1: sessizce seçim ekranına dönmek yerine görünür mesaj + tekrar dene
+      toast(e.message);
+      if (flow.onError) flow.onError({ message: e.userMessage ?? t('error.route'), detail: e.message, retry: () => selectMission(m) });
+      else flow.onBack?.();
+    } finally { busy = false; }
   }
   // Rota seçildi → true (oyun akışında yürüyüş kendiliğinden başlar); geri → false
   async function pickRoute({ autoWalk = flow.autoWalk } = {}) {
-    if (!map.alternatives?.length) return false;
-    const options = map.alternatives.map(r => ({ ...r, label: r.raw?.label ?? r.label, total: { ...(r.raw?.total ?? r.total), status: r.source === 'api' ? r.total.status : t('route.caution') } }));
+    if (!map.alternatives?.length) { const err = new Error('no alternatives'); err.userMessage = t('error.noroute'); throw err; }
+    // Rota adı API'den Türkçe geliyordu; ?lang=en'de kart başlıkları Türkçe kalıyordu (#103 A.5).
+    const name = r => (r.source !== 'api' ? t('route.fallback')
+      : has(`route.kind.${r.kind}`) ? t(`route.kind.${r.kind}`) : r.raw?.label ?? r.label);
+    const options = map.alternatives.map(r => ({ ...r, label: name(r), total: { ...(r.raw?.total ?? r.total), status: r.source === 'api' ? r.total.status : t('route.caution') } }));
     flow.onScreen?.('route', selected);
     const choice = await showRoutePicker(root, options, { call, geo, mission: selected });
     if (!choice) return false;
@@ -73,7 +81,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     const b = document.createElement('button'); b.textContent = `${m.id} · ${missionTitle(m)}`;
     b.dataset.mission = m.id; b.onclick = () => void selectMission(m); buttons.append(b);
   }
-  document.getElementById('btn-routes').onclick = () => { if (!busy) void pickRoute(); };
+  document.getElementById('btn-routes').onclick = () => { if (!busy) pickRoute().catch(e => toast(e.message)); };
   // Uyarı bandında ham kaynak anahtarı ("o2_L") değil cümle görünsün (tr/en).
   const limitText = r => t({ o2_L: 'alerts.limit_o2', time_min: 'alerts.limit_time', kcal: 'alerts.limit_kcal', dose_uGy: 'alerts.limit_dose' }[r] ?? 'alerts.limit_o2');
   function alertLimit(what) {
