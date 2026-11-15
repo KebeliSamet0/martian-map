@@ -13,6 +13,10 @@ export const COOLDOWN_S = 45;        // aynı sebep için iki öneri arası
 export const DECISION_TIMEOUT_S = 25;
 export const LOAD_STEP_KG = 0.5;      // yük bu kadar artınca (numune) kalan rota + dönüş yeni yükle yeniden hesaplanır
 export const OBS_RADIUS_M = 20;       // kask kamerası gözlemi için tasarım yarıçapı (≈ maskeli görüş menzili; kaynaklı ölçüm değil)
+export const PERIODIC_M = 100;        // tur5:dyn sürekli planlama: bu kadar yürüyünce ya da
+export const PERIODIC_S = 60;         // bu kadar süre geçince (hangisi önce) kalan plan yeniden hesaplanır
+export const PERIODIC_MIN_GAP_S = 20; // iki periyodik hesap arası en az bu kadar (debounce)
+export const PERIODIC_CHANGE = 0.10;  // beklenen kalan maliyetten ≥%10 sapma ya da GO→NO-GO ise öneri
 export const OBS_NEAR_ROUTE_M = 40;   // gözlem yalnız rotaya bu kadar yakınsa dikkate alınır
 
 /** pos [x,z] ile polyline [[x,z]...] arasındaki en kısa mesafe: {dist, idx (en yakın segment başlangıcı), point}. */
@@ -39,6 +43,13 @@ export function remainingBudget(limits = {}, snap = {}) {
     fracO2: frac(o2Left, limits.o2_L), fracTime: frac(timeLeft, limits.time_min) };
 }
 
+/** API `budget` gövdesi: kalan bütçe. Tükenmiş (≤0) kaynak küçük pozitif gönderilir (planlayıcı NO-GO desin; bütçesiz = sınırsız olmasın). */
+export function budgetFor(limits = {}, snap = {}) {
+  const r = remainingBudget(limits, snap), b = {};
+  for (const k of ['time_min', 'o2_L', 'kcal', 'dose_uGy']) if (r[k] != null) b[k] = r[k] > 0 ? Math.round(r[k] * 100) / 100 : 0.01;
+  return b;
+}
+
 /** Tek yön maliyet: API total.consumption.outbound + km. */
 export function oneWay(total) {
   const o = total?.consumption?.outbound;
@@ -54,9 +65,19 @@ const sum = (a, b) => ({ m: (a.m ?? 0) + (b.m ?? 0), kcal: (a.kcal ?? 0) + (b.kc
  */
 export function createDynRoute(deps) {
   const { ctx, propose, apply } = deps;
-  const call = (path, body) => { const bp = ctx()?.basePx, g = body.goal; return deps.call(path, bp && g && !(g[0] === bp[0] && g[1] === bp[1]) ? { ...body, base_px: bp } : body); }; // tur4:mantik dönüş ayağı üsten (base_px)
-  const st = { devT: 0, busy: false, cooldown: {}, reserveDone: false, lastTick: 0, noApiNoted: false, load0: null, loadSeen: null, obsSeen: new Set() };
-  const budgetBody = (c) => { const r = remainingBudget(c.limits, c.snap); const b = {}; for (const k of ['time_min', 'o2_L', 'kcal', 'dose_uGy']) if (r[k] != null && r[k] > 0) b[k] = Math.round(r[k] * 100) / 100; return b; };
+  const raw = (path, body) => { const bp = (ctx(true) ?? ctx())?.basePx, g = body.goal; return deps.call(path, bp && g && !(g[0] === bp[0] && g[1] === bp[1]) ? { ...body, base_px: bp } : body); }; // tur4:mantik dönüş ayağı üsten (base_px)
+  // tur5:dyn oyuncunun hücresi planlayıcı için geçilemez köşe olabilir (422): başlangıcı yakın hücrelere kaydırıp yeniden dene (hedef/bütçe aynı)
+  const NUDGE = [[2, 0], [-2, 0], [0, 2], [0, -2], [3, 3], [-3, -3], [3, -3], [-3, 3], [5, 0], [-5, 0], [0, 5], [0, -5]];
+  const call = async (path, body) => {
+    try { return await raw(path, body); } catch (e) {
+      if (!/\b422\b/.test(String(e?.message)) || !body.start) throw e;
+      for (const [dx, dz] of NUDGE) { try { return await raw(path, { ...body, start: [body.start[0] + dx, body.start[1] + dz] }); } catch (e2) { if (!/\b422\b/.test(String(e2?.message))) throw e2; } }
+      throw e;
+    }
+  };
+  const wall = deps.wall ?? (() => Date.now() / 1000);
+  const st = { dist: 0, lastPos: null, lastPeriodic: null, anchor: null, recalcs: 0, last: null, devT: 0, busy: false, cooldown: {}, reserveDone: false, lastTick: 0, noApiNoted: false, load0: null, loadSeen: null, obsSeen: new Set() };
+  const budgetBody = (c) => budgetFor(c.limits, c.snap);
   const pick = (res, kind) => res?.routes?.find((x) => x.kind === kind) ?? res?.routes?.[0];
   const cdOk = (reason, now) => (st.cooldown[reason] ?? -1e9) + COOLDOWN_S <= now;
 
@@ -68,7 +89,7 @@ export function createDynRoute(deps) {
       const [nw, back, rest] = await Promise.all([call('/route', body(c.px, c.route.goalPx)), call('/route', body(c.px, rejoinPx)), call('/route', body(rejoinPx, c.route.goalPx))]);
       const n = pick(nw, kind), b = pick(back, kind), r = pick(rest, kind);
       if (!n || !b || !r) { deps.onNote?.('dynroute: planlayıcı bu konumdan rota döndürmedi (öneri yok)'); return; }
-      const newC = oneWay(n.total), viaOld = sum(oneWay(b.total), oneWay(r.total));
+      record('deviation', n, c); const newC = oneWay(n.total), viaOld = sum(oneWay(b.total), oneWay(r.total));
       await propose({ reason: 'deviation', route: n, current: { px: c.px }, delta: deltaOf(newC, viaOld), via: { newRoute: newC, backToRoute: viaOld }, urgent: false });
     } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
   }
@@ -78,7 +99,7 @@ export function createDynRoute(deps) {
     try {
       const res = await call('/route', { start: c.px, goal: c.basePx, ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) });
       const r = pick(res, 'safest'); if (!r) { deps.onNote?.('dynroute: üsse dönüş rotası yok'); return; }
-      const back = oneWay(r.total), left = remainingBudget(c.limits, c.snap);
+      record('reserve', r, c); const back = oneWay(r.total), left = remainingBudget(c.limits, c.snap);
       const near = (need, have) => need != null && have != null && have > 0 && need >= RETURN_NEAR * have;
       const urgent = r.total?.go === false || near(back.o2_L, left.o2_L) || near(back.min, left.time_min);
       st.reserveDone = true;
@@ -92,7 +113,7 @@ export function createDynRoute(deps) {
       const body = (g, ld) => ({ start: c.px, goal: g, load_kg: ld, ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) });
       const [withL, noL, backL] = await Promise.all([call('/route', body(c.route.goalPx, extraKg)), call('/route', body(c.route.goalPx, 0)), c.basePx ? call('/route', body(c.basePx, extraKg)) : null]);
       const n = pick(withL, c.route.kind), o = pick(noL, c.route.kind); if (!n || !o) { deps.onNote?.('dynroute: yük için rota hesaplanamadı'); return; }
-      const back = backL ? pick(backL, 'safest') : null;
+      record('load', n, c); const back = backL ? pick(backL, 'safest') : null;
       await propose({ reason: 'load', route: n, current: { px: c.px }, delta: deltaOf(oneWay(n.total), oneWay(o.total)), extraKg,
         via: { returnWithLoad: back ? oneWay(back.total) : null }, urgent: back?.total?.go === false });
     } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
@@ -104,8 +125,50 @@ export function createDynRoute(deps) {
       const body = { start: c.px, goal: c.route.goalPx, observations: [{ px: obs.px.map(Math.floor), radius_m: obs.radius_m ?? OBS_RADIUS_M, cls: obs.cls }], ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) };
       const [res, base] = await Promise.all([call('/replan', body), call('/route', { start: c.px, goal: c.route.goalPx, ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) })]);
       const n = pick(res, c.route.kind), o = pick(base, c.route.kind); if (!n || !o) { deps.onNote?.('dynroute: gözlem için rota hesaplanamadı'); return; }
-      await propose({ reason: 'observation', route: n, current: { px: c.px }, delta: deltaOf(oneWay(n.total), oneWay(o.total)), observation: { ...obs, radius_m: obs.radius_m ?? OBS_RADIUS_M }, urgent: false });
+      record('observation', n, c); await propose({ reason: 'observation', route: n, current: { px: c.px }, delta: deltaOf(oneWay(n.total), oneWay(o.total)), observation: { ...obs, radius_m: obs.radius_m ?? OBS_RADIUS_M }, urgent: false });
     } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
+  }
+
+  /** Her planlayıcı yeniden hesabı: sayaç + HUD satırı için son sonuç (yalnız API yanıtından). */
+  function record(reason, route, c) {
+    st.recalcs++;
+    const o = oneWay(route?.total);
+    st.last = { reason, at: wall(), go: route?.total?.go ?? null, status: route?.total?.status ?? null, kcal: o.kcal, o2_L: o.o2_L, m: o.m, progressM: c?.progressM ?? null };
+    deps.onEval?.({ ...st.last, recalcs: st.recalcs });
+  }
+
+  // tur5:dyn sürekli planlama: bulunduğun yerden hedefe KALAN bütçeyle tek istek. Beklenen kalan maliyet = çıpa − o ana kadar harcanan.
+  async function periodic(c, now) {
+    st.busy = true; st.cooldown.periodic = now; st.lastPeriodic = { now, dist: st.dist };
+    try {
+      const res = await call('/route', { start: c.px, goal: c.route.goalPx, ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) });
+      const n = pick(res, c.route.kind); if (!n) { deps.onNote?.('dynroute: periyodik hesapta rota yok'); return; }
+      record('periodic', n, c);
+      const cost = oneWay(n.total), left = remainingBudget(c.limits, c.snap), a = st.anchor;
+      if (!a) { st.anchor = { cost, left, go: n.total?.go !== false }; return; }          // ilk hesap: temel, sessiz
+      const spent = (k, lk) => (a.left[lk] != null && left[lk] != null ? a.left[lk] - left[lk] : null);
+      const expect = (k, lk) => { const sp = spent(k, lk); return a.cost[k] != null && sp != null ? Math.max(0, a.cost[k] - sp) : null; };
+      const eO2 = expect('o2_L', 'o2_L'), eKcal = expect('kcal', 'kcal');
+      const rel = (nv, ev) => (nv != null && ev != null && ev > 0 ? (nv - ev) / ev : null);
+      const rO2 = rel(cost.o2_L, eO2), rKcal = rel(cost.kcal, eKcal);
+      const rr = rO2 ?? rKcal, toNoGo = a.go && n.total?.go === false;
+      if (!toNoGo && !(rr != null && Math.abs(rr) >= PERIODIC_CHANGE)) return;              // anlamlı değişiklik yok: sessiz
+      st.anchor = { cost, left, go: n.total?.go !== false };
+      await propose({ reason: 'periodic', route: n, current: { px: c.px }, delta: { m: null, kcal: sub(cost.kcal, eKcal), o2_L: sub(cost.o2_L, eO2), risk: null },
+        change: rr, toNoGo, urgent: toNoGo });
+    } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
+  }
+
+  /** Kum olayı: kalan bütçe + base_px ile /replan; karşılaştırma aynı bütçeyle kum görmeyen /route. Karar propose'dan döner. */
+  async function sand(S) {
+    const c = ctx(true); if (!c) return null;
+    const bb = Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {};
+    const [res, base] = await Promise.all([
+      call('/replan', { start: c.px, goal: c.route.goalPx, observations: [{ px: S.px, radius_m: S.radius_m, cls: 'sand' }], ...bb }),
+      call('/route', { start: c.px, goal: c.route.goalPx, ...bb }).catch(() => null)]);
+    const n = pick(res, c.route.kind), o = base ? pick(base, c.route.kind) : null; if (!n) { deps.onNote?.('dynroute: kum için rota hesaplanamadı'); return null; }
+    record('sand', n, c); st.anchor = null;
+    return propose({ reason: 'sand', route: n, current: { px: c.px }, delta: o ? deltaOf(oneWay(n.total), oneWay(o.total)) : { m: null, kcal: null, o2_L: null, risk: null }, urgent: true, t0: S.t0 });
   }
 
   let pendingObs = null;
@@ -120,7 +183,9 @@ export function createDynRoute(deps) {
     /** Her kare: dt (sn, gerçek zaman), now (sn). */
     update(dt, now = st.lastTick + dt) {
       st.lastTick = now;
-      const c = ctx(); if (!c || st.busy) { if (!c) st.devT = 0; return; }
+      const c = ctx(); if (!c) { st.devT = 0; st.lastPos = null; return; }
+      if (st.lastPos) st.dist += Math.hypot(c.pos[0] - st.lastPos[0], c.pos[1] - st.lastPos[1]); st.lastPos = c.pos;
+      if (st.busy) return;
       const near = distToPolyline(c.pos, c.route.dense);
       st.devT = near.dist > DEVIATION_M ? st.devT + dt : 0;
       const ld = c.snap?.loadKg;
@@ -128,9 +193,13 @@ export function createDynRoute(deps) {
       if (pendingObs && cdOk('observation', now)) { const o = pendingObs; pendingObs = null; void observe(c, o, now); return; }
       const rf = remainingBudget(c.limits, c.snap), low = Math.min(rf.fracO2 ?? 1, rf.fracTime ?? 1) < RESERVE_FRAC;
       if (low && !st.reserveDone && cdOk('reserve', now) && c.basePx) { void reserve(c, now); return; }
-      if (st.devT >= DEVIATION_HOLD_S && cdOk('deviation', now)) { st.devT = 0; void deviation(c, near, now); }
+      if (st.devT >= DEVIATION_HOLD_S && cdOk('deviation', now)) { st.devT = 0; void deviation(c, near, now); return; }
+      st.lastPeriodic ??= { now, dist: st.dist };                                            // tur5:dyn
+      const lp = st.lastPeriodic;
+      if (now - lp.now >= PERIODIC_MIN_GAP_S && (st.dist - lp.dist >= PERIODIC_M || now - lp.now >= PERIODIC_S)) void periodic(c, now);
     },
-    reset() { st.devT = 0; st.busy = false; st.cooldown = {}; st.reserveDone = false; st.load0 = null; st.loadSeen = null; st.obsSeen = new Set(); pendingObs = null; },
+    sand,
+    reset() { st.dist = 0; st.lastPos = null; st.lastPeriodic = null; st.anchor = null; st.recalcs = 0; st.last = null; st.devT = 0; st.busy = false; st.cooldown = {}; st.reserveDone = false; st.load0 = null; st.loadSeen = null; st.obsSeen = new Set(); pendingObs = null; },
     state: () => ({ ...st }),
   };
 }

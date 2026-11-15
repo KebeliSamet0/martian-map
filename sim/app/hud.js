@@ -127,6 +127,8 @@ export function initHud(container, vitals, { position = 'tl', hz = 5 } = {}) {
   };
   g.ret.row.classList.add('mm-g-return');
   root.append(head, ...Object.values(g).map((x) => x.row));
+  const dynEl = el('div', 'mm-note mm-hud-dyn'); dynEl.dataset.testid = 'hud-dyn';   // tur5:dyn: "Dinamik plan" satırı
+  if (typeof src.dynLine === 'function') root.append(dynEl);
   if (src.fake) root.append(el('div', 'mm-note', 'Sahte veri'));
   container.append(root);
 
@@ -140,6 +142,7 @@ export function initHud(container, vitals, { position = 'tl', hz = 5 } = {}) {
     g.load.set(fmt(v.load, 1), null);
     g.ret.set(fmt(v.returnMargin), null);
     g.ret.row.dataset.level = v.returnMargin == null ? '' : v.returnMargin < 0 ? 'over' : v.returnMargin < (v.reserve ?? 30) ? 'warn' : 'ok';
+    if (typeof src.dynLine === 'function') { try { dynEl.textContent = src.dynLine() ?? ''; } catch { dynEl.textContent = ''; } }   // tur5:dyn
     const st = computeStatus(v);
     status.textContent = st;
     status.dataset.state = st === 'GO' ? 'go' : st === 'NO-GO' ? 'nogo' : 'warn';
