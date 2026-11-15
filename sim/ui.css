@@ -218,6 +218,8 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 .mm-table .mm-why[data-level="over"] { color: var(--mm-nogo); }
 /* Dar ekranda beşinci sütun tabloyu taşırmasın */
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
+/* Görev kartı harita önizlemesi (#103 B.6) */
+.mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
 @media (prefers-reduced-motion: reduce) { .mm-flow, .mm-modal, .mm-mcard, .mm-arrow, body.mm-event::after { transition: none; animation: none; } .mm-mcard { opacity: 1; transform: none; } }
 
 /* entegre yuvalar: rota ekranı küçük ekranda taşmasın, karşılaştırma sekmeleri konsol diline uysun */
