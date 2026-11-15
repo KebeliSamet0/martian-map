@@ -42,7 +42,8 @@ Each number carries its source in `[brackets]`.
 **Title:** Checked against reality, with the misses shown
 - Curiosity drove 3.89 km (science detours); our routes between the same endpoints: 2.26–2.30 km, ~140 m from its track. [`docs/validation_msl.md` §2]
 - Terrain model on the expert-labelled test: mIoU 0.798, large-rock recall 0.973, ECE 0.004. [`ml/rover_terrain/METRICS.md`]
-- Scanner versus Navcam: 3 of 6 stops matched, 1 partly, 2 missed; sand is the weak spot (2 of 7 sandy stops caught). [`SCAN_CHECK.md`, `LAYERS.md`]
+- Scanner versus Navcam: 3 of 6 stops matched, 1 partly, 2 missed, both misses sandy. Model p_sand ≤ 0.11 at 13 sand points: sand is the weak spot. [`SCAN_CHECK.md`, `VALIDATION.md` §7]
+- Calibrated (pixel ECE 0.004), marks where evidence is thin; it does not catch its own errors. Rocks: of 123 large detections, 120 were ridge outcrops or shadows, 3 boulders. [`MODEL_CARD.md`, `VALIDATION.md` §6]
 - **Image:** left `docs/figures/msl_compare.png`, right `docs/figures/navcam_vs_model.png`.
 
 ## 7. Impact and next step
