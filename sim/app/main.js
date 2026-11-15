@@ -499,6 +499,22 @@ function minimap() {
   if (routeRun) { g.strokeStyle = '#00e5ff'; g.lineWidth = 2; g.beginPath(); routeRun.r.dense.forEach((p, i) => (i ? g.lineTo(p[0] * sx, p[1] * sz) : g.moveTo(p[0] * sx, p[1] * sz))); g.stroke(); }
   g.save(); g.translate(P.x * sx, P.z * sz); g.rotate(P.yaw); g.fillStyle = '#fff'; g.strokeStyle = '#000'; g.lineWidth = 1.5;
   g.beginPath(); g.moveTo(0, -8); g.lineTo(5, 6); g.lineTo(-5, 6); g.closePath(); g.fill(); g.stroke(); g.restore();
+  northMark(g, w);
+}
+
+// Kuzey işareti (#103 B.8). Izgara kuzeye hizalı: enlem z arttıkça azalıyor, boylam x arttıkça artıyor
+// (geo.worldToLonlat ile doğrulandı), yani kuzey yukarıda, doğu sağda — ok sabit yukarı bakar.
+function northMark(g, w) {
+  const x = w - 15, y = 14;
+  g.save();
+  g.fillStyle = 'rgba(10,7,5,.62)';
+  g.beginPath(); g.roundRect ? g.roundRect(x - 10, y - 11, 20, 28, 3) : g.rect(x - 10, y - 11, 20, 28); g.fill();
+  g.strokeStyle = '#f2a93b'; g.fillStyle = '#f2a93b'; g.lineWidth = 1.5;
+  g.beginPath(); g.moveTo(x, y - 2); g.lineTo(x, y + 6); g.stroke();
+  g.beginPath(); g.moveTo(x, y - 9); g.lineTo(x + 4, y - 2); g.lineTo(x - 4, y - 2); g.closePath(); g.fill();
+  g.font = '700 9px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'top';
+  g.fillText(t('map.north'), x, y + 7);
+  g.restore();
 }
 
 // Oyuncunun bulunduğu hücrede planlayıcı katmanları (model tahmini): eğim, p_kum, p_iri taş, belirsizlik. API yoksa satır gösterilmez.
