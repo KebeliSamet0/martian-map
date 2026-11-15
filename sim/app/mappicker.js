@@ -3,7 +3,7 @@
 // Hiçbir şey uydurulmaz: eğim ve belirsizlik planlayıcı katmanlarından; durak bilgisi /grid yanıtından. API yoksa seçim yapılabilir, uyarı verilmez.
 import { el, button } from './screens.js';
 import { t } from './i18n.js';
-import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
+import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, mainComponentMask, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
 
 const ZOOM_MAX = 8, TILE_ZOOM_MIN = 1.5;   // 8× → 0,25 m/piksel karo dokusu (HiRISE)
 const CSS = `
@@ -171,16 +171,20 @@ export function openMapPicker(opts) {
     if (rov) return `${t('custom.stop.rover')}: sol ${rov.sol}${rov.stop_id ? ` (${rov.stop_id})` : ''}`;
     return '';
   }
+  let maskMemo = null; const mainMask = () => (maskMemo ??= mainComponentMask(layers.slope));
   function refresh() {
     abLine.textContent = `A: ${fmt(st.a)}   B: ${fmt(st.b)}`;
     let warn = '', blocked = false;
     for (const [name, p] of [['A', st.a], ['B', st.b]]) {
       if (!p || !layers.slope) continue;
-      const ci = cellInfo(layers.slope, p);
+      const mask = mainMask();
+      const ci = cellInfo(layers.slope, p, mask);
       if (!ci.ok) {
         blocked = true;
-        const np = nearestPassable(layers.slope, p);
-        warn += (warn ? ' ' : '') + `${name}: ` + (np ? t('custom.warn.steep', { slope: Math.round(ci.slope), m: np.m }) : t('custom.warn.steep.none', { slope: Math.round(ci.slope) }));
+        const np = nearestPassable(layers.slope, p, 150, mask);   // yalnız ana geçilebilir bölge: ayrık adalar öneri olmaz
+        const k = ci.island ? 'custom.warn.island' : 'custom.warn.steep';
+        const sl = ci.island ? ci.slope.toFixed(1) : Math.round(ci.slope);   // eşik altı yazılırken yuvarlama 20° göstermesin
+        warn += (warn ? ' ' : '') + `${name}: ` + (np ? t(k, { slope: sl, m: np.m }) : t(k + '.none', { slope: sl }));
         st['near' + name] = np?.px ?? null;
       } else st['near' + name] = null;
     }
