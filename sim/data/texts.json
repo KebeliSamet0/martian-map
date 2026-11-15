@@ -694,7 +694,10 @@
       "compare_title": "Rotaların radyasyon farkı",
       "compare_note": "Tek yön yürüyüş süresi × yüzey doz hızı. Uzun rota daha çok doz demektir.",
       "compare_chosen": "seçilen",
-      "unit_ugy": "µGy"
+      "unit_ugy": "µGy",
+      "line_key": "Y: ayrıntı",
+      "line_hint": "Radyasyon (RAD) ayrıntısı: Y ya da tıkla. Grafik Esc menüsünde de var.",
+      "tab": "Radyasyon (RAD)"
     },
     "layers": {
       "button": "Veri katmanları",
@@ -724,13 +727,13 @@
       "crism": {
         "type": "Spektral",
         "name": "CRISM MTRDR FRT0000B6F1, HYD kompoziti, 18 m",
-        "where": "Haritada ve 3B arazide yarı saydam katman; bilim duraklarında saha notu.",
+        "where": "Haritada yarı saydam katman; 3B'de yalnız mineral imzalı pikseller (varsayılan kapalı, bilim durağına yaklaşınca çevresinde açılır); duraklarda saha notu.",
         "kind": "ölçüm"
       },
       "rad": {
         "type": "Radyasyon",
         "name": "MSL RAD yüzey dozu (Hassler 2014)",
-        "where": "Yürürken doz çubuğu ve doz grafiği; karnede rota farkı.",
+        "where": "Yürürken HUD'da tek satır doz; Y ya da Esc menüsünde grafik; karnede rota farkı.",
         "kind": "ölçüm (yayın ortalaması)"
       },
       "model": {
