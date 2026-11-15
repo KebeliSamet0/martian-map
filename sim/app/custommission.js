@@ -3,7 +3,7 @@
 // kum olayı yalnız rota gerçekten sim/data/sand_zones.json'daki bir kum adayının radius_m + 40 m yakınından geçiyorsa.
 
 export const GRID_W = 1000, GRID_H = 1000, RES_M = 2;
-export const IMPASSABLE_DEG = 25;          // planlayıcı varsayımı (insan sınırı değil: docs/sim/VERI_KAYNAKLARI.md)
+export const IMPASSABLE_DEG = 20;          // planlayıcı SLOPE_NOGO_DEG: NASA EVA ConOps 20° skafandr sınırı (params.py)
 export const SAND_TRIGGER_EXTRA_M = 40;    // #49: olay merkeze radius_m + 40 m yaklaşınca
 export const MIN_STRAIGHT_M = 15;          // /route bundan kısa A–B'yi anlamsız sayar
 export const SUIT_SPEED_MS = 0.67056;      // NASA APACHE benchmark hızı (N=1); yalnız TAHMİNİ süre için
@@ -41,7 +41,7 @@ export function cellInfo(slope, [c, r]) {
   return { ok: Number.isFinite(s) && s < IMPASSABLE_DEG, outside: false, slope: s };
 }
 
-/** En yakın geçilebilir (<25°) hücre (halka arama, ≤ maxCells hücre). {px:[c,r], m} ya da null. */
+/** En yakın geçilebilir (<20°) hücre (halka arama, ≤ maxCells hücre). {px:[c,r], m} ya da null. */
 export function nearestPassable(slope, [c, r], maxCells = 150) {
   const ok = (cc, rr) => inGrid([cc, rr]) && slope[rr * GRID_W + cc] < IMPASSABLE_DEG;
   if (ok(c, r)) return { px: [c, r], m: 0 };

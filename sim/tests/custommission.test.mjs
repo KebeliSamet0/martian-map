@@ -21,8 +21,8 @@ test('mesafe ve tahmini süre: 1 hücre = 2 m, 0.67056 m/s', () => {
   assert.ok(Math.abs(etaMinutes(40.2336) - 1) < 1e-6);
 });
 
-test('cellInfo: 25° ve üstü geçilmez, ızgara dışı', () => {
-  const s = flat(); s[5 * GRID_W + 7] = 25; s[6 * GRID_W + 7] = 24.9;
+test('cellInfo: 20° ve üstü geçilmez, ızgara dışı', () => {
+  const s = flat(); s[5 * GRID_W + 7] = 20; s[6 * GRID_W + 7] = 19.9;
   assert.equal(cellInfo(s, [7, 5]).ok, false); assert.equal(cellInfo(s, [7, 6]).ok, true);
   assert.equal(cellInfo(s, [1000, 0]).outside, true);
 });

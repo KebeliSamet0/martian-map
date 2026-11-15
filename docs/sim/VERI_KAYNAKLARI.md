@@ -13,7 +13,7 @@ Etiketler: **GERÇEK** = kaynağı olan ölçüm/yayın · **MODEL** = bizim/eki
 |---|---|---|
 | Eğim | HiRISE DTM (Calef & Parker 2016, USGS MSL Gale Merged DEM 1 m v3), planlayıcı 2 m ızgarada hesaplar | GERÇEK veri, türetilmiş eğim |
 | Segment rengi | Segmentteki **en dik hücre** (`slope_max`): <5° yeşil, 5–10 açık yeşil, 10–15 sarı, 15–20 turuncu, ≥20° kırmızı | Bantlar bizim görselleştirme seçimimiz (VARSAYIM) |
-| "Riskli 15° / geçilmez 25°" | `/assumptions` | VARSAYIM (kaynak aranıyor) |
+| "Riskli 15° / geçilmez 20°" | `/assumptions` | KAYNAKLI: 15° Artemis planlaması (Acta Astronautica 2023), 20° NASA EVA ConOps (EVA-EXP-0075); Ay için, Mars'a temkinli uygulandı (Emre, #52) |
 
 Dikkat: segmentler 40–70 m uzunluğunda; tek dik hücre tüm segmenti boyar. 2 m DEM sırt kenarında eğimi abartıyor
 (`/assumptions`: "2 m DEM ridge edge exaggerates slope"; rover tilt karşılaştırması: `docs/data/gale_dtm_ortho.md`,
@@ -75,7 +75,7 @@ Tam rapor ve atıflar: `docs/data/ekip/gercek_parametre_arastirmasi.md`. Bu doğ
 | Değer | Bulgu | Sunumda nasıl denir |
 |---|---|---|
 | **0.378 g ölçeği** | Farley & McMahon 1992: yerçekimi %75 azalınca koşu enerjisi %72, **yürüme yalnız %33** azalıyor. Enerjiyi g oranıyla doğrusal ölçeklemek desteklenmiyor. | "Enerji tahmini Dünya formülüne dayanır, Mars g'si için doğrulanmış katsayı yok; alt/üst sınır olarak oku." |
-| **Riskli 15° / geçilmez 25°** | Mars insanı için doğrulanmış eşik **bulunamadı**. Apollo yaya eğimleri (Iqbal 2024) ve Ay planlama örneği ±20° (Kim 2025) var; bunlar güvenlik sertifikası değil. | "Eşikler planlama varsayımı; uyarı 'yerel değerlendirme gerekli' anlamında." |
+| **Riskli 15° / geçilmez 20° (2026-11-15: 25°→20°)** | Mars insanı için doğrulanmış eşik **bulunamadı**. Apollo yaya eğimleri (Iqbal 2024) ve Ay planlama örneği ±20° (Kim 2025) var; bunlar güvenlik sertifikası değil. | "Eşikler planlama varsayımı; uyarı 'yerel değerlendirme gerekli' anlamında." |
 | **Yedek süre 30 dk** | Yalnız Apollo OPS acil sisteminin asgari süresi olarak kaynaklı (SP-368). Genel Mars payı için kaynak yok. | "Yedek süre görev prosedüründen gelmeli." |
 | **Bilim durağı 30 dk** | Sabit standart yok; faaliyet başına süre (Johnson 2010). | "Görev planı girdisi." |
 | **Doz 60 µGy** | NASA EVA-başına 60 µGy limiti **bulunamadı**. NASA-STD-3001: kariyer <600 mSv, 30 gün/1 yıl organ limitleri; bunlar EVA bütçesine bölünmez. HUD'daki "doz" Curiosity RAD arka planıdır (0.210 mGy/gün → 8.75 µGy/sa, sabit hız varsayımı). | "Doz = tarihsel RAD arka planıyla tahmin; NASA limiti değil, plan bütçesi." |

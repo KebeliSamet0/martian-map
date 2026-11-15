@@ -49,7 +49,7 @@ def run_smoke(layers_dir: Path = ROOT) -> dict:
     start_stop, goal_stop = stops[0], stops[-1]
     start = [math.floor(start_stop["px"][0]), math.floor(start_stop["px"][1])]
     goal = [math.floor(goal_stop["px"][0]), math.floor(goal_stop["px"][1])]
-    long_start, long_goal = [150, 150], [850, 850]
+    long_start, long_goal = [350, 250], [731, 864]  # ikisi de 20° (SLOPE_NOGO_DEG) 4-komşu ana bileşeninde
 
     prev_env = os.environ.get("MARTIAN_LAYERS_DIR")
     os.environ["MARTIAN_LAYERS_DIR"] = str(layers_dir)

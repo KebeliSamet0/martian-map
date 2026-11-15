@@ -79,3 +79,11 @@ Kapsam dışı (bu belge ele almıyor): eğim sınırları (`SLOPE_*`), radyasyo
 - NASA-STD-3001 Vol. 2 Rev E (2025). *NASA Spaceflight Human-System Standard: Human Factors, Habitability, and
   Environmental Health.*
 - Péronnet, F., Massicotte, D. (1991). Table of nonprotein respiratory quotient: an update. *Can. J. Sport Sci.* 16(1), 23–29.
+
+## Eğim eşikleri (2026-11-15)
+| Eşik | Değer | Kaynak |
+|---|---|---|
+| Dikkat (riskli) | 15° | Artemis güney kutbu EVA yürüyüş planlaması, eğim 15° ile sınırlı (Acta Astronautica 2023, https://www.sciencedirect.com/science/article/pii/S0094576523005179) |
+| Geçilmez | 20° (önceki 25° varsayımdı) | NASA EVA Lunar Surface Concept of Operations (EVA-EXP-0075): skafandrlı astronot 20°'ye kadar yokuş yukarı/aşağı/yan (https://www.nasa.gov/wp-content/uploads/2020/01/topic_1-_eva_lunar_surface_concept_of_operations.pdf). Apollo 15 ~17°, en dik ölçülen 22–25° (EPSC 2024). Ay için tanımlı; Mars'ta yerçekimi ~2,3 kat olduğundan doğrudan, temkinli uygulandı. |
+
+Etki: gerçek ızgarada geçilebilir ana bölge haritanın %73,8'inden %43,6'sına indi (4-komşu); S1–S3 rotaları bulunuyor. Önerip kaynakları bulan: Emre (#52).

@@ -10,7 +10,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 export class MapView {
   constructor(el, { man, geo, nav, base, onChange, toast, params }) {
     Object.assign(this, { man, geo, nav, base, onChange, toast: toast || (() => {}), params });
-    this.a = null; this.b = null; this.route = null; this.mode = 'shortest'; this.maxSlope = 25;
+    this.a = null; this.b = null; this.route = null; this.mode = 'shortest'; this.maxSlope = 20;
     const b = man.bounds_lonlat;
     this.bounds = L.latLngBounds([b.s, b.w], [b.n, b.e]);
     this.map = L.map(el, { crs: L.CRS.EPSG4326, maxZoom: 19, minZoom: 6, zoomSnap: 0.25, attributionControl: true });

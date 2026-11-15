@@ -721,8 +721,8 @@
       "en": "Start and goal selection on the HiRISE orthophoto"
     },
     "custom.layer.impassable": {
-      "tr": "Geçilmez alan (25° planlama varsayımı)",
-      "en": "Planner-excluded area (25° planning assumption)"
+      "tr": "Geçilmez alan (20°, NASA EVA skafandr sınırı)",
+      "en": "Planner-excluded area (20°, NASA EVA suit limit)"
     },
     "custom.layer.rover": {
       "tr": "Curiosity durakları (128)",

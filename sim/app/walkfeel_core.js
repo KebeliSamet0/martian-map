@@ -13,7 +13,7 @@ export const PARAMS = {
   FLAT_REFERENCE_W: 272.0,                                     // params.py FLAT_REFERENCE_W
   TERRAIN_ETA: { bedrock: 1.0, soil: 1.2, sand: 2.1, bigrock: 1.5 },        // Pandolf 1977 η
   TERRAIN_SPEED: { bedrock: 1.0, soil: 0.95, sand: 0.6, bigrock: 0.5 },     // VARSAYIM hız çarpanı
-  SLOPE_RISKY_DEG: 15.0, SLOPE_NOGO_DEG: 25.0,                 // params.py eğim eşikleri
+  SLOPE_RISKY_DEG: 15.0, SLOPE_NOGO_DEG: 20.0,                 // params.py eğim eşikleri
   SCAN_CAUTION_ROCK_CFA: 0.15,                                 // params.py: dikkat gerektiren kaya kaplama oranı
 };
 export const CLASSES = ['soil', 'bedrock', 'sand', 'bigrock'];  // AI4Mars sırası (params.CLASSES)
