@@ -1,6 +1,7 @@
 // SENTETİK yakın plan taş dağılımı: kameranın çevresinde, eğime bağlı olasılıkla, deterministik hash ile. NASA verisi DEĞİLDİR;
 // yalnız görsel ölçek hissi içindir ve arayüzde etiketlenir. Kapatılabilir (K).
 import * as THREE from 'three';
+import { blockersFromInstances } from './collide.js';   // batu:tas
 
 function hash(a, b, s) {
   let h = (a * 374761393 + b * 668265263 + s * 2147483647) | 0;
@@ -45,9 +46,9 @@ export class Rocks {
     this.mesh.castShadow = shadows; this.mesh.receiveShadow = shadows;
     scene.add(this.mesh);
     this.last = new THREE.Vector3(1e9, 0, 1e9);
-    this.enabled = true;
+    this.enabled = true; this.blockers = []; this.blockersRev = 0;   // batu:tas: görünen büyük taşlar fiziksel engel (collide.setDynamic)
   }
-  setEnabled(on) { if (on === this.enabled) return; this.enabled = on; this.mesh.visible = on; if (on) this.last.set(1e9, 0, 1e9); }
+  setEnabled(on) { if (on === this.enabled) return; this.enabled = on; this.mesh.visible = on; if (!on && this.blockers.length) { this.blockers = []; this.blockersRev++; } if (on) this.last.set(1e9, 0, 1e9); }
   update(cam, version = 0) {
     if (!this.enabled) return;
     const dx = cam.x - this.last.x, dz = cam.z - this.last.z, now = performance.now();
@@ -86,6 +87,7 @@ export class Rocks {
       n++;
     }
     this.mesh.count = n;
+    this.blockers = blockersFromInstances(this.mesh.instanceMatrix.array, n); this.blockersRev++;   // batu:tas
     this.mesh.instanceMatrix.needsUpdate = true;
     if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
   }

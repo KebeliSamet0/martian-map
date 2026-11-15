@@ -556,6 +556,7 @@ function frame(now) {
   const nearGround = gy != null && P.y - gy < 80;
   T.rocks.setEnabled(nearGround && !T.rocks.userOff);
   T.rocks.update(T.camera.position, T.terrain.version);
+  if (T.collide && T.collideRev !== T.rocks.blockersRev) { T.collide.setDynamic(T.rocks.blockers); T.collideRev = T.rocks.blockersRev; }   // batu:tas: görünen büyük sentetik taşlar da engel
   T.line.update(dt, T.terrain.version); T.oldLine.update(dt, T.terrain.version); T.beacon.update(now / 1000);
   // Gölge kamerası oyuncuyu izler; merkez IŞIK UZAYINDA gölge-haritası texel'ine yakalanır (dünya eksenine yakalamak gölgeyi titretirdi)
   const ext = state === 'fly' ? 420 : 130;
