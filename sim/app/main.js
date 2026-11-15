@@ -319,7 +319,7 @@ function stepPlayer(dt, t) {
   }
   T.wf?.sense(P, dt, state !== 'fly');   // tur4:his
   if (state === 'auto' && routeRun) {
-    const R = routeRun; R.s = Math.min(R.total, R.s + R.speed * timeScale * (T.wf?.speedMul ?? 1) * dt);   // tur4:his
+    const R = routeRun; if (!window.__viewLock) R.s = Math.min(R.total, R.s + R.speed * timeScale * (T.wf?.speedMul ?? 1) * dt);   // tur4:his, tur4:veri (hizalama sırasında ilerleme donar)
     let i = 1; while (i < R.cum.length - 1 && R.cum[i] < R.s) i++;
     const u = (R.s - R.cum[i - 1]) / ((R.cum[i] - R.cum[i - 1]) || 1), a = R.r.dense[i - 1], b = R.r.dense[i];
     P.x = a[0] + (b[0] - a[0]) * u; P.z = a[1] + (b[1] - a[1]) * u;
@@ -355,7 +355,8 @@ function stepPlayer(dt, t) {
       const target = gy + EYE; P.y += (target - P.y) * (T.snap ? 1 : 1 - Math.exp(-dt * 7)); T.snap = false;
     }
   }
-  const tps = view === 'tps' && state !== 'fly' && gy != null;
+  window.__viewLock?.(P);   // tur4:veri: kask kamerası görüş hizalaması (yaw/pitch/konum); kapalıyken null
+  const tps = view === 'tps' && state !== 'fly' && gy != null && !window.__viewLock;   // tur4:veri
   T.astro.group.visible = tps;
   if (tps) {
     // Astronot hızı (animasyon için): gerçek yer değiştirmeden
@@ -371,7 +372,8 @@ function stepPlayer(dt, t) {
     T.camera.position.set(cx, cy, cz); T.camera.lookAt(tgt[0], tgt[1], tgt[2]);
   } else {
     aLastX = null;
-    const wc = T.wf ? T.wf.cam(t, dt, bobOn && state !== 'fly', moving) : { dy: 0, pitch: 0, roll: 0 };   // tur4:his
+    const wc = T.wf ? T.wf.cam(t, dt, bobOn && state !== 'fly' && !window.__viewLock, moving) :   // tur4:veri
+      { dy: 0, pitch: 0, roll: 0 };   // tur4:his
     T.camera.position.set(P.x, P.y + wc.dy, P.z);
     T.camera.rotation.set(P.pitch + wc.pitch, -P.yaw, wc.roll);
   }
