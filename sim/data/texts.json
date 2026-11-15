@@ -1295,6 +1295,10 @@
     "live.report": {
       "tr": "Canlı rota yürüyüş boyunca {n} kez bulunduğun yerden yeniden hesaplandı (planlayıcı).",
       "en": "The live route was recomputed {n} times from your position during the walk (planner)."
+    },
+    "error.route.plan": {
+      "tr": "Planlayıcı çalışıyor ama bu görev için rota bulamadı: {why}",
+      "en": "The planner is running but found no route for this mission: {why}"
     }
   },
   "helmetcam": {

@@ -107,7 +107,8 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     } catch (e) {
       // #103 A.1: sessizce seçim ekranına dönmek yerine görünür mesaj + tekrar dene
       toast(e.message);
-      if (flow.onError) flow.onError({ message: e.userMessage ?? t('error.route'), detail: e.message, retry: () => selectMission(m) });
+      const api4 = /^API 4\d\d: (.+)/.exec(e.message ?? '')?.[1];   // tur5:canli planlayıcı yanıt verdi ama yol bulamadı: 'API'ye ulaşılamıyor' deme, nedenini yaz
+      if (flow.onError) flow.onError({ message: e.userMessage ?? (api4 ? t('error.route.plan', { why: api4 }) : t('error.route')), detail: e.message, retry: () => selectMission(m) });
       else flow.onBack?.();
     } finally { busy = false; }
   }

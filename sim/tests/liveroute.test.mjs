@@ -22,7 +22,7 @@ test('canlı rota: gözlem varsa /replan, yoksa /route; base_px hedef üs değil
 
 test('canlı rota: komşu başlangıçlar yakından uzağa', () => {
   const n = neighbourStarts([10, 10]);
-  assert.equal(n.length, 8 + 16); assert.deepEqual(n[0], [9, 9]);
+  assert.equal(n.length, 8); assert.deepEqual(n[0], [9, 9]);
 });
 
 test('canlı rota: yanıt kurulur, 422 komşuyla yeniden denenir, aşama değişince atılır', async () => {

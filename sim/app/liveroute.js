@@ -7,6 +7,7 @@ export const LIVE_MOVE_M = 3;        // son istekten bu kadar yürüyünce yenid
 export const LIVE_IDLE_S = 4;        // ya da bu kadar süre geçince (en az LIVE_MIN_MOVE_M hareketle)
 export const LIVE_MIN_MOVE_M = 0.5;
 export const LIVE_MIN_GAP_S = 0.8;   // iki istek arası en az
+export const LIVE_BACKOFF_S = 5;     // başarısız hesaptan sonra bekleme (planlayıcıyı istek yağmuruna tutmamak için)
 
 /** İstek atılmalı mı? st: {busy, lastPos:[x,z]|null, lastAt}, pos:[x,z], nowS. */
 export function shouldRequest(st, pos, nowS) {
@@ -28,7 +29,7 @@ export function requestFor({ px, goalPx, budget, basePx }, obs = []) {
 }
 
 /** 422 (başlangıç hücresi geçilemez) için komşu hücreler: yakından uzağa. */
-export function neighbourStarts(px, r = 2) {
+export function neighbourStarts(px, r = 1) {
   const out = [];
   for (let d = 1; d <= r; d++) for (let dy = -d; dy <= d; dy++) for (let dx = -d; dx <= d; dx++) {
     if (Math.max(Math.abs(dx), Math.abs(dy)) !== d) continue;
@@ -63,7 +64,7 @@ export function createLiveRoute(deps) {
       deps.install(rt, { startPx, ms, obs: st.obs.length });
       deps.onStatus?.(st.last);
       return rt;
-    } catch (e) { st.err = String(e?.message ?? e); return null; }
+    } catch (e) { st.err = String(e?.message ?? e); st.lastAt = nowS + LIVE_BACKOFF_S; return null; }
     finally { st.busy = false; }
   }
   return {
