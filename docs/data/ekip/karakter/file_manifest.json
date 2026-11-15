@@ -1,0 +1,335 @@
+{
+  "created_utc": "2026-11-14T15:43:07.214517+00:00",
+  "files": [
+    {
+      "file": "adaylar.md",
+      "bytes": 5080,
+      "sha256": "f1550450ffb9a778f330e57e8e89f0d064182ddf1b06eaad22cc2698034418e0"
+    },
+    {
+      "file": "asset_manifest.json",
+      "bytes": 17350,
+      "sha256": "286a37247cea8fc6f9b076d274a65bd76b321b172b063f5677981497048f3856"
+    },
+    {
+      "file": "astronaut_mrlentereng_rig.png",
+      "bytes": 116598,
+      "sha256": "5bf3a05b389d486979dfe40edb8ac083eec799e4abbc5347716e5ab9a13647c9"
+    },
+    {
+      "file": "astronaut_quaternius_2022_idle.png",
+      "bytes": 116339,
+      "sha256": "623dfeaef8012ac2c360b23e68a80e3abe06808b3e287fc7f0feabd006f11122"
+    },
+    {
+      "file": "astronaut_quaternius_2022_walk.png",
+      "bytes": 112745,
+      "sha256": "01d9bed4fd78d9bd33a21ef13a3508763d5c1569046844f3372f4202db3444d1"
+    },
+    {
+      "file": "astronaut_quaternius_2023_human_idle.png",
+      "bytes": 152998,
+      "sha256": "f37c13b989bc5e0dfb2c426a396b9f944ce7aed73a6697f100e19588d832d75b"
+    },
+    {
+      "file": "astronaut_quaternius_2023_human_walk.png",
+      "bytes": 156308,
+      "sha256": "ee2a78d026975bf0efeea9d9c63d4a80a69bec8e2b7c3a19bd8b9ef048873260"
+    },
+    {
+      "file": "astronaut_quaternius_2023_idle.png",
+      "bytes": 154001,
+      "sha256": "58e0beab5bb99ba30aaf22e1ae5ee6dc3216360dcd199f6c703ae37a6458a94e"
+    },
+    {
+      "file": "astronaut_quaternius_2023_walk.png",
+      "bytes": 156606,
+      "sha256": "c0eeccd352da77f6e4cfd513964c28045020970be43efde79f2bde6095e73376"
+    },
+    {
+      "file": "ATTRIBUTION.txt",
+      "bytes": 7614,
+      "sha256": "9d20f0f4b407a7fe826eca705f25cafb922f1e74e1653de481f0ce1a5f2e7686"
+    },
+    {
+      "file": "bones_and_clips.md",
+      "bytes": 3199,
+      "sha256": "de396a6095af112f12616f00056319db4e85a22aa34e8ccf01688d90e5d65a01"
+    },
+    {
+      "file": "fetch_assets.py",
+      "bytes": 8801,
+      "sha256": "aa7abfa281a8d04c645889fa8369a33df71783841bcce177edd49581a9c27a09"
+    },
+    {
+      "file": "fetch_itch.cjs",
+      "bytes": 2117,
+      "sha256": "d3eb14a0c08c4633c4ed5eaad357505893cc22c56cd6d7a4dc491372d045a4c0"
+    },
+    {
+      "file": "finalize_delivery.py",
+      "bytes": 7320,
+      "sha256": "c946d97a1c2c9a65e5309a75a49dd02e12f1c0fe6ae2b0614e8aa8e9b0f6302a"
+    },
+    {
+      "file": "licenses/CC0-1.0.txt",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    },
+    {
+      "file": "licenses/fflate-MIT.txt",
+      "bytes": 1069,
+      "sha256": "62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751"
+    },
+    {
+      "file": "licenses/three-MIT.txt",
+      "bytes": 1081,
+      "sha256": "852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d"
+    },
+    {
+      "file": "models/astronaut_mrlentereng.glb",
+      "bytes": 757884,
+      "sha256": "e7ae57a4ef9d1dbc9d9afebbe7a543708e2c586c4d9ea97fb24d4291655db355"
+    },
+    {
+      "file": "models/astronaut_quaternius_2022.glb",
+      "bytes": 1944976,
+      "sha256": "c825fb5dc0f3c2875f8c298938c35df79e884c8117d9ff62a6b213d783957758"
+    },
+    {
+      "file": "prepare_backup.py",
+      "bytes": 754,
+      "sha256": "616a8dccf66b6bf84c959319342ec9fc2e4e473196ba30c2af91de99e019bd97"
+    },
+    {
+      "file": "provenance/bee_candidate_asset_manifest.json",
+      "bytes": 16157,
+      "sha256": "e616b279f2108e310f29b045ba9f0b3656e4e680c83d3362d732a2e950b9444f"
+    },
+    {
+      "file": "provenance/bee_candidate_test_output.txt",
+      "bytes": 2902,
+      "sha256": "002d0b28850eae6808251daa2937def9442202937ddd5c672f3ab122b3bf41ed"
+    },
+    {
+      "file": "provenance/bee_candidate_test_results.json",
+      "bytes": 35527,
+      "sha256": "43acd56356a2fe5b93f3e7492b724ecd90068513eceed654faa77f107dc815e5"
+    },
+    {
+      "file": "provenance/conversion_failure_before_fix.txt",
+      "bytes": 1168,
+      "sha256": "d4858943e5a59d46ae63bd14c023c8e68e3d3d96e0c979c26460f115910ccfb3"
+    },
+    {
+      "file": "provenance/evaluated/astronaut_bee_candidate.glb",
+      "bytes": 755356,
+      "sha256": "f8ebf47de4c2506a49e6eab0c5333085780d92ef48112345125a91874b67ecff"
+    },
+    {
+      "file": "provenance/evaluated/astronaut_flamingo_candidate.glb",
+      "bytes": 701328,
+      "sha256": "0ff4594de44e0cd3339373f80cc734e69fd139c4457812efe9a761a72c8a541d"
+    },
+    {
+      "file": "provenance/evaluated/astronaut_polygonalmind_static.glb",
+      "bytes": 1391468,
+      "sha256": "e7ea82c4d942c4608b1d8caa5d728362f465651b82512344964b1b1ca16b38fd"
+    },
+    {
+      "file": "provenance/fbx_vendor_downloads.json",
+      "bytes": 3214,
+      "sha256": "7ec56fdfee0b925cdd69822c42833e638e54492e8e93d25100821c4184f878b3"
+    },
+    {
+      "file": "provenance/final_backup_record.json",
+      "bytes": 2313,
+      "sha256": "376672eaf3066ddcf6a12e897c531c67a2f6e1bca58de9676384cc2715de14cd"
+    },
+    {
+      "file": "provenance/flamingo_candidate_asset_manifest.json",
+      "bytes": 16173,
+      "sha256": "f9f7e10c96d48e0a5f988bcb11711a319267fb3e2a174a0c61919dbbd7700e78"
+    },
+    {
+      "file": "provenance/flamingo_candidate_test_output.txt",
+      "bytes": 2909,
+      "sha256": "81c1a4252b524d5583b1840df66aeb8a0b0d284c1ad88fa41c5d3196ceadb805"
+    },
+    {
+      "file": "provenance/flamingo_candidate_test_results.json",
+      "bytes": 35553,
+      "sha256": "bd9175a25961340b935915231056b95190c2d5d1d784d67aa489abcea3c257e7"
+    },
+    {
+      "file": "provenance/itch_astronaut.html",
+      "bytes": 27385,
+      "sha256": "edc10e9b4911517d75703b8a5d3f2f24da01e247fafed202e0596ed90dda4d90"
+    },
+    {
+      "file": "provenance/itch_download.html",
+      "bytes": 21185,
+      "sha256": "aaa31c4670efcaf5c689e08104679d2687e2d204c0c084b44018e67132c7f8ff"
+    },
+    {
+      "file": "provenance/itch_download_record.json",
+      "bytes": 910,
+      "sha256": "2c8179cec702175454b1482c2013cbc81a7865eacf82ee14a4f0c1604eb9b4e3"
+    },
+    {
+      "file": "provenance/itch_purchase.html",
+      "bytes": 12067,
+      "sha256": "104537d905242db6f62c45d83523f3e38230230395ac9a1095957d837bbb946e"
+    },
+    {
+      "file": "provenance/poly_3hC2i0CTuO.html",
+      "bytes": 111321,
+      "sha256": "851b95d95a6efc5b93fd1ef1f0f1a5f1c294565d4628fb44ff04be3025cafa2c"
+    },
+    {
+      "file": "provenance/poly_3hC2i0CTuO.json",
+      "bytes": 911,
+      "sha256": "bfad8a01126c3961e3bc9c52b9a80304dadd2fc36d29e52f83ecef4455bd2dbb"
+    },
+    {
+      "file": "provenance/poly_OgeSH89Nmx.html",
+      "bytes": 111717,
+      "sha256": "2c7aef7e7e07d1e264503a3efe8dc8bfb839eda8c525d725f460b9acb7fc1de5"
+    },
+    {
+      "file": "provenance/poly_OgeSH89Nmx.json",
+      "bytes": 936,
+      "sha256": "ee400f7f9c0a3fcb591aefcf07e58db9c316494813ddfc5e4e042339cf533e02"
+    },
+    {
+      "file": "provenance/poly_UeBrldDxE9.html",
+      "bytes": 108463,
+      "sha256": "6aaa83507e1dea90dd99ec94062cb7df54720e281470b1cb3fdd19c136707d55"
+    },
+    {
+      "file": "provenance/poly_UeBrldDxE9.json",
+      "bytes": 735,
+      "sha256": "c557db6e0f721ec322ee1d990806cd12493ab7c30d84a654e5d09d9d4f9d7b8b"
+    },
+    {
+      "file": "provenance/poly_zbtPq4dOJL.html",
+      "bytes": 111726,
+      "sha256": "b44844536fed715d019d2c9a93f665c3444305f72801290e1a2ef5408dad4e3a"
+    },
+    {
+      "file": "provenance/poly_zbtPq4dOJL.json",
+      "bytes": 939,
+      "sha256": "bca9794a53bc2b3ee749d16cd119241cb91f7f46d25c3be7105bb52b88898a40"
+    },
+    {
+      "file": "provenance/polygonalmind_rejected.json",
+      "bytes": 601,
+      "sha256": "62e86440d832ad36d0aa190d7fd78c2e766222ad6bb1beec313765186ee6b390"
+    },
+    {
+      "file": "provenance/rigged_astronaut_original.zip",
+      "bytes": 432271,
+      "sha256": "02b9550b0968d9bf73314af0e75fc1e84bd2a2e73e3013b77638a23532ce43dc"
+    },
+    {
+      "file": "provenance/rigged_source/Untitled.blend",
+      "bytes": 268250,
+      "sha256": "42b649d8a28319c5f246c605ba6fd113dcd885d291a41ad2fd9f8783ee8d8bab"
+    },
+    {
+      "file": "provenance/rigged_source/Untitled.fbx",
+      "bytes": 270348,
+      "sha256": "df6b6643c177938425fc2f739f9a2e33842aa3595cd064bb6c527bd459eafcb1"
+    },
+    {
+      "file": "provenance/thunderware_download_record.json",
+      "bytes": 838,
+      "sha256": "143f0116f1ca374995381930802844b517564f99ad063b43a95cd2da6e17c8d9"
+    },
+    {
+      "file": "provenance/thunderware_original.blend",
+      "bytes": 1155908,
+      "sha256": "e21f522e327ef672a55a21fa5edd24ea9a1fe776cad5528e8d3836d5f995769e"
+    },
+    {
+      "file": "provenance/thunderware_original.html",
+      "bytes": 23154,
+      "sha256": "0bc791cb2a08c5bde74f17126d4b1737ef108f414c86fd282881bd04f3984e70"
+    },
+    {
+      "file": "provenance/ultimate_space_kit.html",
+      "bytes": 263680,
+      "sha256": "19aa243cecafde45572823bc14be8648bb84cbd0ba22cf9e972657fe00f5d906"
+    },
+    {
+      "file": "provenance/ultimate_space_kit.json",
+      "bytes": 49689,
+      "sha256": "32b9e9626b218704a808248958268a1883c0f1ed05693b15c37a77f653b2cd36"
+    },
+    {
+      "file": "rapor.md",
+      "bytes": 14259,
+      "sha256": "6c002c1dea9a9cbad55aa6b2199d996a75b5be411808c755b3ab969da10be0a6"
+    },
+    {
+      "file": "test_models.cjs",
+      "bytes": 6945,
+      "sha256": "c96ed17ded11857018b1dc4350387f3296da29529573651f506904ab03231e02"
+    },
+    {
+      "file": "test_output.txt",
+      "bytes": 2250,
+      "sha256": "f7051ebc65c9756a0a04947b6e765e9958b91a8a4868ab370f153de1411424ca"
+    },
+    {
+      "file": "test_results.json",
+      "bytes": 24086,
+      "sha256": "8d84d3d823613cb9929bcc007ab8536fdb9633a76900388b0c7b619273e32a5b"
+    },
+    {
+      "file": "vendor/curves/NURBSCurve.js",
+      "bytes": 1878,
+      "sha256": "34dee297704432358680934a8d5acae35f05c71aa59ce7a8e97decb0ac38e452"
+    },
+    {
+      "file": "vendor/curves/NURBSUtils.js",
+      "bytes": 7861,
+      "sha256": "86bcf4002721854739f6dc7fd185b5eb0540d6b8676feaae6979bb605baac85e"
+    },
+    {
+      "file": "vendor/exporters/GLTFExporter.js",
+      "bytes": 77714,
+      "sha256": "f8a6eb87719e68c925fdf445014b5ead49cf779ae14e69c6cc1cb1dd4eae514d"
+    },
+    {
+      "file": "vendor/libs/fflate.module.js",
+      "bytes": 83291,
+      "sha256": "5686c3d02432a47d8e31f16cabc2d725bbf4531a3abb37cc6fd00142256e3730"
+    },
+    {
+      "file": "vendor/loaders/FBXLoader.js",
+      "bytes": 101466,
+      "sha256": "e8c2a47dffc04ca5699839a6d80fa9140fd9c943f62cea8d074736d7de9c5d98"
+    },
+    {
+      "file": "vendor/loaders/GLTFLoader.js",
+      "bytes": 108522,
+      "sha256": "d073b438e6a07e1359741dd5d6c76c953420cc0d4fd84eb1bdde94315540e6a3"
+    },
+    {
+      "file": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 31906,
+      "sha256": "9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb"
+    },
+    {
+      "file": "vendor/utils/TextureUtils.js",
+      "bytes": 2367,
+      "sha256": "1b84a7fde8745dd614f62b6ca8108b592144278c07891a0cbe8cdf8e15796efa"
+    },
+    {
+      "file": "viewer.html",
+      "bytes": 6938,
+      "sha256": "e3f951bbfe6de29d0d7763808468775db46910883ddb34a4405ec1fd35ff61e8"
+    }
+  ]
+}

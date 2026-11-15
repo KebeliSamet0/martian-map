@@ -1,0 +1,65 @@
+[
+  {
+    "sol": 53,
+    "season_label": "Gale \u0130lkbahar (Spring Equinox)",
+    "mars_year": 31,
+    "tab": {
+      "name": "RME_402151514RMD00530000000_______PA.TAB",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00001_00089/SOL00053/RME_402151514RMD00530000000_______PA.TAB",
+      "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_402151514RMD00530000000_______PA.TAB",
+      "bytes": 7496916,
+      "sha256": "8bc155f85042c314c3a9c9ecc87b12ef0a841360da9f29a41a904d9a3afce0ae",
+      "http_status": 200
+    },
+    "xml": {
+      "name": "RME_402151514RMD00530000000_______PA.xml",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00001_00089/SOL00053/RME_402151514RMD00530000000_______PA.xml",
+      "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_402151514RMD00530000000_______PA.xml",
+      "bytes": 28158,
+      "sha256": "63637b0d77bbb5367b04a37c7758678d3b13d68d074c4cc088340976a8afab98",
+      "http_status": 200
+    }
+  },
+  {
+    "sol": 191,
+    "season_label": "Gale Yaz / Perihelion (Summer Solstice)",
+    "mars_year": 31,
+    "tab": {
+      "name": "RME_414402384RMD01910000000_______P8.TAB",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00180_00269/SOL00191/RME_414402384RMD01910000000_______P8.TAB",
+      "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_414402384RMD01910000000_______P8.TAB",
+      "bytes": 2728992,
+      "sha256": "1e09ff40659577ed60c2f9673ffacb390f2dbb76568ca5802b2be7471f3ea7d0",
+      "http_status": 200
+    },
+    "xml": {
+      "name": "RME_414402384RMD01910000000_______P8.xml",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00180_00269/SOL00191/RME_414402384RMD01910000000_______P8.xml",
+      "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_414402384RMD01910000000_______P8.xml",
+      "bytes": 28156,
+      "sha256": "2c7db588bac16c9b37160fc0160cc74183d0ce3d7e6cd9ac2da9082190c4eeff",
+      "http_status": 200
+    }
+  },
+  {
+    "sol": 533,
+    "season_label": "Gale K\u0131\u015f / Aphelion (Winter Solstice)",
+    "mars_year": 32,
+    "tab": {
+      "name": "RME_444763232RMD05330000000_______P5.TAB",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00450_00583/SOL00533/RME_444763232RMD05330000000_______P5.TAB",
+      "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_444763232RMD05330000000_______P5.TAB",
+      "bytes": 7795632,
+      "sha256": "8ab0c3e002c5ce6ef3ed16cf8ad1016f127e0d85c66b502c736469b8be2d38d6",
+      "http_status": 200
+    },
+    "xml": {
+      "name": "RME_444763232RMD05330000000_______P5.xml",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00450_00583/SOL00533/RME_444763232RMD05330000000_______P5.xml",
+      "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_444763232RMD05330000000_______P5.xml",
+      "bytes": 28158,
+      "sha256": "e447843e79e3da0b4e765e2c00009b5ae21ead65aab6de704ddf8140846dd475",
+      "http_status": 200
+    }
+  }
+]

@@ -1,0 +1,350 @@
+{
+  "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+  "license": "CC0-1.0",
+  "license_url": "https://polyhaven.com/license",
+  "license_quote": "Our assets are all licensed as CC0",
+  "assets": [
+    {
+      "id": "terrain_red_01",
+      "source_url": "https://polyhaven.com/a/terrain_red_01",
+      "info_url": "https://api.polyhaven.com/info/terrain_red_01",
+      "authors": {
+        "Rob Tuytel": "All"
+      },
+      "dimensions_mm": [
+        2000,
+        2000
+      ],
+      "files": [
+        {
+          "channel": "Diffuse",
+          "path": "textures/terrain_red_01/terrain_red_01_diff_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_diff_1k.jpg",
+          "bytes": 583519,
+          "sha256": "f3f3fa6ebcddce22ece1fc8a343b469cbf67faefafac453ba53bce1fa28fc4b0",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "nor_gl",
+          "path": "textures/terrain_red_01/terrain_red_01_nor_gl_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_nor_gl_1k.jpg",
+          "bytes": 756034,
+          "sha256": "97b57469b655d40c2e4c39b7c5f8deb9cbaee2af16c0ee19cd85f435f48f1da6",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "Rough",
+          "path": "textures/terrain_red_01/terrain_red_01_rough_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_rough_1k.jpg",
+          "bytes": 546786,
+          "sha256": "d28d3cb3cb1cff885eff978ebab96e2e887aad9c82294978554bc09ae00b2832",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "AO",
+          "path": "textures/terrain_red_01/terrain_red_01_ao_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_ao_1k.jpg",
+          "bytes": 338135,
+          "sha256": "a7b0b649ca9e6ae319b5f7b7c077b491eee9e3ee34f912c95b4aebd003e050c6",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "arm",
+          "path": "textures/terrain_red_01/terrain_red_01_arm_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_arm_1k.jpg",
+          "bytes": 354220,
+          "sha256": "e48b6015d7af7325f9f354b8f88bf5d1bbce4d31bf58746449f49f20a60b738f",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        }
+      ],
+      "bytes": 2578694
+    },
+    {
+      "id": "sand_03",
+      "source_url": "https://polyhaven.com/a/sand_03",
+      "info_url": "https://api.polyhaven.com/info/sand_03",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "dimensions_mm": [
+        2000,
+        2000
+      ],
+      "files": [
+        {
+          "channel": "Diffuse",
+          "path": "textures/sand_03/sand_03_diff_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_diff_1k.jpg",
+          "bytes": 703132,
+          "sha256": "e72144f9d7b81bdb7bbdb34222b53431738dcef79346dd89412d2abd541e4d30",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "nor_gl",
+          "path": "textures/sand_03/sand_03_nor_gl_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_nor_gl_1k.jpg",
+          "bytes": 884706,
+          "sha256": "1bde5f49ea78f94bcad73592696bf3949711c4ac197133b710c0c8521b6e996b",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "Rough",
+          "path": "textures/sand_03/sand_03_rough_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_rough_1k.jpg",
+          "bytes": 291218,
+          "sha256": "5c9ead290a94913cfa2d0452a576ba527b50301fe208f2ffc4861e42a8fea45b",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "AO",
+          "path": "textures/sand_03/sand_03_ao_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_ao_1k.jpg",
+          "bytes": 640155,
+          "sha256": "5789af3cb61185c2bab282eb27b1fd78e4d50ca6578855998b0834f71a2d7b74",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "arm",
+          "path": "textures/sand_03/sand_03_arm_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_arm_1k.jpg",
+          "bytes": 594822,
+          "sha256": "6b497a5f4aaa6b8a6ffc35eb840c2ca3050db17eec7980426c531355a84704fa",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        }
+      ],
+      "bytes": 3114033
+    },
+    {
+      "id": "rock_face_03",
+      "source_url": "https://polyhaven.com/a/rock_face_03",
+      "info_url": "https://api.polyhaven.com/info/rock_face_03",
+      "authors": {
+        "Dario Barresi": "Photography",
+        "Rico Cilliers": "Processing"
+      },
+      "dimensions_mm": [
+        2699.9995708465576,
+        2699.9995708465576
+      ],
+      "files": [
+        {
+          "channel": "Diffuse",
+          "path": "textures/rock_face_03/rock_face_03_diff_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_diff_1k.jpg",
+          "bytes": 927082,
+          "sha256": "ea48e0e47ad42c8bd312476178b1248ec66f0eb19156a26a1c222f2a40caaf2d",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "nor_gl",
+          "path": "textures/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+          "bytes": 1146788,
+          "sha256": "c6423169583f31715cf0636954bad524e806848a5f2861fcea6794275f726ff0",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "Rough",
+          "path": "textures/rock_face_03/rock_face_03_rough_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_rough_1k.jpg",
+          "bytes": 638904,
+          "sha256": "9e3d9a2fd75244892e7acb6bab2eaed1279299510a7970672c0ee27ff1c19fea",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "AO",
+          "path": "textures/rock_face_03/rock_face_03_ao_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_ao_1k.jpg",
+          "bytes": 689257,
+          "sha256": "be3536db0cf69c950fff97a196310f486cef8b23d16e6eb48743a58fadef0917",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "arm",
+          "path": "textures/rock_face_03/rock_face_03_arm_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_arm_1k.jpg",
+          "bytes": 793241,
+          "sha256": "a1f8e60eaf4f119071840e36e165d3a9185be62bd3ac7068ab6d886aa639d29f",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        }
+      ],
+      "bytes": 4195272
+    },
+    {
+      "id": "dry_ground_01",
+      "source_url": "https://polyhaven.com/a/dry_ground_01",
+      "info_url": "https://api.polyhaven.com/info/dry_ground_01",
+      "authors": {
+        "Rob Tuytel": "All"
+      },
+      "dimensions_mm": [
+        4000,
+        4000
+      ],
+      "files": [
+        {
+          "channel": "Diffuse",
+          "path": "textures/dry_ground_01/dry_ground_01_diff_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dry_ground_01/dry_ground_01_diff_1k.jpg",
+          "bytes": 604799,
+          "sha256": "75222fc97a82b635a09cf8f2891dd58bc42e49599b9fda920b2c50193fe85e9f",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "nor_gl",
+          "path": "textures/dry_ground_01/dry_ground_01_nor_gl_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dry_ground_01/dry_ground_01_nor_gl_1k.jpg",
+          "bytes": 243523,
+          "sha256": "8faf30f0656721f861dba573006c3f90e38fcda8dad481d2369145b114c6b45e",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "Rough",
+          "path": "textures/dry_ground_01/dry_ground_01_rough_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dry_ground_01/dry_ground_01_rough_1k.jpg",
+          "bytes": 336234,
+          "sha256": "1e2587819279786a45b3a6b766cd75cd571e7e524b787ebd7e534bc7f9bd143e",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "AO",
+          "path": "textures/dry_ground_01/dry_ground_01_ao_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dry_ground_01/dry_ground_01_ao_1k.jpg",
+          "bytes": 494732,
+          "sha256": "2d2ca6ed343dfc04d6e4b1e6177d8bd0fe8bc50edc84c40f615ebc10cdd97840",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        },
+        {
+          "channel": "arm",
+          "path": "textures/dry_ground_01/dry_ground_01_arm_1k.jpg",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dry_ground_01/dry_ground_01_arm_1k.jpg",
+          "bytes": 184324,
+          "sha256": "e6627e56850bf5021162081bbd886fbb38465850dbcee854b9b5deedfb2c3fed",
+          "downloaded_utc": "2026-11-14T15:19:35.666857+00:00",
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "format": "JPEG",
+          "verified": true
+        }
+      ],
+      "bytes": 1863612
+    }
+  ],
+  "total_bytes": 11751611
+}

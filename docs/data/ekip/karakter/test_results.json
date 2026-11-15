@@ -1,0 +1,886 @@
+{
+  "passed": true,
+  "chrome": "157.0.8103.78",
+  "tested_utc": "2026-11-14T16:25:06.058Z",
+  "three_module_read_only_path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\sim\\lib\\three.module.js",
+  "three_sha256": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495",
+  "three_unchanged": true,
+  "models": [
+    {
+      "three_revision": "160",
+      "file": "models/astronaut_quaternius_2022.glb",
+      "raw_bbox": {
+        "min": [
+          -0.28203535115363465,
+          -0.001330366193928613,
+          -0.17214563555381576
+        ],
+        "max": [
+          0.31892147592821685,
+          1.8566914591611312,
+          0.4582565165751659
+        ],
+        "height": 1.8580218253550598
+      },
+      "raw_height_m": 1.8580218253550598,
+      "assumed_target_height_m": 1.85,
+      "scale_to_1_85m": 0.9956825989632674,
+      "translate_after_scale": [
+        -0.018363436290619685,
+        0.0013246224695437115,
+        -0.14243781280350407
+      ],
+      "normalized_bbox": {
+        "min": [
+          -0.2991811277267885,
+          1.0148132334464322e-16,
+          -0.3138402223669331
+        ],
+        "max": [
+          0.29918112772678834,
+          1.8499999999999999,
+          0.3138402266119108
+        ],
+        "height": 1.8499999999999999
+      },
+      "raw_foot_bones": [
+        {
+          "name": "FootL",
+          "world": [
+            0.12059149064209014,
+            0.02275174135013923,
+            -0.11473902946404586
+          ]
+        },
+        {
+          "name": "FootR",
+          "world": [
+            -0.06850708675245472,
+            0.022751741350140162,
+            0.24597416828780433
+          ]
+        }
+      ],
+      "normalized_foot_bones": [
+        {
+          "name": "FootL",
+          "world": [
+            0.10170741252475116,
+            0.02397813542799037,
+            -0.25668146786278817
+          ]
+        },
+        {
+          "name": "FootR",
+          "world": [
+            -0.08657475047570581,
+            0.0239781354279913,
+            0.10247438635512501
+          ]
+        }
+      ],
+      "bone_names": [
+        "Root",
+        "Body",
+        "Hips",
+        "Abdomen",
+        "Torso",
+        "Chest",
+        "Neck",
+        "Head",
+        "ShoulderL",
+        "UpperArmL",
+        "LowerArmL",
+        "WristL",
+        "Index1L",
+        "Index2L",
+        "Index3L",
+        "Index4L",
+        "Middle1L",
+        "Middle2L",
+        "Middle3L",
+        "Middle4L",
+        "Ring1L",
+        "Ring2L",
+        "Ring3L",
+        "Ring4L",
+        "Pinky1L",
+        "Pinky2L",
+        "Pinky3L",
+        "Pinky4L",
+        "Thumb1L",
+        "Thumb2L",
+        "Thumb3L",
+        "ShoulderR",
+        "UpperArmR",
+        "LowerArmR",
+        "WristR",
+        "Index1R",
+        "Index2R",
+        "Index3R",
+        "Index4R",
+        "Middle1R",
+        "Middle2R",
+        "Middle3R",
+        "Middle4R",
+        "Ring1R",
+        "Ring2R",
+        "Ring3R",
+        "Ring4R",
+        "Pinky1R",
+        "Pinky2R",
+        "Pinky3R",
+        "Pinky4R",
+        "Thumb1R",
+        "Thumb2R",
+        "Thumb3R",
+        "UpperLegL",
+        "LowerLegL",
+        "UpperLegR",
+        "LowerLegR",
+        "FootL",
+        "PTL",
+        "FootR",
+        "PTR"
+      ],
+      "bone_count": 62,
+      "mesh_count": 13,
+      "skinned_meshes": 13,
+      "triangles": 10558,
+      "materials": [
+        {
+          "name": "SciFi_Light_Accent",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light_Accent",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_MainDark",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Main",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light_Accent",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_MainDark",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Main",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light_Accent",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "SciFi_Light",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        },
+        {
+          "name": "Grey",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.415087103843689,
+          "metalness": 0.400000005960464,
+          "map": false,
+          "normalMap": false
+        }
+      ],
+      "textures": [],
+      "animations": [
+        {
+          "name": "CharacterArmature|Death",
+          "duration": 1.0416666269302368,
+          "tracks": 30,
+          "bone_pose_l1_delta": 12.290709192296749
+        },
+        {
+          "name": "CharacterArmature|Gun_Shoot",
+          "duration": 0.5833333134651184,
+          "tracks": 34,
+          "bone_pose_l1_delta": 5.513149710361113
+        },
+        {
+          "name": "CharacterArmature|HitRecieve",
+          "duration": 0.5416666865348816,
+          "tracks": 18,
+          "bone_pose_l1_delta": 5.104550659965009
+        },
+        {
+          "name": "CharacterArmature|HitRecieve_2",
+          "duration": 0.5416666865348816,
+          "tracks": 19,
+          "bone_pose_l1_delta": 4.617300691150567
+        },
+        {
+          "name": "CharacterArmature|Idle",
+          "duration": 1.6666666269302368,
+          "tracks": 21,
+          "bone_pose_l1_delta": 0.33061915438531486
+        },
+        {
+          "name": "CharacterArmature|Idle_Gun",
+          "duration": 1.6666666269302368,
+          "tracks": 35,
+          "bone_pose_l1_delta": 0.8382244568776538
+        },
+        {
+          "name": "CharacterArmature|Idle_Gun_Pointing",
+          "duration": 1.6666666269302368,
+          "tracks": 35,
+          "bone_pose_l1_delta": 0.44159562662822727
+        },
+        {
+          "name": "CharacterArmature|Idle_Gun_Shoot",
+          "duration": 0.6666666865348816,
+          "tracks": 38,
+          "bone_pose_l1_delta": 4.97783390155434
+        },
+        {
+          "name": "CharacterArmature|Idle_Neutral",
+          "duration": 1.6666666269302368,
+          "tracks": 29,
+          "bone_pose_l1_delta": 0.10502551876693407
+        },
+        {
+          "name": "CharacterArmature|Idle_Sword",
+          "duration": 1.6666666269302368,
+          "tracks": 34,
+          "bone_pose_l1_delta": 0.4031983075715182
+        },
+        {
+          "name": "CharacterArmature|Interact",
+          "duration": 1.25,
+          "tracks": 23,
+          "bone_pose_l1_delta": 3.469911448760405
+        },
+        {
+          "name": "CharacterArmature|Kick_Left",
+          "duration": 0.9166666865348816,
+          "tracks": 54,
+          "bone_pose_l1_delta": 12.388119921798971
+        },
+        {
+          "name": "CharacterArmature|Kick_Right",
+          "duration": 0.9166666865348816,
+          "tracks": 56,
+          "bone_pose_l1_delta": 11.257273723490579
+        },
+        {
+          "name": "CharacterArmature|Punch_Left",
+          "duration": 0.8333333134651184,
+          "tracks": 55,
+          "bone_pose_l1_delta": 6.694518123917359
+        },
+        {
+          "name": "CharacterArmature|Punch_Right",
+          "duration": 0.8333333134651184,
+          "tracks": 56,
+          "bone_pose_l1_delta": 3.8172361097101315
+        },
+        {
+          "name": "CharacterArmature|Roll",
+          "duration": 1.3333333730697632,
+          "tracks": 58,
+          "bone_pose_l1_delta": 16.685416163604653
+        },
+        {
+          "name": "CharacterArmature|Run",
+          "duration": 0.7916666865348816,
+          "tracks": 54,
+          "bone_pose_l1_delta": 7.75221596468184
+        },
+        {
+          "name": "CharacterArmature|Run_Back",
+          "duration": 0.8333333134651184,
+          "tracks": 54,
+          "bone_pose_l1_delta": 5.659294367685871
+        },
+        {
+          "name": "CharacterArmature|Run_Left",
+          "duration": 0.7916666865348816,
+          "tracks": 55,
+          "bone_pose_l1_delta": 13.320695891345967
+        },
+        {
+          "name": "CharacterArmature|Run_Right",
+          "duration": 0.7916666865348816,
+          "tracks": 56,
+          "bone_pose_l1_delta": 7.196202201862286
+        },
+        {
+          "name": "CharacterArmature|Run_Shoot",
+          "duration": 0.8333333134651184,
+          "tracks": 54,
+          "bone_pose_l1_delta": 10.894896477692532
+        },
+        {
+          "name": "CharacterArmature|Sword_Slash",
+          "duration": 1,
+          "tracks": 37,
+          "bone_pose_l1_delta": 6.656285037606558
+        },
+        {
+          "name": "CharacterArmature|Walk",
+          "duration": 1.3333333730697632,
+          "tracks": 37,
+          "bone_pose_l1_delta": 6.994635616652384
+        },
+        {
+          "name": "CharacterArmature|Wave",
+          "duration": 1.6666666269302368,
+          "tracks": 23,
+          "bone_pose_l1_delta": 5.520343329299892
+        }
+      ],
+      "rig_deformation_probe": {
+        "bone": "LowerLegL",
+        "rotation_radians": 0.2,
+        "sampled_vertices": 2769,
+        "max_world_vertex_displacement_m": 0.08574523050300294
+      },
+      "webgl_error": 0,
+      "render_calls": 15,
+      "render_triangles_with_ground": 10560,
+      "phases": [
+        {
+          "requested": "Idle",
+          "clip": "CharacterArmature|Idle",
+          "samples": [
+            {
+              "clip": "CharacterArmature|Idle",
+              "time": 0,
+              "bbox": {
+                "min": [
+                  -0.28916233409229825,
+                  0.000051045233317378,
+                  -0.3138328688856875
+                ],
+                "max": [
+                  0.29918112772678834,
+                  1.8411639442267553,
+                  0.3138402266119108
+                ],
+                "height": 1.841112898993438
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.10170741252475116,
+                    0.02397813542799037,
+                    -0.25668146786278817
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.08657475047570581,
+                    0.0239781354279913,
+                    0.10247438635512501
+                  ]
+                }
+              ]
+            },
+            {
+              "clip": "CharacterArmature|Idle",
+              "time": 0.4166666567325592,
+              "bbox": {
+                "min": [
+                  -0.2945367776641155,
+                  0.000047191023563906065,
+                  -0.3138308401192528
+                ],
+                "max": [
+                  0.29918112772678834,
+                  1.8457637359601138,
+                  0.3138402266119108
+                ],
+                "height": 1.8457165449365498
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.10170741252475116,
+                    0.02397813542799037,
+                    -0.25668146786278817
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.08657475047570581,
+                    0.0239781354279913,
+                    0.10247438635512501
+                  ]
+                }
+              ]
+            },
+            {
+              "clip": "CharacterArmature|Idle",
+              "time": 0.8333333134651184,
+              "bbox": {
+                "min": [
+                  -0.29888090558705677,
+                  -0.0004930868032903062,
+                  -0.31515233646753343
+                ],
+                "max": [
+                  0.29918112772678834,
+                  1.849276440423491,
+                  0.3138402266119108
+                ],
+                "height": 1.8497695272267813
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.10170741252475116,
+                    0.02397813542799037,
+                    -0.25668146786278817
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.08657475047570581,
+                    0.0239781354279913,
+                    0.10247438635512501
+                  ]
+                }
+              ]
+            },
+            {
+              "clip": "CharacterArmature|Idle",
+              "time": 1.2499999701976776,
+              "bbox": {
+                "min": [
+                  -0.2932517511049589,
+                  0.00004719102040039798,
+                  -0.3138308401301844
+                ],
+                "max": [
+                  0.29918112772678834,
+                  1.8457637364891681,
+                  0.3138402266119108
+                ],
+                "height": 1.8457165454687678
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.10170741252475116,
+                    0.02397813542799037,
+                    -0.25668146786278817
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.08657475047570581,
+                    0.0239781354279913,
+                    0.10247438635512501
+                  ]
+                }
+              ]
+            }
+          ],
+          "screenshot": "astronaut_quaternius_2022_idle.png"
+        },
+        {
+          "requested": "Walk",
+          "clip": "CharacterArmature|Walk",
+          "samples": [
+            {
+              "clip": "CharacterArmature|Walk",
+              "time": 0,
+              "bbox": {
+                "min": [
+                  -0.26213503982403924,
+                  -0.004825308464325134,
+                  -0.5894404187458883
+                ],
+                "max": [
+                  0.2108667662762143,
+                  1.8255921732878237,
+                  0.47981894283863125
+                ],
+                "height": 1.8304174817521488
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.07891352767071197,
+                    0.07094978750321143,
+                    0.28594322074438294
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.1253599831563726,
+                    0.1290436342810231,
+                    -0.5273780734027189
+                  ]
+                }
+              ]
+            },
+            {
+              "clip": "CharacterArmature|Walk",
+              "time": 0.3333333432674408,
+              "bbox": {
+                "min": [
+                  -0.27821235448596054,
+                  0.0027170227217765295,
+                  -0.3301095594014838
+                ],
+                "max": [
+                  0.26390959574819656,
+                  1.8564246639105533,
+                  0.14707245823121198
+                ],
+                "height": 1.8537076411887767
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.07729253703178379,
+                    0.02663856666809504,
+                    -0.0935661603400503
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.14154218268304267,
+                    0.1852113133202659,
+                    -0.2716117541251266
+                  ]
+                }
+              ]
+            },
+            {
+              "clip": "CharacterArmature|Walk",
+              "time": 0.6666666865348816,
+              "bbox": {
+                "min": [
+                  -0.24757940257650904,
+                  0.003280683987040567,
+                  -0.6346406265557661
+                ],
+                "max": [
+                  0.2254153959355363,
+                  1.8255890477734575,
+                  0.479818924725841
+                ],
+                "height": 1.822308363786417
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.09078535634256993,
+                    0.1792363728480985,
+                    -0.5785630414604037
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.1156403694002972,
+                    0.07094978750321768,
+                    0.2859431975820221
+                  ]
+                }
+              ]
+            },
+            {
+              "clip": "CharacterArmature|Walk",
+              "time": 1.0000000298023224,
+              "bbox": {
+                "min": [
+                  -0.30059853569115413,
+                  0.0031551608231542936,
+                  -0.33010951752275414
+                ],
+                "max": [
+                  0.24197330553839239,
+                  1.856391992158762,
+                  0.14706871701192523
+                ],
+                "height": 1.8532368313356076
+              },
+              "feet": [
+                {
+                  "name": "FootL",
+                  "world": [
+                    0.10481529460567884,
+                    0.18521129732938732,
+                    -0.2716117128896882
+                  ]
+                },
+                {
+                  "name": "FootR",
+                  "world": [
+                    -0.11614295043461018,
+                    0.02716105114999985,
+                    -0.12569153463523144
+                  ]
+                }
+              ]
+            }
+          ],
+          "screenshot": "astronaut_quaternius_2022_walk.png"
+        }
+      ]
+    },
+    {
+      "three_revision": "160",
+      "file": "models/astronaut_mrlentereng.glb",
+      "raw_bbox": {
+        "min": [
+          -90.78819258526332,
+          0.18588822971885577,
+          -38.858447619143135
+        ],
+        "max": [
+          90.78819015633644,
+          190.1182455259097,
+          24.28083150097455
+        ],
+        "height": 189.93235729619084
+      },
+      "raw_height_m": 189.93235729619084,
+      "assumed_target_height_m": 1.85,
+      "scale_to_1_85m": 0.009740309794160084,
+      "translate_after_scale": [
+        1.1829250122327094e-8,
+        -0.0018106089445496505,
+        0.07099524852565169
+      ],
+      "normalized_bbox": {
+        "min": [
+          -0.8843051096030827,
+          5.058797825086003e-11,
+          -0.30749806940494473
+        ],
+        "max": [
+          0.884305109603083,
+          1.850000000020235,
+          0.30749807152076797
+        ],
+        "height": 1.849999999969647
+      },
+      "raw_foot_bones": [
+        {
+          "name": "foot_l",
+          "world": [
+            11.037171163478423,
+            9.179600553396384,
+            1.913625427856783
+          ]
+        },
+        {
+          "name": "foot_r",
+          "world": [
+            -11.399367719510387,
+            9.179594396751682,
+            1.913618697105022
+          ]
+        }
+      ],
+      "normalized_foot_bones": [
+        {
+          "name": "foot_l",
+          "world": [
+            0.10750547821270022,
+            0.08760154423217437,
+            0.08963455302295889
+          ]
+        },
+        {
+          "name": "foot_r",
+          "world": [
+            -0.1110333612163292,
+            0.08760148426454761,
+            0.08963448746335159
+          ]
+        }
+      ],
+      "bone_names": [
+        "Root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "spine_03",
+        "clavicle_l",
+        "upperarm_l",
+        "lowerarm_l",
+        "hand_l",
+        "middle_01_l",
+        "middle_02_l",
+        "middle_03_l",
+        "index_01_l",
+        "index_02_l",
+        "index_03_l",
+        "thumb_01_l",
+        "thumb_02_l",
+        "thumb_03_l",
+        "ring_01_l",
+        "ring_02_l",
+        "ring_03_l",
+        "pinky_01_l",
+        "pinky_02_l",
+        "pinky_03_l",
+        "clavicle_r",
+        "upperarm_r",
+        "lowerarm_r",
+        "hand_r",
+        "ring_01_r",
+        "ring_02_r",
+        "ring_03_r",
+        "thumb_01_r",
+        "thumb_02_r",
+        "thumb_03_r",
+        "pinky_01_r",
+        "pinky_02_r",
+        "pinky_03_r",
+        "index_01_r",
+        "index_02_r",
+        "index_03_r",
+        "middle_01_r",
+        "middle_02_r",
+        "middle_03_r",
+        "neck_01",
+        "head",
+        "thigh_l",
+        "calf_l",
+        "foot_l",
+        "ball_l",
+        "thigh_r",
+        "calf_r",
+        "foot_r",
+        "ball_r"
+      ],
+      "bone_count": 53,
+      "mesh_count": 1,
+      "skinned_meshes": 1,
+      "triangles": 4038,
+      "materials": [
+        {
+          "name": "Material.001",
+          "type": "MeshStandardMaterial",
+          "roughness": 0.5,
+          "metalness": 0.5,
+          "map": false,
+          "normalMap": false
+        }
+      ],
+      "textures": [],
+      "animations": [],
+      "rig_deformation_probe": {
+        "bone": "calf_l",
+        "rotation_radians": 0.2,
+        "sampled_vertices": 202,
+        "max_world_vertex_displacement_m": 0.11538021233266253
+      },
+      "webgl_error": 0,
+      "render_calls": 3,
+      "render_triangles_with_ground": 4040,
+      "phases": [
+        {
+          "requested": "Idle",
+          "missing": true
+        },
+        {
+          "requested": "Walk",
+          "missing": true
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "model_http_responses": [
+    {
+      "url": "http://127.0.0.1:56861/models/astronaut_quaternius_2022.glb",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:56861/models/astronaut_mrlentereng.glb",
+      "status": 200
+    }
+  ]
+}
