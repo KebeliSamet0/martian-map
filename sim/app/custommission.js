@@ -56,6 +56,40 @@ export function nearestPassable(slope, [c, r], maxCells = 150) {
   return best ? { px: best.px, m: Math.round(best.d * RES_M) } : null;
 }
 
+// tur5:secim — A–B düz hattı boyunca eğim ≥ eşik olan hücrelerin oranı (0..1) ve hücre sırası; yalnız katman verisi.
+export function lineImpassable(slope, a, b) {
+  if (!slope) return null;
+  const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1])));
+  const hit = new Uint8Array(n + 1); let bad = 0;
+  for (let i = 0; i <= n; i++) {
+    const c = Math.round(a[0] + ((b[0] - a[0]) * i) / n), r = Math.round(a[1] + ((b[1] - a[1]) * i) / n);
+    const s = inGrid([c, r]) ? slope[r * GRID_W + c] : NaN;
+    if (!(s < IMPASSABLE_DEG)) { hit[i] = 1; bad++; }
+  }
+  return { fraction: bad / (n + 1), hit, samples: n + 1 };
+}
+
+// tur5:secim — A'dan B'ye yalnız eğim<20° hücrelerle (8 komşu) gidilebilir mi? Planlayıcının kalan kısıtlarını (kaya, güven) KATMAZ:
+// "false" kesin "eğim açısından yol yok"; "true" ise yalnız eğim açısından geçit var demektir.
+export function slopeReachable(slope, a, b) {
+  if (!slope || !inGrid(a) || !inGrid(b)) return null;
+  const ok = (i) => slope[i] < IMPASSABLE_DEG;
+  const s = a[1] * GRID_W + a[0], g = b[1] * GRID_W + b[0];
+  if (!ok(s) || !ok(g)) return false;
+  const seen = new Uint8Array(GRID_W * GRID_H), q = new Int32Array(GRID_W * GRID_H);
+  let h = 0, tl = 0; q[tl++] = s; seen[s] = 1;
+  while (h < tl) {
+    const i = q[h++]; if (i === g) return true;
+    const c = i % GRID_W, r = (i - c) / GRID_W;
+    for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+      if (!dc && !dr) continue;
+      const cc = c + dc, rr = r + dr; if (cc < 0 || rr < 0 || cc >= GRID_W || rr >= GRID_H) continue;
+      const j = rr * GRID_W + cc; if (!seen[j] && ok(j)) { seen[j] = 1; q[tl++] = j; }
+    }
+  }
+  return false;
+}
+
 /** Görev nesnesi (S1'in biçimi). sand başta yok: rota seçilince sandForRoute ile belirlenir. */
 export function buildCustomMission({ a, b, o2 = null, title = 'Özel görev' }) {
   if (!inGrid(a) || !inGrid(b)) throw new RangeError('A/B ızgara dışında');

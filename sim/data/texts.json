@@ -1143,6 +1143,38 @@
     "custom.zoom.hint": {
       "tr": "Fare tekerleği ile yakınlaştır, sürükleyerek kaydır; yakınlaşınca HiRISE doku karoları yüklenir.",
       "en": "Scroll to zoom, drag to pan; HiRISE texture tiles load when zoomed in."
+    },
+    "custom.snap": {
+      "tr": "{p} noktasını en yakın geçilebilir hücreye taşı",
+      "en": "Move point {p} to the nearest passable cell"
+    },
+    "custom.hover.ok": {
+      "tr": "geçilebilir",
+      "en": "passable"
+    },
+    "custom.hover.bad": {
+      "tr": "geçilmez (≥ 20°)",
+      "en": "impassable (≥ 20°)"
+    },
+    "custom.reach.none": {
+      "tr": "Eğim açısından yol yok: A ile B arasında 20°'nin altında kesintisiz bir geçit bulunmuyor. Başka bir nokta seç.",
+      "en": "No route by slope: there is no continuous corridor below 20° between A and B. Pick another point."
+    },
+    "custom.reach.detour": {
+      "tr": "Düz hattın %{pct}'i geçilmez eğimden (kırmızı) geçiyor; planlayıcı dolanır, rota düz hattan uzun olur.",
+      "en": "{pct}% of the straight line crosses impassable slope (red); the planner detours, so the route will be longer than the line."
+    },
+    "custom.reach.clear": {
+      "tr": "Düz hat boyunca eğim sınırı aşılmıyor. Kaya ve model güveni rota hesabında ayrıca değerlendirilir.",
+      "en": "The slope limit is not exceeded along the straight line. Rock density and model confidence are assessed in the route calculation."
+    },
+    "custom.quick.title": {
+      "tr": "Hızlı başlangıç",
+      "en": "Quick start"
+    },
+    "custom.quick.hint": {
+      "tr": "Hazır senaryolardan biriyle doğrudan brifinge geç.",
+      "en": "Jump straight to the briefing with a ready-made scenario."
     }
   },
   "helmetcam": {

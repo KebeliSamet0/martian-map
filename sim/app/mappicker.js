@@ -3,7 +3,7 @@
 // Hiçbir şey uydurulmaz: eğim ve belirsizlik planlayıcı katmanlarından; durak bilgisi /grid yanıtından. API yoksa seçim yapılabilir, uyarı verilmez.
 import { el, button } from './screens.js';
 import { t } from './i18n.js';
-import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
+import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, lineImpassable, slopeReachable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
 
 const ZOOM_MAX = 8, TILE_ZOOM_MIN = 1.5;   // 8× → 0,25 m/piksel karo dokusu (HiRISE)
 const CSS = `
@@ -23,6 +23,17 @@ const CSS = `
 .mm-picker .mp-zoom{display:flex;gap:6px;align-items:center}
 .mm-picker .mp-zoom button{min-width:38px}
 .mm-picker canvas.mp-drag{cursor:grabbing}
+.mm-picker.mp-embed{position:relative;inset:auto;z-index:auto;height:min(64vh,calc(100vh - 330px));min-height:380px;border:1px solid #2a303b;border-top:3px solid #f2a93b}
+.mm-picker.mp-embed{grid-template-rows:minmax(0,1fr)}
+.mm-picker.mp-embed .mm-picker-map{overflow:hidden;position:relative}
+.mm-picker.mp-embed canvas{position:absolute;inset:0;margin:auto;height:100%;width:auto;max-width:100%;max-height:100%;aspect-ratio:1/1}
+.mm-picker.mp-embed .mm-picker-side{padding:12px 14px;gap:8px}
+.mm-picker .mp-hover{font-size:13px;font-variant-numeric:tabular-nums;color:#cfd3da;min-height:1.4em}
+.mm-picker .mp-hover[data-ok="0"]{color:#ffb4a8}.mm-picker .mp-hover[data-ok="1"]{color:#8fe3a1}
+.mm-picker .mp-reach{font-size:13px;border-radius:8px;padding:8px 10px;border:1px solid #2a303b;background:#151a22}
+.mm-picker .mp-reach:empty{display:none}.mm-picker .mp-reach[data-lvl="bad"]{color:#ffb4a8;border-color:rgba(255,70,50,.35)}
+.mm-picker .mp-reach[data-lvl="warn"]{color:#ffd9a0;border-color:rgba(242,169,59,.4)}.mm-picker .mp-reach[data-lvl="ok"]{color:#8fe3a1}
+.mm-picker .mp-snap{display:flex;gap:6px;flex-wrap:wrap}.mm-picker .mp-snap:empty{display:none}
 @media(max-width:900px){.mm-picker{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}}
 `;
 
@@ -45,9 +56,9 @@ export async function loadPickerLayers(apiBase, call) {
  * Dönen: { close(), state(), setA(c,r), setB(c,r), compute() } (test kancası da window.__mm.picker olarak bağlanır).
  */
 export function openMapPicker(opts) {
-  const { root, geo, coords, overviewUrl, grid = {}, layers = {}, initial, onCompute, onBack } = opts;
+  const { root, geo, coords, overviewUrl, grid = {}, layers = {}, initial, onCompute, onBack, embedded = false } = opts;   // tur5:secim embedded: seçim ekranının içinde, tam ekran değil
   if (!document.getElementById('mm-picker-css')) { const s = document.createElement('style'); s.id = 'mm-picker-css'; s.textContent = CSS; document.head.append(s); }
-  const wrap = el('div', 'mm-picker'); wrap.dataset.testid = 'mappicker';
+  const wrap = el('div', 'mm-picker'); wrap.dataset.testid = 'mappicker'; if (embedded) wrap.classList.add('mp-embed');
   const cv = document.createElement('canvas'); cv.width = 1000; cv.height = 1000; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', t('custom.map.aria'));
   const side = el('aside', 'mm-picker-side');
   const mapBox = el('div', 'mm-picker-map'); mapBox.append(cv);
@@ -104,7 +115,7 @@ export function openMapPicker(opts) {
     for (let i = 0; i < arr.length; i++) { const px = fn(arr[i]); if (px) d.data.set(px, i * 4); }
     x.putImageData(d, 0, 0); return c;
   };
-  const impLayer = paintLayer(layers.slope, (s) => (s >= IMPASSABLE_DEG ? [255, 59, 48, 110] : null));
+  const impLayer = paintLayer(layers.slope, (s) => (s >= IMPASSABLE_DEG ? [255, 59, 48, 80] : null));
   const entLayer = paintLayer(layers.entropy, (e) => (e >= 0.6 ? [180, 120, 255, Math.round(40 + 90 * Math.min(1, (e - 0.6) / 0.4))] : null));
 
   function draw() {
@@ -124,7 +135,16 @@ export function openMapPicker(opts) {
       const [x, y] = toCanvas(s.px); g.strokeStyle = '#4fd1ff'; g.lineWidth = 3; g.fillStyle = 'rgba(79,209,255,.25)';
       g.beginPath(); g.arc(x, y, 9, 0, 7); g.fill(); g.stroke();
     }
-    if (st.a && st.b) { const [ax, ay] = toCanvas(st.a), [bx, by] = toCanvas(st.b); g.setLineDash([8, 6]); g.strokeStyle = '#f2a93b'; g.lineWidth = 2.5; g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke(); g.setLineDash([]); }
+    if (st.a && st.b) {
+      const [ax, ay] = toCanvas(st.a), [bx, by] = toCanvas(st.b); g.setLineDash([8, 6]); g.strokeStyle = '#f2a93b'; g.lineWidth = 2.5; g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+      const li = st.line;   // tur5:secim: düz hattın geçilmez (≥20°) kısımları kırmızı
+      if (li && li.fraction > 0) {
+        g.strokeStyle = '#ff3b30'; g.lineWidth = 4; g.setLineDash([]); g.beginPath();
+        for (let i = 0; i < li.samples; i++) if (li.hit[i]) { const f = i / (li.samples - 1), [x, y] = toCanvas([st.a[0] + (st.b[0] - st.a[0]) * f, st.a[1] + (st.b[1] - st.a[1]) * f]); g.moveTo(x - 0.1, y); g.lineTo(x + 0.1, y + 0.1); }
+        g.stroke();
+      }
+      g.setLineDash([]);
+    }
     for (const [p, label, fill] of [[st.a, 'A', '#0b0e13'], [st.b, 'B', '#f2a93b']]) {
       if (!p) continue; const [x, y] = toCanvas(p);
       g.beginPath(); g.arc(x, y, 13, 0, 7); g.fillStyle = fill; g.fill(); g.lineWidth = 3; g.strokeStyle = '#f2a93b'; g.stroke();
@@ -138,6 +158,9 @@ export function openMapPicker(opts) {
   const abLine = el('div', 'mm-num'); const etaLine = el('div', 'mp-eta'); etaLine.dataset.testid = 'mp-eta';
   const warnBox = el('div', 'mp-warn'); warnBox.dataset.testid = 'mp-warn'; warnBox.setAttribute('role', 'alert');
   const infoBox = el('div', 'mp-info'); infoBox.dataset.testid = 'mp-info';
+  const hoverBox = el('div', 'mp-hover'); hoverBox.dataset.testid = 'mp-hover';   // tur5:secim
+  const reachBox = el('div', 'mp-reach'); reachBox.dataset.testid = 'mp-reach';
+  const snapBox = el('div', 'mp-snap'); snapBox.dataset.testid = 'mp-snap';
   const toggles = el('div');
   const mkToggle = (key, label, avail = true) => {
     const l = document.createElement('label'), c = document.createElement('input'); c.type = 'checkbox'; c.checked = st.layersOn[key]; c.disabled = !avail;
@@ -160,7 +183,8 @@ export function openMapPicker(opts) {
   zin.onclick = () => zoomAt(0.5, 0.5, 1.6); zout.onclick = () => zoomAt(0.5, 0.5, 1 / 1.6); zreset.onclick = () => { view.x0 = 0; view.y0 = 0; view.w = GRID_W; draw(); };
   const row = el('div', 'mp-row'); row.append(compute, share, back);
   const note = el('div', 'mp-fine', t('custom.eta.note'));
-  side.append(title, help, zoomRow, zoomHint, abLine, etaLine, warnBox, infoBox, toggles, o2Box, o2Hint, row, note);
+  if (embedded) back.hidden = true;
+  side.append(title, help, row, hoverBox, abLine, etaLine, warnBox, snapBox, reachBox, infoBox, toggles, o2Box, o2Hint, zoomRow, zoomHint, note);   // tur5:secim: Rotaları hesapla kıvrımın altında kalmasın
 
   const fmt = (p) => (p ? `${p[0]}, ${p[1]}` : '—');
   function stopInfo(p) {
@@ -186,6 +210,21 @@ export function openMapPicker(opts) {
     }
     if (st.a && st.b && straightMeters(st.a, st.b) < MIN_STRAIGHT_M) { warn += (warn ? ' ' : '') + t('custom.warn.short'); blocked = true; }
     st.warn = warn; warnBox.textContent = warn;
+    // tur5:secim: anında geçerlilik — taşı düğmesi, düz hat geçilmezlik oranı, eğim açısından erişilebilirlik
+    snapBox.replaceChildren();
+    for (const [name, key, which] of [['A', 'nearA', 'a'], ['B', 'nearB', 'b']]) {
+      if (!st[key]) continue;
+      const b = button(t('custom.snap', { p: name }), 'ghost'); b.dataset.testid = `mp-snap-${which}`;
+      b.onclick = () => setPoint(which, st[key][0], st[key][1]); snapBox.append(b);
+    }
+    st.line = null; st.reach = null; reachBox.textContent = ''; reachBox.dataset.lvl = '';
+    if (st.a && st.b && layers.slope && !blocked) {
+      st.line = lineImpassable(layers.slope, st.a, st.b); st.reach = slopeReachable(layers.slope, st.a, st.b);
+      const pct = Math.round(st.line.fraction * 100);
+      if (st.reach === false) { reachBox.dataset.lvl = 'bad'; reachBox.textContent = t('custom.reach.none'); blocked = true; }
+      else if (pct > 0) { reachBox.dataset.lvl = 'warn'; reachBox.textContent = t('custom.reach.detour', { pct }); }
+      else { reachBox.dataset.lvl = 'ok'; reachBox.textContent = t('custom.reach.clear'); }
+    }
     if (st.a && st.b) { const m = straightMeters(st.a, st.b); etaLine.textContent = t('custom.eta', { m: Math.round(m), min: etaMinutes(m).toFixed(0) }); } else etaLine.textContent = '';
     st.info = st.b ? stopInfo(st.b) : ''; infoBox.textContent = st.info;
     compute.disabled = !(st.a && st.b) || blocked;
@@ -215,7 +254,12 @@ export function openMapPicker(opts) {
   cv.addEventListener('wheel', (e) => { e.preventDefault(); const [fx, fy] = frac(e); zoomAt(fx, fy, e.deltaY < 0 ? 1.25 : 1 / 1.25); }, { passive: false });
   let drag = null, moved = false;
   cv.addEventListener('pointerdown', (e) => { if (e.button !== 0) return; drag = { x: e.clientX, y: e.clientY, x0: view.x0, y0: view.y0 }; moved = false; });
-  cv.addEventListener('pointermove', (e) => {
+  cv.addEventListener('pointermove', (e) => {   // tur5:secim: imleç altındaki hücrenin eğimi ve geçerliliği
+    if (!drag && layers.slope) {
+      const rc = cv.getBoundingClientRect(), [c, r] = toPx(((e.clientX - rc.left) / rc.width) * cv.width, ((e.clientY - rc.top) / rc.height) * cv.height), ci = cellInfo(layers.slope, [c, r]);
+      hoverBox.dataset.ok = ci.outside ? '' : ci.ok ? '1' : '0';
+      hoverBox.textContent = ci.outside ? '' : `${c}, ${r} · ${Number.isFinite(ci.slope) ? ci.slope.toFixed(1) : '—'}° · ${t(ci.ok ? 'custom.hover.ok' : 'custom.hover.bad')}`;
+    }
     if (!drag) return; const rc = cv.getBoundingClientRect(), dx = e.clientX - drag.x, dy = e.clientY - drag.y;
     if (!moved && Math.hypot(dx, dy) < 5) return;
     moved = true; cv.classList.add('mp-drag'); try { cv.setPointerCapture(e.pointerId); } catch {}
@@ -228,14 +272,14 @@ export function openMapPicker(opts) {
     const rc = cv.getBoundingClientRect(); const [c, r] = toPx(((e.clientX - rc.left) / rc.width) * cv.width, ((e.clientY - rc.top) / rc.height) * cv.height);
     setPoint(st.next, c, r);
   });
-  const onKey = (e) => { if (e.code === 'Escape') { close(); onBack?.(); } };
+  const onKey = (e) => { if (!embedded && e.code === 'Escape') { close(); onBack?.(); } };
   addEventListener('keydown', onKey);
   function close() { removeEventListener('keydown', onKey); wrap.remove(); if (window.__mm?.picker === api) delete window.__mm.picker; }
 
   const api = { close, view: () => ({ ...view, zoom: zoomOf() }), zoomBy: (f, fx = 0.5, fy = 0.5) => zoomAt(fx, fy, f), setA: (c, r) => setPoint('a', c, r), setB: (c, r) => setPoint('b', c, r), compute: doCompute, shareUrl,
     state: () => ({ a: st.a, b: st.b, o2: st.o2, warn: st.warn, info: st.info, straightM: st.a && st.b ? straightMeters(st.a, st.b) : null,
-      etaMin: st.a && st.b ? etaMinutes(straightMeters(st.a, st.b)) : null, canCompute: !compute.disabled, nearA: st.nearA ?? null, nearB: st.nearB ?? null }) };
+      etaMin: st.a && st.b ? etaMinutes(straightMeters(st.a, st.b)) : null, canCompute: !compute.disabled, nearA: st.nearA ?? null, nearB: st.nearB ?? null, lineFraction: st.line?.fraction ?? null, reachable: st.reach ?? null }) };
   window.__mm = window.__mm ?? {}; window.__mm.picker = api;
-  refresh(); compute.focus();
+  refresh(); if (!embedded) compute.focus();
   return api;
 }
