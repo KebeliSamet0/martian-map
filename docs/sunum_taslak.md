@@ -2,7 +2,7 @@
 
 Hazırlayan: Elif Nisa · 2026-11-15 (v3: Batu'nun iddia denetimine göre düzeltildi, `docs/data/ekip/sunum_denetimi.md`) · Sunum: Paz ~21:00 · Slayt metinleri İngilizce (jüri), notlar Türkçe.
 Ürün tanımı: **"astronaut mission rehearsal simulator"** (bir EVA prova prototipi). Sunumda "oyun" ya da "game" kelimesi geçmiyor.
-Söylenmeyecekler (denetimde YASAK): "NASA onayladı", "güvenli rota garantisi", "60 µGy NASA limiti", "25° NASA'nın insan eşiği", "hatalar hep güvenli yönde", gerçek GPU FPS sayısı.
+Söylenmeyecekler (denetimde YASAK): "NASA onayladı", "güvenli rota garantisi", "60 µGy NASA limiti", "20° Mars için doğrulanmış insan sınırı" (20° Ay ConOps gereksinimi), "hatalar hep güvenli yönde", gerçek GPU FPS sayısı.
 
 > **1 dakikalık özet (bitti koşulu):** Astronotun Mars'taki bir yürüyüşü, yapılmadan önce prova edebileceği bir
 > simülatör prototipi geliştirdik. Astronot görev brifingini alır, haritada üç rotadan birini seçer; her rotanın süre,
@@ -161,7 +161,7 @@ Not: Altyazı seslendirme metniyle aynı. Ekran kaydı demo bilgisayarında, ger
 - EVA limits used by the app: 6 h, 2000 kcal, 420 L O₂, 30 min science stop, 30 min reserve.
 - For context, not our mission limits (`docs/eva_parameters.md`): 7 h and 1800 kcal (Apollo 15–17 life support), walk-back ≤ 3.5 km (a conditional proposal in a NASA Mars suit study, Ogilvie et al. 2026). 420 L O₂ is a planning value, not a measured suit capacity.
 - Radiation dose budget per EVA (60 µGy): demonstration planning value, not a NASA per-EVA limit (`docs/data/rad_rems_route.md`).
-- Slope thresholds (15° caution, 25° no-go; 12° no-go on sand) and scanner thresholds are planning assumptions, not validated human limits for Mars (`api/planner/params.py`).
+- Slope thresholds: 15° caution (Artemis south-pole traverse planning, Acta Astronautica 2023) and 20° no-go (NASA EVA lunar surface ConOps, EVA-EXP-0075: suited walking up to 20°). Both are **lunar** sources; Mars gravity is ~2.3× the Moon's, so they are planning thresholds, not validated human limits for Mars. 12° no-go on sand and the scanner thresholds remain our assumptions (`api/planner/params.py`, `docs/eva_parameters.md`).
 - Rock cover: small rocks (< 1 m, below HiRISE resolution) are missed, while outcrop and shadow false alarms can inflate it; both effects exist.
 - Terrain model: trained on AI4Mars (Curiosity Navcam, 2012–2019), applied to 391 Navcam frames at 128 rover stops in our area. Under our propagation method 64.6% of cells exceed the uncertainty threshold (entropy ≥ 0.6; this is not direct image coverage). Far from the stops the probabilities approach an uninformative distribution, and the interface shows an uncertainty warning. The 200 m / 800 m propagation distances are modelling choices. The model under-reports sand (2 of 7 checked stops).
 

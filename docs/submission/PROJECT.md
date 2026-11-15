@@ -61,7 +61,7 @@ Short model summary: [`MODEL_CARD.md`](MODEL_CARD.md). We report what held and w
 - **Rock cover is partly ridge shadow.** 120 of the 123 largest detections are outcrops or shadows; `rock_cfa` was not regenerated this round (needs the 25 cm source). [`ml/orbital/VALIDATION.md` §6]
 - **Confidence does not flag errors.** Stop-level uncertainty is the same for hits and misses (0.21 vs 0.18). [`MODEL_CARD.md`]
 - **Terrain model domain shift.** Trained on Curiosity Navcam 2012–2019; there are no expert labels for the 2025 boxwork area. It over-calls large rock on textured outcrops and under-calls sand. [`ml/rover_terrain/METRICS.md`]
-- **2 m DEM exaggerates ridge-edge slopes** (35 cells on Curiosity's own track read above the no-go threshold), so red does not always mean dangerous. [`docs/validation_msl.md` §4]
+- **2 m DEM exaggerates ridge-edge slopes** (in the older 25° run, 35 cells on Curiosity's own track already read above the no-go threshold; with 20° there are more), so red does not always mean dangerous. [`docs/validation_msl.md` §4]
 - **Rock cover:** rocks < 1 m are missed (HiRISE resolution), while outcrop and shadow false alarms can inflate cover; both effects exist. [`ml/orbital/VALIDATION.md` §3b, §6]
 - The simulator is not a flight or operations approval tool.
 

@@ -29,7 +29,7 @@ Hazırlayan: Elif Nisa · 2026-11-14 · İlgili kod: `api/planner/params.py` (Sa
 | Bilim durağı süresi | `SCIENCE_STOP_MIN` | 30 dk | 30 dk (değişmez) | Kaynak bulunamadı | ⚠️ VARSAYIM |
 | Mars yerçekimi | `G_MARS` | 3.71 m/s² | 3.71 (değişmez) | Dünya'nın ~3/8'i (Ogilvie vd. 2026) | ✅ |
 
-Kapsam dışı (bu belge ele almıyor): eğim sınırları (`SLOPE_*`), radyasyon bütçesi (`EVA_MAX_DOSE_UGY`).
+Kapsam dışı (bu belge ele almıyor): radyasyon bütçesi (`EVA_MAX_DOSE_UGY`). Eğim sınırları (`SLOPE_*`) sonda, "Eğim eşikleri" bölümünde.
 
 ## 2. Önemli uyarılar (sunumda dürüst olmak için)
 
