@@ -1184,10 +1184,6 @@
       "tr": "geçilmez (≥ 20°)",
       "en": "impassable (≥ 20°)"
     },
-    "custom.reach.none": {
-      "tr": "Eğim açısından yol yok: A ile B arasında 20°'nin altında kesintisiz bir geçit bulunmuyor. Başka bir nokta seç.",
-      "en": "No route by slope: there is no continuous corridor below 20° between A and B. Pick another point."
-    },
     "custom.reach.detour": {
       "tr": "Düz hattın %{pct}'i geçilmez eğimden (kırmızı) geçiyor; planlayıcı dolanır, rota düz hattan uzun olur.",
       "en": "{pct}% of the straight line crosses impassable slope (red); the planner detours, so the route will be longer than the line."
@@ -1203,6 +1199,14 @@
     "custom.quick.hint": {
       "tr": "Hazır senaryolardan biriyle doğrudan brifinge geç.",
       "en": "Jump straight to the briefing with a ready-made scenario."
+    },
+    "custom.warn.island": {
+      "tr": "Bu hücrenin eğimi {slope}° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; buradan hedefe yol bulunamaz. Ana bölgedeki en yakın nokta {m} m uzakta.",
+      "en": "The slope of this cell is {slope}° (below the threshold) but it sits on a small island cut off from the main passable region, so no route can reach it. The nearest point in the main region is {m} m away."
+    },
+    "custom.warn.island.none": {
+      "tr": "Bu hücrenin eğimi {slope}° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; yakında ana bölgeden nokta bulunamadı.",
+      "en": "The slope of this cell is {slope}° (below the threshold) but it sits on a small island cut off from the main passable region; no point of the main region was found nearby."
     }
   },
   "helmetcam": {
