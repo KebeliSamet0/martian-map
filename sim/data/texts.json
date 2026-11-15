@@ -712,6 +712,42 @@
       "mask_label": {
           "tr": "Model maskesi (tahmin, yarı saydam)",
           "en": "Model mask (prediction, semi-transparent)"
+      },
+      "dir_label": {
+          "tr": "Fotoğraf bu yöne çekildi: {az}° ({card}), yükseklik {el}°, görüş açısı {fov}°",
+          "en": "Photo taken facing {az}° ({card}), elevation {el}°, field of view {fov}°"
+      },
+      "dir_unknown": {
+          "tr": "Bu karenin bakış yönü bilinmiyor.",
+          "en": "The viewing direction of this frame is unknown."
+      },
+      "dir_source": {
+          "tr": "Yön: rover duruşu + mast azimutu (NASA kamera modeli). Kuzeyden saat yönünde.",
+          "en": "Direction: rover attitude + mast azimuth (NASA camera model), clockwise from north."
+      },
+      "btn_align": {
+          "tr": "Bu yöne bak (V)",
+          "en": "Look this way (V)"
+      },
+      "btn_back": {
+          "tr": "Geri dön (V)",
+          "en": "Back (V)"
+      },
+      "lbl_real": {
+          "tr": "gerçek",
+          "en": "real"
+      },
+      "lbl_sim": {
+          "tr": "simülasyon",
+          "en": "simulation"
+      },
+      "wipe_hint": {
+          "tr": "Sürgü: ◀ ▶ ya da sürükle",
+          "en": "Slider: ◀ ▶ or drag"
+      },
+      "align_note": {
+          "tr": "Yakın alan DTM çözünürlüğü (1 m) ve sentetik kayalar yüzünden farklı görünür; ufuk ve büyük yer şekillerini karşılaştır. ▲▼ kare, ◀ ▶ sürgü.",
+          "en": "Near ground differs (1 m DTM, synthetic rocks); compare the skyline and large landforms. ▲▼ frame, ◀ ▶ slider."
       }
   },
   "insight": {

@@ -80,3 +80,30 @@ export function imageCandidates(stop, dataBase) {
 export function localFallback(stop, dataBase) {
   return stop.local ? [{ name: `${stop.stop_id}.jpg`, sol: stop.sol, url: `${dataBase}navcam/${stop.stop_id}.jpg`, mask: null, local: true }] : [];
 }
+
+/** sim/data/navcam_dirs.json → { <görüntü adı>: {az_deg, el_deg, fov_deg, ...} } (az null = bilinmiyor). */
+export async function loadDirs(url, fetcher = fetch) {
+  const r = await fetcher(url); if (!r.ok) throw new Error(`navcam_dirs ${r.status}`);
+  return (await r.json()).frames;
+}
+
+/** Yön geçerli mi (uydurma yok: az/el/fov hepsi sayı olmalı). */
+export const hasDir = (d) => !!d && [d.az_deg, d.el_deg, d.fov_deg].every((v) => typeof v === 'number' && Number.isFinite(v));
+
+const CARD = ['K', 'KD', 'D', 'GD', 'G', 'GB', 'B', 'KB'], CARD_EN = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+export const cardinal = (az, en = false) => (en ? CARD_EN : CARD)[Math.round((((az % 360) + 360) % 360) / 45) % 8];
+
+/** Görüş konisi: durağın (x,z) dünya noktasından az (kuzeyden saat yönü; sim: kuzey = −z, doğu = +x) yönünde FOV genişliğinde yelpaze. [[x,z],...] (ilk nokta merkez). */
+export function fanPoints(x, z, azDeg, fovDeg, radius, steps = 24) {
+  const pts = [[x, z]];
+  for (let i = 0; i <= steps; i++) {
+    const a = ((azDeg - fovDeg / 2 + (fovDeg * i) / steps) * Math.PI) / 180;
+    pts.push([x + Math.sin(a) * radius, z - Math.cos(a) * radius]);
+  }
+  return pts;
+}
+
+/** Hizalama: kamera yaw/pitch (radyan) ve dikey fov — kare fotoğraf ekran yüksekliğini kaplar (aspect ≥ 1), bu yüzden dikey fov = fotoğraf fov'u. */
+export function alignView(d) {
+  return { yaw: (d.az_deg * Math.PI) / 180, pitch: (d.el_deg * Math.PI) / 180, fov: d.fov_deg };
+}

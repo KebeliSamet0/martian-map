@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadManifest } from '../app/helmetcam-core.js';
+import { nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadManifest, loadDirs, hasDir, cardinal, fanPoints, alignView } from '../app/helmetcam-core.js';
 
 const texts = JSON.parse(await readFile(new URL('../data/texts.json', import.meta.url)));
 const tr = (g) => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v.tr]));
@@ -63,4 +63,40 @@ test('olay gövdesi ve görüntü adayları', () => {
 test('loadManifest in_grid dışını eler', async () => {
   const f = async () => ({ ok: true, json: async () => ({ stops: [{ in_grid: true, stop_id: 'a' }, { in_grid: false, stop_id: 'b' }] }) });
   assert.deepEqual((await loadManifest('u', f)).map((s) => s.stop_id), ['a']);
+});
+
+const dirs = JSON.parse(await readFile(new URL('../data/navcam_dirs.json', import.meta.url))).frames;
+
+test('yönler: her kare için az/el/fov; az kuzeyden saat yönü, fov Navcam ~45°, null uydurulmaz', () => {
+  const names = man.stops.flatMap((s) => s.files.map((f) => f.name));
+  assert.equal(Object.keys(dirs).length, names.length);
+  for (const n of names) {
+    const d = dirs[n]; assert.ok(d, n);
+    if (d.az_deg === null) { assert.equal(d.el_deg, null); assert.equal(d.fov_deg, null); assert.equal(d.kaynak, null); continue; }
+    assert.ok(d.az_deg >= 0 && d.az_deg < 360 && d.el_deg > -90 && d.el_deg < 30 && d.fov_deg > 40 && d.fov_deg < 50, n);
+    assert.ok(hasDir(d));
+  }
+  assert.equal(hasDir({ az_deg: null, el_deg: null, fov_deg: null }), false);
+});
+
+test('yön doğrulaması: kuaterniyonlu azimut = rover azimutu + rover yaw; seviye pan çerçevelerinde site yüksekliği sabit', () => {
+  const wrap = (a) => ((a % 360) + 360) % 360, diff = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+  const st = man.stops.find((s) => s.stop_id === 'msl_s120_d0934');
+  const els = st.files.map((f) => dirs[f.name]);
+  for (const d of els) assert.ok(diff(d.az_deg, wrap(d.az_rover_deg + d.rover_yaw_deg)) < 12);   // yaw'ın eğim etkisiyle fark küçük
+  assert.ok(Math.max(...els.map((d) => d.el_deg)) - Math.min(...els.map((d) => d.el_deg)) < 0.5);   // aynı pan: dünya yüksekliği sabit
+});
+
+test('koni, pusula adı ve hizalama', () => {
+  assert.equal(cardinal(0), 'K'); assert.equal(cardinal(350), 'K'); assert.equal(cardinal(95), 'D'); assert.equal(cardinal(95, true), 'E'); assert.equal(cardinal(225), 'GB');
+  const f = fanPoints(100, 200, 90, 40, 50, 4);   // doğu (+x) yönünde 40° yelpaze
+  assert.deepEqual(f[0], [100, 200]); assert.equal(f.length, 6);
+  const mid = f[3]; assert.ok(Math.abs(mid[1] - 200) < 1e-9 && Math.abs(mid[0] - 150) < 1e-9);   // merkez ışın tam doğu
+  const n = fanPoints(0, 0, 0, 0, 10, 1)[1]; assert.ok(Math.abs(n[0]) < 1e-9 && Math.abs(n[1] + 10) < 1e-9);   // kuzey = −z
+  const v = alignView({ az_deg: 90, el_deg: -20, fov_deg: 45.4 }); assert.ok(Math.abs(v.yaw - Math.PI / 2) < 1e-9 && Math.abs(v.pitch + (20 * Math.PI) / 180) < 1e-9 && v.fov === 45.4);
+});
+
+test('loadDirs', async () => {
+  const f = async () => ({ ok: true, json: async () => ({ frames: { a: { az_deg: 1 } } }) });
+  assert.deepEqual(await loadDirs('u', f), { a: { az_deg: 1 } });
 });

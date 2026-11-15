@@ -4,10 +4,12 @@
 // Olay sözleşmesi (window CustomEvent):
 //   mm:camera-insight  detail { stopId, classFrac, entropy, warn, kinds, aheadM }   kamera bir durakta açıldığında (replan kararı Veysel'de)
 //   mm:helmetcam       detail { open: bool, stopId }                                   açılış/kapanış; Navcam kartını gizlemek için
+//   mm:helmetcam-view  detail { on: bool, stopId, az, el, fov }                        V ile hizalama (gerçek/simülasyon karşılaştırması) açıldı/kapandı
 import { loadTexts } from './screens.js';
-import { API_BASE, API_OFF, GRID, worldToPx } from './api.js';
+import { API_BASE, API_OFF, GRID, worldToPx, pxToWorld } from './api.js';
 import { sampleField, sharedField } from './insight.js';
-import { loadManifest, nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf } from './helmetcam-core.js';
+import { showCone, clearCone } from './helmetcam-3d.js';
+import { loadManifest, nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadDirs, hasDir, cardinal, alignView } from './helmetcam-core.js';
 
 const lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'tr';
 const pick = (v) => (v && typeof v === 'object' && 'tr' in v ? (v[lang] ?? v.tr) : v);
@@ -16,11 +18,12 @@ const fmt = (tpl, vars) => String(tpl).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?
 const mm = () => window.__mm;
 const emit = (name, detail) => window.dispatchEvent(new CustomEvent(name, { detail }));
 
-const S = { stops: null, T: null, walking: false, timer: 0, card: null, hint: null, open: null, field: null, loading: null, noPhotoT: 0 };
+const S = { stops: null, T: null, walking: false, timer: 0, card: null, hint: null, open: null, field: null, dirs: {}, align: null, loading: null, noPhotoT: 0 };
 const ready = () => (S.loading ??= (async () => {
   const all = await loadTexts();
   S.T = Object.fromEntries(Object.entries(all.helmetcam ?? {}).map(([k, v]) => [k, pick(v)]));
   S.stops = await loadManifest(new URL('navcam_manifest.json', DATA).href);
+  S.dirs = await loadDirs(new URL('navcam_dirs.json', DATA).href).catch(() => ({}));
   if (!API_OFF) S.field = await sharedField(API_BASE, { w: GRID.w, h: GRID.h }).catch(() => null);
 })().catch((e) => { console.warn('[helmetcam]', e); S.stops = []; }));
 
@@ -35,8 +38,75 @@ const line = (txt, css = '') => `<div style="margin-top:5px;${css}">${txt}</div>
 const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
 function close() {
-  if (!S.open) { if (S.card) S.card.hidden = true; return; }
+  exitAlign();
+  if (!S.open) { if (S.card) S.card.hidden = true; clearCone(); return; }
+  clearCone();
   const id = S.open.stop.stop_id; S.open = null; S.card.hidden = true; emit('mm:helmetcam', { open: false, stopId: id });
+}
+
+// ---- yön: pusula, 3B koni, hizalama (V) ----
+const stopWorld = (st) => pxToWorld(mm().geo, st.px[0], st.px[1]);
+function dirBlock(o, c) {
+  const T = S.T, d = S.dirs[c.name];
+  if (!hasDir(d)) return line(esc(T.dir_unknown), 'font-size:11px;opacity:.7');
+  return `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><canvas class="mm-hc-compass" width="84" height="84" style="flex:none"></canvas><div>` +
+    `<div style="font-weight:600;color:#ffd9b8">${esc(fmt(T.dir_label, { az: Math.round(d.az_deg), card: cardinal(d.az_deg, lang === 'en'), el: Math.round(d.el_deg), fov: Math.round(d.fov_deg) }))}</div>` +
+    `<button class="mm-hc-align" style="margin-top:4px">${esc(T.btn_align)}</button>` +
+    `<div style="font-size:11px;opacity:.65;margin-top:3px">${esc(T.dir_source)}</div></div></div>`;
+}
+function drawCompass(cv, d) {
+  if (!cv || !hasDir(d)) return;
+  const g = cv.getContext('2d'), R = 38, cx = 42, cy = 42, rad = (a) => ((a - 90) * Math.PI) / 180;   // 0° = yukarı (kuzey)
+  g.clearRect(0, 0, 84, 84); g.strokeStyle = 'rgba(243,227,211,.55)'; g.lineWidth = 1; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
+  g.fillStyle = 'rgba(255,178,122,.38)'; g.beginPath(); g.moveTo(cx, cy); g.arc(cx, cy, R, rad(d.az_deg - d.fov_deg / 2), rad(d.az_deg + d.fov_deg / 2)); g.closePath(); g.fill();   // FOV konisi
+  g.strokeStyle = '#ffd9b8'; g.lineWidth = 2; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.cos(rad(d.az_deg)) * R, cy + Math.sin(rad(d.az_deg)) * R); g.stroke();   // bakış oku
+  g.fillStyle = '#f3e3d3'; g.font = '10px system-ui'; g.textAlign = 'center'; g.fillText(lang === 'en' ? 'N' : 'K', cx, 11);
+}
+function showDirCone(st, d) {
+  clearCone(); const m = mm(); if (!hasDir(d) || !m?.T?.scene || !m.nav) return;
+  const w = stopWorld(st); showCone({ scene: m.T.scene, heightAt: (x, z) => m.nav.heightAt(x, z), x: w[0], z: w[1], azDeg: d.az_deg, fovDeg: d.fov_deg });
+}
+function enterAlign() {
+  const o = S.open, m = mm(); if (!o || !m?.T?.camera) return; const c = o.cands[o.i], d = S.dirs[c.name]; if (!hasDir(d)) return;
+  const cam = m.T.camera, w = stopWorld(o.stop), v = alignView(d), saved = S.align?.savedFov ?? cam.fov;
+  const W = innerWidth, H = innerHeight, side = Math.min(W, H), vf = (2 * Math.atan(Math.tan((v.fov * Math.PI) / 360) * (H / side)) * 180) / Math.PI;
+  S.align = { savedFov: saved, wipe: S.align?.wipe ?? 0.5 };
+  window.__viewLock = (P) => { P.x = w[0]; P.z = w[1]; P.yaw = v.yaw; P.pitch = v.pitch; if (Math.abs(cam.fov - vf) > 1e-6) { cam.fov = vf; cam.updateProjectionMatrix(); } };
+  S.card.hidden = true; renderAlign(c, side);
+  emit('mm:helmetcam-view', { on: true, stopId: o.stop.stop_id, az: d.az_deg, el: d.el_deg, fov: d.fov_deg });
+}
+function exitAlign() {
+  if (!S.align) return; const cam = mm()?.T?.camera;
+  window.__viewLock = null; if (cam) { cam.fov = S.align.savedFov; cam.updateProjectionMatrix(); }
+  S.alignEl?.remove(); S.alignEl = null; const id = S.open?.stop.stop_id; S.align = null;
+  if (S.card && S.open) S.card.hidden = false;
+  emit('mm:helmetcam-view', { on: false, stopId: id });
+}
+function renderAlign(c, side = Math.min(innerWidth, innerHeight)) {
+  const T = S.T, A = S.align, o = S.open; S.alignEl?.remove();
+  const root = document.createElement('div'); Object.assign(root.style, { position: 'fixed', inset: '0', zIndex: 28, pointerEvents: 'none' });
+  const left = (innerWidth - side) / 2, wx = left + side * A.wipe;
+  root.innerHTML =
+    `<div class="mm-hc-photo" style="position:absolute;left:${left}px;top:${(innerHeight - side) / 2}px;width:${side}px;height:${side}px;clip-path:inset(0 ${(1 - A.wipe) * 100}% 0 0);overflow:hidden;background:#000">` +
+    `<img src="${esc(c.url)}" alt="Curiosity Navcam, sol ${c.sol}" style="width:100%;height:100%;display:block"></div>` +
+    `<div class="mm-hc-bar" style="position:absolute;left:${wx - 1}px;top:${(innerHeight - side) / 2}px;height:${side}px;width:2px;background:#ffd9b8;box-shadow:0 0 8px rgba(0,0,0,.6)"></div>` +
+    `<div class="mm-hc-knob" title="${esc(T.wipe_hint)}" style="position:absolute;left:${wx - 16}px;top:${innerHeight / 2 - 16}px;width:32px;height:32px;border-radius:50%;background:rgba(14,10,8,.85);border:2px solid #ffd9b8;color:#ffd9b8;font:14px/28px system-ui;text-align:center;cursor:ew-resize;pointer-events:auto;touch-action:none">↔</div>` +
+    `<div style="position:absolute;left:${left + 10}px;top:${(innerHeight - side) / 2 + 8}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#f3e3d3;font:12px system-ui">${esc(T.lbl_real)} · ${esc(fmt(T.source_img, { sol: c.sol }))}</div>` +
+    `<div style="position:absolute;right:${left + 10}px;top:${(innerHeight - side) / 2 + 8}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#f3e3d3;font:12px system-ui">${esc(T.lbl_sim)}</div>` +
+    `<div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;background:rgba(14,10,8,.88);color:#f3e3d3;font:12px system-ui;pointer-events:auto;max-width:94vw;flex-wrap:wrap;justify-content:center">` +
+    (o.cands.length > 1 ? `<button class="mm-hc-prev">▲</button><span>${esc(fmt(T.frame, { i: o.i + 1, n: o.cands.length }))}</span><button class="mm-hc-next">▼</button>` : '') +
+    `<button class="mm-hc-back">${esc(T.btn_back)}</button><span style="opacity:.7;max-width:46ch">${esc(T.align_note)}</span></div>`;
+  document.body.append(root); S.alignEl = root;
+  const setWipe = (f) => { A.wipe = Math.max(0, Math.min(1, f)); const x = left + side * A.wipe; root.querySelector('.mm-hc-photo').style.clipPath = `inset(0 ${(1 - A.wipe) * 100}% 0 0)`; root.querySelector('.mm-hc-bar').style.left = `${x - 1}px`; root.querySelector('.mm-hc-knob').style.left = `${x - 16}px`; };
+  A.setWipe = setWipe;
+  const knob = root.querySelector('.mm-hc-knob');
+  knob.onpointerdown = (e) => { knob.setPointerCapture(e.pointerId); knob.onpointermove = (ev) => setWipe((ev.clientX - left) / side); knob.onpointerup = () => { knob.onpointermove = null; }; };
+  root.querySelector('.mm-hc-back').onclick = () => exitAlign();
+  root.querySelector('.mm-hc-prev')?.addEventListener('click', () => stepFrame(-1)); root.querySelector('.mm-hc-next')?.addEventListener('click', () => stepFrame(1));
+}
+function stepFrame(dir) {
+  const o = S.open; if (!o || !S.align) return; o.i = (o.i + dir + o.cands.length) % o.cands.length;
+  if (hasDir(S.dirs[o.cands[o.i].name])) { renderStop(); S.card.hidden = true; enterAlign(); } else { renderStop(); exitAlign(); }
 }
 
 function renderStop() {
@@ -47,7 +117,7 @@ function renderStop() {
     `<span><span class="mm-hc-frame" style="opacity:.75;font-size:12px">${o.cands.length > 1 ? esc(fmt(T.frame, { i: o.i + 1, n: o.cands.length })) : ''}</span> <button class="mm-hc-x" style="margin-left:8px">${esc(T.close)}</button></span></div>` +
     `<div style="position:relative;margin-top:6px;background:#000;text-align:center"><img class="mm-hc-img" alt="Curiosity Navcam, sol ${c.sol}" style="max-width:100%;max-height:46vh;display:block;margin:0 auto">` +
     `<img class="mm-hc-mask" alt="" hidden style="position:absolute;inset:0;margin:auto;max-width:100%;max-height:46vh;opacity:.5;pointer-events:none"></div>` +
-    line(esc(fmt(T.source_img, { sol: c.sol })), 'font-size:11px;opacity:.8') + line(esc(T.source_model), 'font-size:11px;opacity:.8') +
+    line(esc(fmt(T.source_img, { sol: c.sol })), 'font-size:11px;opacity:.8') + line(esc(T.source_model), 'font-size:11px;opacity:.8') + dirBlock(o, c) +
     line(`<b>${esc(r.text)}</b>`) + line(esc(fmt(T.certainty_line, { c: Math.round(r.certainty * 100) })), 'font-size:11px;opacity:.75') +
     (r.warn ? line(esc(r.warnText), 'color:#ffb4ad;font-weight:600') : '') + (ahead ? line(esc(ahead), 'color:#ffb4ad') : '') +
     (r.sandNote ? line(esc(T.sand_note), 'font-size:11px;opacity:.65') : '') +
@@ -61,6 +131,9 @@ function renderStop() {
   img.src = c.url;
   if (c.mask) { mask.onload = () => { mask.hidden = false; const l = el.querySelector('.mm-hc-masklabel'); if (l) l.hidden = false; }; mask.onerror = () => { mask.hidden = true; }; mask.src = c.mask; }   // maske yoksa gizli
   el.querySelector('.mm-hc-x').onclick = close;
+  const ab = el.querySelector('.mm-hc-align'); if (ab) ab.onclick = enterAlign;
+  drawCompass(el.querySelector('.mm-hc-compass'), S.dirs[c.name]);
+  showDirCone(st, S.dirs[c.name]);
   el.hidden = false;
 }
 
@@ -110,6 +183,9 @@ addEventListener('keydown', (e) => {
   if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName ?? '')) return;
   try { if (mm()?.stats().state === 'fly') return; } catch { /* henüz yok */ }
   if (e.code === 'KeyC') { e.stopImmediatePropagation(); if (S.open || (S.card && !S.card.hidden)) { close(); if (S.card) S.card.hidden = true; } else void openCamera(); }
+  else if (S.open && e.code === 'KeyV') { e.stopImmediatePropagation(); e.preventDefault(); if (S.align) exitAlign(); else enterAlign(); }
+  else if (S.align && (e.code === 'ArrowLeft' || e.code === 'ArrowRight')) { e.stopImmediatePropagation(); e.preventDefault(); S.align.setWipe(S.align.wipe + (e.code === 'ArrowRight' ? 0.04 : -0.04)); }
+  else if (S.align && (e.code === 'ArrowUp' || e.code === 'ArrowDown') && S.open.cands.length > 1) { e.stopImmediatePropagation(); e.preventDefault(); stepFrame(e.code === 'ArrowDown' ? 1 : -1); }
   else if (S.open && (e.code === 'ArrowLeft' || e.code === 'ArrowRight') && S.open.cands.length > 1) {
     e.stopImmediatePropagation(); e.preventDefault();
     S.open.i = (S.open.i + (e.code === 'ArrowRight' ? 1 : S.open.cands.length - 1)) % S.open.cands.length; renderStop();
