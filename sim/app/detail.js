@@ -324,7 +324,7 @@ export function patchMaterial(shader) {
 uniform float uMicro;
 float mh(vec2 c) { vec3 p3 = fract(vec3(c.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
 float mn(vec2 p) { vec2 i = floor(p), f = p - i, u = f * f * (3.0 - 2.0 * f); return mix(mix(mh(i), mh(i + vec2(1.0, 0.0)), u.x), mix(mh(i + vec2(0.0, 1.0)), mh(i + vec2(1.0, 1.0)), u.x), u.y); }
-float microD(vec2 w) { return (mn(w / 5.3) - 0.5) * 0.34 + (mn(w / 2.7 + vec2(17.1, 3.7)) - 0.5) * 0.16; }
+float microD(vec2 w) { return (mn(w / 5.2) - 0.5) * 0.30 + (mn(w / 2.3 + vec2(17.1, 3.7)) - 0.5) * 0.20; }   // Gale: TAR ~5 m ±0.15 m, büyük rüzgâr dalgacığı ~2.3 m ±0.10 m (Lapotre 2016; docs/data/ekip/gale_zemin_ortam_arastirmasi.md §4)
 float microFade(vec3 w) { return uMicro * (1.0 - smoothstep(25.0, 70.0, distance(cameraPosition, w))); }
 `;
   shader.vertexShader =

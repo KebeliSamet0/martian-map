@@ -18,8 +18,9 @@ import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
 import { initAudio } from './audio.js';
 
-const BASE = './data/tiles';
 const Q = new URLSearchParams(location.search);
+// ?tiles=tiles_shifted: DEM kayması düzeltilmiş karolar (docs/sim/DEM_KAYMA.md); yalnız güvenli klasör adı kabul edilir.
+const BASE = `./data/${/^[A-Za-z0-9_-]+$/.test(Q.get('tiles') ?? '') ? Q.get('tiles') : 'tiles'}`;
 const quality = Q.get('q') || 'high';
 MICRO.value = Q.get('ground') === 'rich' && Q.get('micro') !== '0' ? 1 : 0;   // ?ground=rich: tas serpintisi + mikro rolyef
 const $ = (id) => document.getElementById(id);

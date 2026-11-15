@@ -213,7 +213,7 @@ export class Terrain {
     if (!MICRO.value || !this.camPos) return 0;
     const fade = MICRO.value * (1 - smoothstepJS(25, 70, Math.hypot(this.camPos.x - x, this.camPos.z - z)));
     if (fade <= 0) return 0;
-    return ((mnJS(x / 5.3, z / 5.3) - 0.5) * 0.34 + (mnJS(x / 2.7 + 17.1, z / 2.7 + 3.7) - 0.5) * 0.16) * fade;
+    return ((mnJS(x / 5.2, z / 5.2) - 0.5) * 0.30 + (mnJS(x / 2.3 + 17.1, z / 2.3 + 3.7) - 0.5) * 0.20) * fade;
   }
   heightAt(x, z) {
     const h = this.heightAtRaw(x, z);
