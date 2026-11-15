@@ -2,17 +2,17 @@
 // Varlık dosyası yok: iz dokusu canvas ile prosedürel çizilir (lisans gerekmez). Renkler sunum tonudur, ölçüm değildir.
 import * as THREE from 'three';
 
-/** Bot tabanı alfa dokusu: tabanın gövdesi + topuk boşluğu + sığ tırtıl çizgileri. */
+/** Bot izi dokusu (ince, yumuşak kenarlı): R=maske, G=çökük çekirdek, B=kenarda kabaran toprak halkası. Çizgi/tırtıl yok. */
 function printTexture() {
-  const c = document.createElement('canvas'); c.width = 64; c.height = 128;
-  const g = c.getContext('2d'); g.clearRect(0, 0, 64, 128);
-  g.fillStyle = '#fff';
-  g.beginPath(); g.ellipse(32, 38, 20, 34, 0, 0, Math.PI * 2); g.fill();        // ayak önü
-  g.beginPath(); g.ellipse(32, 100, 15, 21, 0, 0, Math.PI * 2); g.fill();       // topuk
-  g.globalCompositeOperation = 'destination-out'; g.fillStyle = '#000';
-  g.fillRect(14, 70, 36, 5);                                                   // topuk-ön arası boşluk
-  for (let y = 14; y < 112; y += 11) g.fillRect(16, y, 32, 2.2);               // tırtıl
-  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; t.colorSpace = THREE.SRGBColorSpace; return t;
+  const W = 64, H = 128, data = new Uint8Array(W * H * 4);
+  const ell = (x, y, cx, cy, a, b) => (Math.hypot((x - cx) / a, (y - cy) / b) - 1) * Math.min(a, b);
+  const sm = (e0, e1, x) => { const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); };
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const d = Math.min(ell(x, y, 32, 40, 19, 34), ell(x, y, 32, 99, 14, 23));   // burun + topuk birleşimi, işaretli uzaklık (px)
+    const mask = sm(3, -3, d), core = sm(-1, -9, d), rim = sm(9, 2, d) * sm(-2, 3, d);
+    const i = (y * W + x) * 4; data[i] = mask * 255; data[i + 1] = core * 255; data[i + 2] = rim * 255; data[i + 3] = 255;
+  }
+  const t = new THREE.DataTexture(data, W, H, THREE.RGBAFormat); t.magFilter = t.minFilter = THREE.LinearFilter; t.needsUpdate = true; return t;
 }
 function softTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 64;
@@ -26,14 +26,15 @@ function softTexture() {
  * Ayak izi: tek InstancedMesh halkası. Yeni iz en eskinin yerine yazılır (arkada kalan iz rotayı anlatır).
  * add(x, z, yaw, depth, y, normal): depth 0..1 (kum belirgin, ana kaya yok → çağıran 0 verir ve eklenmez).
  */
-export function createFootprints(scene, { max = 480, tint = [0.11, 0.055, 0.035] } = {}) {
-  const geo = new THREE.PlaneGeometry(0.22, 0.44); geo.rotateX(-Math.PI / 2);   // yatay; +Z topuk yönü
+export function createFootprints(scene, { max = 480 } = {}) {
+  const geo = new THREE.PlaneGeometry(0.13, 0.30); geo.rotateX(-Math.PI / 2);   // yatay; +Z topuk yönü
   const alpha = new Float32Array(max);
-  geo.setAttribute('aAlpha', new THREE.InstancedBufferAttribute(alpha, 1));
+  const tints = new Float32Array(max * 3);
+  geo.setAttribute('aAlpha', new THREE.InstancedBufferAttribute(alpha, 1)); geo.setAttribute('aTint', new THREE.InstancedBufferAttribute(tints, 3));
   const mat = new THREE.ShaderMaterial({
-    uniforms: { map: { value: printTexture() }, tint: { value: new THREE.Color(...tint) } },
-    vertexShader: 'attribute float aAlpha; varying vec2 vUv; varying float vA; void main(){ vUv=uv; vA=aAlpha; gl_Position=projectionMatrix*modelViewMatrix*instanceMatrix*vec4(position,1.0); }',
-    fragmentShader: 'uniform sampler2D map; uniform vec3 tint; varying vec2 vUv; varying float vA; void main(){ float a=texture2D(map,vUv).a*vA; if(a<0.01) discard; gl_FragColor=vec4(tint,a); }',
+    uniforms: { map: { value: printTexture() } },
+    vertexShader: 'attribute float aAlpha; attribute vec3 aTint; varying vec2 vUv; varying float vA; varying vec3 vT; void main(){ vUv=uv; vA=aAlpha; vT=aTint; gl_Position=projectionMatrix*modelViewMatrix*instanceMatrix*vec4(position,1.0); }',
+    fragmentShader: 'uniform sampler2D map; varying vec2 vUv; varying float vA; varying vec3 vT; void main(){ vec3 t=texture2D(map,vUv).rgb; float shade=1.0-0.6*t.g+0.15*t.b; float a=max(t.r,t.b*0.2)*vA; if(a<0.01) discard; gl_FragColor=vec4(vT*shade,a); }',
     transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4,
   });
   const mesh = new THREE.InstancedMesh(geo, mat, max);
@@ -44,16 +45,16 @@ export function createFootprints(scene, { max = 480, tint = [0.11, 0.055, 0.035]
   return {
     mesh,
     get count() { return n; },
-    add(x, z, yaw, depth, y, normal) {
+    add(x, z, yaw, depth, y, normal, rgb = [0.3, 0.2, 0.15]) {
       if (depth <= 0.02) return;
       // Yüzey normaline yatır, sonra yaw (ileri = (sin yaw, −cos yaw)); doku burnu −Z gösterir
       q.setFromUnitVectors(up, normal || up); qy.setFromAxisAngle(up, -yaw); q.multiply(qy);
-      const s = 0.85 + 0.45 * depth;   // derin iz biraz daha geniş görünür
+      const s = 0.92 + 0.2 * depth;
       pos.set(x, y + 0.035, z); sc.set(s, 1, s);
       m.compose(pos, q, sc); mesh.setMatrixAt(head, m);
-      alpha[head] = 0.35 + 0.55 * depth;
+      alpha[head] = 0.34 + 0.5 * depth; tints.set(rgb, head * 3);
       head = (head + 1) % max; n = Math.min(max, n + 1); mesh.count = n;
-      mesh.instanceMatrix.needsUpdate = true; geo.attributes.aAlpha.needsUpdate = true;
+      mesh.instanceMatrix.needsUpdate = true; geo.attributes.aAlpha.needsUpdate = true; geo.attributes.aTint.needsUpdate = true;
     },
     clear() { n = 0; head = 0; mesh.count = 0; },
     dispose() { scene.remove(mesh); geo.dispose(); mat.dispose(); },
@@ -87,8 +88,8 @@ export function createDust(scene, { max = 220, g = 3.71 } = {}) {
         const a = Math.random() * Math.PI * 2, sp = (0.25 + Math.random() * 0.6) * strength;
         pos[i * 3] = x + (Math.random() - 0.5) * 0.25; pos[i * 3 + 1] = y + 0.05; pos[i * 3 + 2] = z + (Math.random() - 0.5) * 0.25;
         vel[i * 3] = Math.cos(a) * sp * 0.6 + fx * sp * 0.5; vel[i * 3 + 1] = (0.5 + Math.random() * 0.9) * strength; vel[i * 3 + 2] = Math.sin(a) * sp * 0.6 + fz * sp * 0.5;
-        life[i] = 0; ttl[i] = 0.7 + Math.random() * 0.7; size[i] = 0.3 + Math.random() * 0.3;
-        const j = 0.9 + Math.random() * 0.2; col[i * 3] = rgb[0] * j; col[i * 3 + 1] = rgb[1] * j; col[i * 3 + 2] = rgb[2] * j; alpha[i] = 0.85;
+        life[i] = 0; ttl[i] = 0.5 + Math.random() * 0.5; size[i] = 0.07 + Math.random() * 0.09;
+        const j = 0.9 + Math.random() * 0.2; col[i * 3] = rgb[0] * j; col[i * 3 + 1] = rgb[1] * j; col[i * 3 + 2] = rgb[2] * j; alpha[i] = 0.4;
       }
     },
     update(dt, pixelHeight = 900, fov = 66) {
@@ -99,7 +100,7 @@ export function createDust(scene, { max = 220, g = 3.71 } = {}) {
         if (f >= 1) { pos[i * 3 + 1] = -1e4; alpha[i] = 0; continue; }
         vel[i * 3 + 1] -= g * dt; const d = Math.exp(-dt * 1.4); vel[i * 3] *= d; vel[i * 3 + 2] *= d;
         pos[i * 3] += vel[i * 3] * dt; pos[i * 3 + 1] += vel[i * 3 + 1] * dt; pos[i * 3 + 2] += vel[i * 3 + 2] * dt;
-        alpha[i] = 0.85 * (1 - f) * (1 - f); size[i] += dt * 0.5;
+        alpha[i] = 0.4 * (1 - f) * (1 - f); size[i] += dt * 0.12;
       }
       geo.attributes.position.needsUpdate = geo.attributes.aAlpha.needsUpdate = geo.attributes.aSize.needsUpdate = true;
     },
