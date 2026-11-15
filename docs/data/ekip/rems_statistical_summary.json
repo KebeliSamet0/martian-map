@@ -1,0 +1,224 @@
+[
+  {
+    "sol": 53,
+    "season": "Gale \u0130lkbahar (Spring Equinox, Ls ~180\u00b0)",
+    "mars_year": 31,
+    "total_records": 20153,
+    "utc_start": "2012-09-29T00:45:14Z",
+    "utc_end": "2012-09-30T00:29:28Z",
+    "ls_start": 179.63,
+    "ls_end": 180.18,
+    "ltst_start": "00053 00:39:36",
+    "ltst_end": "00053 23:45:48",
+    "ground_temp_kelvin": {
+      "min": 165.62,
+      "max": 283.97,
+      "mean": 235.36,
+      "valid_count": 18653,
+      "filtered_missing": 1500
+    },
+    "ground_temp_celsius": {
+      "min": -107.53,
+      "max": 10.82,
+      "mean": -37.79
+    },
+    "air_temp_kelvin": {
+      "min": 203.34,
+      "max": 268.41,
+      "mean": 230.98,
+      "valid_count": 20153,
+      "filtered_missing": 0
+    },
+    "air_temp_celsius": {
+      "min": -69.81,
+      "max": -4.74,
+      "mean": -42.17
+    },
+    "pressure_pa": {
+      "min": 716.08,
+      "max": 806.61,
+      "mean": 761.9,
+      "valid_count": 20153,
+      "filtered_missing": 0
+    },
+    "pressure_hpa": {
+      "min": 7.16,
+      "max": 8.07,
+      "mean": 7.62
+    },
+    "uv_abc_w_m2": {
+      "max": 19.89,
+      "day_mean": 7.52,
+      "valid_count": 12158
+    },
+    "manifest": {
+      "sol": 53,
+      "season_label": "Gale \u0130lkbahar (Spring Equinox)",
+      "mars_year": 31,
+      "tab": {
+        "name": "RME_402151514RMD00530000000_______PA.TAB",
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00001_00089/SOL00053/RME_402151514RMD00530000000_______PA.TAB",
+        "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_402151514RMD00530000000_______PA.TAB",
+        "bytes": 7496916,
+        "sha256": "8bc155f85042c314c3a9c9ecc87b12ef0a841360da9f29a41a904d9a3afce0ae",
+        "http_status": 200
+      },
+      "xml": {
+        "name": "RME_402151514RMD00530000000_______PA.xml",
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00001_00089/SOL00053/RME_402151514RMD00530000000_______PA.xml",
+        "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_402151514RMD00530000000_______PA.xml",
+        "bytes": 28158,
+        "sha256": "63637b0d77bbb5367b04a37c7758678d3b13d68d074c4cc088340976a8afab98",
+        "http_status": 200
+      }
+    }
+  },
+  {
+    "sol": 191,
+    "season": "Gale Yaz / Perihelion (Summer Solstice, Ls ~267\u00b0)",
+    "mars_year": 31,
+    "total_records": 7336,
+    "utc_start": "2013-02-17T19:47:02Z",
+    "utc_end": "2013-02-18T19:29:20Z",
+    "ls_start": 266.51,
+    "ls_end": 267.13,
+    "ltst_start": "00190 23:51:31",
+    "ltst_end": "00191 22:55:06",
+    "ground_temp_kelvin": {
+      "min": 181.04,
+      "max": 279.9,
+      "mean": 234.42,
+      "valid_count": 5536,
+      "filtered_missing": 1800
+    },
+    "ground_temp_celsius": {
+      "min": -92.11,
+      "max": 6.75,
+      "mean": -38.73
+    },
+    "air_temp_kelvin": {
+      "min": 205.23,
+      "max": 269.22,
+      "mean": 230.4,
+      "valid_count": 7336,
+      "filtered_missing": 0
+    },
+    "air_temp_celsius": {
+      "min": -67.92,
+      "max": -3.93,
+      "mean": -42.75
+    },
+    "pressure_pa": {
+      "min": 863.12,
+      "max": 960.79,
+      "mean": 920.62,
+      "valid_count": 7336,
+      "filtered_missing": 0
+    },
+    "pressure_hpa": {
+      "min": 8.63,
+      "max": 9.61,
+      "mean": 9.21
+    },
+    "uv_abc_w_m2": {
+      "max": 2.27,
+      "day_mean": 0.58,
+      "valid_count": 5180
+    },
+    "manifest": {
+      "sol": 191,
+      "season_label": "Gale Yaz / Perihelion (Summer Solstice)",
+      "mars_year": 31,
+      "tab": {
+        "name": "RME_414402384RMD01910000000_______P8.TAB",
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00180_00269/SOL00191/RME_414402384RMD01910000000_______P8.TAB",
+        "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_414402384RMD01910000000_______P8.TAB",
+        "bytes": 2728992,
+        "sha256": "1e09ff40659577ed60c2f9673ffacb390f2dbb76568ca5802b2be7471f3ea7d0",
+        "http_status": 200
+      },
+      "xml": {
+        "name": "RME_414402384RMD01910000000_______P8.xml",
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00180_00269/SOL00191/RME_414402384RMD01910000000_______P8.xml",
+        "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_414402384RMD01910000000_______P8.xml",
+        "bytes": 28156,
+        "sha256": "2c7db588bac16c9b37160fc0160cc74183d0ce3d7e6cd9ac2da9082190c4eeff",
+        "http_status": 200
+      }
+    }
+  },
+  {
+    "sol": 533,
+    "season": "Gale K\u0131\u015f / Aphelion (Winter Solstice, Ls ~85\u00b0)",
+    "mars_year": 32,
+    "total_records": 20956,
+    "utc_start": "2014-02-04T05:21:27Z",
+    "utc_end": "2014-02-05T05:04:22Z",
+    "ls_start": 85.19,
+    "ls_end": 85.63,
+    "ltst_start": "00533 00:14:04",
+    "ltst_end": "00533 23:19:05",
+    "ground_temp_kelvin": {
+      "min": 99.03,
+      "max": 266.43,
+      "mean": 205.12,
+      "valid_count": 19276,
+      "filtered_missing": 1680
+    },
+    "ground_temp_celsius": {
+      "min": -174.12,
+      "max": -6.72,
+      "mean": -68.03
+    },
+    "air_temp_kelvin": {
+      "min": 185.1,
+      "max": 241.01,
+      "mean": 208.84,
+      "valid_count": 20956,
+      "filtered_missing": 0
+    },
+    "air_temp_celsius": {
+      "min": -88.05,
+      "max": -32.14,
+      "mean": -64.31
+    },
+    "pressure_pa": {
+      "min": 837.76,
+      "max": 895.44,
+      "mean": 871.7,
+      "valid_count": 20956,
+      "filtered_missing": 0
+    },
+    "pressure_hpa": {
+      "min": 8.38,
+      "max": 8.95,
+      "mean": 8.72
+    },
+    "uv_abc_w_m2": {
+      "max": 0.99,
+      "day_mean": 0.25,
+      "valid_count": 15717
+    },
+    "manifest": {
+      "sol": 533,
+      "season_label": "Gale K\u0131\u015f / Aphelion (Winter Solstice)",
+      "mars_year": 32,
+      "tab": {
+        "name": "RME_444763232RMD05330000000_______P5.TAB",
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00450_00583/SOL00533/RME_444763232RMD05330000000_______P5.TAB",
+        "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_444763232RMD05330000000_______P5.TAB",
+        "bytes": 7795632,
+        "sha256": "8ab0c3e002c5ce6ef3ed16cf8ad1016f127e0d85c66b502c736469b8be2d38d6",
+        "http_status": 200
+      },
+      "xml": {
+        "name": "RME_444763232RMD05330000000_______P5.xml",
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/msl_rems_bundle/data_calibrated/SOL_00450_00583/SOL00533/RME_444763232RMD05330000000_______P5.xml",
+        "path": "C:\\Users\\Batu\\Desktop\\martian-map-main\\martian-map-main\\docs\\data\\ekip\\rems\\RME_444763232RMD05330000000_______P5.xml",
+        "bytes": 28158,
+        "sha256": "e447843e79e3da0b4e765e2c00009b5ae21ead65aab6de704ddf8140846dd475",
+        "http_status": 200
+      }
+    }
+  }
+]
