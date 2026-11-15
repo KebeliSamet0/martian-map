@@ -18,7 +18,8 @@ import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
 import { initAudio } from './audio.js';
 import { initFlow } from './wire-flow.js';   // tur4:akis
-import { t } from './i18n.js';   // tur4:akis
+import { t, loadTexts } from './i18n.js';   // tur4:akis
+import { ensureUiCss } from './hud.js';
 import './insight-ui.js';   // tur4:veri
 import './helmetcam.js';   // tur4:veri
 import './bilim.js'; // tur4:bilim
@@ -38,7 +39,44 @@ const EYE = 1.75;   // skafandrlı astronot göz yüksekliği (varsayım)
 let toastTimer;
 function toast(msg, force = false) { if (!DEV && !force) return; const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 4200); }
 
-const man = await (await fetch(`${BASE}/manifest.json`)).json();
+// Karolar yoksa sayfa siyah kalmasın: okunur hata kartı + "tekrar dene" (#103 A.1).
+async function showTilesError(base, detail) {
+  await loadTexts().catch(() => { /* yer tutucu metinlerle devam */ });
+  ensureUiCss();
+  const node = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const back = node('div', 'mm-ui mm-modal mm-in');   // mm-in: .mm-modal varsayılanı opacity:0
+  // .mm-modal position:absolute; body'nin yüksekliği 0 (her şey fixed) → tam ekran ve görünür olmayı garantiye al.
+  back.style.cssText = 'position:fixed; inset:0; z-index:2200; pointer-events:auto; opacity:1';
+  const card = node('section', 'mm-card');
+  card.setAttribute('role', 'alertdialog');
+  const retry = node('button', 'mm-btn mm-btn-primary', t('fatal.retry'));
+  retry.type = 'button';
+  retry.onclick = () => location.reload();
+  const hint = node('p', 'mm-text', t('fatal.tiles.hint'));
+  hint.style.marginTop = '10px';
+  const tech = node('p', 'mm-fine', detail);
+  retry.style.marginTop = '16px';
+  card.append(
+    node('h2', 'mm-card-title', t('fatal.tiles.title')),
+    node('p', 'mm-text', t('fatal.tiles.body', { dir: `sim/${String(base).replace(/^\.\//, '')}` })),
+    hint,
+    tech,
+    retry,
+  );
+  back.append(card);
+  (document.getElementById('mission-ui') ?? document.body).append(back);
+  retry.focus();
+}
+
+let man;
+try {
+  const res = await fetch(`${BASE}/manifest.json`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  man = await res.json();   // 404 gövdesi HTML gelirse de buraya düşer
+} catch (e) {
+  await showTilesError(BASE, `${BASE}/manifest.json — ${e.message}`);
+  throw new Error(`tiles unavailable: ${BASE}/manifest.json`);   // modül burada durur, ekranda kart var
+}
 // Denetlenmiş gerçek parametreler (sim/data/params.json ← docs/data/real_params.json; bkz. tools/export_params.py). Yoksa varsayılanlara düşer ve etiketlenir.
 const params = await fetch('./data/params.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
 const pv = (name, dflt) => params?.params?.[name]?.value ?? dflt;
