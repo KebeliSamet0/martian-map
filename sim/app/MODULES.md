@@ -57,3 +57,11 @@ function updateResources(dtSec) { // yürüyüş karesinden, timeScale uygulanm�
   `api.missions()` ve `api.debrief(summary)` opsiyonel adaptörler; aksi halde fetch kullanılır.
   Karede önce vitals.update, sonra mission.update; event sonrası yeniden planlayıp resume çağırın.
   Hedefte collectSample bir kez yük ekler; finish plan/gerçek farkını ve API/yerel özetini döndürür.
+
+## dynroute.js (batu:dyn, #122)
+Yürüyüş boyunca durumu izler ve MEVCUT konumdan yeni plan önerir; sayılar yalnız planlayıcı API yanıtından (`/route`, `total.consumption.outbound`, `km`).
+- Sapma: rotadan > 15 m ve 5 sn → `reason:'deviation'` (yeni rota ↔ rotaya dön+devam farkı: m, kcal, O₂).
+- Rezerv: O₂ ya da süre payı < %40 → üsse dönüş rotası (`reason:'reserve'`), kalan bütçeyle; dönüş maliyeti kalan bütçenin %80'ine yaklaşırsa `urgent` ("dönüşü olmayan nokta").
+- Kum: mevcut `/replan` aynı sözleşmeyle (`reason:'sand'`, `urgent:true`); arayüz yoksa eskisi gibi hemen uygulanır.
+- Olaylar: `window` `mm:route-suggest` {reason, route, current, delta:{m,kcal,o2_L,risk}, urgent} (iptal edilebilir: dinleyici `preventDefault()` derse arayüz onda; yoksa yerleşik bant) ve `mm:route-decision` {accept, reason}.
+- Test: `sim/tests/dynroute.test.mjs` (API taklidiyle eşik, debounce, soğuma, olay üretimi).
