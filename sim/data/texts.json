@@ -783,6 +783,50 @@
     "custom.err.noroute": {
       "tr": "Bu A/B çifti için rota bulunamadı. Başka noktalar seç veya planlayıcı durumunu kontrol et.",
       "en": "No route was found for this A/B pair. Choose different points or check the planner status."
+    },
+    "dyn.msg.deviation": {
+      "tr": "Rotadan uzaklaştın. Buradan yeni rota, rotaya dönüp devam etmeye göre {m} m, {kcal} kcal ve {o2} L O₂ fark yaratıyor (planlayıcı hesabı).",
+      "en": "You left the route. A new route from here differs from rejoining the old one by {m} m, {kcal} kcal and {o2} L O₂ (planner estimate)."
+    },
+    "dyn.msg.reserve": {
+      "tr": "Oksijen ya da süre payın %40'ın altına indi. Üsse dönüş yolu yaklaşık {m} m, {kcal} kcal, {o2} L O₂ (planlayıcı hesabı).",
+      "en": "Your oxygen or time margin fell below 40 %. The way back to base is about {m} m, {kcal} kcal, {o2} L O₂ (planner estimate)."
+    },
+    "dyn.msg.load": {
+      "tr": "Yük arttı; kalan rota ve dönüş yeni yükle yeniden hesaplandı ({m} m, {kcal} kcal, {o2} L O₂ fark).",
+      "en": "Your load increased; the rest of the route and the return were recomputed ({m} m, {kcal} kcal, {o2} L O₂ difference)."
+    },
+    "dyn.msg.observation": {
+      "tr": "Kask kamerası rotaya yakın riskli zemin işaretledi; bu gözlemle yeni rota {m} m, {kcal} kcal ve {o2} L O₂ fark yaratıyor (model gözlemi, ölçüm değil).",
+      "en": "The helmet camera flagged risky ground near the route; with this observation a new route differs by {m} m, {kcal} kcal and {o2} L O₂ (model observation, not a measurement)."
+    },
+    "dyn.urgent": {
+      "tr": "Dönüş maliyeti kalan bütçeye yaklaşıyor: dönüşü olmayan nokta olabilir.",
+      "en": "The return cost nears your remaining budget: this may be a point of no return."
+    },
+    "dyn.accept": {
+      "tr": "Yeni rotayı al",
+      "en": "Take new route"
+    },
+    "dyn.dismiss": {
+      "tr": "Mevcut rotada kal",
+      "en": "Stay on current route"
+    },
+    "dyn.applied.deviation": {
+      "tr": "Yeni rota: {km} km · {min} dk.",
+      "en": "New route: {km} km · {min} min."
+    },
+    "dyn.applied.reserve": {
+      "tr": "Üsse dönüş rotası: {km} km · {min} dk.",
+      "en": "Return route to base: {km} km · {min} min."
+    },
+    "dyn.applied.load": {
+      "tr": "Rota yeni yükle güncellendi: {km} km · {min} dk.",
+      "en": "Route updated for the new load: {km} km · {min} min."
+    },
+    "dyn.applied.observation": {
+      "tr": "Yeni rota: {km} km · {min} dk.",
+      "en": "New route: {km} km · {min} min."
     }
   },
   "helmetcam": {

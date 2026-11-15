@@ -57,3 +57,13 @@ function updateResources(dtSec) { // yürüyüş karesinden, timeScale uygulanm�
   `api.missions()` ve `api.debrief(summary)` opsiyonel adaptörler; aksi halde fetch kullanılır.
   Karede önce vitals.update, sonra mission.update; event sonrası yeniden planlayıp resume çağırın.
   Hedefte collectSample bir kez yük ekler; finish plan/gerçek farkını ve API/yerel özetini döndürür.
+
+## dynroute.js (batu:dyn, #122)
+Yürüyüş boyunca durumu izler ve MEVCUT konumdan yeni plan önerir; sayılar yalnız planlayıcı API yanıtından (`/route`, `total.consumption.outbound`, `km`).
+- Sapma: rotadan > 15 m ve 5 sn → `reason:'deviation'` (yeni rota ↔ rotaya dön+devam farkı: m, kcal, O₂).
+- Rezerv: O₂ ya da süre payı < %40 → üsse dönüş rotası (`reason:'reserve'`), kalan bütçeyle; dönüş maliyeti kalan bütçenin %80'ine yaklaşırsa `urgent` ("dönüşü olmayan nokta").
+- Kum: mevcut `/replan` aynı sözleşmeyle (`reason:'sand'`, `urgent:true`); arayüz yoksa eskisi gibi hemen uygulanır.
+- Olaylar: `window` `mm:route-suggest` {reason, route, current, delta:{m,kcal,o2_L,risk}, urgent} (iptal edilebilir: dinleyici `preventDefault()` derse arayüz onda; yoksa yerleşik bant) ve `mm:route-decision` {accept, reason}.
+- Test: `sim/tests/dynroute.test.mjs` (API taklidiyle eşik, debounce, soğuma, olay üretimi).
+- Yük (#122-3): vitals `loadKg` ≥ 0.5 kg artınca (numune) kalan rota ve üsse dönüş `load_kg` ile yeniden hesaplanır (`reason:'load'`; dönüş NO-GO ise `urgent`).
+- Gözlem (#122-4): `mm:camera-insight` (warn, kinds sand/bigrock) → durağın çevresi (`OBS_RADIUS_M`=20 m tasarım yarıçapı) `/replan` gözlemi (`reason:'observation'`); rotadan > 60 m uzakta yok sayılır. Tarayıcı kaynaklı gözlem yok: geçilmez alan zaten planlayıcı maskesinde.
