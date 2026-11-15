@@ -74,6 +74,9 @@ test('blockersFromInstances: yalnız yarıçapı >= BLOCK_MIN_R olanlar, ölçek
   assert.deepEqual([b[0].x, b[0].z], [10, 20]); assert.ok(Math.abs(b[0].r - 0.95) < 1e-6);
   assert.ok(Math.abs(b[1].r - 0.285) < 1e-6);
   assert.ok(0.3 * 0.95 >= BLOCK_MIN_R);
+  assert.equal(BLOCK_MIN_R, 0.12);
+  const c2 = blockersFromInstances(inst([[0, 0, 0.13, 0.13], [0, 0, 0.12, 0.12], [0, 0, 0.11, 0.11]]), 3);   // 0,13×0,95=0,1235 evet; 0,114 hayır
+  assert.equal(c2.length, 1);
 });
 
 test('setDynamic: sentetik taş içinden geçilmez, çevresinden kayılır; gerçek kaya ile birlikte çalışır', () => {
