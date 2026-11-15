@@ -20,7 +20,14 @@ export function worldToPx(geo, X, Z) {
 }
 export const pxInside = (p) => p[0] >= 0 && p[1] >= 0 && p[0] < GRID.w && p[1] < GRID.h;
 
+// DENEME (Emre, 2026-11-15): "Azami eğim" ayarı API rotalarına da gitsin (/route, /replan). null = planlayıcının 25° kuralı.
+export const routeOpts = { maxSlope: null };
+export function withSlope(path, body) {
+  return body && routeOpts.maxSlope != null && (path === '/route' || path === '/replan') ? { ...body, max_slope_deg: routeOpts.maxSlope } : body;
+}
+
 async function call(path, body, ms = 8000) {
+  body = withSlope(path, body);
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
   try {
     const res = await fetch(API_BASE + path, { method: body ? 'POST' : 'GET', headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal });

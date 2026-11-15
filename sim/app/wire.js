@@ -1,5 +1,5 @@
 import { createStepAdapter } from './wire-step.js';
-import { API_BASE, API_OFF } from './api.js';
+import { API_BASE, API_OFF, withSlope } from './api.js';
 import { createGridGeo } from './gridgeo.js';
 import { createVitals } from './vitals.js';
 import { createMission, loadMissions } from './mission.js';
@@ -11,6 +11,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const root = document.getElementById('mission-ui'), buttons = document.getElementById('missions');
   const call = async (path, body) => {
     if (API_OFF) throw new Error('API kapalı');
+    body = withSlope(path, body);
     const r = await fetch(API_BASE + path, { method: body ? 'POST' : 'GET', signal: AbortSignal.timeout(8000),
       headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
     if (!r.ok) throw new Error(`API ${r.status}`); return r.json();

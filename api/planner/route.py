@@ -36,9 +36,15 @@ def _check(L: Layers, px, snap: bool = True):
     return y, x
 
 
-def shortest_path(L: Layers, start, goal, w: dict):
-    cost, terms = cost_surface(L, w)
+def shortest_path(L: Layers, start, goal, w: dict, max_slope_deg: float | None = None):
+    cost, terms = cost_surface(L, w, max_slope_deg=max_slope_deg)
     s, g = _check(L, start), _check(L, goal)
+    if max_slope_deg is not None:
+        # Başlangıç/hedef hücresi kullanıcı sınırından dik olsa da bağlanabilsin (25° kuralı _check'te zaten uygulandı)
+        base, _ = cost_surface(L, w)
+        for q in (s, g):
+            if not np.isfinite(cost[q]):
+                cost[q] = base[q]
     mcp = MCP_Geometric(cost)
     acc, _ = mcp.find_costs([s], [g])
     if not np.isfinite(acc[g]):
@@ -48,6 +54,8 @@ def shortest_path(L: Layers, start, goal, w: dict):
         rs, rg = ranks.get(cs, 0), ranks.get(cg, 0)
         ss, sg = int(comp_sizes[rs]) if rs else 0, int(comp_sizes[rg]) if rg else 0
         ps, pg = ss / total_cells * 100, sg / total_cells * 100
+        if max_slope_deg is not None:
+            raise PlanError(f"Azami eğim {max_slope_deg:g}° ile başlangıç ve hedef arasında yol yok; sınırı gevşet.")
         raise PlanError(
             f"Başlangıç ile hedef arasında geçilebilir yol yok: "
             f"başlangıç {[int(start[0]), int(start[1])]} bileşen #{rs} ({ss} hücre, %{ps:.2f}), "
@@ -252,12 +260,13 @@ def _budget(prof, segs, path, limits=None) -> dict:
     }
 
 
-def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None) -> dict:
+def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None,
+             max_slope_deg: float | None = None) -> dict:
     presets = P.PRESETS if L.synthetic else P.REAL_PRESETS
     w = dict(presets.get(kind, presets["balanced"]))
     if weights:
         w.update(weights)
-    path, terms = shortest_path(L, start, goal, w)
+    path, terms = shortest_path(L, start, goal, w, max_slope_deg)
     prof = _profile(L, path, terms)
     segs = _segments(L, path, prof)
     return {
@@ -337,8 +346,9 @@ def _contrast(chosen: dict, alt: dict, res_m: float, min_dev_m: float = 40.0):
         seg["rejected_alt"] = (seg["rejected_alt"] + " " if seg["rejected_alt"] else "") + txt
 
 
-def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None) -> list[dict]:
-    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget) for k in kinds]
+def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None,
+         max_slope_deg: float | None = None) -> list[dict]:
+    routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget, max_slope_deg) for k in kinds]
     for r in routes:
         for alt in routes:
             if alt is not r:

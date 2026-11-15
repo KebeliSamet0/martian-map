@@ -58,6 +58,8 @@ class RouteInput(Input):
     goal: Pixel
     weights: Weights | None = None
     budget: Budget | None = None
+    # DENEME (Emre): simülatörün "Azami eğim" ayarı. 25° üstü verilirse planlayıcının 25° kuralı geçerli kalır.
+    max_slope_deg: float | None = Field(default=None, ge=5, le=45)
 
 
 class Observation(Input):
@@ -100,7 +102,8 @@ def assumptions(request: Request):
 def result(layers, body: RouteInput):
     routes = planner.plan(layers, body.start, body.goal,
                           weights=body.weights.model_dump() if body.weights else None,
-                          budget=body.budget.model_dump() if body.budget else None)
+                          budget=body.budget.model_dump() if body.budget else None,
+                          max_slope_deg=body.max_slope_deg)
     info = layers.grid_info()
     return {"grid": {k: info[k] for k in ("region", "width", "height", "res_m", "synthetic", "px_note")},
             "routes": routes}

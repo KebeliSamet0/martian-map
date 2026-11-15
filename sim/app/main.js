@@ -11,7 +11,7 @@ import { MissionMap as MapView } from './wire-map.js';
 import { initWire } from './wire.js';
 import { initExtras } from './wire-extras.js';
 import { applyScanClasses } from './wire-scan.js';
-import { API_BASE, API_OFF } from './api.js';
+import { API_BASE, API_OFF, routeOpts } from './api.js';
 import { worldToPx, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
@@ -73,7 +73,7 @@ function onRouteChange(r) {
 mapView = new MapView($('map'), { man, geo, nav, base: BASE, toast, onChange: onRouteChange, params });
 $('mode').onchange = () => mapView.setOptions({ mode: $('mode').value });
 $('maxslope').oninput = () => { $('maxslope-v').textContent = $('maxslope').value + '°'; };
-$('maxslope').onchange = () => mapView.setOptions({ maxSlope: Number($('maxslope').value) });
+$('maxslope').onchange = () => { routeOpts.maxSlope = Number($('maxslope').value); mapView.setOptions({ maxSlope: routeOpts.maxSlope }); };
 $('btn-reset').onclick = () => mapView.reset();
 $('btn-json').onclick = () => {
   const blob = new Blob([JSON.stringify(mapView.routeJSON(), null, 2)], { type: 'application/json' });
