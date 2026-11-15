@@ -3,7 +3,7 @@
 ## Ölçülen büyüklükler (2026-11-15)
 | Parça | Boyut | Git'te mi |
 |---|---|---|
-| `sim/data/tiles` (h 128 MB + t 220 MB + nav + overview) | 355 MB, 7,3 bin dosya | **Hayır** (`build_tiles.py` ile üretilir) |
+| `sim/data/tiles_fixed` (h 128 MB + t 220 MB + nav + overview) | 355 MB, 7,3 bin dosya | **Hayır** (`build_tiles.py` ile üretilir) |
 | `layers/` (gerçek katmanlar) | 45 MB | Evet |
 | `sim/` kodu + varlıklar | ~10 MB | Evet |
 | **Paket (`deploy/bundle.sh`)** | **412 MB, 7426 dosya** | `deploy/dist/`, git dışı |
@@ -34,7 +34,7 @@ Yedek plan: HF'te depo sınırı ya da ücretsiz katman engel çıkarsa C (stati
 - Bilinen: çevrimdışı rotada bilgi satırı hâlâ "PLANLAYICI API" yazar (metin akis desk'inde); şerit durumu açıkça söyler.
 
 ## Samet'in adımları (komut komut)
-Ön koşul: ana makinede `sim/data/tiles` var (yoksa `python -I sim/tools/build_tiles.py`), `brew install git-lfs`.
+Ön koşul: ana makinede `sim/data/tiles_fixed` var (yoksa `python -I sim/tools/build_tiles.py --out sim/data/tiles_fixed --work <ayrı klasör> --dtm-dcol 30 --dtm-drow 33`), `brew install git-lfs`.
 1. Birleştirmeden sonra paketi topla: `MM_LAYERS_DIR=$PWD .venv/bin/python deploy/precompute_missions.py && deploy/bundle.sh`
 2. (Docker varsa, yerelde dene) `docker build -t martian-map deploy/dist && docker run --rm -p 7860:7860 martian-map`, sonra `http://127.0.0.1:7860/`. **Bu makinede Docker yok; imaj denenmedi.**
 3. Hugging Face hesabında oturum aç: `huggingface-cli login`.

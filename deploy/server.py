@@ -20,7 +20,7 @@ os.environ.setdefault("MM_LAYERS_DIR", str(ROOT))   # gerçek katmanlar; ayarlan
 from api.main import app as api_app  # noqa: E402
 
 STATIC_PREFIXES = ("/sim", "/contracts", "/layers/")
-IMMUTABLE = ("/sim/data/tiles/", "/sim/assets/", "/sim/lib/")
+IMMUTABLE = ("/sim/data/tiles/", "/sim/data/tiles_fixed/", "/sim/assets/", "/sim/lib/")
 
 
 class CacheHeaders(BaseHTTPMiddleware):
