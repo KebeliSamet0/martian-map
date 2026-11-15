@@ -149,6 +149,8 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Düz zemin metabolik düzeyi", "value": FLAT_REFERENCE_W, "unit": "W", "source": "Apollo EVA ortalaması, Waligora & Horrigan 1975 (doğrulanacak)", "mars_validated": False},
         {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": TERRAIN_SOURCE},
         {"name": "Hücre maliyet katmanı eğim özeti", "value": "|slope| ile çıkış (yönsüz hücre özeti); yönlü yol hesabı /step ucunda", "unit": "-", "source": "VARSAYIM: tek hücrede yürüyüş yönü bilinmediğinden |G| = tan(slope)·100 kullanılır"},
+        {"name": "Bilim durağı süresi", "value": SCIENCE_STOP_MIN, "unit": "dk", "source": "VARSAYIM: hedefte bilim çalışması; GO kararındaki committed toplamına girer"},
+        {"name": "Durak metabolik düzeyi", "value": STOP_METABOLIC_W, "unit": "W", "source": "VARSAYIM: durak/yedek metabolizması (şimdilik düz zemin düzeyine eşit)"},
         {"name": "Oksijen dönüşümü", "value": {"kcal_per_L_o2": KCAL_PER_L_O2, "g_per_L_o2": O2_G_PER_L}, "unit": "kcal/L, g/L", "source": "Dolaylı kalorimetri (4.8 kcal/L O₂) ve STP yoğunluğu (1.429 g/L)"},
         {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "VARSAYIM"},
         {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "VARSAYIM"},

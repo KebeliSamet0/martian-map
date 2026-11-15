@@ -3,8 +3,10 @@ const valid = n => Number.isFinite(n) && n >= 0;
 const mul = (a, b) => valid(a) && valid(b) ? a * b : null;
 const add = (a, b) => a == null || b == null ? null : a + b;
 export function createVitals({ api, assumptions = [], route, loadKg, stepIntervalSec = 3, arrivalRadiusM = 2 } = {}) {
-  const param = (key, name) => {
-    const v = Array.isArray(assumptions) ? assumptions.find(a => a.name === name || a.name === key)?.value : assumptions[key];
+  // Liste biçiminde değer sayı ya da sözlük olabilir (/assumptions "Oksijen dönüşümü" → {kcal_per_L_o2}); sözlükte `sub` alanı okunur.
+  const param = (key, name, sub) => {
+    let v = Array.isArray(assumptions) ? assumptions.find(a => a.name === name || a.name === key)?.value : assumptions[key];
+    if (v && typeof v === 'object' && sub) v = v[sub];
     return valid(v) ? v : null;
   };
   const body = param('BODY_KG', 'Astronot kütlesi'), suit = param('SUIT_KG', 'Skafandr + yaşam destek');
@@ -20,21 +22,30 @@ export function createVitals({ api, assumptions = [], route, loadKg, stepInterva
   const on = (name, cb) => { if (!listeners.has(name)) listeners.set(name, new Set()); listeners.get(name).add(cb); return () => listeners.get(name).delete(cb); };
   const consumption = () => Object.fromEntries(Object.keys(used).map(k => [k, unknown[k] ? null : used[k]]));
   const total = () => rt?.total ?? {};
-  const oxygenRatio = () => param('KCAL_PER_L_O2', 'O₂ kalorik eşdeğeri') ?? (total().eva_kcal > 0 && valid(total().o2_L) ? total().o2_L / total().eva_kcal : null);
+  const kcalPerLO2 = () => param('KCAL_PER_L_O2', 'Oksijen dönüşümü', 'kcal_per_L_o2');
+  const oxygenRatio = () => kcalPerLO2() ?? (total().eva_kcal > 0 && valid(total().o2_L) ? total().o2_L / total().eva_kcal : null);
   // Parametre kcal/L, rota oranı L/kcal.
   const o2PerKcal = () => {
-    const p = param('KCAL_PER_L_O2', 'O₂ kalorik eşdeğeri');
+    const p = kcalPerLO2();
     return p > 0 ? 1 / p : oxygenRatio();
   };
   const doseRate = () => param('DOSE_UGY_PER_H', 'Yüzey doz hızı') ?? (total().eva_min > 0 ? mul(total().dose_uGy, 60 / total().eva_min) : null);
+  // Durak gücü API'de STOP_METABOLIC_W ("Durak metabolik düzeyi") olarak gelir; yoksa düz zemin düzeyi VARSAYIM olarak kullanılır.
   const stopW = () => param('STOP_METABOLIC_W', 'Durak metabolik düzeyi') ?? param('FLAT_REFERENCE_W', 'Düz zemin metabolik düzeyi');
+  const scienceMin = () => param('SCIENCE_STOP_MIN', 'Bilim durağı süresi') ?? 0;
+  // Gidiş+dönüş dışındaki taahhüt (bilim durağı + yedek): planlayıcının total.consumption.{science,reserve} değerleri; yoksa parametrelerden.
+  const stopScope = (min, name) => {
+    const c = total().consumption?.[name];
+    if (c && ['min', 'kcal', 'o2_L', 'dose_uGy'].every(k => valid(c[k]))) return { time_min: c.min, kcal: c.kcal, o2_L: c.o2_L, dose_uGy: c.dose_uGy };
+    const kcal = mul(min, mul(stopW(), 60 / 4184));
+    return { time_min: min, kcal, o2_L: mul(kcal, o2PerKcal()), dose_uGy: mul(min, mul(doseRate(), 1 / 60)) };
+  };
   const loadFactor = () => body != null && suit != null && body + suit + tools > 0 ? (body + suit + load) / (body + suit + tools) : load === tools ? 1 : null;
   function snapshot() {
     const actual = consumption();
     const consumed = { time_min: elapsed / 60, ...actual };
-    const reserve = limits.reserve_min;
-    const reserveKcal = mul(reserve, mul(stopW(), 60 / 4184));
-    const extra = { time_min: reserve, kcal: reserveKcal, o2_L: mul(reserveKcal, o2PerKcal()), dose_uGy: mul(reserve, mul(doseRate(), 1 / 60)) };
+    const sci = stopScope(scienceMin(), 'science'), res = stopScope(limits.reserve_min, 'reserve');
+    const extra = Object.fromEntries(Object.keys(sci).map(k => [k, add(sci[k], res[k])]));
     const margin = Object.fromEntries(Object.keys(consumed).map(k => [k,
       valid(limits[k]) && consumed[k] != null && returnUsed[k] != null && extra[k] != null ? limits[k] - consumed[k] - returnUsed[k] - extra[k] : null]));
     const known = Object.values(margin).every(v => v != null);

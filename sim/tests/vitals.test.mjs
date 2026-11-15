@@ -44,3 +44,25 @@ test('varış bir kez, snapshot dışarıdan değiştirilemez', () => {
   v.update(100, [100, 0]); v.update(1, [100, 0]); assert.equal(n, 1);
   assert.throws(() => v.addLoad(-1)); assert.throws(() => v.update(NaN, [0, 0]));
 });
+// #52 madde 1: bilim durağı ve yedek, planlayıcının total.consumption.committed mantığıyla aynı olmalı.
+function s3Route(o2 = 80) {
+  const sc = (min, kcal) => ({ min, kcal, o2_L: kcal / 4.8, dose_uGy: min / 60 * 9 });
+  return { dense: [[0, 0], [1000, 0]], total: { consumption: { science: sc(30, 117.1), reserve: sc(30, 117.1), committed: { o2_L: 85 } },
+    budget: { limits: { time_min: 360, kcal: 2000, o2_L: o2, dose_uGy: 60, reserve_min: 30 } } },
+    segments: [{ len_m: 1000, min: 20, kcal: 86.9, o2_L: 18.1, path_px: [[0, 0], [1000, 0]] }] };
+}
+test('S3: bilim durağı dönüş payına girer, uygun anda NO-GO', () => {
+  const v = createVitals({ assumptions, route: s3Route() });
+  v.update(0, [0, 0], [0, 0]);
+  assert.equal(v.snapshot().returnMargin.o2_L.toFixed(1), (80 - 48.8).toFixed(1));
+  let statusAt = null;
+  for (let x = 50; x <= 1000; x += 50) { v.update(60, [x, 0], [x, 0]); if (!statusAt && v.snapshot().status === 'NO-GO') statusAt = x; }
+  assert.ok(statusAt && statusAt < 1000, 'varıştan önce NO-GO gelmeli: ' + statusAt);
+  assert.equal(v.snapshot().returnPossible, false);
+});
+test('parametre adı: API /assumptions "Oksijen dönüşümü" sözlüğü okunur', () => {
+  const list = [{ name: 'Oksijen dönüşümü', value: { kcal_per_L_o2: 4.8 } }, { name: 'Düz zemin metabolik düzeyi', value: 272 }];
+  const v = createVitals({ assumptions: list, route: { dense: [[0, 0]], total: { budget: { limits: { time_min: 360, o2_L: 80, reserve_min: 30 } } } } });
+  v.update(60, [0, 0], [0, 0]);
+  assert.ok(Math.abs(v.snapshot().o2UsedL - (60 / 4184 * 272) / 4.8) < 1e-9);
+});
