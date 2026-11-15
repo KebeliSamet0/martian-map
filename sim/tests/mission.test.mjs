@@ -35,6 +35,28 @@ test('olay tetik mesafesi trigger_m: radius_m değişmez, rota uzaksa tetiklenme
   m.plan(); m.start({ total: {} });
   assert.equal(m.update([0, 0]).state, 'walking'); assert.equal(m.update([10, 0]).state, 'event');
   assert.equal(m.snapshot().currentEvent.radius_m, 5);
+});
+
+// #125 A.1: numune → üsse dönüş ayağı
+test('beginReturn ikinci hedefi açar, üsse varışta karne alınabilir', async () => {
+  let load = 0;
+  const vitals = { setRoute() {}, addLoad(kg) { load += kg; }, snapshot: () => ({ elapsedSec: 60, kcal: 10, distanceM: 20 }), flush: async () => {} };
+  const def = { id: 'ret', goal: { world: [100, 0], radius_m: 2 }, sample_kg: 8, events: [] };
+  const m = createMission({ definition: def, vitals, fetcher: async () => { throw new Error('api yok'); } });
+  m.plan(); m.start({ total: { km: 0.1, min: 1, kcal: 8 } });
+  assert.equal(m.snapshot().leg, 'outbound');
+  assert.equal(m.update([100, 0]).state, 'arrived');
+  m.collectSample();
+  assert.equal(load, 8);
+  assert.equal(m.beginReturn({ world: [0, 0], radius_m: 5 }).state, 'walking');
+  assert.equal(m.snapshot().leg, 'return');
+  // gidişteki hedefe tekrar uğramak görevi bitirmez
+  assert.equal(m.update([100, 0]).state, 'walking');
+  assert.equal(m.update([2, 0]).state, 'arrived');
+  await m.finish();
+  assert.equal(m.snapshot().state, 'debrief');
+  assert.equal(m.snapshot().summary.sampled, true);
+  assert.throws(() => m.beginReturn({ world: [0, 0] }), /debrief/);
   const far = createMission({ definition: { id: 'f', goal: { world: [200, 0], radius_m: 2 }, events: [{ id: 's', type: 'sand', world: [50, 100], radius_m: 5, trigger_m: 45 }] } });
   far.plan(); far.start({ total: {} }); far.update([0, 0]); assert.equal(far.update([100, 0]).state, 'walking');
 });

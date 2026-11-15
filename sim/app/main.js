@@ -26,7 +26,8 @@ import './bilim.js'; // tur4:bilim
 import { createWalkFeel } from './walkfeel.js';   // tur4:his
 import { initCollide } from './collide.js';   // tur4:fizik
 import { pickTiles } from './tiles-base.js';
-import { startPrefetch } from './prefetch.js';   // tur4:dogrula
+import { startPrefetch } from './prefetch.js';
+import { createDynRoute, proposeVia, oneWay, deltaOf } from './dynroute.js';   // batu:dyn   // tur4:dogrula
 
 const BASE = await pickTiles(new URLSearchParams(location.search).get('tiles'));   // tur4:dogrula: varsayılan tiles_fixed, yedek tiles, ?tiles= ile seçilir
 const Q = new URLSearchParams(location.search);
@@ -237,7 +238,7 @@ function groundY(x, z) {
 }
 
 function enter3D(kind) {
-  paused = false; keys.clear(); initThree();
+  paused = false; keys.clear(); initThree(); dyn?.reset();   // batu:dyn
   $('mapwrap').hidden = true; $('gl').hidden = false; $('hud').hidden = hudHidden; $('ctl').hidden = false; $('mini').hidden = false; $('hint').hidden = false;
   const r = mapView.route;
   if (kind === 'auto' && r) {
@@ -319,25 +320,97 @@ function deviationCheck(now) {
   w.hidden = !offRoute; if (offRoute) w.textContent = t('alert.offroute', { d: Math.round(best) });
 }
 
+// batu:dyn — yeni plan kurulumu: eski rota gri çizgi, yeni rota çizilir, yürüyüş yeni rotadan sürer (kum, sapma, rezerv ortak).
+let dyn = null, dynPropose = null, dynLast = null;
+function installRoute(rt, curPx, goalPx, t0 = performance.now()) {
+  const R = routeRun, nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind });
+  nr.goalPx = goalPx; nr.startPx = curPx; nr.start = R.r.start; nr.goal = R.r.goal; nr.computeMs = Math.round(performance.now() - t0);
+  const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
+  T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
+  routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, replanned: true, prev: { km: R.r.total.km, min: R.r.total.min }, baseWorld: R.baseWorld ?? R.r.start?.world };
+  wire?.setRoute(nr);
+  return nr;
+}
+const curPxNow = () => worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
+
 async function fireReplan(S) {
   const R = routeRun; if (!R || R.r.source !== 'api') { toast(t('flow.noapi'), true); return; }
   const oldGeneration = R;
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
   audio?.alert('sand');
   try {
-    const cur = worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
+    const cur = curPxNow();
     const t0 = performance.now();
     const res = await wire.call('/replan', { start: cur, goal: R.r.goalPx, observations: [{ px: S.px, radius_m: S.radius_m, cls: 'sand' }], ...(wire.selected?.limits ? { budget: wire.selected.limits } : {}) });
     if (routeRun !== oldGeneration || state === 'map') return;
     const rt = res.routes.find((x) => x.kind === R.r.kind) || res.routes[0];
-    const nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind }); nr.goalPx = R.r.goalPx; nr.startPx = cur; nr.start = R.r.start; nr.goal = R.r.goal; nr.computeMs = Math.round(performance.now() - t0);
-    const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
-    const oldLeft = (R.total - R.s) / 1000;
-    T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
-    routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, replanned: true, prev: { km: R.r.total.km, min: R.r.total.min } };
-    wire?.setRoute(nr);
-    toast(t('flow.replan.toast', { ms: nr.computeMs, km: nr.total.km, min: nr.total.min, status: nr.total.status }), true);
+    // Kum olayı dinamik rota sözleşmesiyle (mm:route-suggest) gider; arayüz yoksa eskisi gibi hemen uygulanır.
+    await dynPropose({ reason: 'sand', route: rt, current: { px: cur }, delta: deltaOf(oneWay(rt.total), oneWay(R.r.raw?.total ?? R.r.total)), urgent: true, t0 });
   } catch (e) { toast(t('flow.replan.fail', { why: e.message }), true); }
+}
+function applyDyn(rt, reason, t0) {
+  const R = routeRun; if (!R || state === 'map') return;
+  const base = R.baseWorld && worldToPx(geo, R.baseWorld[0], R.baseWorld[1]).map(Math.floor);
+  const nr = installRoute(rt, curPxNow(), reason === 'reserve' && base ? base : R.r.goalPx, t0);
+  if (reason === 'sand') toast(t('flow.replan.toast', { ms: nr.computeMs, km: nr.total.km, min: nr.total.min, status: nr.total.status }), true);
+  else toast(t(`dyn.applied.${reason}`, { km: nr.total.km, min: nr.total.min }), true);
+}
+dynPropose = proposeVia({ t, apply: (rt, reason) => applyDyn(rt, reason) });
+dyn = createDynRoute({
+  call: async (path, body) => { const r = await fetch(API_BASE + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(25000) }); if (!r.ok) throw new Error(`API ${r.status}`); return r.json(); },   // wire.call 8 sn: üç paralel /route için kısa
+  propose: (d) => dynPropose(d),
+  apply: (rt, reason) => applyDyn(rt, reason),
+  onNote: (x) => console.warn(x),
+  ctx: () => {
+    const R = routeRun, m = wire?.machine?.snapshot?.();
+    if (!R || R.r.source !== 'api' || paused || state === 'map' || state === 'tour' || m?.state !== 'walking' || !wire.selected) return null;
+    const base = R.baseWorld ?? R.r.start?.world;
+    return { route: { dense: R.r.dense, goalPx: R.r.goalPx, kind: R.r.kind }, pos: [P.x, P.z], px: curPxNow(), progressM: R.s,
+      limits: wire.selected.limits ?? {}, snap: wire.vitals?.snapshot?.() ?? {}, basePx: base ? worldToPx(geo, base[0], base[1]).map(Math.floor) : null,
+      worldToPx: (p) => worldToPx(geo, p[0], p[1]), pxToWorld: (p) => pxToWorld(geo, p[0], p[1]) };
+  },
+});
+// Kask kamerası uyarısı (mm:camera-insight, warn): o durağın çevresi gözlem olarak /replan'a verilir (kum/iri taş sınıfı varsa). batu:dyn
+addEventListener('mm:camera-insight', (e) => {
+  const d = e.detail ?? {}; if (!d.warn || !dyn) return;
+  const stop = wire?.grid?.rover_stops?.find((s) => s.stop_id === d.stopId); if (!stop) return;
+  const kinds = d.kinds ?? [], cls = kinds.includes('sand') ? 'sand' : (kinds.includes('bigrock') || kinds.includes('rock')) ? 'bigrock' : null;
+  if (cls) dyn.observe({ px: stop.px, cls, source: 'camera' });
+});
+
+// #125 A.1: numune alındıktan sonra üsse dönüş ayağı — mevcut konumdan başlangıç noktasına yeni rota.
+// Planlayıcı yoksa yerel A* yedeği kullanılır ve bu açıkça etiketlenir (sayı uydurulmaz).
+async function startReturnLeg() {
+  const R = routeRun; if (!R) return null;
+  const home = R.r.start?.world;
+  if (!Array.isArray(home)) return null;
+  const t0 = performance.now();
+  let nr = null, why = null;
+  const cur = worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
+  const homePx = worldToPx(geo, home[0], home[1]).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
+  try {
+    if (R.r.source !== 'api') throw new Error(t('route.fallback'));
+    const res = await wire.call('/route', { start: cur, goal: homePx, ...(wire.selected?.limits ? { budget: wire.selected.limits } : {}) });
+    const rt = res.routes.find((x) => x.kind === 'safest') || res.routes[0];
+    nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: 'safest' });
+    nr.startPx = cur; nr.goalPx = homePx; nr.source = 'api';
+  } catch (e) {
+    why = e.message;
+    const local = nav.route(P.x, P.z, home[0], home[1], { mode: 'balanced', maxSlope: 25 });
+    if (local.error) { toast(t('return.local', { why: local.error }), true); return null; }
+    nr = { ...local, kind: 'local', label: t('route.fallback'), source: 'local', fallbackWhy: why, startPx: cur, goalPx: homePx };
+  }
+  nr.start = { world: [P.x, P.z] }; nr.goal = { world: [...home] };
+  nr.computeMs = Math.round(performance.now() - t0);
+  const cum = [0];
+  for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
+  T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
+  T.beacon.set?.(home[0], home[1]);
+  routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, leg: 'return' };
+  wire?.setRoute(nr);
+  if (state === 'auto') { P.yaw = Math.atan2(nr.dense[Math.min(4, nr.dense.length - 1)][0] - nr.dense[0][0], -(nr.dense[Math.min(4, nr.dense.length - 1)][1] - nr.dense[0][1])); }
+  toast(why ? t('return.local', { why }) : t('return.ready'), true);
+  return { route: nr, home };
 }
 
 function stepPlayer(dt, t) {
@@ -446,6 +519,7 @@ function frame(now) {
   }
   T.wf?.update(dt, innerHeight * T.ratio); T.wf?.applyAstro(T.astro);   // tur4:his
   if (!paused) wire?.update(dt * timeScale, P);
+  if (dyn) { const nowS = performance.now() / 1000; dyn.update(Math.min(2, nowS - (dynLast ?? nowS)), nowS); dynLast = nowS; }   // batu:dyn: duvar saati (kare dt'si kısıtlı olabilir)
   if (!paused) T.extras?.update(P);
   deviationCheck(now); scanUpdate(now / 1000);
   T.terrain.update(T.camera.position);
@@ -553,7 +627,8 @@ const groundRow = () => {
 };
 
 const pauseFn = (value) => { paused = value; keys.clear(); };
-wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: pauseFn, replan: fireReplan, toast, flow: flowHooks });
+wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: pauseFn, replan: fireReplan, toast, flow: flowHooks,
+  returnToBase: startReturnLeg, audio });   // #125 A.1: numune sonrası üsse dönüş ayağı
 
 void loadGroundLayers();
 ensureScanTex();
@@ -580,6 +655,7 @@ if (Q.get('perf')) { const s = document.createElement('script'); s.src = './tool
 window.__mm = {
   man, geo, nav, get mapView() { return mapView; }, get T() { return T; }, P,
   enter3D, enterMap, enterTour, get flow() { return flow; }, get wire() { return wire; }, get routeRun() { return routeRun; },
+  dynState: () => dyn?.state?.(),   // test kancası (batu:dyn)
   setTimeScale(value) { timeScale = clamp(value, 1, 2000); },
   teleport(x, z, yaw = 0, pitch = -0.1, st = 'walk', heightAbove) {
     if (!T) enter3D('walk');
@@ -596,7 +672,7 @@ if (Q.get('mod') === '3d') enter3D('walk');
 else if (!DEV || Q.get('intro') === '1') {   // tur4:akis: oyun akışı (açılış → görev → brifing → rota → yürüyüş → karne)
   flow = initFlow({ wire, root: document.body, getState: () => state, getPose: () => P, pause: pauseFn, enterMap, exitToTour: enterTour, audio, dev: DEV,
     geo, overviewUrl: `${BASE}/overview.jpg` });   // görev kartı harita önizlemesi (#103 B.6)
-  Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, autoWalk: true });
+  Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, setObjective: flow.setObjective, autoWalk: true });
   const m0 = wire.catalog.missions.find((m) => m.start_px && m.goal_px);
   if (m0) { const a = wire.coords.cellToWorld(m0.start_px), b = wire.coords.cellToWorld(m0.goal_px); tourC = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; }
   enterTour(); if (!flow.openCustomFromUrl()) flow.showIntro();   // batu:custom: ?a=col,row&b=col,row

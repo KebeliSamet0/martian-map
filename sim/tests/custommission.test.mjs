@@ -45,12 +45,12 @@ test('buildCustomMission: S1 biçimi, bütçe, 80 L, çok yakın A-B reddedilir'
 });
 
 const toWorld = ([c, r]) => [c * 2, r * 2];   // 1 hücre = 2 m, basit düzlem
-const zones = [{ id: 'z1', px: [100, 100], radius_m: 20 }, { id: 'z2', px: [400, 400], radius_m: 10 }];
+const zones = [{ id: 'z1', px: [100.6, 100.4], radius_m: 20 }, { id: 'z2', px: [400, 400], radius_m: 10 }];
 
 test('sandForRoute: yalnız radius_m+40 içinden geçen rota için olay', () => {
   const near = [[0, 200], [100, 200], [200, 200], [300, 200]];          // z1 merkezi (200,200) rotanın üzerinde
   const r = sandForRoute(near, zones, toWorld);
-  assert.equal(r.id, 'z1'); assert.equal(r.threshold_m, 60); assert.ok(r.min_dist_m <= 60);
+  assert.equal(r.id, 'z1'); assert.deepEqual(r.px, [100, 100], 'API için tam sayı hücre'); assert.equal(r.threshold_m, 60); assert.ok(r.min_dist_m <= 60);
   const far = [[0, 0], [100, 0], [200, 0]];                              // z1'e 200 m
   assert.equal(sandForRoute(far, zones, toWorld), null);
   const edge = [[0, 200 + 61], [400, 200 + 61]];                         // 61 m: eşiğin dışında

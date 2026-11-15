@@ -39,13 +39,14 @@ export function createMission({ definition = DEMO, vitals, coords, api, apiBase 
     if (!Array.isArray(p) || p.length !== 2 || !p.every(Number.isFinite)) throw new TypeError('world veya grid_px + coords gerekli');
     return p;
   };
-  const goal = world(def.goal), radius = def.goal.radius_m ?? 2;
+  let goal = world(def.goal), radius = def.goal.radius_m ?? 2;
   const events = (def.events ?? []).map((e, i) => ({ ...e, id: e.id ?? `event-${i}`, world: world(e), radius_m: e.radius_m ?? 0 }));
   if (!nonnegative(radius) || !nonnegative(def.sample_kg ?? 0) || events.some(e => !nonnegative(e.radius_m) || (e.trigger_m != null && !nonnegative(e.trigger_m))) || new Set(events.map(e => e.id)).size !== events.length)
     throw new TypeError('Geçersiz görev yarıçapı, yükü veya olay kimliği');
   let state = 'briefing', currentEvent = null, sampled = false, previous = null, planned = null, summary = null, finishing = null;
+  let leg = 'outbound';   // #125 A.1: gidiş → numune → üsse dönüş
   const emit = (name, data) => { for (const cb of listeners.get(name) ?? []) cb(structuredClone(data)); };
-  const snapshot = () => structuredClone({ state, missionId: def.id, source, currentEvent, sampled, triggered: [...triggered], planned, summary });
+  const snapshot = () => structuredClone({ state, missionId: def.id, source, currentEvent, sampled, leg, triggered: [...triggered], planned, summary });
   const move = next => { state = next; emit('state', snapshot()); return snapshot(); };
   const requireState = expected => { if (state !== expected) throw new Error(`${state} durumunda ${expected} işlemi yapılamaz`); };
   return {
@@ -77,6 +78,17 @@ export function createMission({ definition = DEMO, vitals, coords, api, apiBase 
       requireState('arrived');
       if (!sampled) { vitals?.addLoad(def.sample_kg ?? 0); sampled = true; emit('sample', { kg: def.sample_kg ?? 0 }); }
       return snapshot();
+    },
+    // #125 A.1: numune alındıktan sonra ikinci hedef — üsse dönüş. Gidişte tetiklenen olaylar tekrar açılmaz.
+    beginReturn(target = {}) {
+      requireState('arrived');
+      const q = point(target.world ?? target);
+      if (!Array.isArray(q) || q.length !== 2 || !q.every(Number.isFinite)) throw new TypeError('Dönüş hedefi gerekli');
+      goal = q;
+      if (nonnegative(target.radius_m)) radius = target.radius_m;
+      leg = 'return'; previous = null;
+      if (target.route) vitals?.setRoute(target.route);
+      return move('walking');
     },
     async finish() {
       if (state === 'debrief') return snapshot();
