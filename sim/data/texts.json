@@ -622,162 +622,211 @@
     "fatal.retry": {
       "tr": "Tekrar dene",
       "en": "Try again"
+    },
+    "unit.hm": {
+      "tr": "sa:dk",
+      "en": "hh:mm"
+    },
+    "computing.title": {
+      "tr": "ROTALAR HESAPLANIYOR",
+      "en": "COMPUTING ROUTES"
+    },
+    "computing.hint": {
+      "tr": "Planlayıcı üç rotayı değerlendiriyor: en kısa, dengeli ve en güvenli.",
+      "en": "The planner is working out three routes: shortest, balanced and safest."
+    },
+    "computing.step.route": {
+      "tr": "Eğim, zemin sınıfı ve kaya yoğunluğu okunuyor",
+      "en": "Reading slope, terrain class and rock density"
+    },
+    "error.title": {
+      "tr": "BİR ŞEY TERS GİTTİ",
+      "en": "SOMETHING WENT WRONG"
+    },
+    "error.route": {
+      "tr": "Rotalar hesaplanamadı. Planlayıcı API'sine ulaşılamıyor olabilir.",
+      "en": "The routes could not be computed. The planner API may be unreachable."
+    },
+    "error.noroute": {
+      "tr": "Bu görev için rota bulunamadı.",
+      "en": "No route could be found for this mission."
+    },
+    "route.kind.shortest": {
+      "tr": "En kısa",
+      "en": "Shortest"
+    },
+    "route.kind.balanced": {
+      "tr": "Dengeli",
+      "en": "Balanced"
+    },
+    "route.kind.safest": {
+      "tr": "En güvenli",
+      "en": "Safest"
     }
   },
   "helmetcam": {
-      "hint": {
-          "tr": "C · kask kamerası: Curiosity burada sol {sol}'de durdu",
-          "en": "C · helmet camera: Curiosity stopped here on sol {sol}"
-      },
-      "title": {
-          "tr": "Kask kamerası",
-          "en": "Helmet camera"
-      },
-      "source_img": {
-          "tr": "Gerçek görüntü: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}",
-          "en": "Real image: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}"
-      },
-      "source_model": {
-          "tr": "Model: AI4Mars ile eğitilmiş DeepLabv3+ (tahmin)",
-          "en": "Model: DeepLabv3+ trained on AI4Mars (prediction)"
-      },
-      "comment": {
-          "tr": "Önünde {list}; {sand}.",
-          "en": "Ahead of you: {list}; {sand}."
-      },
-      "part": {
-          "tr": "%{pct} {cls}",
-          "en": "{pct}% {cls}"
-      },
-      "class_bedrock": {
-          "tr": "ana kaya",
-          "en": "bedrock"
-      },
-      "class_soil": {
-          "tr": "toprak",
-          "en": "soil"
-      },
-      "class_sand": {
-          "tr": "kum",
-          "en": "sand"
-      },
-      "class_bigrock": {
-          "tr": "büyük kaya",
-          "en": "big rock"
-      },
-      "class_none": {
-          "tr": "belirgin bir sınıf yok",
-          "en": "no dominant class"
-      },
-      "sand_none": {
-          "tr": "kum yok denecek kadar az",
-          "en": "almost no sand"
-      },
-      "sand_some": {
-          "tr": "kum %{pct}",
-          "en": "sand {pct}%"
-      },
-      "certain_high": {
-          "tr": "Model bu durakta emin.",
-          "en": "The model is confident at this stop."
-      },
-      "certain_low": {
-          "tr": "Model emin değil; kanıt az.",
-          "en": "The model is not sure; there is little evidence."
-      },
-      "certainty_line": {
-          "tr": "Model kesinliği %{c} (1 − entropi). Düşük kesinlik 'kanıt az' demektir, 'yanlış' değil.",
-          "en": "Model certainty {c}% (1 − entropy). Low certainty means little evidence, not 'wrong'."
-      },
-      "warn": {
-          "tr": "Uyarı: bu durakta {what}; ileride benzer zemin olabilir.",
-          "en": "Warning: at this stop {what}; similar ground may lie ahead."
-      },
-      "warn_part": {
-          "tr": "{cls} %{pct}",
-          "en": "{cls} {pct}%"
-      },
-      "ahead_hit": {
-          "tr": "Rotan {m} m ileride benzer zeminden ({cls}) geçiyor.",
-          "en": "Your route crosses similar ground ({cls}) {m} m ahead."
-      },
-      "ahead_none": {
-          "tr": "Rotanın önündeki {m} m içinde benzer zemin görünmüyor (model tahmini).",
-          "en": "No similar ground on your route within the next {m} m (model estimate)."
-      },
-      "sand_note": {
-          "tr": "Not: model ince, koyu kumu eksik tahmin edebilir; kum yok demek kum yok anlamına gelmez.",
-          "en": "Note: the model can under-predict thin dark sand, so 'no sand' is not proof of none."
-      },
-      "nophoto": {
-          "tr": "Burada Curiosity fotoğrafı yok. Haritadaki zemin, en yakın durakların model sonucundan yayılmış bir tahmin.",
-          "en": "There is no Curiosity photo here. The ground on the map is an estimate spread from the model results at the nearest stops."
-      },
-      "nophoto_meta": {
-          "tr": "Model kesinliği %{c}; en yakın durak {d} m uzakta.",
-          "en": "Model certainty {c}%; the nearest stop is {d} m away."
-      },
-      "nophoto_near": {
-          "tr": "Bu durağın görüntüsü yüklenemedi (arşivde yok ya da indirilmedi).",
-          "en": "The image for this stop could not be loaded (not in the archive or not downloaded)."
-      },
-      "frame": {
-          "tr": "Kare {i}/{n} · ◀ ▶",
-          "en": "Frame {i}/{n} · ◀ ▶"
-      },
-      "close": {
-          "tr": "Kapat (C)",
-          "en": "Close (C)"
-      },
-      "mask_label": {
-          "tr": "Model maskesi (tahmin, yarı saydam)",
-          "en": "Model mask (prediction, semi-transparent)"
-      },
-      "dir_label": {
-          "tr": "Fotoğraf bu yöne çekildi: {az}° ({card}), yükseklik {el}°, görüş açısı {fov}°",
-          "en": "Photo taken facing {az}° ({card}), elevation {el}°, field of view {fov}°"
-      },
-      "dir_unknown": {
-          "tr": "Bu karenin bakış yönü bilinmiyor.",
-          "en": "The viewing direction of this frame is unknown."
-      },
-      "dir_source": {
-          "tr": "Yön: rover duruşu + mast azimutu (NASA kamera modeli). Kuzeyden saat yönünde.",
-          "en": "Direction: rover attitude + mast azimuth (NASA camera model), clockwise from north."
-      },
-      "btn_align": {
-          "tr": "Bu yöne bak (V)",
-          "en": "Look this way (V)"
-      },
-      "btn_back": {
-          "tr": "Geri dön (V)",
-          "en": "Back (V)"
-      },
-      "lbl_real": {
-          "tr": "gerçek",
-          "en": "real"
-      },
-      "lbl_sim": {
-          "tr": "simülasyon",
-          "en": "simulation"
-      },
-      "wipe_hint": {
-          "tr": "Sürgü: ◀ ▶ ya da sürükle",
-          "en": "Slider: ◀ ▶ or drag"
-      },
-      "align_note": {
-          "tr": "Yakın alan DTM çözünürlüğü (1 m) ve sentetik kayalar yüzünden farklı görünür; ufuk ve büyük yer şekillerini karşılaştır. ▲▼ kare, ◀ ▶ sürgü.",
-          "en": "Near ground differs (1 m DTM, synthetic rocks); compare the skyline and large landforms. ▲▼ frame, ◀ ▶ slider."
-      }
+    "hint": {
+      "tr": "C · kask kamerası: Curiosity burada sol {sol}'de durdu",
+      "en": "C · helmet camera: Curiosity stopped here on sol {sol}"
+    },
+    "title": {
+      "tr": "Kask kamerası",
+      "en": "Helmet camera"
+    },
+    "source_img": {
+      "tr": "Gerçek görüntü: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}",
+      "en": "Real image: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}"
+    },
+    "source_model": {
+      "tr": "Model: AI4Mars ile eğitilmiş DeepLabv3+ (tahmin)",
+      "en": "Model: DeepLabv3+ trained on AI4Mars (prediction)"
+    },
+    "comment": {
+      "tr": "Önünde {list}; {sand}.",
+      "en": "Ahead of you: {list}; {sand}."
+    },
+    "part": {
+      "tr": "%{pct} {cls}",
+      "en": "{pct}% {cls}"
+    },
+    "class_bedrock": {
+      "tr": "ana kaya",
+      "en": "bedrock"
+    },
+    "class_soil": {
+      "tr": "toprak",
+      "en": "soil"
+    },
+    "class_sand": {
+      "tr": "kum",
+      "en": "sand"
+    },
+    "class_bigrock": {
+      "tr": "büyük kaya",
+      "en": "big rock"
+    },
+    "class_none": {
+      "tr": "belirgin bir sınıf yok",
+      "en": "no dominant class"
+    },
+    "sand_none": {
+      "tr": "kum yok denecek kadar az",
+      "en": "almost no sand"
+    },
+    "sand_some": {
+      "tr": "kum %{pct}",
+      "en": "sand {pct}%"
+    },
+    "certain_high": {
+      "tr": "Model bu durakta emin.",
+      "en": "The model is confident at this stop."
+    },
+    "certain_low": {
+      "tr": "Model emin değil; kanıt az.",
+      "en": "The model is not sure; there is little evidence."
+    },
+    "certainty_line": {
+      "tr": "Model kesinliği %{c} (1 − entropi). Düşük kesinlik 'kanıt az' demektir, 'yanlış' değil.",
+      "en": "Model certainty {c}% (1 − entropy). Low certainty means little evidence, not 'wrong'."
+    },
+    "warn": {
+      "tr": "Uyarı: bu durakta {what}; ileride benzer zemin olabilir.",
+      "en": "Warning: at this stop {what}; similar ground may lie ahead."
+    },
+    "warn_part": {
+      "tr": "{cls} %{pct}",
+      "en": "{cls} {pct}%"
+    },
+    "ahead_hit": {
+      "tr": "Rotan {m} m ileride benzer zeminden ({cls}) geçiyor.",
+      "en": "Your route crosses similar ground ({cls}) {m} m ahead."
+    },
+    "ahead_none": {
+      "tr": "Rotanın önündeki {m} m içinde benzer zemin görünmüyor (model tahmini).",
+      "en": "No similar ground on your route within the next {m} m (model estimate)."
+    },
+    "sand_note": {
+      "tr": "Not: model ince, koyu kumu eksik tahmin edebilir; kum yok demek kum yok anlamına gelmez.",
+      "en": "Note: the model can under-predict thin dark sand, so 'no sand' is not proof of none."
+    },
+    "nophoto": {
+      "tr": "Burada Curiosity fotoğrafı yok. Haritadaki zemin, en yakın durakların model sonucundan yayılmış bir tahmin.",
+      "en": "There is no Curiosity photo here. The ground on the map is an estimate spread from the model results at the nearest stops."
+    },
+    "nophoto_meta": {
+      "tr": "Model kesinliği %{c}; en yakın durak {d} m uzakta.",
+      "en": "Model certainty {c}%; the nearest stop is {d} m away."
+    },
+    "nophoto_near": {
+      "tr": "Bu durağın görüntüsü yüklenemedi (arşivde yok ya da indirilmedi).",
+      "en": "The image for this stop could not be loaded (not in the archive or not downloaded)."
+    },
+    "frame": {
+      "tr": "Kare {i}/{n} · ◀ ▶",
+      "en": "Frame {i}/{n} · ◀ ▶"
+    },
+    "close": {
+      "tr": "Kapat (C)",
+      "en": "Close (C)"
+    },
+    "mask_label": {
+      "tr": "Model maskesi (tahmin, yarı saydam)",
+      "en": "Model mask (prediction, semi-transparent)"
+    },
+    "dir_label": {
+      "tr": "Fotoğraf bu yöne çekildi: {az}° ({card}), yükseklik {el}°, görüş açısı {fov}°",
+      "en": "Photo taken facing {az}° ({card}), elevation {el}°, field of view {fov}°"
+    },
+    "dir_unknown": {
+      "tr": "Bu karenin bakış yönü bilinmiyor.",
+      "en": "The viewing direction of this frame is unknown."
+    },
+    "dir_source": {
+      "tr": "Yön: rover duruşu + mast azimutu (NASA kamera modeli). Kuzeyden saat yönünde.",
+      "en": "Direction: rover attitude + mast azimuth (NASA camera model), clockwise from north."
+    },
+    "btn_align": {
+      "tr": "Bu yöne bak (V)",
+      "en": "Look this way (V)"
+    },
+    "btn_back": {
+      "tr": "Geri dön (V)",
+      "en": "Back (V)"
+    },
+    "lbl_real": {
+      "tr": "gerçek",
+      "en": "real"
+    },
+    "lbl_sim": {
+      "tr": "simülasyon",
+      "en": "simulation"
+    },
+    "wipe_hint": {
+      "tr": "Sürgü: ◀ ▶ ya da sürükle",
+      "en": "Slider: ◀ ▶ or drag"
+    },
+    "align_note": {
+      "tr": "Yakın alan DTM çözünürlüğü (1 m) ve sentetik kayalar yüzünden farklı görünür; ufuk ve büyük yer şekillerini karşılaştır. ▲▼ kare, ◀ ▶ sürgü.",
+      "en": "Near ground differs (1 m DTM, synthetic rocks); compare the skyline and large landforms. ▲▼ frame, ◀ ▶ slider."
+    }
   },
   "insight": {
-    "foot_label": { "tr": "ZEMİN", "en": "GROUND" },
+    "foot_label": {
+      "tr": "ZEMİN",
+      "en": "GROUND"
+    },
     "foot_line": {
       "tr": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği (kalibre) {conf} %",
       "en": "sand {sand} % · bedrock {bedrock} % · soil {soil} % · big rock {bigrock} % · model certainty (calibrated) {conf} %"
     },
-    "foot_dominant": { "tr": "{cls} ağırlıklı", "en": "mostly {cls}" },
-    "foot_uncertain": { "tr": "belirsiz", "en": "uncertain" },
+    "foot_dominant": {
+      "tr": "{cls} ağırlıklı",
+      "en": "mostly {cls}"
+    },
+    "foot_uncertain": {
+      "tr": "belirsiz",
+      "en": "uncertain"
+    },
     "foot_provisional": {
       "tr": "geçici zemin katmanı (model çıktısı değil)",
       "en": "provisional terrain layer (not model output)"
@@ -786,10 +835,22 @@
       "tr": "Model tahmini (AI4Mars tabanlı), ölçüm değil",
       "en": "Model prediction (AI4Mars-based), not a measurement"
     },
-    "class_sand": { "tr": "kum", "en": "sand" },
-    "class_bedrock": { "tr": "ana kaya", "en": "bedrock" },
-    "class_soil": { "tr": "toprak", "en": "soil" },
-    "class_bigrock": { "tr": "büyük kaya", "en": "big rock" },
+    "class_sand": {
+      "tr": "kum",
+      "en": "sand"
+    },
+    "class_bedrock": {
+      "tr": "ana kaya",
+      "en": "bedrock"
+    },
+    "class_soil": {
+      "tr": "toprak",
+      "en": "soil"
+    },
+    "class_bigrock": {
+      "tr": "büyük kaya",
+      "en": "big rock"
+    },
     "seg_line": {
       "tr": "Segment {id}: {cls} (p={p}) → zemin katsayısı ×{eta} → {extra} kcal",
       "en": "Segment {id}: {cls} (p={p}) → terrain factor ×{eta} → {extra} kcal"
@@ -798,27 +859,42 @@
       "tr": "Segment {id}: {cls}, zemin etkisi küçük (katsayı ×{eta}, {extra} kcal)",
       "en": "Segment {id}: {cls}, little terrain effect (factor ×{eta}, {extra} kcal)"
     },
-    "seg_alt": { "tr": "alternatif: {alt}", "en": "alternative: {alt}" },
+    "seg_alt": {
+      "tr": "alternatif: {alt}",
+      "en": "alternative: {alt}"
+    },
     "seg_conf_low": {
       "tr": "model kesinliği düşük ({conf} %): kanıt az, tahmin yanlış demek değil",
       "en": "low model certainty ({conf} %): little evidence, not necessarily a wrong call"
     },
-    "fog_button": { "tr": "Model kesinliği katmanı", "en": "Model certainty layer" },
+    "fog_button": {
+      "tr": "Model kesinliği katmanı",
+      "en": "Model certainty layer"
+    },
     "fog_hint": {
       "tr": "Soluk alan = kanıt az (kesinlik = 1 − normalize entropi). Yanlış demek değil: entropi yanlış tahminleri ayırt etmiyor. Model tahmini, ölçüm değil.",
       "en": "Faded area = little evidence (certainty = 1 − normalized entropy). It does not mean wrong: entropy cannot tell wrong predictions apart. Model prediction, not a measurement."
     },
-    "seg_title": { "tr": "Segment açıklamaları (model rotası)", "en": "Segment notes (model route)" },
+    "seg_title": {
+      "tr": "Segment açıklamaları (model rotası)",
+      "en": "Segment notes (model route)"
+    },
     "hazard_button": {
       "tr": "Yalnız eğim rotasının kayalık/yüzlek zemini (3B)",
       "en": "Rocky/outcrop ground on the slope-only route (3D)"
     },
-    "walk_title": { "tr": "Yürüdüğün zemin", "en": "The ground you walked" },
+    "walk_title": {
+      "tr": "Yürüdüğün zemin",
+      "en": "The ground you walked"
+    },
     "walk_total": {
       "tr": "Katettiğin {m} m boyunca model tahmini:",
       "en": "Model prediction over the {m} m you covered:"
     },
-    "walk_class": { "tr": "{cls} {pct} % ({m} m)", "en": "{cls} {pct} % ({m} m)" },
+    "walk_class": {
+      "tr": "{cls} {pct} % ({m} m)",
+      "en": "{cls} {pct} % ({m} m)"
+    },
     "walk_conf": {
       "tr": "Ortalama model kesinliği {conf} %; yolun {low} % kadarında ({lowm} m) kanıt azdı (bu, tahminin yanlış olduğu anlamına gelmez).",
       "en": "Average model certainty {conf} %; evidence was thin over {low} % of the path ({lowm} m) — which does not mean the prediction is wrong."
@@ -829,9 +905,18 @@
     }
   },
   "compare": {
-    "title": { "tr": "Zemin modeli ne kazandırıyor?", "en": "What does the terrain model buy you?" },
-    "naive": { "tr": "Yalnız eğim", "en": "Slope only" },
-    "model": { "tr": "Zemin modeli + kaya", "en": "Terrain model + rock" },
+    "title": {
+      "tr": "Zemin modeli ne kazandırıyor?",
+      "en": "What does the terrain model buy you?"
+    },
+    "naive": {
+      "tr": "Yalnız eğim",
+      "en": "Slope only"
+    },
+    "model": {
+      "tr": "Zemin modeli + kaya",
+      "en": "Terrain model + rock"
+    },
     "naive_sub": {
       "tr": "DTM eğimi var; zemin ve kaya bilinmiyor",
       "en": "DTM slope only; ground and rock unknown"
@@ -840,18 +925,54 @@
       "tr": "AI4Mars zemin sınıfı + kaya yoğunluğu",
       "en": "AI4Mars terrain class + rock density"
     },
-    "row_dist": { "tr": "Mesafe", "en": "Distance" },
-    "row_kcal": { "tr": "Enerji", "en": "Energy" },
-    "row_o2": { "tr": "O₂", "en": "O₂" },
-    "row_risk": { "tr": "Risk", "en": "Risk" },
-    "row_hazard": { "tr": "Tehlikeli zemin", "en": "Hazardous ground" },
-    "unit_m": { "tr": "m", "en": "m" },
-    "unit_kcal": { "tr": "kcal", "en": "kcal" },
-    "unit_l": { "tr": "L", "en": "L" },
-    "unit_risk": { "tr": "puan", "en": "pts" },
-    "delta_better": { "tr": "model {v} {u} az", "en": "model {v} {u} less" },
-    "delta_worse": { "tr": "model {v} {u} fazla", "en": "model {v} {u} more" },
-    "delta_same": { "tr": "fark yok", "en": "no difference" },
+    "row_dist": {
+      "tr": "Mesafe",
+      "en": "Distance"
+    },
+    "row_kcal": {
+      "tr": "Enerji",
+      "en": "Energy"
+    },
+    "row_o2": {
+      "tr": "O₂",
+      "en": "O₂"
+    },
+    "row_risk": {
+      "tr": "Risk",
+      "en": "Risk"
+    },
+    "row_hazard": {
+      "tr": "Tehlikeli zemin",
+      "en": "Hazardous ground"
+    },
+    "unit_m": {
+      "tr": "m",
+      "en": "m"
+    },
+    "unit_kcal": {
+      "tr": "kcal",
+      "en": "kcal"
+    },
+    "unit_l": {
+      "tr": "L",
+      "en": "L"
+    },
+    "unit_risk": {
+      "tr": "puan",
+      "en": "pts"
+    },
+    "delta_better": {
+      "tr": "model {v} {u} az",
+      "en": "model {v} {u} less"
+    },
+    "delta_worse": {
+      "tr": "model {v} {u} fazla",
+      "en": "model {v} {u} more"
+    },
+    "delta_same": {
+      "tr": "fark yok",
+      "en": "no difference"
+    },
     "hazard_note": {
       "tr": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu bu rotalarda görmüyor (p_sand ≤ 0,25).",
       "en": "Red: rocky/outcrop segment (mean rock density ≥ 0.10; the naive route crosses it). Rock density may be inflated: 78% of the large detections in the corridor are outcrop or shadow. The model sees no sand on these routes (p_sand ≤ 0.25)."
@@ -876,8 +997,14 @@
       "tr": "Tek yön, {kind} rota. Maliyet gerçek zemin katmanında ölçülür; zemin katmanı model tahminidir.",
       "en": "One way, {kind} route. Cost is measured on the real terrain layer; that layer is a model prediction."
     },
-    "loading": { "tr": "Karşılaştırma hesaplanıyor…", "en": "Computing the comparison…" },
-    "error": { "tr": "Karşılaştırma alınamadı ({why}).", "en": "Could not fetch the comparison ({why})." },
+    "loading": {
+      "tr": "Karşılaştırma hesaplanıyor…",
+      "en": "Computing the comparison…"
+    },
+    "error": {
+      "tr": "Karşılaştırma alınamadı ({why}).",
+      "en": "Could not fetch the comparison ({why})."
+    },
     "provisional": {
       "tr": "Zemin katmanı geçici (model çıktısı değil); karşılaştırma bunu yansıtır.",
       "en": "The terrain layer is provisional (not model output); the comparison reflects that."
@@ -886,7 +1013,10 @@
       "tr": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
       "en": "The model paid off in safety, not energy: risk dropped by {risk_pct} %."
     },
-    "sentence_cost": { "tr": " Bedeli {cost} kcal ek enerji.", "en": " It costs {cost} kcal of extra energy." },
+    "sentence_cost": {
+      "tr": " Bedeli {cost} kcal ek enerji.",
+      "en": " It costs {cost} kcal of extra energy."
+    },
     "sentence_other": {
       "tr": "Model rotayı değiştirdi; bu görevde risk ve enerji farkı küçük.",
       "en": "The model changed the route; on this mission the risk and energy difference is small."

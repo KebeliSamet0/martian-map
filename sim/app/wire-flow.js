@@ -126,6 +126,54 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     row.querySelector('button')?.focus();
   }
 
+  // ---------- Hesaplanıyor ekranı (#103 A.1) ----------
+  // Eskiden bu aşamada katman boşaltılıp hiçbir şey çizilmiyordu: yavaş API'de boş ekran.
+  function showComputing(m) {
+    clearLayer(); hudLayer.hidden = true; setScreen('computing', { mission: m?.id });
+    const card = el('section', 'mm-card mm-card-busy');
+    card.append(
+      el('div', 'mm-kicker', m?.id ?? ''),
+      el('h2', 'mm-card-title', t('computing.title')),
+      el('p', 'mm-text', t('computing.hint')),
+    );
+    const bar = el('div', 'mm-progress');
+    bar.append(el('div', 'mm-progress-fill'));
+    card.append(bar, el('p', 'mm-fine', t('computing.step.route')));
+    const box = el('div', 'mm-modal mm-overlay mm-in');
+    box.append(card);
+    layer.append(box);
+    layer.classList.add('mm-in');
+  }
+
+  // ---------- Görünür hata + tekrar dene (#103 A.1) ----------
+  let lastError = null;
+  function showError(info) {
+    const { message, detail, retry } = info;
+    lastError = info;
+    clearLayer(); hudLayer.hidden = true; setScreen('error');
+    const card = el('section', 'mm-card');
+    card.append(
+      el('h2', 'mm-card-title', t('error.title')),
+      el('p', 'mm-text', message ?? t('error.route')),
+    );
+    if (detail) card.append(el('p', 'mm-fine', detail));
+    const acts = el('div', 'mm-alert-acts mm-acts-end');
+    const back = button(t('briefing.back'), 'ghost');
+    back.onclick = () => { exitToTour(); showSelect(); };
+    acts.append(back);
+    if (retry) {
+      const again = button(t('fatal.retry'));
+      again.onclick = () => { void retry(); };
+      acts.append(again);
+      card.append(acts);
+      again.focus();
+    } else { card.append(acts); back.focus(); }
+    const box = el('div', 'mm-modal mm-overlay mm-in');
+    box.append(card);
+    layer.append(box);
+    layer.classList.add('mm-in');
+  }
+
   // ---------- Yürüyüş HUD'u ----------
   let hudRefs = null;
   function buildWalkHud() {
@@ -255,6 +303,8 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
   onLang(() => {
     if (screen === 'intro') showIntro(); else if (screen === 'select') showSelect();
     else if (current) renderPause();
+    else if (screen === 'computing') showComputing(wire.selected);
+    else if (screen === 'error' && lastError) showError(lastError);
     else if (screen === 'walk') { buildWalkHud(); }
   });
 
@@ -263,7 +313,12 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     showIntro, showSelect, showWalk, update, openPause, closePause, toggleHelp,
     get screen() { return screen; }, get paused() { return paused; }, dev,
     // wire.js kancaları
-    onScreen: (name, m) => { if (name === 'briefing' || name === 'computing' || name === 'route') { clearLayer(); setScreen(name, { mission: m?.id }); } else if (name === 'select') { /* onBack gösterir */ } else setScreen(name, { mission: m?.id }); },
+    onScreen: (name, m) => {
+      if (name === 'computing') return showComputing(m);
+      if (name === 'briefing' || name === 'route') { clearLayer(); setScreen(name, { mission: m?.id }); }
+      else if (name === 'select') { /* onBack gösterir */ } else setScreen(name, { mission: m?.id });
+    },
+    onError: showError,
     onBack: () => { exitToTour(); showSelect(); },
     onReport: (action) => { hudLayer.hidden = true; exitToTour(); showSelect(); },
     autoWalk: true,
