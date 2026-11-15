@@ -231,6 +231,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     setRoute(route) {
       vitals?.setRoute(route);
       if (!running || !route || !vitals) return;
+      if (outboundActual || machine?.snapshot?.().leg === 'return') return;   // numune alındıktan sonraki dönüş rotası replan değildir: karne gidiş planını korur (#125)
       const s = vitals.snapshot();
       const rest = walkPlan(structuredClone(route?.raw?.total ?? route?.total ?? {}));
       const sum = (a, b) => (Number.isFinite(a) && Number.isFinite(b) ? a + b : null);
