@@ -1,69 +1,66 @@
----
-title: Martian Map API
-emoji: 🪐
-colorFrom: red
-colorTo: yellow
-sdk: docker
-app_port: 7860
-pinned: false
----
+# Martian Map
 
-# Martian Map (çalışma adı)
+**Rehearse a Mars spacewalk before you take it.**
+Team SÜNOVA · NASA Space Apps Challenge 2026 · Konya, Türkiye · Challenge: *Interplanetary Survival Guide: Martian Map*
 
-Docker/Spaces çalıştırma ve çevrimdışı rota paketi: [deploy rehberi](api/DEPLOY.md).
+▶ **30-second demo video:** VIDEO_LINK
 
-NASA Space Apps Challenge 2026 · **Interplanetary Survival Guide: Martian Map** · Konya
+Martian Map is an astronaut EVA rehearsal simulator on real Mars terrain (Gale Crater, the Mount Sharp boxwork area Curiosity explored in 2025–2026). The astronaut reads a briefing, compares three planned routes by time, energy, oxygen and radiation dose, and walks the chosen one in 3D while the life-support budget drains. The route is re-planned live from wherever the astronaut stands. A helmet camera opens Curiosity's real Navcam photo of that spot with our terrain model's reading on top, and a scanner marks caution / no-go ground and places where the model has little evidence.
 
-Mars'ta yürüyen astronota Gale Krateri'nde güvenli rota çizen, her rota parçasında **neden o yolu seçtiğini** ve yapay zekâ modelinin zemin hakkında **ne kadar emin olduğunu** söyleyen, rotayı 3D ortamda prova ettiren bir web uygulaması.
+Every number in the app comes from NASA data, a published equation or a labelled planning assumption. Full project text: [`docs/submission/PROJECT.md`](docs/submission/PROJECT.md).
 
-## Akış
-```
-NASA verisi ──► katmanlar (eğim, kaya, termal) ──┐
-Navcam + AI4Mars modeli ──► zemin sınıfı + güven ─┼─► maliyet haritası ─► 3 rota ─► segment açıklaması ─► arayüz + 3D prova
-CRISM / jeoloji ──► bilim durakları ──────────────┘
-```
+## Run it (any machine, 2 commands)
 
-## Klasörler
-| Klasör | İçerik | Sorumlu |
-|---|---|---|
-| `pipeline/` | DTM, ortofoto, eğim, ızgara, CRISM, THEMIS işleme | Elif Rana |
-| `ml/rover_terrain/` | AI4Mars zemin segmentasyonu + MC Dropout (RTX 4070, Emre'nin makinesi) | Emre |
-| `ml/orbital/` | HiRISE kaya tespiti / kaya yoğunluğu (Colab; eğitim gerekirse Samet'in M5 Pro'su) | Bora |
-| `api/` | Maliyet modeli, rota, açıklama, FastAPI | Samet |
-| `web/` | React + Leaflet arayüz, segment kartları | Veysel |
-| `sim/` | Three.js 3D prova simülasyonu | Batu |
-| `docs/` | Kaynaklar, metabolik model, proje sayfası, sunum | Elif Nisa |
-| `contracts/` | Ekipler arası veri formatları (önce bunu oku) | herkes |
-
-## Kapılar (Türkiye saati)
-| Zaman | Kapı | Koşul |
-|---|---|---|
-| Cmt 14:00 | **Kapı 1 – Veri** | Gale DTM ızgarada; değilse Jezero'ya geçiş |
-| Cmt 22:00 | **Kapı 2 – Uçtan uca** | Gerçek veriyle tek rota baştan sona çalışıyor; değilse ekstralar iptal |
-| Paz 12:00 | **Kapı 3 – Simülasyon** | 3D hazır değilse 2D ile teslim |
-| Paz 16:00 | **Kapı 4 – Kod dondurma** | Sonrası yalnız video, slayt, proje sayfası |
-| Paz 22:00 | **Teslim** | Resmî son 23:59 |
-
-## Çalıştırma (herhangi bir makinede, 2 komut)
-
-Gereken: Python 3.10+ (web arayüzü için isteğe bağlı Node.js). 3B arazi karoları (`sim/data/tiles_fixed`) ve tüm katmanlar repoda.
+Needs Python 3.10+ (Node.js optional, only for the web map). All terrain tiles, layers, Navcam frames and masks are in the repo.
 
 ```sh
 git clone https://github.com/KebeliSamet0/martian-map.git && cd martian-map
-bash scripts/setup.sh     # bir kez: .venv + API bağımlılıkları
-bash scripts/dev.sh       # API :8000 + Sim :8001 (+ Web :5173 varsa)
+bash scripts/setup.sh     # once: .venv + API dependencies
+bash scripts/dev.sh       # planner API :8000 + simulator :8001
 ```
 
-Tarayıcıda: **http://127.0.0.1:8001/sim/** · İngilizce: `?lang=en` · geliştirici panelleri: `?dev=1`
+Open **http://127.0.0.1:8001/sim/?lang=en** (Turkish UI without `?lang=en`). Controls: W A S D walk, L scanner, C helmet camera, G/V Navcam card, Esc menu, ? help.
 
-Gerçek katmanlarla uçtan uca duman testini (`/route` + kum gözlemiyle `/replan`) çalıştırmak için:
+## How it works
 
+```
+HiRISE DTM 1 m + orthophoto 25 cm ──► slope, rock cover (shadow-based detector)  ─┐
+Curiosity Navcam (391 frames) ──► AI4Mars-trained DeepLabv3+ ──► terrain class   ─┼─► walking-energy cost map ─► FastAPI planner ─► 3D simulator
+Curiosity RAD, CRISM, MMGIS track ──► dose rate, geology, validation             ─┘     (Pandolf + terrain factors,   (3 routes, live re-plan,     (HUD, scanner,
+                                                                                         Apollo 272 W calibration)    /route /replan /compare)    helmet camera)
+```
+
+| Part | Folder | What it does |
+|---|---|---|
+| Data pipeline | `pipeline/` | DTM, orthophoto, slope, grid, CRISM, Curiosity track and stops |
+| Terrain model | `ml/rover_terrain/` | DeepLabv3+ (ResNet34) on AI4Mars, MC Dropout uncertainty, Navcam masks, ONNX export |
+| Rock detector | `ml/orbital/` | Shadow-based rock detection on HiRISE, with validation |
+| Planner API | `api/` | Cost model, routing (20° no-go, rock blocking), re-planning, assumptions endpoint |
+| Simulator | `sim/` | Three.js 3D walk, life support, live route, scanner, helmet camera, debrief |
+| Web map | `web/` | React + Leaflet route map |
+| Documents | `docs/` | Sources, metabolic model, EVA parameters, validation, submission |
+
+Model card: [`docs/submission/MODEL_CARD.md`](docs/submission/MODEL_CARD.md) · References: [`docs/submission/REFERENCES.md`](docs/submission/REFERENCES.md) · Data sources and assumptions: [`docs/sim/VERI_KAYNAKLARI.md`](docs/sim/VERI_KAYNAKLARI.md)
+
+## Honest limits
+- Slope limits (15° caution, 20° no-go) and the energy model come from Earth and lunar studies; they are not validated for suited humans on Mars and are labelled as planning assumptions.
+- The terrain model under-calls thin dark sand in this region; sand in the demo mission is scenario-defined.
+- Small rocks and ground texture in the 3D view are synthetic and labelled; the terrain shape is real HiRISE data.
+- Not a flight or operations tool.
+
+## Tests
 ```sh
-.venv/bin/python scripts/smoke.py
+.venv/bin/python -m pytest -q      # planner API
+node --test sim/tests/             # simulator logic
+.venv/bin/python scripts/smoke.py  # end-to-end /route + /replan on real layers
 ```
 
-Veri keşfi: [docs/data/README.md](docs/data/README.md)
+## Team SÜNOVA
+Selçuk University, Konya. Samet (lead, planner API, integration), Elif Rana (data pipeline), Emre (terrain model), Bora (rock and sand detection), Veysel (simulator interface and game flow), Batu (3D simulator, scanner, routing), Elif Nisa (science documents, sources, presentation).
 
-Eğitim makineleri: **RTX 4070** (Emre) ve **M5 Pro** (Samet). Diğer herkes ağır iş için Google Colab kullanır.
+## Credits and license
+Code: MIT ([LICENSE](LICENSE)). NASA data and images: NASA/JPL-Caltech, NASA/JPL/University of Arizona, USGS; see references. Third-party assets (CC0 astronaut model by Quaternius, three.js MIT): [`sim/ASSETS.md`](sim/ASSETS.md). No NASA logos are used.
 
-Çalışma kuralları: [CONTRIBUTING.md](CONTRIBUTING.md)
+---
+
+**Türkçe kısa kurulum:** `bash scripts/setup.sh && bash scripts/dev.sh` → http://127.0.0.1:8001/sim/ · Çalışma kuralları: [CONTRIBUTING.md](CONTRIBUTING.md) · HF Space yayını: [api/DEPLOY.md](api/DEPLOY.md)

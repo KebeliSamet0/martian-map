@@ -34,6 +34,6 @@
 ## Software and assets (permissive licences)
 24. three.js r160 (MIT). https://threejs.org/ · GDAL, rasterio, pyproj, NumPy, PyTorch, segmentation-models-pytorch, FastAPI.
 25. Quaternius, Astronaut (CC0 1.0). https://poly.pizza/m/3hC2i0CTuO (details in `sim/ASSETS.md`).
-26. Code repository: https://github.com/KebeliSamet0/martian-map `[confirm it is public before submitting]`
+26. Code repository: https://github.com/KebeliSamet0/martian-map
 
 Full working list with notes: `docs/REFERENCES.md`.
