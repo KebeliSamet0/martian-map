@@ -28,10 +28,7 @@ export function parseAB(search) {
 
 /** Aynı görevi link ile açtıran URL parçası. */
 export function shareQuery({ a, b, o2 }) {
-  const q = new URLSearchParams();
-  q.set('a', a.join(',')); q.set('b', b.join(','));
-  if (o2 === O2_LIMITED_L) q.set('o2', '80');
-  return q.toString();
+  return `a=${a.join(',')}&b=${b.join(',')}${o2 === O2_LIMITED_L ? '&o2=80' : ''}`;   // virgül %2C'ye kodlanmaz: okunaklı bağlantı
 }
 
 export const straightMeters = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]) * RES_M;

@@ -13,7 +13,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const root = document.getElementById('mission-ui'), buttons = document.getElementById('missions');
   const call = async (path, body) => {
     if (API_OFF) throw new Error('API kapalı');
-    const r = await fetch(API_BASE + path, { method: body ? 'POST' : 'GET', signal: AbortSignal.timeout(8000),
+    const r = await fetch(API_BASE + path, { method: body ? 'POST' : 'GET', signal: AbortSignal.timeout(/^\/(route|replan|compare)/.test(path) ? 25000 : 8000)   /* batu:custom: uzun A→B ve yüklü API'de 8 sn yetmiyordu */,
       headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
     if (!r.ok) throw new Error(`API ${r.status}`); return r.json();
   };
