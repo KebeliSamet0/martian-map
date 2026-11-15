@@ -123,3 +123,8 @@ Test paketi sol, yerçekimi, doz, hız veya süre BİRİMİ için hiçbir sayıs
 ## Tur 4b — B15/B16 teşhisi
 - `tani_kayitlari/s2_teshis.js`, `b15_dogrulama_S2.log`, `b15_dogrulama_P1P2.log`, `b15_dogrulama_P2.log`: kendi koşularım (gerçek GPU, API 8000).
 - Salt-okunur kod: `sim/app/wire.js` (satır 34, 60–80, 155–170 `askDecision`, `dynHandlesSand`, `onArrived`), `sim/app/main.js` (collide.step). B16 nedeni yalnız kod okumasıdır, doğrulanmadı.
+
+## Tur 4 — eğim eşiği 20° (2026-11-15)
+- Canlı API `127.0.0.1:8000`: `GET /assumptions` (Geçilmez eğim 20 °, Riskli 15 °, bağlanma yarıçapı 10 m), `GET /grid`, `GET /layers/slope.bin` (≥ 20° %29,03; ≥ 25° %18,75; ≥ 15° %43,73 — kendi ölçümüm), `POST /route` (AB01/AB10/AB12/AB13/P3 çiftleri; `tani_kayitlari/api_422_ciftleri_20deg.log`).
+- Salt okunur kod/veri: `main-wt` (HEAD `4df17a4`, `git archive` kopyası) `sim/app/{wire.js, wire-flow.js, dynroute.js, mappicker.js, custommission.js}`, `sim/data/texts.json` (`custom.warn.steep`, `custom.layer.impassable`); `docs/data/ekip/ab_ciftleri.json` (çalışan 2, 25°). Başka HEAD'in (`4ab3b0a`) wire.js/dynroute.js'i yalnız B16 notu için okundu.
+- Mars/Dünya: 20° NASA EVA skafandr sınırı, planlama eşiği (insan yürüyüş sınırı değil — uygulamanın kendi metni). Test hızı sabiti 0,67056 m/s Dünya APACHE değeri olarak etiketli, Mars değeri değil.

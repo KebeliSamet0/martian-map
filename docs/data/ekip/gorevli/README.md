@@ -1,7 +1,64 @@
-DURUM: TAMAMLANDI (tur 3) — T12 (Kendi rotanı planla) ve T13 (dinamik rota) eklendi, 14 grubun hepsi güncel kodda **gerçek GPU** ile koşuldu. **1 bulgu teşhis edilemedi (B15)**; ayrıntı [`bulgular.md`](bulgular.md).
+DURUM: TAMAMLANDI (tur 4 — eğim eşiği 20°) — 14 grubun hepsi 20° ile gerçek GPU'da koşuldu (`tam_20deg.log`). Kalan **18 FAIL'in 15'i uygulama bulgusu** (B13, B14, B16, B17 ve EN etiketleri B3–B5), **1'i ölçüm koşulu** (T7 FPS), **2'si test düzeltmesiyle kapandı** (T12b, doğrulandı). Ayrıntı: [`bulgular.md`](bulgular.md) "Tur 4".
+
+## Tur 4 — 20° (2026-11-15 14:25)
+
+**Ne koşuldu.** Samet geçilmez eğimi 25°→20° yaptı (main `a5738a4`). Başlamadan canlı API doğrulandı (log ilk satırları, `ON` grubu): `GET /assumptions` → "Geçilmez eğim = 20 °", "Riskli eğim = 15 °", "Geçilmez hücreden bağlanma yarıçapı = 10 m"; `GET /grid` → `synthetic=false`, 1000×1000, 2 m. Bu iki koşul artık testin **ön koşuludur** (`ON`: 5/5; eşik 20 değilse test baştan FAIL verir).
+
+**Sim sürümü (HEAD) — önemli.** Görev notu sim'in `main-wt` içinde `batu/docs-masa-teslimleri-tur5 @ 4df17a4` olduğunu söylüyordu. İlk koşudan sonra `main-wt` çalışma ağacı **başkası tarafından** `batu/tas-esik @ 4ab3b0a` dalına alınmış (2 dosyası değiştirilmişti); o sürümde seçim ekranı yeniden tasarlanmıştı (`select-map`, "Hızlı başlangıç" şeridi, `mission-go-custom` yok) ve karar kartı akışı farklıydı (aşağıdaki "Çöpe giden koşu 2"). Depoya dokunmamak için `git archive 4df17a4 sim contracts` ile **salt okunur bir kopya** çıkardım (git'te izlenmeyen `sim/data/tiles*` klasörleri `main-wt`'den kopyalandı) ve testi bu kopyaya karşı koştum. **Koşulan sim = `4df17a4`** (= origin/main; #140 ada düzeltmesi içinde DEĞİL). API: `127.0.0.1:8000`, gerçek ızgara.
+
+**Komut.**
+```
+MM_REPO_ROOT=<4df17a4 kopyası> MM_PORT=8012 MM_RESULT_FILE=test_sonucu_tam_20deg.json REAL_GPU=1 node akis_testi.js   # 1463 sn
+```
+Dosyalar: `tam_20deg.log`, `test_sonucu_tam_20deg.json`. Ek doğrulama: `t12b_dogrulama_20deg.log` / `test_sonucu_T12b_dogrulama_20deg.json` (T12, çift AB13, T12b düzeltmesi). Taslak koşular (saklandı, sonuç SAYILMAZ): `tam_20deg_kosu1_taslak.log` (doğru HEAD, ama test henüz ana-bileşen/çift uyarlaması olmadan: 76/97 T12), `tam_20deg_kosu2_taslak_yanlis_HEAD.log` (düzeltilmiş test, ama sim yanlış HEAD `4ab3b0a`).
+
+| # | Test | Sonuç (20°) | Not |
+|---|---|---|---|
+| ON | API (eşik 20°, gerçek ızgara, `/compare`) + sim sunucusu | **PASS 5/5** | yeni: eşik 20° ön koşulu |
+| T1 | S1/S2/S3 tam akış (rota kartı, kum olayı, replan, E-numune, dönüş, karne) | **PASS 36/36** | S1 GO 0,55/0,57/0,61 km; S2 GO 0,56/0,58/0,63; S3 NO-GO (25°'de de NO-GO). B15 test hatasıydı, kapandı |
+| T2 | L taraması: "Dikkat" + "Geçilmez" lejantı | **PASS 3/3** | |
+| T3 | Kum olayı `radius_m+40` m | **PASS 9/9** | S1 59,1 / S2 59,8 / S3 59,0 m (eşik 59,4 / 60 / 59,4) |
+| T4 | `mission:arrived` olayı | **PASS 3/3** | |
+| T5 | HUD: Zemin (model) + Gale ortam (REMS) | **PASS 2/2** | |
+| T6 | Konsolda hata yok | **FAIL 0/1** | 45 hata, 422 `POST /route` = **B13** (`load_kg`) |
+| T7 | `?perf=1` probu (gerçek GPU: p95 ≤ 22 ms, ≥ 45 FPS) | **FAIL 4/5** | p95 41,8 ms / 34 FPS (taslak koşuda 27,9 ms / 41 FPS). Eşik tutmadı; makinede aynı anda API + başka tarayıcılar çalışıyordu — **sebep doğrulanmadı**, tek başına koşu yapılmadı. Eşiği gevşetmedim |
+| T8 | Normal oyun girişi (dev yok) | **FAIL 38/40** | 2 FAIL = **B16** (ikinci turda kum kararı yok → karne gelmez; ardından "Görevlere dön" zinciri) |
+| T9 | Gerçek klavye | **PASS 14/14** | |
+| T10 | TR/EN boş anahtar | **FAIL 17/19** | EN modda Türkçe: "Y: ayrıntı", Navcam altyazısı, rota adları, radyasyon metinleri = **B3–B5** (düzelmedi) |
+| T11 | Yerleşim 1280×720 / 1920×1080 | **FAIL 13/14** | `.mm-mhud` × `#scanleg` 87×29 px = **B14** (düzelmedi). **1280×720 karne düğmeleri kaydırmasız: PASS** (tabanlar 705 ≤ 720) |
+| T12 | Kendi rotanı planla (11 çift: P1–P5 + 6 çalışan-2 çifti, 80 L, URL) | **FAIL 121/131** | 10 FAIL: 2 test düzeltmesi (T12b, doğrulandı), 4×B13 (422), 2×B16 (P2, AB04), 2×B17 (AB01, AB10) |
+| T13 | Dinamik rota (#122) | **FAIL 17/18** | tek FAIL: yük önerisi hiç gelmiyor = **B13** |
+
+**Toplam:** 14 grubun 7'si PASS (ON, T1–T5, T9), 7'si FAIL (T6, T7, T8, T10, T11, T12, T13). Hiçbir FAIL beklenti gevşetilerek geçirilmedi.
+
+### 20°'ye göre test beklentilerinde neyi neden değiştirdim
+| Değişiklik | Neden |
+|---|---|
+| `IMPASS_DEG` 25 → 20 (T12 çift üretimi, geçilmez nokta seçimi) | Eşik 20°. Geçilmez noktalar artık slope ≥ 20° |
+| "Geçilebilir" = slope < 20° **ve** en büyük 8-komşuluklu bileşende (`layers.py` kuralının bağımsız yeniden yazımı) | 20°'de geçilebilir hücreler çok sayıda adaya bölünüyor (`ab_ciftleri_gorevli.json` → `bilesen_sayisi`, `ana_bilesen_hucre`); 25° koşusundaki P3 (A=8,1° ama adada) bu yüzden seçicide reddediliyordu |
+| T12b "en yakın geçilebilir nokta N m" beklentisi artık **ana bileşen** içinde ve yuvarlanarak hesaplanıyor; çalışan 2'nin `nearest_passable_m` (25° için) değerleri yerine yeniden hesaplanan değer | 25°'de 2 m olan mesafeler 20°'de 2–58 m. Eski değer dosyada `calisan2_nearest_m_25derece` olarak durur |
+| T12b "çok kısa" uyarısı: B = A+4 hücre yerine A'ya 6–12 m'de **geçilebilir** bir hücre | 20°'de A+4 hücresi 23° (geçilmez) çıkıp "çok kısa" yerine eğim uyarısı veriyordu — beklenti değil, test girdisi hataydı |
+| Çalışan 2 çiftlerinden 3 kumlu + 3 kumsuz (önce 2+2); son çift (AB13) T12b/T12d/T12e (80 L) için kullanılıyor | "en az 2 yeni çift, biri 80 L" şartı |
+| Yeni kontrol: "seçici ile API `/route` aynı kararı verir" (her çift) | 20°'de çelişki görüldü (B17); çelişkili çiftte akış sürdürülmez, bulgu kaydedilir |
+| T13: bant (`dyn-banner`) **ya da** karar kartı (`route-decision`) kabul edilir | `4df17a4`'te `wire.js` bandı bastırmıyor (bant); sonraki HEAD'lerde karar kartı var. İki sürümde de aynı test koşar |
+| Olay günlüğü (`mm:route-suggest/decision`) ve olay listesi sonuçlara yazılıyor | B16 teşhisi için |
+
+### 20°'de özel olarak sorulanlar
+1. **S1/S2/S3 hâlâ GO / rota buluyor mu?** Evet: S1, S2 GO (3 rota; 25°'ye göre mesafe farkı ≤ 0,01 km); S3 3 rota ama NO-GO (25° koşusunda da NO-GO). Üçünde de 3 rota API'den (`source=api`).
+2. **Kum olayları tetikleniyor mu?** S1/S2/S3'te evet: `radius_m+40` m'de (−8…+2 m penceresinde) tetiklendi (T3 9/9). Özel görevde ilk koşan kumlu çiftler (P1, AB03) tetikledi; **aynı sayfada ikinci kumlu görevde tetiklenmiyor = B16**.
+3. **"Geçilmez alan" kırmızı katmanı doğru mu?** Evet: `tani_kayitlari/imp_katman.js` — katman açıkken kırmızı oran **%28,98**, kapalıyken %0,02; `slope.bin`'de ≥ 20° hücreler **%29,03** (≥ 25° olsaydı %18,75). Etiket: "Geçilmez alan (20°, NASA EVA skafandr sınırı)". Kayıt: `imp_katman_20deg.log`, [`imp_katman_20deg.png`](tani_kayitlari/imp_katman_20deg.png).
+4. **Seçici uyarıları** (`custom.warn.steep`, "20° planlama eşiği"): 6 geçilmez noktada metin, eğim ve "en yakın nokta N m" doğru (N bağımsız hesapla, ana bileşende); hesapla düğmesi kapalı; B ucunda da aynı uyarı. Bir nokta ilk koşuda yuvarlama biçimi yüzünden FAIL verdi (test 20,88, uygulama 21): düzeltilen test `t12b_dogrulama_20deg.log` içinde PASS.
+5. **steep_snap örnekleri 20°'de:** `tani_kayitlari/steep_ornekler_20deg.log` (ızgara örneklemesi: ≥ 20° hücre 30 104 / 102 400 ≈ %29,4) ve `steep_snap_20deg.log` (5 durum, seçici ↔ API; `api_422_ciftleri_20deg.log` B17 kanıtı). 10 m'den uzak dik nokta (200,47; 43°) hem API ("10 m içinde geçilebilir hücre yok") hem seçici ("en yakın 351 m") tarafından reddediliyor — **tutarlı**. 21° nokta (41,20): API A'yı 10 m içinde yakalayıp rota veriyor (200), seçici "yakında eşiğin altında nokta bulunamıyor" diyerek reddediyor — seçici daha katı (ana bileşen kuralı, tasarım gereği; bulgu değil, not).
+
+**Çöpe giden koşu (gizlemiyorum):** `main-wt` dalı koşu sırasında `batu/tas-esik @ 4ab3b0a`'ya geçince T8/T12/T13 yeni arayüze çarptı (özel görev kartı yok, T12 1/2). Bu sonuçlar bulgu **değildir**. Yeni arayüz için testin uyarlanması ayrı iştir (yapmadım): `select-map`, "Hızlı başlangıç" şeridi, karar kartı.
+
+
+---
+
+ESKİ (25°) DURUM: TAMAMLANDI (tur 3) — T12 (Kendi rotanı planla) ve T13 (dinamik rota) eklendi, 14 grubun hepsi güncel kodda **gerçek GPU** ile koşuldu. **1 bulgu teşhis edilemedi (B15)**; ayrıntı [`bulgular.md`](bulgular.md).
 Sürüm: test edilen sim `main-wt` dal `batu/custom-mission` @ `d460385` (koşu sırasında #125 numune/üsse dönüş ve #130 birleşti; dal başkasının elinde değişebilir).
 
-## Tur 3 — güncel sonuç (gerçek GPU, 2026-11-15)
+## Tur 3 — ESKİ (25°) sonuç (gerçek GPU, 2026-11-15) — 20° için yukarıdaki Tur 4'e bakın
 
 Koşu komutu: `REAL_GPU=1 node akis_testi.js` (tam, 831 sn) + test beklentileri güncellendikten sonra `REAL_GPU=1 MM_ONLY=T8,T13 node akis_testi.js` (213 sn). Birleşik sonuç: `test_sonucu.json` (`birlestirme`, `ozet` alanları); ham günlükler: `tam_real_gpu.log`, `t8_t13_real_gpu.log`.
 **Yazılım GL ile tam koşu (~14 dk/koşu) yalnız tur 1–2'de (eski sim sürümü) iki kez yapıldı; tur 3'te süre ve bellek nedeniyle gerçek GPU kullanıldı.** Önceki sonuçlar aşağıda korunmuştur.

@@ -1,4 +1,4 @@
-# Bulgular — normal oyun girişi (?dev=1 YOK), tur 2 (2026-11-15)
+# Bulgular — tur 2–3 (25° eşiği) ve TUR 4 (20° eşiği, dosyanın sonunda) (2026-11-15)
 
 Kaynak: `akis_testi.js` T8–T11, yazılım GL (swiftshader), Windows 11, Chrome 157; API `127.0.0.1:8000` (gerçek 1000×1000 ızgara, `/compare` var). Ham kayıt: `tur2_kosu.log`, `test_sonucu_tur2_T8-T11.json`, ekranlar `shots/`.
 Sınıflar: **engelleyici** = demo akışı durur · **görünüş** = akış çalışır ama kullanıcı sorunu görür · **kozmetik** = küçük/tasarım notu.
@@ -70,3 +70,48 @@ Kod: `main-wt` dal `batu/custom-mission`, HEAD `d460385` (koşu sırasında #125
 | B3–B5 | EN modda Türkçe: rota adları (API etiketi), Navcam altyazısı, "Y: ayrıntı", radyasyon karşılaştırma metinleri | Etiketler API'den TR; `wire-extras.js:7` sabit metin; `texts.json` radyasyon alanları düz TR | Etiketleri i18n anahtarına bağla; `{tr,en}` ekle | **Açık**; güncel kodda yeniden doğrulandı (`FAIL [T10] [1920×1080 EN] 5_yuruyus`, `6_karne`) |
 | Test | "3 görev kartı" ve "soğuma ≥ 45 sn" beklentileri | Yeni "Kendi rotanı planla" kartı (4 kart); soğuma hesaplama başlangıcından sayılıyor | Beklentiler güncellendi (4 kart; ≥ 40 sn) | **Test düzeltildi** |
 | Test | Hedefte karne beklentisi | #125 A.1: hedefte E ile numune → üsse dönüş → karne | `finishMission()` (E basılı tut, dönüş ayağı, karne) | **Test uyarlandı** |
+
+
+---
+
+# Tur 4 — eğim eşiği 20° (2026-11-15 14:25)
+
+Kaynak: `tam_20deg.log` / `test_sonucu_tam_20deg.json` (tam koşu, gerçek GPU, 1463 sn). Sim **`4df17a4`** (salt okunur kopya, bkz. README "Tur 4"), API `127.0.0.1:8000` — `/assumptions`: Geçilmez eğim = 20 °, `/grid`: `synthetic=false`. Kod/sim'e dokunulmadı.
+
+**Sonuç:** 20°'ye geçiş **demo akışını bozmadı**: S1/S2 GO, S3 (zaten NO-GO) aynı; kum olayları, replan, numune, dönüş, karne (T1 36/36, T3 9/9) çalışıyor; kırmızı "Geçilmez alan" katmanı %28,98 (beklenen ≥ 20° = %29,03). Yeni bulgular özel rota (#120) tarafında: **B16 teşhisi netleşti, B17 yeni**.
+
+## Yeni / güncellenen bulgular
+
+| # | Önem | Adım | Beklenen | Görülen | Kanıt |
+|---|---|---|---|---|---|
+| **B16** (güncel) | **engelleyici olabilir** (kum kararı sessizce atlanıyor) | Aynı sayfada art arda iki kumlu görev (S1→Tekrar oyna, ya da P1 → "Başka görev" → P2) | Her kumlu görevde kum olayı → karar penceresi → kabul → replan | **İlk kumlu görev çalışır; sonrakilerde olay tetiklenir (`machine 'event'`), ama ne `mm:route-suggest` ne karar penceresi ne replan gelir** (`evlog:[]`, `decisions:[]`, `replanned:false`); görev sessizce hedefe gider. Sayfa yenilenince (testte AB01 çelişkisinden sonraki `loadGame`) bir sonraki kumlu görev yine çalışır, ondan sonraki yine bozulur | `tam_20deg.log`: T8 "ikinci tur: varış + karne" FAIL (S1 sand, `evlog:[]`), T12c P2 FAIL (`CUSTOM-sand`, `evlog:[]`), T12c AB04 FAIL; P1 ve AB03 (her biri sayfa tazeyken ilk kumlu görev) PASS. P2 tek başına koşunca PASS: `tani_kayitlari/b15_dogrulama_P2.log`; P1→P2 sırayla FAIL: `b15_dogrulama_P1P2.log` |
+| **B17** | görünüş / engelleyici (özel rota) | Seçicide AB01 (791,844→518,999) ya da AB10 (801,147→806,366) seç → "Rotaları hesapla" | Seçici kabul ediyorsa API rota vermeli (ya da seçici reddetmeli) | Seçici **kabul** ediyor (uyarı yok, düğme açık), API `POST /route` **422** ("köşe kesmeden (iki yan hücre geçilebilir) bağlanamıyor"); sim "Yerel yedek" tek rota gösteriyor (`n:1, src:local, why:"API 422"`), 3 rota kartı gelmiyor | `tani_kayitlari/api_422_ciftleri_20deg.log` (curl), `tam_20deg.log` ("harita seçici ile API /route aynı kararı verir" FAIL, AB01 ve AB10), `tam_20deg_kosu1_taslak.log` (AB01: `{"n":1,"src":"local","why":"API 422"}`) |
+| **B13** (tekrar) | görünüş | Numune al / yük ekle | `load_kg` ile rota | Hâlâ 422 (T6'da 45 hata; T12 P1, P2, AB03, AB04 "422 yok" FAIL; T13 yük önerisi gelmedi: "yük önce 10 kg, süre 60 sn, delta undefined") | `tam_20deg.log` |
+| **B14**, **B3–B5** (tekrar) | görünüş | 1280×720 tarama; EN mod | örtüşme yok; EN'de Türkçe yok | Değişmedi (87×29 px örtüşme; "Y: ayrıntı", Navcam altyazısı, rota adları, radyasyon metinleri) | `tam_20deg.log` T11, T10 |
+| **B1** (doğrulandı) | — | 1280×720 karne düğmeleri | kaydırmasız | PASS: düğme tabanları 705 ≤ 720 | `tam_20deg.log` T8 |
+
+### B16 — teşhis (adım adım)
+1. Üç ayrı yerde aynı örüntü: T8 ikinci tur, T12 P2, T12 AB04 — hepsi "aynı sayfada daha önce bir kumlu görev tamamlandı".
+2. Sayfa yenilenince düzeliyor: AB01 çelişkisinden sonra test sayfayı yeniden yükledi, sonraki kumlu çift (AB03) PASS; ardından AB04 yine FAIL.
+3. Olay günlüğü: kum olayı makineden geliyor (`events:[{id:"CUSTOM-sand", …}]`), ama pencerede hiç `mm:route-suggest`/`mm:route-decision` yok (`evlog:[]`) → karar akışı hiç başlamıyor; bu "karar penceresi açıldı ama kabul edilmedi" değil.
+4. Kod okuması (**doğrulanmadı**, salt okunur): `4df17a4` `sim/app/wire.js` satır 34/74/163 — `dynHandlesSand` bayrağı `mm:route-suggest reason='sand'` gelince `true` oluyor, hiç sıfırlanmıyor; kum olayı işleyicisinde `if (dynHandlesSand) return;` olduğu için ikinci görevde `replan` hiç çağrılmıyor, dolayısıyla dynroute da öneri üretmiyor. Bu, 1–3 ile birebir uyumlu.
+5. Not: sonraki bir HEAD'de (`4ab3b0a`, `main-wt` o sırada) `dynHandlesSand` kaldırılmış (kum doğrudan `replan` → dynroute). **O sürümde B16'nın düzelip düzelmediğini koşmadım.**
+6. Öneri: `dynHandlesSand`'i görev başında (`generation` artarken) `false` yap ya da bayrağı kaldır. Sahip: batu.
+
+### B17 — notlar
+- 20°'de iki yönlü seçici↔API farkı var: (a) **seçici kabul / API 422** (B17: seçici 8-komşuluk ana bileşeni sınıyor, API ayrıca "köşe kesmeden bağlanma" kuralını uyguluyor); (b) **seçici red / API 200**: küçük bir adadaki iki nokta (örn. P3 179,445→131,369 ya da 41,20→131,90) API'de rota alıyor, seçici ana bileşen dışını reddediyor. (b) tasarım kararı olabilir (#140 "ada hücreleri hedef olamaz"); (a) ise kullanıcıyı sessizce yedek rotaya düşürür.
+- Öneri (a): seçicide API'nin köşe-kesme kuralını aynala ya da hesaplamadan önce `/route` ön kontrolü yapıp "API bu çifti reddetti" uyarısı göster.
+
+## Test tarafı düzeltmeleri (uygulama bulgusu DEĞİL)
+| # | Sorun | Neden | Düzeltme | Durum |
+|---|---|---|---|---|
+| T-1 | T12b geçilmez nokta 393,704: beklenen "20.88 m" | çalışan 2 dosyasındaki mesafeyi 25° için yeniden hesapladım ama yuvarlamadım; uygulama "21 m" yazıyor | `Math.round` | **Düzeltildi**, `t12b_dogrulama_20deg.log` PASS |
+| T-2 | T12b "çok kısa" uyarısı beklenen yerine eğim uyarısı verdi | B = A+4 hücre 20°'de 23° (geçilmez) | Geçilebilir, < 15 m B seçilir | **Düzeltildi** |
+| T-3 | T12 P3 (25° için üretilmişti) A hücresi 20°'de adada | geçilebilir küme parçalandı | Çift üretiminde ana bileşen kuralı | **Düzeltildi** |
+| T-4 | T13 bandı bekliyordu; farklı HEAD'de karar kartı | sim sürümleri arası arayüz farkı | Bant ya da karar kartı kabul | **Düzeltildi** |
+| T-5 | 25° çalışan-2 verileri bayat | `ab_ciftleri.json` (e580605) 25° ile üretilmiş: AB04 kum mesafesi 17,35→6 m, AB01/AB10/AB12 artık API'de 422, `nearest_passable_m` değişti | Test beklentilerini kendisi bağımsız yeniden hesaplıyor; dosyada eski değerler `calisan2_*_25derece` | **Çalışan 2'ye not:** `ab_ciftleri.json` 20° için yeniden üretilmeli |
+
+## Gözlem / sınırlar
+- **T7 (FPS)**: 34 FPS / p95 41,8 ms (eşik ≥ 45 / ≤ 22 ms) FAIL; taslak koşuda 41 FPS / 27,9 ms. Eşiği gevşetmedim. Aynı anda API ve başka tarayıcı oturumları çalışıyordu; sebep doğrulanmadı.
+- **Yanlış HEAD'de çalışan koşu** (`main-wt` → `batu/tas-esik @ 4ab3b0a`): seçim ekranı yeniden tasarlanmış, "Kendi rotanı planla" kartı/`mission-go-custom` yok; T12 1/2, T8 36/40, T13 16/18. **Bulgu sayılmadı**, test o arayüze uyarlanmadı.
+- `main-wt`'e dokunmadım; `4df17a4` kopyası `git archive` ile (salt okunur) çıkarıldı.

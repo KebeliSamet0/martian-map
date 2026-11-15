@@ -1,8 +1,10 @@
 {
+ "ana_bilesen_hucre": 532486,
+ "bilesen_sayisi": 3748,
  "kaynak": "gorevli (kendi üretimi: gerçek ızgara slope.bin + API /route + sand_zones.json) + çalışan 2 ab_ciftleri.json çapraz doğrulama (2 kumlu + 2 kumsuz çift, 3 geçilmez nokta)",
  "seed": 120,
  "api": "http://127.0.0.1:8000",
- "route_denemesi": 7,
+ "route_denemesi": 6,
  "pairs": [
   {
    "id": "P1",
@@ -21,8 +23,12 @@
     "minDistM": 18,
     "thresholdM": 56.2
    },
-   "routeKm": 0.78,
-   "routeStatus": "GO"
+   "routeKm": 0.97,
+   "routeStatus": "GO",
+   "shortB": [
+    543,
+    595
+   ]
   },
   {
    "id": "P2",
@@ -42,26 +48,14 @@
     "thresholdM": 48
    },
    "routeKm": 0.43,
-   "routeStatus": "GO"
+   "routeStatus": "GO",
+   "shortB": [
+    376,
+    497
+   ]
   },
   {
    "id": "P3",
-   "a": [
-    179,
-    445
-   ],
-   "b": [
-    131,
-    369
-   ],
-   "straightM": 180,
-   "triggers": false,
-   "sand": null,
-   "routeKm": 0.21,
-   "routeStatus": "GO"
-  },
-  {
-   "id": "P4",
    "a": [
     176,
     770
@@ -74,23 +68,51 @@
    "triggers": false,
    "sand": null,
    "routeKm": 0.39,
-   "routeStatus": "GO"
+   "routeStatus": "GO",
+   "shortB": [
+    179,
+    770
+   ]
+  },
+  {
+   "id": "P4",
+   "a": [
+    704,
+    147
+   ],
+   "b": [
+    619,
+    69
+   ],
+   "straightM": 231,
+   "triggers": false,
+   "sand": null,
+   "routeKm": 0.24,
+   "routeStatus": "GO",
+   "shortB": [
+    707,
+    147
+   ]
   },
   {
    "id": "P5",
    "a": [
-    868,
-    813
+    759,
+    331
    ],
    "b": [
-    850,
-    671
+    774,
+    528
    ],
-   "straightM": 286,
+   "straightM": 395,
    "triggers": false,
    "sand": null,
-   "routeKm": 0.43,
-   "routeStatus": "GO"
+   "routeKm": 0.48,
+   "routeStatus": "GO",
+   "shortB": [
+    762,
+    331
+   ]
   },
   {
    "id": "AB01",
@@ -111,7 +133,11 @@
     "triggers": true,
     "min_any_m": 10.03
    },
-   "kaynak": "calisan2"
+   "kaynak": "calisan2",
+   "shortB": [
+    794,
+    844
+   ]
   },
   {
    "id": "AB03",
@@ -132,28 +158,36 @@
     "triggers": true,
     "min_any_m": 3.62
    },
-   "kaynak": "calisan2"
+   "kaynak": "calisan2",
+   "shortB": [
+    611,
+    580
+   ]
   },
   {
-   "id": "AB09",
+   "id": "AB04",
    "a": [
-    877,
-    678
+    489,
+    600
    ],
    "b": [
-    774,
-    558
+    539,
+    319
    ],
-   "straightM": 316,
-   "triggers": false,
+   "straightM": 571,
+   "triggers": true,
    "sand": {
-    "id": "sand_3",
-    "min_route_dist_m": 396.31,
-    "threshold_m": 65,
-    "triggers": false,
-    "min_any_m": 396.31
+    "id": "sand_14",
+    "min_route_dist_m": 17.35,
+    "threshold_m": 56.2,
+    "triggers": true,
+    "min_any_m": 17.35
    },
-   "kaynak": "calisan2"
+   "kaynak": "calisan2",
+   "shortB": [
+    492,
+    600
+   ]
   },
   {
    "id": "AB10",
@@ -174,33 +208,62 @@
     "triggers": false,
     "min_any_m": 369.53
    },
-   "kaynak": "calisan2"
+   "kaynak": "calisan2",
+   "shortB": [
+    801,
+    150
+   ]
+  },
+  {
+   "id": "AB13",
+   "a": [
+    704,
+    529
+   ],
+   "b": [
+    762,
+    416
+   ],
+   "straightM": 254,
+   "triggers": false,
+   "sand": {
+    "id": "sand_14",
+    "min_route_dist_m": 408.31,
+    "threshold_m": 56.2,
+    "triggers": false,
+    "min_any_m": 408.31
+   },
+   "kaynak": "calisan2",
+   "shortB": [
+    704,
+    532
+   ]
   }
  ],
  "impassable": [
   {
    "px": [
-    653,
-    501
+    286,
+    244
    ],
-   "slopeDeg": 44,
-   "nearestPassableM": 3
+   "slopeDeg": 42,
+   "nearestPassableM": 58
   },
   {
    "px": [
-    852,
-    725
+    240,
+    561
    ],
-   "slopeDeg": 46,
-   "nearestPassableM": 4
+   "slopeDeg": 24,
+   "nearestPassableM": 21
   },
   {
    "px": [
-    386,
-    565
+    842,
+    811
    ],
-   "slopeDeg": 33,
-   "nearestPassableM": 2
+   "slopeDeg": 30,
+   "nearestPassableM": 13
   },
   {
    "px": [
@@ -209,7 +272,8 @@
    ],
    "slopeDeg": 25,
    "nearestPassableM": 2,
-   "kaynak": "calisan2"
+   "calisan2_nearest_m_25derece": 2,
+   "kaynak": "calisan2 (konum/eğim) + 20° için yeniden hesaplanan mesafe"
   },
   {
    "px": [
@@ -217,8 +281,9 @@
     704
    ],
    "slopeDeg": 31,
-   "nearestPassableM": 2,
-   "kaynak": "calisan2"
+   "nearestPassableM": 21,
+   "calisan2_nearest_m_25derece": 2,
+   "kaynak": "calisan2 (konum/eğim) + 20° için yeniden hesaplanan mesafe"
   },
   {
    "px": [
@@ -227,7 +292,8 @@
    ],
    "slopeDeg": 26,
    "nearestPassableM": 2,
-   "kaynak": "calisan2"
+   "calisan2_nearest_m_25derece": 2,
+   "kaynak": "calisan2 (konum/eğim) + 20° için yeniden hesaplanan mesafe"
   }
  ],
  "kendi_cift": 5,

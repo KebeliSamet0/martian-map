@@ -1,0 +1,1780 @@
+{
+ "zaman": "2026-11-15T10:32:05.537Z",
+ "sure_sn": 1251,
+ "base": "http://127.0.0.1:8002/sim/",
+ "api": "http://127.0.0.1:8000",
+ "api_ok": true,
+ "genel": "FAIL",
+ "ozet": [
+  {
+   "id": "ON",
+   "baslik": "Ön koşul: API + sim sunucusu",
+   "durum": "PASS",
+   "gecen": 5,
+   "toplam": 5
+  },
+  {
+   "id": "T1",
+   "baslik": "S1/S2/S3 tam akış",
+   "durum": "PASS",
+   "gecen": 36,
+   "toplam": 36
+  },
+  {
+   "id": "T2",
+   "baslik": "L taraması: lejant Dikkat + Geçilmez",
+   "durum": "PASS",
+   "gecen": 3,
+   "toplam": 3
+  },
+  {
+   "id": "T3",
+   "baslik": "Kum olayı radius_m+40 m",
+   "durum": "PASS",
+   "gecen": 9,
+   "toplam": 9
+  },
+  {
+   "id": "T4",
+   "baslik": "'mission:arrived' window olayı",
+   "durum": "PASS",
+   "gecen": 3,
+   "toplam": 3
+  },
+  {
+   "id": "T5",
+   "baslik": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "durum": "PASS",
+   "gecen": 2,
+   "toplam": 2
+  },
+  {
+   "id": "T6",
+   "baslik": "Konsolda hata yok",
+   "durum": "FAIL",
+   "gecen": 0,
+   "toplam": 1
+  },
+  {
+   "id": "T7",
+   "baslik": "?perf=1 probu",
+   "durum": "FAIL",
+   "gecen": 4,
+   "toplam": 5
+  },
+  {
+   "id": "T8",
+   "baslik": "Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev",
+   "durum": "FAIL",
+   "gecen": 38,
+   "toplam": 40
+  },
+  {
+   "id": "T9",
+   "baslik": "Gerçek klavye: WASD R L H T ? M",
+   "durum": "PASS",
+   "gecen": 14,
+   "toplam": 14
+  },
+  {
+   "id": "T10",
+   "baslik": "TR/EN: boş anahtar / yer tutucu yok",
+   "durum": "FAIL",
+   "gecen": 17,
+   "toplam": 19
+  },
+  {
+   "id": "T11",
+   "baslik": "Yerleşim 1280x720 + 1920x1080: taşma / örtüşme",
+   "durum": "FAIL",
+   "gecen": 13,
+   "toplam": 14
+  },
+  {
+   "id": "T12",
+   "baslik": "Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L",
+   "durum": "FAIL",
+   "gecen": 76,
+   "toplam": 97
+  },
+  {
+   "id": "T13",
+   "baslik": "Dinamik rota (#122): sapma önerisi, soğuma, kabul",
+   "durum": "FAIL",
+   "gecen": 6,
+   "toplam": 8
+  }
+ ],
+ "ortam": {
+  "repo_head": "2282726dfd91606aa4a7e526e36abf57f712694a (batu/tas-carpisma) + yerel değişiklik (sim/)",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "real_gpu": true,
+  "repo": "C:\\Users\\Batu\\Desktop\\mm-pr\\main-wt",
+  "headless": true,
+  "senaryolar": [
+   "S1",
+   "S2",
+   "S3"
+  ]
+ },
+ "perf": {
+  "mod": "REAL_GPU",
+  "fps_ort": 41.18,
+  "fps_p50": 47.39,
+  "fps_min": 10.29,
+  "kare_ms_ort": 24.28,
+  "kare_ms_p95": 27.9,
+  "kare_ms_p99": 28.3,
+  "cizim_cagrisi_ort": 177,
+  "ucgen_ort": 1944131,
+  "kare_sayisi": 1236,
+  "kriter": {
+   "p95TargetMs": 22,
+   "p95ActualMs": 27.9,
+   "p95Passed": false,
+   "avgFpsTarget": 45,
+   "avgFpsActual": 41.18,
+   "avgFpsPassed": false,
+   "overallPassed": false
+  },
+  "donanim": {
+   "gpu": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001638) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+   "cozunurluk": "1000x600",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+  }
+ },
+ "ekran_goruntuleri": {
+  "T1": [
+   "shots/S1_1_brifing.png",
+   "shots/S1_2_rotalar.png",
+   "shots/S1_3_yuruyus.png",
+   "shots/S2_1_brifing.png",
+   "shots/S2_2_rotalar.png",
+   "shots/S2_3_yuruyus.png",
+   "shots/S3_1_brifing.png",
+   "shots/S3_2_rotalar.png",
+   "shots/S3_3_yuruyus.png"
+  ],
+  "T2": [
+   "shots/scan_lines.png"
+  ],
+  "T3": [
+   "shots/S1_4_kum_replan.png",
+   "shots/S2_4_kum_replan.png",
+   "shots/S3_4_kum_replan.png",
+   "shots/T3_kum_olayi_S1.png",
+   "shots/T3_kum_olayi_S2.png",
+   "shots/T3_kum_olayi_S3.png"
+  ],
+  "T4": [
+   "shots/S1_5_karne.png",
+   "shots/S2_5_karne.png",
+   "shots/S3_5_karne.png"
+  ],
+  "T5": [
+   "shots/hud.png"
+  ],
+  "T6": [
+   "shots/T6_konsol.png"
+  ],
+  "T7": [
+   "shots/perf.png"
+  ],
+  "T8": [
+   "shots/T11_1280x720_1_intro.png",
+   "shots/T11_1280x720_2_gorev_secimi.png",
+   "shots/T11_1280x720_3_brifing.png",
+   "shots/T11_1280x720_4_rotalar.png",
+   "shots/T11_1280x720_5_yuruyus.png",
+   "shots/T11_1280x720_6_karne.png",
+   "shots/T11_1920x1080_1_intro.png",
+   "shots/T11_1920x1080_2_gorev_secimi.png",
+   "shots/T11_1920x1080_3_brifing.png",
+   "shots/T11_1920x1080_4_rotalar.png",
+   "shots/T11_1920x1080_5_yuruyus.png",
+   "shots/T11_1920x1080_6_karne.png",
+   "shots/T8_baska_gorev.png",
+   "shots/T8_tekrar_oyna.png"
+  ],
+  "T9": [
+   "shots/T9_m_dev.png",
+   "shots/T9_tarama.png",
+   "shots/T9_t_tusu.png",
+   "shots/T9_yurume.png"
+  ],
+  "T10": [
+   "shots/T10_en_gorev_secimi.png"
+  ],
+  "T11": [
+   "shots/T11_1280x720_1_intro.png",
+   "shots/T11_1280x720_2_gorev_secimi.png",
+   "shots/T11_1280x720_3_brifing.png",
+   "shots/T11_1280x720_4_rotalar.png",
+   "shots/T11_1280x720_5b_yuruyus_tarama.png",
+   "shots/T11_1280x720_5_yuruyus.png",
+   "shots/T11_1280x720_6_karne.png",
+   "shots/T11_1280x720_7_duraklat.png",
+   "shots/T11_1920x1080_1_intro.png",
+   "shots/T11_1920x1080_2_gorev_secimi.png",
+   "shots/T11_1920x1080_3_brifing.png",
+   "shots/T11_1920x1080_4_rotalar.png",
+   "shots/T11_1920x1080_5_yuruyus.png",
+   "shots/T11_1920x1080_6_karne.png"
+  ],
+  "T12": [
+   "shots/T12_harita.png",
+   "shots/T12_istisna_AB01.png",
+   "shots/T12_istisna_AB03.png",
+   "shots/T12_istisna_AB04.png",
+   "shots/T12_istisna_AB10.png",
+   "shots/T12_istisna_AB12.png",
+   "shots/T12_istisna_AB13.png",
+   "shots/T12_istisna_P1.png",
+   "shots/T12_istisna_P2.png",
+   "shots/T12_istisna_P3.png",
+   "shots/T12_karne.png",
+   "shots/T12_o2_brifing.png",
+   "shots/T12_o2_rotalar.png",
+   "shots/T12_secim_eta.png",
+   "shots/T12_url_brifing.png",
+   "shots/T12_uyari.png"
+  ],
+  "T13": [
+   "shots/T13_gozlem.png",
+   "shots/T13_ikinci_oneri.png",
+   "shots/T13_istisna.png",
+   "shots/T13_kabul.png",
+   "shots/T13_oneri_bant.png"
+  ]
+ },
+ "gozlemler": [
+  {
+   "tur": "yerlesim",
+   "yer": "1280×720 TR 5b_yuruyus_tarama",
+   "d": "ÖRTÜŞME .mm-mhud × #scanleg: 87×29 px"
+  },
+  {
+   "tur": "i18n",
+   "yer": "1920×1080 EN 5_yuruyus",
+   "d": "EN modda Türkçe: \"Sol 4625 · Navcam · büyüt: G\" | EN modda Türkçe: \"Y: ayrıntı\""
+  },
+  {
+   "tur": "i18n",
+   "yer": "1920×1080 EN 6_karne",
+   "d": "EN modda Türkçe: \"Sol 4625 · Navcam · büyüt: G\" | EN modda Türkçe: \"One way, En güvenli route. Cost is measured on the real terr\" | EN modda Türkçe: \"Rotaların radyasyon farkı Radyasyon: RAD\" | EN modda Türkçe: \"En kısa\" | EN modda Türkçe: \"En güvenli\" | EN modda Türkçe: \"Tek yön yürüyüş süresi × yüzey doz hızı. Uzun rota daha çok \""
+  },
+  {
+   "tur": "klavye",
+   "yer": "H tuşu",
+   "d": "H yalnız vitals HUD'unu gizliyor; görev paneli (.mm-mhud) görünür kalıyor (display=block)"
+  }
+ ],
+ "testler": [
+  {
+   "id": "ON",
+   "title": "Ön koşul: API + sim sunucusu",
+   "checks": [
+    {
+     "n": "API http://127.0.0.1:8000/assumptions çalışıyor",
+     "ok": true,
+     "d": "HTTP 200"
+    },
+    {
+     "n": "API geçilmez eğim eşiği 20° (/assumptions \"Geçilmez eğim\")",
+     "ok": true,
+     "d": "Geçilmez eğim=20 °"
+    },
+    {
+     "n": "API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)",
+     "ok": true,
+     "d": "synthetic=false 1000x1000 @ 2 m — \"Gale / Mount Sharp boxwork bolgesi (Curi\""
+    },
+    {
+     "n": "API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)",
+     "ok": true,
+     "d": "HTTP 422"
+    },
+    {
+     "n": "sim sunucusu http://127.0.0.1:8002/sim/",
+     "ok": true,
+     "d": "betik başlattı / yeniden kullandı"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T1",
+   "title": "S1/S2/S3 tam akış",
+   "checks": [
+    {
+     "n": "S1: brifing açılır",
+     "ok": true,
+     "d": "S1 GÖREV BRİFİNGİ Boxwork'ten Atacama sondajına  Curiosity'nin incelediği boxwork sırtları"
+    },
+    {
+     "n": "S1: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa GO Mesafe 0.55 km Süre\",\"Dengeli GO Mesafe 0.57 km Süre\",\"En güvenli GO Mesafe 0.61 km S\"]"
+    },
+    {
+     "n": "S1: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S1: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S1: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":611,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S1: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"route_s\":224}"
+    },
+    {
+     "n": "S1: kum olayında karar penceresi (route-decision) açılır; \"kabul\" ile yeniden plan başlar",
+     "ok": true,
+     "d": "KUM ALGILANDI ROTA KARARI Önündeki zemin planlanandan yumuşak. Planlayıcı kumu dolaşan bir rota hesapladı. Far"
+    },
+    {
+     "n": "S1: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle."
+    },
+    {
+     "n": "S1: hedefte numune (E basılı tut) ve üsse dönüş ayağı",
+     "ok": true,
+     "d": "{\"hold\":true,\"ret\":true}"
+    },
+    {
+     "n": "S1: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S1: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S1: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    },
+    {
+     "n": "S2: brifing açılır",
+     "ok": true,
+     "d": "S2 GÖREV BRİFİNGİ Kumlu kestirme  Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemd"
+    },
+    {
+     "n": "S2: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa GO Mesafe 0.56 km Süre\",\"Dengeli GO Mesafe 0.58 km Süre\",\"En güvenli GO Mesafe 0.63 km S\"]"
+    },
+    {
+     "n": "S2: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S2: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S2: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":627,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S2: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"route_s\":255}"
+    },
+    {
+     "n": "S2: kum olayında karar penceresi (route-decision) açılır; \"kabul\" ile yeniden plan başlar",
+     "ok": true,
+     "d": "KUM ALGILANDI ROTA KARARI Önündeki zemin planlanandan yumuşak. Planlayıcı kumu dolaşan bir rota hesapladı. Far"
+    },
+    {
+     "n": "S2: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle."
+    },
+    {
+     "n": "S2: hedefte numune (E basılı tut) ve üsse dönüş ayağı",
+     "ok": true,
+     "d": "{\"hold\":true,\"ret\":true}"
+    },
+    {
+     "n": "S2: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S2: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S2: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    },
+    {
+     "n": "S3: brifing açılır",
+     "ok": true,
+     "d": "S3 GÖREV BRİFİNGİ Kısıtlı O₂ bütçesi  Bu senaryoda oksijen bütçen 80 L'ye düşürüldü. Hedef"
+    },
+    {
+     "n": "S3: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa NO-GO Mesafe 0.52 km S\",\"Dengeli NO-GO Mesafe 0.54 km S\",\"En güvenli NO-GO Mesafe 0.57 k\"]"
+    },
+    {
+     "n": "S3: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S3: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S3: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":573,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S3: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"route_s\":186}"
+    },
+    {
+     "n": "S3: kum olayında karar penceresi (route-decision) açılır; \"kabul\" ile yeniden plan başlar",
+     "ok": true,
+     "d": "KUM ALGILANDI ROTA KARARI Önündeki zemin planlanandan yumuşak. Planlayıcı kumu dolaşan bir rota hesapladı. Far"
+    },
+    {
+     "n": "S3: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle."
+    },
+    {
+     "n": "S3: hedefte numune (E basılı tut) ve üsse dönüş ayağı",
+     "ok": true,
+     "d": "{\"hold\":true,\"ret\":true}"
+    },
+    {
+     "n": "S3: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S3: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S3: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T2",
+   "title": "L taraması: lejant Dikkat + Geçilmez",
+   "checks": [
+    {
+     "n": "lejant görünür (#scanleg)",
+     "ok": true,
+     "d": "hidden=false"
+    },
+    {
+     "n": "lejantta 'Dikkat' etiketi",
+     "ok": true,
+     "d": "═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim) · kaya adayı (HiRISE gölge tespiti, doğrulanmadı, tahmini çap 1.13 m) · 1 m"
+    },
+    {
+     "n": "lejantta 'Geçilmez' etiketi",
+     "ok": true,
+     "d": "═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim) · kaya adayı (HiRISE gölge tespiti, doğrulanmadı, tahmini çap 1.13 m) · 1 m"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T3",
+   "title": "Kum olayı radius_m+40 m",
+   "checks": [
+    {
+     "n": "S1: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S1-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921846,\"pz\":4729.386083951582}"
+    },
+    {
+     "n": "S1: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=19.4 trigger_m=59.4 beklenen=59.4"
+    },
+    {
+     "n": "S1: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=59.1 m, eşik=59.4 m"
+    },
+    {
+     "n": "S2: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S2-sand\",\"type\":\"sand\",\"radius_m\":20,\"trigger_m\":60,\"world\":[3239.7952005489965,4844.496536437015],\"px\":3223.851369587078,\"pz\":4787.541365523759}"
+    },
+    {
+     "n": "S2: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=20 trigger_m=60 beklenen=60"
+    },
+    {
+     "n": "S2: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=59.1 m, eşik=60 m"
+    },
+    {
+     "n": "S3: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S3-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.991792184599,\"pz\":4729.139704836866}"
+    },
+    {
+     "n": "S3: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=19.4 trigger_m=59.4 beklenen=59.4"
+    },
+    {
+     "n": "S3: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=59.3 m, eşik=59.4 m"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T4",
+   "title": "'mission:arrived' window olayı",
+   "checks": [
+    {
+     "n": "S1: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    },
+    {
+     "n": "S2: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    },
+    {
+     "n": "S3: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T5",
+   "title": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "checks": [
+    {
+     "n": "HUD'da 'Zemin (model)' satırı",
+     "ok": true,
+     "d": "Zemin (model)\neğim 3° · kum 0.03 · iri taş 0.02 · belirsizlik 0.21"
+    },
+    {
+     "n": "HUD'da 'Gale ortam (REMS)' satırı",
+     "ok": true,
+     "d": "Gale ortam (REMS)\nhava -88…-3.9 °C · zemin -121…7.5 °C · 716–961 Pa"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T6",
+   "title": "Konsolda hata yok",
+   "checks": [
+    {
+     "n": "konsolda beklenmeyen hata yok (32 hata, 0 tanesi bilinen/hariç)",
+     "ok": false,
+     "d": "[S1] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) <http://127.0.0.1:8000/route> || [S1] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) <http://127.0.0.1:8000/route> || [S1] Failed to load resource: the server r"
+    }
+   ],
+   "status": "FAIL",
+   "ignored": {},
+   "keep": [
+    {
+     "page": "S1",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S1",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S1",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S2",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S2",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S2",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S3",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S3",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "S3",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    },
+    {
+     "page": "oyun 1280×720 TR",
+     "type": "error",
+     "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+     "url": "http://127.0.0.1:8000/route"
+    }
+   ]
+  },
+  {
+   "id": "T7",
+   "title": "?perf=1 probu",
+   "checks": [
+    {
+     "n": "prob açıldı (konsolda \"[PerfProbe] ... başlatılıyor\" + canlı HUD)",
+     "ok": true,
+     "d": "%c[PerfProbe] Martian Map Performans Probu başlatılıyor... color: #00e5ff; font-weight: bold;"
+    },
+    {
+     "n": "prob 30 sn senaryoyu bitirip rapor açar (#perf-probe-overlay)",
+     "ok": true,
+     "d": "rapor açıldı"
+    },
+    {
+     "n": "'[PerfProbe HATA]' yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "perf raporu okundu (ort FPS, p95 ms)",
+     "ok": true,
+     "d": "ort 41.18 FPS, p95 27.9 ms (REAL_GPU)"
+    },
+    {
+     "n": "GERÇEK GPU eşiği: p95 <= 22 ms ve ort >= 45 FPS",
+     "ok": false,
+     "d": "p95 27.9 ms, ort 41.18 FPS, GPU: ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001638) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T8",
+   "title": "Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev",
+   "checks": [
+    {
+     "n": "[1280×720 TR] açılış ekranı (intro), body.dev yok",
+     "ok": true,
+     "d": "{\"screen\":\"intro\",\"dev\":false}"
+    },
+    {
+     "n": "[1280×720 TR] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)",
+     "ok": true,
+     "d": "[[\"panel\",\"none\"],[\"mapwrap\",\"none\"],[\"hud\",\"none\"],[\"ctl\",\"none\"]]"
+    },
+    {
+     "n": "[1280×720 TR] intro: başlık, altyazı ve başlat düğmesi dolu",
+     "ok": true,
+     "d": "{\"title\":\"MARTIAN MAP\",\"sub\":\"EVA PROVASI\",\"btn\":\"GÖREV SEÇ\"}"
+    },
+    {
+     "n": "[1280×720 TR] \"Görev seç\" → görev seçimi ekranı",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "[1280×720 TR] 4 görev kartı (S1,S2,S3 + \"Kendi rotanı planla\" CUSTOM)",
+     "ok": true,
+     "d": "S1,S2,S3,CUSTOM"
+    },
+    {
+     "n": "[1280×720 TR] dil anahtarı: TR → EN (görev kartı düğmesi + <html lang> güncellenir)",
+     "ok": true,
+     "d": "{\"lang\":\"en\",\"go\":\"Open briefing\",\"btn\":\"Open briefing\",\"htmlLang\":\"en\"}"
+    },
+    {
+     "n": "[1280×720 TR] dil anahtarı geri döner",
+     "ok": true,
+     "d": "{\"lang\":\"tr\",\"go\":\"Brifinge geç\",\"btn\":\"Brifinge geç\"}"
+    },
+    {
+     "n": "[1280×720 TR] \"Geri\" → intro",
+     "ok": true,
+     "d": "screen=intro"
+    },
+    {
+     "n": "[1280×720 TR] S1 → brifing",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1280×720 TR] rota seçimi: 3 kart",
+     "ok": true,
+     "d": "kart=3"
+    },
+    {
+     "n": "[1280×720 TR] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "[1280×720 TR] rotalar canlı API'den (çevrimdışı yedek rozeti yok)",
+     "ok": true,
+     "d": "{\"alt\":\"api,api,api\",\"offline\":false}"
+    },
+    {
+     "n": "[1280×720 TR] yürüyüş: durum=auto, rota uzunluğu > 0",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":611,\"hud\":true,\"dist\":\"609 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1280×720 TR] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":611,\"hud\":true,\"dist\":\"609 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1280×720 TR] kum olayı → rota yeniden planlanır",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"events\":[{\"id\":\"S1-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.991792184599,\"pz\":4729.774380141858}],\"decisions\":[\"sand\",\"sand\"],\"fired\":true,\"replanned\":true,\"rep\":true,\"hold\":true,\"ret\":true,\"decision\":\"KUM ALGILANDI"
+    },
+    {
+     "n": "[1280×720 TR] hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "[1280×720 TR] karne: harf + 4 satırlık tablo + iki düğme (\"Tekrar oyna\", \"Başka görev\")",
+     "ok": true,
+     "d": "{\"grade\":\"C\",\"rows\":5,\"btns\":[\"Tekrar oyna\",\"Başka görev\"]}"
+    },
+    {
+     "n": "[1280×720 TR] karne: \"Tekrar oyna\"/\"Başka görev\" düğmeleri kaydırmadan görünür",
+     "ok": true,
+     "d": "{\"vh\":720,\"bottoms\":[705,705],\"kartYuksek\":696,\"kaydirilabilir\":true}"
+    },
+    {
+     "n": "[1280×720 TR] \"Tekrar oyna\": yürüyüş yeniden başlar (walk, rota başında, karne kapanır, makine=walking)",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"s\":54,\"tot\":611,\"ms\":\"walking\",\"report\":false,\"paused\":false}"
+    },
+    {
+     "n": "[1280×720 TR] Esc → duraklat menüsü açılır (oyun durur, 6 düğme)",
+     "ok": true,
+     "d": "{\"menu\":true,\"paused\":true,\"btns\":[\"Devam\",\"Görev bilgisi\",\"Veri katmanları\",\"Ses: Açık\",\"Dil: TR\",\"Görevden çık\"]}"
+    },
+    {
+     "n": "[1280×720 TR] \"Devam\" → menü kapanır, oyun sürer",
+     "ok": true,
+     "d": "{\"menu\":false,\"paused\":false}"
+    },
+    {
+     "n": "[1280×720 TR] ikinci tur: varış + karne",
+     "ok": false,
+     "d": "{\"hasSand\":true,\"events\":[{\"id\":\"S1-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921846,\"pz\":4729.377546199266}],\"decisions\":[],\"fired\":true,\"replanned\":false,\"rep\":true,\"hold\":true,\"ret\":true,\"decision\":null,\"toast\":\"Üsse dönüş rot"
+    },
+    {
+     "n": "[1280×720 TR] \"Başka görev\": görev seçimine döner (tur, yürüyüş HUD gizli, makine temiz, 4 kart)",
+     "ok": true,
+     "d": "{\"st\":\"tour\",\"walkhud\":\"none\",\"vit\":false,\"machine\":false,\"report\":false,\"cards\":4}"
+    },
+    {
+     "n": "[1280×720 TR] karne sonrası ikinci görev (S2) brifingi açılır",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1280×720 TR] brifingde \"Görevlere dön\" → seçime döner",
+     "ok": false,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1920×1080 EN] açılış ekranı (intro), body.dev yok",
+     "ok": true,
+     "d": "{\"screen\":\"intro\",\"dev\":false}"
+    },
+    {
+     "n": "[1920×1080 EN] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)",
+     "ok": true,
+     "d": "[[\"panel\",\"none\"],[\"mapwrap\",\"none\"],[\"hud\",\"none\"],[\"ctl\",\"none\"]]"
+    },
+    {
+     "n": "[1920×1080 EN] intro: başlık, altyazı ve başlat düğmesi dolu",
+     "ok": true,
+     "d": "{\"title\":\"MARTIAN MAP\",\"sub\":\"EVA REHEARSAL\",\"btn\":\"SELECT MISSION\"}"
+    },
+    {
+     "n": "[1920×1080 EN] \"Görev seç\" → görev seçimi ekranı",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "[1920×1080 EN] 4 görev kartı (S1,S2,S3 + \"Kendi rotanı planla\" CUSTOM)",
+     "ok": true,
+     "d": "S1,S2,S3,CUSTOM"
+    },
+    {
+     "n": "[1920×1080 EN] S1 → brifing",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1920×1080 EN] rota seçimi: 3 kart",
+     "ok": true,
+     "d": "kart=3"
+    },
+    {
+     "n": "[1920×1080 EN] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "[1920×1080 EN] rotalar canlı API'den (çevrimdışı yedek rozeti yok)",
+     "ok": true,
+     "d": "{\"alt\":\"api,api,api\",\"offline\":false}"
+    },
+    {
+     "n": "[1920×1080 EN] yürüyüş: durum=auto, rota uzunluğu > 0",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":611,\"hud\":true,\"dist\":\"610 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1920×1080 EN] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":611,\"hud\":true,\"dist\":\"610 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1920×1080 EN] kum olayı → rota yeniden planlanır",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"events\":[{\"id\":\"S1-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921846004,\"pz\":4729.6045465640855}],\"decisions\":[\"sand\",\"sand\"],\"fired\":true,\"replanned\":true,\"rep\":true,\"hold\":true,\"ret\":true,\"decision\":\"SAND DETECT"
+    },
+    {
+     "n": "[1920×1080 EN] hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "[1920×1080 EN] karne: harf + 4 satırlık tablo + iki düğme (\"Tekrar oyna\", \"Başka görev\")",
+     "ok": true,
+     "d": "{\"grade\":\"C\",\"rows\":5,\"btns\":[\"Play again\",\"Other mission\"]}"
+    },
+    {
+     "n": "[1920×1080 EN] karne: \"Tekrar oyna\"/\"Başka görev\" düğmeleri kaydırmadan görünür",
+     "ok": true,
+     "d": "{\"vh\":1080,\"bottoms\":[1065,1065],\"kartYuksek\":1056,\"kaydirilabilir\":true}"
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T9",
+   "title": "Gerçek klavye: WASD R L H T ? M",
+   "checks": [
+    {
+     "n": "yürüyüş (auto) başladı",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "W: otomatik yürüyüşten devralır (durum=walk) ve ileri gider",
+     "ok": true,
+     "d": "durum auto→walk, {\"fwd\":9.77,\"right\":0,\"dist\":9.77}"
+    },
+    {
+     "n": "S: geri gider (ileri bileşen < 0)",
+     "ok": true,
+     "d": "{\"fwd\":-12.67,\"right\":0,\"dist\":12.67}"
+    },
+    {
+     "n": "D: sağa kayar (sağ bileşen > 0)",
+     "ok": true,
+     "d": "{\"fwd\":0,\"right\":9.35,\"dist\":9.35}"
+    },
+    {
+     "n": "A: sola kayar (sağ bileşen < 0)",
+     "ok": true,
+     "d": "{\"fwd\":0,\"right\":-9.18,\"dist\":9.18}"
+    },
+    {
+     "n": "Shift+W: koşar (ileri gider)",
+     "ok": true,
+     "d": "{\"fwd\":17.06,\"right\":0,\"dist\":17.06}"
+    },
+    {
+     "n": "R: rotaya dönülür (durum=auto)",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"routeRun\":true}"
+    },
+    {
+     "n": "T: astronot görünürlüğü 3. şahıs ↔ 1. şahıs değişir",
+     "ok": true,
+     "d": "önce=true, T sonrası=false, 2. T sonrası=true"
+    },
+    {
+     "n": "H: vitals HUD gizlenir ve geri gelir",
+     "ok": true,
+     "d": "önce=true, H=false, H=true"
+    },
+    {
+     "n": "L: tarayıcı lejantı görünür (Dikkat + Geçilmez)",
+     "ok": true,
+     "d": "{\"hidden\":false,\"text\":\"═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim) · k\"}"
+    },
+    {
+     "n": "?: yardım penceresi açılır ve tuşları listeler",
+     "ok": true,
+     "d": "[\"W A S D\",\"Shift\",\"Fare (tıkla)\",\"R\",\"L / Shift+L\",\"T\",\"[ ]\",\"G\",\"N\",\"H\",\"Esc\",\"?\"]"
+    },
+    {
+     "n": "yardımda vaat edilen tuşlar listede",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "M (normal oyun): harita açılmaz — tasarım gereği yalnız ?dev=1 (yardım listesinde M yok)",
+     "ok": true,
+     "d": "önce=auto, sonra={\"st\":\"auto\",\"map\":\"none\"}"
+    },
+    {
+     "n": "M (?dev=1): 3B → haritaya döner",
+     "ok": true,
+     "d": "{\"st\":\"map\",\"map\":\"block\",\"gl\":true}"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T10",
+   "title": "TR/EN: boş anahtar / yer tutucu yok",
+   "checks": [
+    {
+     "n": "[1280×720 TR] 1_intro: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 2_gorev_secimi: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] EN'e geçince görev seçimi: boş anahtar yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 3_brifing: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 4_rotalar: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5_yuruyus: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5b_yuruyus_tarama: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 6_karne: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 7_duraklat: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 1_intro: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 2_gorev_secimi: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 3_brifing: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 4_rotalar: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 5_yuruyus: boş anahtar/yer tutucu yok",
+     "ok": false,
+     "d": "EN modda Türkçe: \"Sol 4625 · Navcam · büyüt: G\" | EN modda Türkçe: \"Y: ayrıntı\""
+    },
+    {
+     "n": "[1920×1080 EN] 6_karne: boş anahtar/yer tutucu yok",
+     "ok": false,
+     "d": "EN modda Türkçe: \"Sol 4625 · Navcam · büyüt: G\" | EN modda Türkçe: \"One way, En güvenli route. Cost is measured on the real terr\" | EN modda Türkçe: \"Rotaların radyasyon farkı Radyasyon: RAD\" | EN modda Türkçe: \"En kısa\" | EN modda Türkçe: \"En güvenli\" | EN modda Türkçe: \"Tek yön yürüyüş süresi × yü"
+    },
+    {
+     "n": "texts.json ui: 304 anahtarın hepsinde dolu tr + en",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "bilgi: tr == en olan uzun metinler (çevrilmemiş olabilir)",
+     "ok": true,
+     "d": "yok"
+    },
+    {
+     "n": "kodda t('...') ile çağrılan 174 anahtarın hepsi texts.json'da var",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "görev zorluk etiketleri (diff.<zorluk>) tanımlı",
+     "ok": true,
+     "d": "eksik: "
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T11",
+   "title": "Yerleşim 1280x720 + 1920x1080: taşma / örtüşme",
+   "checks": [
+    {
+     "n": "[1280×720 TR] 1_intro: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 2_gorev_secimi: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 3_brifing: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 4_rotalar: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5_yuruyus: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5b_yuruyus_tarama: taşma/örtüşme yok",
+     "ok": false,
+     "d": "ÖRTÜŞME .mm-mhud × #scanleg: 87×29 px"
+    },
+    {
+     "n": "[1280×720 TR] 6_karne: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 7_duraklat: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 1_intro: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 2_gorev_secimi: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 3_brifing: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 4_rotalar: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 5_yuruyus: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 6_karne: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T12",
+   "title": "Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L",
+   "checks": [
+    {
+     "n": "A–B çiftleri hazır: 11 çift (5 kumlu, 6 kumsuz), 6 geçilmez nokta",
+     "ok": true,
+     "d": "ab_ciftleri_gorevli.json; 7 /route denemesi"
+    },
+    {
+     "n": "seçim ekranında özel görev kartı (mission-custom) ve düğmesi (mission-go-custom) var",
+     "ok": true,
+     "d": "{\"card\":true,\"go\":true}"
+    },
+    {
+     "n": "\"Haritayı aç\" → harita ekranı (mappicker)",
+     "ok": true,
+     "d": "screen=picker"
+    },
+    {
+     "n": "test kancası window.__mm.picker { setA, setB, compute, state, shareUrl } var",
+     "ok": true,
+     "d": "ok"
+    },
+    {
+     "n": "harita ekranı öğeleri (mp-warn, mp-eta, mp-info, mp-compute, mp-share, mp-o2, mp-back) var",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "T12b: geçilmez A=653,501 (44°): uyarı metni \"3 m\" ve eğim doğru",
+     "ok": false,
+     "d": "beklenen \"A: Bu harita hücresinde hesaplanan eğim 44°; projenin 20° planlama eşiği …\" | görülen \"A: Bu harita hücresinde hesaplanan eğim 44°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın no\""
+    },
+    {
+     "n": "T12b: geçilmez A=653,501: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": false,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 44°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki e"
+    },
+    {
+     "n": "T12b: geçilmez A=852,725 (46°): uyarı metni \"4 m\" ve eğim doğru",
+     "ok": false,
+     "d": "beklenen \"A: Bu harita hücresinde hesaplanan eğim 46°; projenin 20° planlama eşiği …\" | görülen \"A: Bu harita hücresinde hesaplanan eğim 46°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın no\""
+    },
+    {
+     "n": "T12b: geçilmez A=852,725: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": false,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 46°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki e"
+    },
+    {
+     "n": "T12b: geçilmez A=386,565 (33°): uyarı metni \"4 m\" ve eğim doğru",
+     "ok": false,
+     "d": "beklenen \"A: Bu harita hücresinde hesaplanan eğim 33°; projenin 20° planlama eşiği …\" | görülen \"A: Bu harita hücresinde hesaplanan eğim 33°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın no\""
+    },
+    {
+     "n": "T12b: geçilmez A=386,565: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": false,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 33°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki e"
+    },
+    {
+     "n": "T12b: geçilmez A=409,724 (25°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Bu harita hücresinde hesaplanan eğim 25°; projenin 20° planlama eşiği …\" | görülen \"A: Bu harita hücresinde hesaplanan eğim 25°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın no\""
+    },
+    {
+     "n": "T12b: geçilmez A=409,724: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 25°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki e"
+    },
+    {
+     "n": "T12b: geçilmez A=393,704 (31°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": false,
+     "d": "beklenen \"A: Bu harita hücresinde hesaplanan eğim 31°; projenin 20° planlama eşiği …\" | görülen \"A: Bu harita hücresinde hesaplanan eğim 31°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın no\""
+    },
+    {
+     "n": "T12b: geçilmez A=393,704: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": false,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 31°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki e"
+    },
+    {
+     "n": "T12b: geçilmez A=437,702 (26°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Bu harita hücresinde hesaplanan eğim 26°; projenin 20° planlama eşiği …\" | görülen \"A: Bu harita hücresinde hesaplanan eğim 26°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın no\""
+    },
+    {
+     "n": "T12b: geçilmez A=437,702: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 26°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki e"
+    },
+    {
+     "n": "T12b: geçilebilir çiftte uyarı boş, hesaplanabilir",
+     "ok": true,
+     "d": "{\"warn\":\"\",\"can\":true}"
+    },
+    {
+     "n": "T12b: A–B 15 m'den yakınsa \"çok kısa\" uyarısı",
+     "ok": false,
+     "d": "B: Bu harita hücresinde hesaplanan eğim 23°; projenin 20° planlama eşiği aşılmış. Eşiğin a"
+    },
+    {
+     "n": "T12a: gerçek harita tıklamasıyla A ve B seçilir (±2 px)",
+     "ok": true,
+     "d": "A=704,529 B=762,415 beklenen 704,529→762,416 (tıklama sırası A/B ya da B/A: sıra durumuna bağlı)"
+    },
+    {
+     "n": "T12a: canlı mesafe/süre (mp-eta) kuş uçuşu ve 0,67056 m/s referansıyla tutarlı",
+     "ok": true,
+     "d": "beklenen \"Kuş uçuşu 254 m · kaba süre tahmini ≈ 6 dk\" | görülen \"Kuş uçuşu 254 m · kaba süre tahmini ≈ 6 dk\""
+    },
+    {
+     "n": "bilgi: mp-info (hedefe yakın durak notu)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "T12d: shareUrl() aynı A/B'yi taşır (virgül kodu çözülünce ?a=c,r&b=c,r)",
+     "ok": true,
+     "d": "beklenen http://127.0.0.1:8002/sim/?a=704,529&b=762,416 | görülen http://127.0.0.1:8002/sim/?a=704,529&b=762,416"
+    },
+    {
+     "n": "T12d (kozmetik): bağlantı okunaklı biçimde: virgül %2C ile kodlanmamış",
+     "ok": true,
+     "d": "beklenen http://127.0.0.1:8002/sim/?a=704,529&b=762,416 | görülen http://127.0.0.1:8002/sim/?a=704,529&b=762,416 (URLSearchParams virgülü %2C yapıyor; işlev etkilenmez, ?a=540%2C595 de açılır)"
+    },
+    {
+     "n": "T12d: paylaşım düğmesi (mp-share) aynı URL'yi üretir (panoya ya da prompt'a)",
+     "ok": true,
+     "d": "pano=http://127.0.0.1:8002/sim/?a=704,529&b=762,416 prompt=null"
+    },
+    {
+     "n": "T12e: \"Kısıtlı O₂ bütçesi (80 L)\" işaretlenince state.o2 = 80",
+     "ok": true,
+     "d": "o2=80"
+    },
+    {
+     "n": "T12e: paylaşım URL'si &o2=80 içerir",
+     "ok": true,
+     "d": "http://127.0.0.1:8002/sim/?a=704,529&b=762,416&o2=80"
+    },
+    {
+     "n": "T12e: hesapla → brifing",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12e: görev limitleri O₂ = 80 L ve brifingde 80 görünür",
+     "ok": true,
+     "d": "{\"id\":\"CUSTOM\",\"o2\":80,\"txt\":\"CUSTOM GÖREV BRİFİNGİ Özel görev  Kendi seçtiğin iki nokta arasında yürüyeceksin. Rota planlayıcıdan gelir; kum uyarısı yalnız rota ortofotoda kum adayı işaretli bir alana yaklaşırsa çıkar. "
+    },
+    {
+     "n": "T12e: 3 rota kartı geldi (80 L bütçede durum rozetleri kaydedildi; NO-GO beklenebilir)",
+     "ok": true,
+     "d": "[{\"k\":\"shortest\",\"why\":null},{\"k\":\"balanced\",\"why\":null},{\"k\":\"safest\",\"why\":null}]"
+    },
+    {
+     "n": "bilgi: P1 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "2855 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": true,
+     "d": "{\"can\":true,\"warn\":\"\"}"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): 3 rota kartı, kaynak api",
+     "ok": true,
+     "d": "{\"n\":3,\"src\":\"api,api,api\",\"why\":null}"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): yürüyüş başlar (walk, durum=auto)",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)",
+     "ok": true,
+     "d": "beklenen {\"id\":\"sand_14\",\"minDistM\":18,\"thresholdM\":56.2} | görülen {\"id\":\"sand_14\",\"min\":17,\"thr\":56.2}"
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"events\":[{\"id\":\"CUSTOM-sand\",\"type\":\"sand\",\"radius_m\":16.2,\"trigger_m\":56.2,\"world\":[3281.6477568215983,4676.496536437015],\"px\":3333.95133864002,\"pz\":4696.496536437075}],\"decisions\":[\"sand\",\"sand\"],\"fired\":true,\"replanned\":true,\"rep\":true,\"hold\":true,\"ret\":true,\"decision\":\"KUM ALGIL"
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): replan BAŞARILI: toast'ta \"başarısız\"/\"failed\" yok",
+     "ok": true,
+     "d": "toast=\"Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.\""
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): bu çiftte /replan, /step vb. 422 yok",
+     "ok": false,
+     "d": "POST /route POST /route POST /route"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): \"Başka görev\" → seçime döner (özel kart yine var)",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "bilgi: P2 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "1526 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a P2 373,497→544,544 (355 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": true,
+     "d": "{\"can\":true,\"warn\":\"\"}"
+    },
+    {
+     "n": "T12a P2 373,497→544,544 (355 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12a P2 373,497→544,544 (355 m, kum VAR): 3 rota kartı, kaynak api",
+     "ok": true,
+     "d": "{\"n\":3,\"src\":\"api,api,api\",\"why\":null}"
+    },
+    {
+     "n": "T12a P2 373,497→544,544 (355 m, kum VAR): yürüyüş başlar (walk, durum=auto)",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12c P2 373,497→544,544 (355 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)",
+     "ok": true,
+     "d": "beklenen {\"id\":\"sand_15\",\"minDistM\":15,\"thresholdM\":48} | görülen {\"id\":\"sand_15\",\"min\":16,\"thr\":48}"
+    },
+    {
+     "n": "T12c P2 373,497→544,544 (355 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)",
+     "ok": false,
+     "d": "{\"hasSand\":true,\"events\":[{\"id\":\"CUSTOM-sand\",\"type\":\"sand\",\"radius_m\":8,\"trigger_m\":48,\"world\":[3181.998813315404,4540.496536437073],\"px\":3137.541306074962,\"pz\":4556.496536437015}],\"decisions\":[],\"fired\":true,\"replanned\":false,\"rep\":true,\"hold\":true,\"ret\":true,\"decision\":null,\"toast\":\"Üsse dönüş ro"
+    },
+    {
+     "n": "T12c P2 373,497→544,544 (355 m, kum VAR): replan BAŞARILI: toast'ta \"başarısız\"/\"failed\" yok",
+     "ok": true,
+     "d": "toast=\"Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.\""
+    },
+    {
+     "n": "T12c P2 373,497→544,544 (355 m, kum VAR): bu çiftte /replan, /step vb. 422 yok",
+     "ok": false,
+     "d": "POST /route POST /route POST /route POST /route POST /route POST /route"
+    },
+    {
+     "n": "T12a P2 373,497→544,544 (355 m, kum VAR): hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "T12a P2 373,497→544,544 (355 m, kum VAR): \"Başka görev\" → seçime döner (özel kart yine var)",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "bilgi: P3 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "443 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a P3 179,445→131,369 (180 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": false,
+     "d": "{\"can\":false,\"warn\":\"A: Bu hücrenin eğimi 8.1° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; buradan hedefe yol bulunamaz. Ana bölgedeki en yakın nokta 94 m uzakta. B: Bu hücrenin eğimi 9.2° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; buradan hedefe yo"
+    },
+    {
+     "n": "T12a P3 179,445→131,369 (180 m, kum YOK): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 30000ms exceeded."
+    },
+    {
+     "n": "bilgi: P4 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "850 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a P4 176,770→38,860 (330 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": true,
+     "d": "{\"can\":true,\"warn\":\"\"}"
+    },
+    {
+     "n": "T12a P4 176,770→38,860 (330 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12a P4 176,770→38,860 (330 m, kum YOK): 3 rota kartı, kaynak api",
+     "ok": true,
+     "d": "{\"n\":3,\"src\":\"api,api,api\",\"why\":null}"
+    },
+    {
+     "n": "T12a P4 176,770→38,860 (330 m, kum YOK): yürüyüş başlar (walk, durum=auto)",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12c P4 176,770→38,860 (330 m, kum YOK): kum olayı YOK (selected.sand=null)",
+     "ok": true,
+     "d": "beklenen null | görülen null"
+    },
+    {
+     "n": "T12c P4 176,770→38,860 (330 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ ve karar penceresi açılmadı",
+     "ok": true,
+     "d": "{\"fired\":false,\"decisions\":[]}"
+    },
+    {
+     "n": "T12a P4 176,770→38,860 (330 m, kum YOK): hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "T12a P4 176,770→38,860 (330 m, kum YOK): \"Başka görev\" → seçime döner (özel kart yine var)",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "bilgi: P5 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "480 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a P5 704,147→619,69 (231 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": true,
+     "d": "{\"can\":true,\"warn\":\"\"}"
+    },
+    {
+     "n": "T12a P5 704,147→619,69 (231 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12a P5 704,147→619,69 (231 m, kum YOK): 3 rota kartı, kaynak api",
+     "ok": true,
+     "d": "{\"n\":3,\"src\":\"api,api,api\",\"why\":null}"
+    },
+    {
+     "n": "T12a P5 704,147→619,69 (231 m, kum YOK): yürüyüş başlar (walk, durum=auto)",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12c P5 704,147→619,69 (231 m, kum YOK): kum olayı YOK (selected.sand=null)",
+     "ok": true,
+     "d": "beklenen null | görülen null"
+    },
+    {
+     "n": "T12c P5 704,147→619,69 (231 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ ve karar penceresi açılmadı",
+     "ok": true,
+     "d": "{\"fired\":false,\"decisions\":[]}"
+    },
+    {
+     "n": "T12a P5 704,147→619,69 (231 m, kum YOK): hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "T12a P5 704,147→619,69 (231 m, kum YOK): \"Başka görev\" → seçime döner (özel kart yine var)",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "bilgi: AB01 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "873 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a AB01 791,844→518,999 (628 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": true,
+     "d": "{\"can\":true,\"warn\":\"\"}"
+    },
+    {
+     "n": "T12a AB01 791,844→518,999 (628 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12a AB01 791,844→518,999 (628 m, kum VAR): 3 rota kartı, kaynak api",
+     "ok": false,
+     "d": "{\"n\":1,\"src\":\"local\",\"why\":\"API 422\"}"
+    },
+    {
+     "n": "T12a AB01 791,844→518,999 (628 m, kum VAR): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 20000ms exceeded."
+    },
+    {
+     "n": "bilgi: AB03 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "2407 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a AB03 608,580→413,577 (390 m, kum VAR): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 20000ms exceeded."
+    },
+    {
+     "n": "bilgi: AB04 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "3305 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a AB04 489,600→539,319 (571 m, kum VAR): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 20000ms exceeded."
+    },
+    {
+     "n": "bilgi: AB10 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "2779 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a AB10 801,147→806,366 (438 m, kum YOK): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 20000ms exceeded."
+    },
+    {
+     "n": "bilgi: AB12 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "8227 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a AB12 217,702→173,358 (694 m, kum YOK): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 20000ms exceeded."
+    },
+    {
+     "n": "bilgi: AB13 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "915 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a AB13 704,529→762,416 (254 m, kum YOK): İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 20000ms exceeded."
+    },
+    {
+     "n": "T12d: ?a=&b= doğrudan brifinge açar (aynı A/B, O₂ 420 L)",
+     "ok": true,
+     "d": "{\"id\":\"CUSTOM\",\"a\":[704,529],\"b\":[762,416],\"o2\":420,\"intro\":false,\"brief\":true}"
+    },
+    {
+     "n": "T12d: ?a=&b=&o2=80 doğrudan brifinge açar (aynı A/B, O₂ 80 L)",
+     "ok": true,
+     "d": "{\"id\":\"CUSTOM\",\"a\":[704,529],\"b\":[762,416],\"o2\":80,\"intro\":false,\"brief\":true}"
+    },
+    {
+     "n": "T12d: geçersiz ?a=5000,5&b=3,3 → özel görev açılmaz, normal intro",
+     "ok": true,
+     "d": "{\"screen\":\"intro\",\"sel\":null}"
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T13",
+   "title": "Dinamik rota (#122): sapma önerisi, soğuma, kabul",
+   "checks": [
+    {
+     "n": "S1 yürüyüşü (auto) başladı",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "test kancası window.__mm.dynState() { devT, busy, cooldown, reserveDone } var",
+     "ok": true,
+     "d": "dist,lastPos,lastPeriodic,anchor,recalcs,last,devT,busy,cooldown,reserveDone,lastTick,noApiNoted,load0,loadSeen,obsSeen"
+    },
+    {
+     "n": "W: durum walk, routeRun korunur",
+     "ok": true,
+     "d": "{\"st\":\"walk\",\"run\":true,\"total\":611,\"dev\":0}"
+    },
+    {
+     "n": "rotadan ≥ 30 m uzaklaşıldı (P += 45 m yönlerinden uygun olan)",
+     "ok": true,
+     "d": "{\"dx\":45,\"dz\":0,\"distM\":42,\"home\":[3135.1705935630125,4554.508038317906]}"
+    },
+    {
+     "n": "sapma önerisi (mm:route-suggest) ≤ 40 sn içinde geldi",
+     "ok": true,
+     "d": "süre 11.5 sn (API yüklüyse 3 /route isteği ~20 sn sürebilir)"
+    },
+    {
+     "n": "öneri sebebi \"deviation\", delta.m ve delta.kcal sayı, rota var",
+     "ok": true,
+     "d": "{\"reason\":\"deviation\",\"delta\":{\"m\":-40,\"kcal\":-9.7,\"o2_L\":-2,\"risk\":null},\"urgent\":false}"
+    },
+    {
+     "n": "yerleşik bant (dyn-banner) + dyn-accept + dyn-dismiss görünür; metin boş anahtar içermez",
+     "ok": false,
+     "d": ""
+    },
+    {
+     "n": "İSTİSNA",
+     "ok": false,
+     "d": "page.click: Timeout 30000ms exceeded."
+    }
+   ],
+   "status": "FAIL"
+  }
+ ],
+ "konsol_hariclenen": [],
+ "konsol_kalan_hatalar": [
+  {
+   "page": "S1",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S1",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S1",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S2",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S2",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S2",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S3",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S3",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "S3",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  },
+  {
+   "page": "oyun 1280×720 TR",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)",
+   "url": "http://127.0.0.1:8000/route"
+  }
+ ]
+}

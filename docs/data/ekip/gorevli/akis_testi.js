@@ -357,7 +357,8 @@ function pageLayoutScan() {
 async function walkNatural(p, { ts = 40, maxS = 300, shotName = null } = {}) {
   await p.evaluate((k) => __mm.setTimeScale(k), ts);
   await p.evaluate(() => {
-    const m = __mm.wire.machine; window.__sandEv = [];
+    const m = __mm.wire.machine; window.__sandEv = []; window.__evlog = [];
+    if (!window.__evlogHooked) { window.__evlogHooked = true; for (const nme of ['mm:route-suggest', 'mm:route-decision']) addEventListener(nme, (e) => (window.__evlog ||= []).push({ n: nme, reason: e.detail?.reason, accept: e.detail?.accept, auto: e.detail?.auto, defaultPrevented: e.defaultPrevented })); }
     if (window.__hookedMachine !== m) { window.__hookedMachine = m; m.on('event', (e) => { const P = __mm.P; window.__sandEv.push({ id: e.id, type: e.type, radius_m: e.radius_m, trigger_m: e.trigger_m, world: e.world, px: P.x, pz: P.z }); }); }
   });
   const sandLabel = await p.evaluate(async () => { const i = await import('./app/i18n.js'); return i.t('decision.reason.sand'); });
@@ -378,7 +379,7 @@ async function walkNatural(p, { ts = 40, maxS = 300, shotName = null } = {}) {
     if (st.rep) { out.rep = true; break; }
   }
   out.toast = await p.evaluate(() => document.getElementById('toast')?.textContent?.slice(0, 120) ?? null);
-  out.events = await p.evaluate(() => window.__sandEv || []);
+  out.events = await p.evaluate(() => window.__sandEv || []); out.evlog = await p.evaluate(() => window.__evlog || []);
   return out;
 }
 
@@ -386,7 +387,7 @@ async function walkNatural(p, { ts = 40, maxS = 300, shotName = null } = {}) {
 async function driveToArrival(p) {
   const hasSand = await p.evaluate(() => !!__mm.wire.selected?.sand);
   const nat = await walkNatural(p);
-  return { hasSand, events: nat.events, decisions: nat.decisions, fired: nat.fired, replanned: nat.replanned, rep: nat.rep, hold: nat.hold, ret: nat.ret, decision: nat.decision, toast: nat.toast };
+  return { hasSand, events: nat.events, evlog: nat.evlog, decisions: nat.decisions, fired: nat.fired, replanned: nat.replanned, rep: nat.rep, hold: nat.hold, ret: nat.ret, decision: nat.decision, toast: nat.toast };
 }
 
 // ---------------------------------------------------------------- T8 + T10 + T11: oyun akışı
@@ -606,7 +607,7 @@ function staticI18n(t) {
 // ab_ciftleri.json (çalışan 2) yoksa çiftler gerçek ızgarada (API /layers/slope.bin) üretilir ve ab_ciftleri_gorevli.json'a yazılır.
 // NOT (Mars/Dünya kuralı): 'tahmini süre' beklentisi uygulamanın kendi sabitini yineler: 0,67056 m/s (NASA APACHE benchmark; Dünya'da ölçülmüş
 // giysili yürüyüş hızı, Mars değeri DEĞİL). Test yalnız uygulamanın metnini bu sabitle tutarlı mı diye sınar, değeri doğrulamaz.
-const CUSTOM_SPEED = 0.67056, CUSTOM_RES_M = 2, CUSTOM_W = 1000, IMPASS_DEG = 25, O2_LIM = 80;
+const CUSTOM_SPEED = 0.67056, CUSTOM_RES_M = 2, CUSTOM_W = 1000, IMPASS_DEG = 20, O2_LIM = 80;   // tur 4: Samet 25°→20° (main a5738a4); API /assumptions nogo_slope_deg ile ön koşulda doğrulanır
 
 function getBin(url, ms = 30000) {
   return new Promise((resolve) => {
@@ -642,7 +643,13 @@ async function makePairs() {
   if (!slopeBuf || slopeBuf.length !== CUSTOM_W * CUSTOM_W * 4) throw new Error('slope.bin okunamadı');
   const slope = new Float32Array(slopeBuf.buffer, slopeBuf.byteOffset, CUSTOM_W * CUSTOM_W);
   const zones = JSON.parse(fs.readFileSync(path.join(REPO, 'sim/data/sand_zones.json'), 'utf8'));
-  const ok = (c, r) => c >= 0 && r >= 0 && c < CUSTOM_W && r < CUSTOM_W && slope[r * CUSTOM_W + c] < IMPASS_DEG;
+  // 20° eşiğinde geçilebilir hücreler küçük adalara bölünür: uygulama (layers.py ile aynı kural) yalnız EN BÜYÜK 8-komşuluklu bileşeni geçilebilir sayar.
+  // Beklentiler bağımsız olarak burada aynı kuralla (yeniden yazılmış taşma doldurma) hesaplanır.
+  const lab = new Int32Array(CUSTOM_W * CUSTOM_W), stk = new Int32Array(CUSTOM_W * CUSTOM_W); let bestId = 0, bestSz = 0, nid = 0;
+  for (let i0 = 0; i0 < lab.length; i0++) { if (lab[i0] || !(slope[i0] < IMPASS_DEG)) continue; const id = ++nid; let sp = 0, sz = 0; stk[sp++] = i0; lab[i0] = id;
+    while (sp) { const j = stk[--sp]; sz++; const c0 = j % CUSTOM_W, r0 = (j - c0) / CUSTOM_W; for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) { const rr = r0 + dr, cc = c0 + dc; if ((!dr && !dc) || rr < 0 || cc < 0 || rr >= CUSTOM_W || cc >= CUSTOM_W) continue; const k = rr * CUSTOM_W + cc; if (!lab[k] && slope[k] < IMPASS_DEG) { lab[k] = id; stk[sp++] = k; } } }
+    if (sz > bestSz) { bestSz = sz; bestId = id; } }
+  const ok = (c, r) => c >= 0 && r >= 0 && c < CUSTOM_W && r < CUSTOM_W && slope[r * CUSTOM_W + c] < IMPASS_DEG && lab[r * CUSTOM_W + c] === bestId;
   const rnd = mulberry(120), ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
   const pairs = [], tries = { n: 0 };
   const verify = async (a, b) => {
@@ -666,7 +673,7 @@ async function makePairs() {
     }
   })();
   await want(2, true); await want(3, false);
-  // geçilmez noktalar (eğim >= 25°) + bağımsız en yakın geçilebilir mesafe
+  // geçilmez noktalar (eğim >= 20°) + bağımsız en yakın geçilebilir mesafe
   const impassable = [];
   for (let k = 0; k < 20000 && impassable.length < 3; k++) {
     const c = ri(20, 980), r = ri(20, 980), s = slope[r * CUSTOM_W + c]; if (!(s >= IMPASS_DEG)) continue;
@@ -675,17 +682,21 @@ async function makePairs() {
     let mm = null; if (best !== Infinity) { for (let d = Math.floor(best); d <= Math.ceil(best) + 1; d++) for (let dc = -d; dc <= d; dc++) for (let dr = -d; dr <= d; dr++) if (ok(c + dc, r + dr)) best = Math.min(best, Math.hypot(dc, dr)); mm = Math.round(best * CUSTOM_RES_M); }
     impassable.push({ px: [c, r], slopeDeg: Math.round(s), nearestPassableM: mm });
   }
+  // en yakın geçilebilir hücre (20°) — çalışan 2 dosyasındaki mesafeler 25° eşiğiyle hesaplanmıştı, burada yeniden hesaplanır
+  const nearestM = (c, r) => { let best = Infinity; for (let d = 1; d <= 150 && best === Infinity; d++) for (let dc = -d; dc <= d; dc++) for (let dr = -d; dr <= d; dr++) { if (Math.max(Math.abs(dc), Math.abs(dr)) !== d || !ok(c + dc, r + dr)) continue; best = Math.min(best, Math.hypot(dc, dr)); } if (best === Infinity) return null; const b0 = best; for (let d = Math.floor(b0); d <= Math.ceil(b0) + 1; d++) for (let dc = -d; dc <= d; dc++) for (let dr = -d; dr <= d; dr++) if (ok(c + dc, r + dr)) best = Math.min(best, Math.hypot(dc, dr)); return Math.round(best * CUSTOM_RES_M); };
   // Çalışan 2'nin ab_ciftleri.json'u (varsa) ÇAPRAZ DOĞRULAMA için eklenir: onların geçilmez noktaları (slope_deg, nearest_passable_m)
   // ve kumlu/kumsuz çiftlerinden (nearest_sand.triggers) en çok 2'şer tane. Beklentiler onların bağımsız hesabından gelir.
   let ek = null;
   try {
     const x = JSON.parse(fs.readFileSync(path.join(OUT, '..', 'ab_ciftleri.json'), 'utf8'));
     const mine = (pp) => ({ id: pp.id, a: pp.a, b: pp.b, straightM: Math.round(pp.straight_m), triggers: !!pp.nearest_sand?.triggers, sand: pp.nearest_sand ?? null, kaynak: 'calisan2' });
-    const okp = x.pairs.filter((pp) => pp.straight_m <= 700 && ok(...pp.a) && ok(...pp.b));
-    ek = { pairs: [...okp.filter((pp) => pp.nearest_sand?.triggers).slice(0, 2), ...okp.filter((pp) => !pp.nearest_sand?.triggers).slice(0, 2)].map(mine),
-      impassable: x.impassable.slice(0, 3).map((im) => ({ px: im.px, slopeDeg: Math.round(im.slope_deg), nearestPassableM: im.nearest_passable_m, kaynak: 'calisan2' })) };
+    const okp = x.pairs.filter((pp) => pp.straight_m <= 700 && ok(...pp.a) && ok(...pp.b));   // 20° altında A/B hâlâ geçilebilir olmalı
+    ek = { pairs: [...okp.filter((pp) => pp.nearest_sand?.triggers).slice(0, 3), ...okp.filter((pp) => !pp.nearest_sand?.triggers).slice(0, 3)].map(mine),
+      impassable: x.impassable.slice(0, 3).map((im) => ({ px: im.px, slopeDeg: Math.round(im.slope_deg), nearestPassableM: nearestM(im.px[0], im.px[1]), calisan2_nearest_m_25derece: im.nearest_passable_m, kaynak: 'calisan2 (konum/eğim) + 20° için yeniden hesaplanan mesafe' })) };
   } catch { /* dosya yok / biçim farklı: yalnız kendi çiftlerim */ }
-  const out = { kaynak: 'gorevli (kendi üretimi: gerçek ızgara slope.bin + API /route + sand_zones.json)' + (ek ? ' + çalışan 2 ab_ciftleri.json çapraz doğrulama (2 kumlu + 2 kumsuz çift, 3 geçilmez nokta)' : '; ab_ciftleri.json bulunamadı'), seed: 120, api: API, route_denemesi: tries.n, pairs: pairs.concat(ek?.pairs ?? []), impassable: impassable.concat(ek?.impassable ?? []), kendi_cift: pairs.length, kendi_gecilmez: impassable.length };
+  const shortB = (a) => { for (let d = 3; d <= 6; d++) for (const [dx, dy] of [[d, 0], [-d, 0], [0, d], [0, -d]]) if (ok(a[0] + dx, a[1] + dy)) return [a[0] + dx, a[1] + dy]; return null; };
+  for (const pp of pairs.concat(ek?.pairs ?? [])) pp.shortB = shortB(pp.a);
+  const out = { ana_bilesen_hucre: bestSz, bilesen_sayisi: nid, kaynak: 'gorevli (kendi üretimi: gerçek ızgara slope.bin + API /route + sand_zones.json)' + (ek ? ' + çalışan 2 ab_ciftleri.json çapraz doğrulama (2 kumlu + 2 kumsuz çift, 3 geçilmez nokta)' : '; ab_ciftleri.json bulunamadı'), seed: 120, api: API, route_denemesi: tries.n, pairs: pairs.concat(ek?.pairs ?? []), impassable: impassable.concat(ek?.impassable ?? []), kendi_cift: pairs.length, kendi_gecilmez: impassable.length };
   fs.writeFileSync(path.join(OUT, 'ab_ciftleri_gorevli.json'), JSON.stringify(out, null, 1));
   return out;
 }
@@ -725,7 +736,7 @@ async function runCustom(browser, t) {
     await p.waitForTimeout(2500); await shot(p, 'T12_harita.png');
 
     // ---- T12b: geçilmez nokta uyarısı
-    const good = data.pairs[0];
+    const good = data.pairs.at(-1);   // tur 4: çalışan 2'nin yeni çifti (T12b B ucu, T12d URL, T12e 80 L)
     for (const im of data.impassable) {
       const exp = (im.nearestPassableM == null ? fill(tpl['custom.warn.steep.none'].tr, { slope: im.slopeDeg }) : fill(tpl['custom.warn.steep'].tr, { slope: im.slopeDeg, m: im.nearestPassableM }));
       await p.evaluate(([a, b]) => { __mm.picker.setA(...a); __mm.picker.setB(...b); }, [im.px, good.b]);
@@ -739,9 +750,9 @@ async function runCustom(browser, t) {
     await p.evaluate((g) => { __mm.picker.setA(...g.a); __mm.picker.setB(...g.b); }, good);
     const okS = await p.evaluate(() => ({ warn: document.querySelector('[data-testid="mp-warn"]')?.innerText || '', st: __mm.picker.state() }));
     c('T12b: geçilebilir çiftte uyarı boş, hesaplanabilir', okS.warn === '' && okS.st.canCompute === true, JSON.stringify({ warn: okS.warn, can: okS.st.canCompute }));
-    const a5 = good.a; await p.evaluate(([a]) => { __mm.picker.setA(...a); __mm.picker.setB(a[0] + 4, a[1]); }, [a5]);
+    await p.evaluate(([a, b]) => { __mm.picker.setA(...a); __mm.picker.setB(...b); }, [good.a, good.shortB]);   // 20° altında a[0]+4 hücresi geçilmez olabiliyor: geçilebilir ve < 15 m uzak B
     const sh = await p.evaluate(() => document.querySelector('[data-testid="mp-warn"]')?.innerText || '');
-    c('T12b: A–B 15 m\'den yakınsa "çok kısa" uyarısı', sh === tpl['custom.warn.short'].tr, sh.slice(0, 90));
+    c('T12b: A–B 15 m\'den yakınsa "çok kısa" uyarısı', !!good.shortB && sh === tpl['custom.warn.short'].tr, `B=${good.shortB} ` + sh.slice(0, 90));
     await shot(p, 'T12_uyari.png');
 
     // ---- T12a-0: gerçek harita tıklaması + canlı süre
@@ -802,6 +813,9 @@ async function runCustom(browser, t) {
         await p.waitForFunction(() => window.__mm?.picker, null, { timeout: 15000 });
         await p.evaluate((g) => { __mm.picker.setA(...g.a); __mm.picker.setB(...g.b); }, pr);
         const st0 = await p.evaluate(() => __mm.picker.state());
+        const apiRes = await postJson(API + '/route', { start: pr.a, goal: pr.b }, 120000), apiOk = !!apiRes?.routes;
+        c(`T12a ${tag}: harita seçici ile API /route aynı kararı verir (seçici=${st0.canCompute ? 'kabul' : 'red'}, API=${apiOk ? '200' : '422'})`, st0.canCompute === apiOk, JSON.stringify({ can: st0.canCompute, warn: String(st0.warn).slice(0, 140), apiRoutes: apiOk }));
+        if (!st0.canCompute || !apiOk) { await loadGame(p, 'tr'); await p.click(tid('intro-start')); await waitScreen(p, 'select', 20000); continue; }   // çelişkili çift: akışı sürdürme, bulgu olarak kaydedildi
         c(`T12a ${tag}: seçim kabul edildi (uyarı yok, hesaplanabilir)`, st0.canCompute && st0.warn === '', JSON.stringify({ can: st0.canCompute, warn: st0.warn }));
         await p.click(tid('mp-compute'));
         c(`T12a ${tag}: hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)`, (await waitScreen(p, 'briefing', 30000)) && await p.evaluate((g) => { const s = __mm.wire.selected; return s?.id === 'CUSTOM' && s.start_px.join() === g.a.join() && s.goal_px.join() === g.b.join() && s.limits.o2_L === 420; }, pr), 'screen=' + (await scr(p)));
@@ -838,7 +852,7 @@ async function runCustom(browser, t) {
   // ---- T12d: URL ile açılış: ?a=&b= (ve &o2=80) doğrudan brifing
   const q = await newPage(browser, 'ozel-url', 1280, 720);
   try {
-    const g = data.pairs[0];
+    const g = data.pairs.at(-1);
     for (const o2 of [false, true]) {
       await q.goto(BASE + `?a=${g.a.join(',')}&b=${g.b.join(',')}${o2 ? '&o2=80' : ''}&fixedres=1${API_Q}`, { waitUntil: 'load' });
       await q.waitForFunction(() => window.__mm?.flow && window.__mm?.wire, null, { timeout: 120000 });
@@ -898,13 +912,13 @@ async function runDyn(browser, t) {
     const el1 = Math.round((Date.now() - t0) / 100) / 10;
     c('sapma önerisi (mm:route-suggest) ≤ 40 sn içinde geldi', got1 && el1 <= 40, `süre ${el1} sn (API yüklüyse 3 /route isteği ~20 sn sürebilir)`);
     if (!got1) { await shot(p, 'T13_oneri_yok.png'); return; }
-    const s1 = await p.evaluate(() => ({ ...window.__sug[0], banner: !!document.querySelector('[data-testid="dyn-banner"]'), acc: !!document.querySelector('[data-testid="dyn-accept"]'), dis: !!document.querySelector('[data-testid="dyn-dismiss"]'), txt: document.querySelector('[data-testid="dyn-banner"]')?.innerText.replace(/\n/g, ' ').slice(0, 160) }));
+    const s1 = await p.evaluate(() => ({ ...window.__sug[0], banner: !!document.querySelector('[data-testid="dyn-banner"], [data-testid="route-decision"]'), acc: !!document.querySelector('[data-testid="dyn-accept"], [data-testid="decision-accept"]'), dis: !!document.querySelector('[data-testid="dyn-dismiss"], [data-testid="decision-keep"]'), txt: document.querySelector('[data-testid="dyn-banner"], [data-testid="route-decision"]')?.innerText.replace(/\n/g, ' ').slice(0, 160) }));
     c('öneri sebebi "deviation", delta.m ve delta.kcal sayı, rota var', s1.reason === 'deviation' && Number.isFinite(s1.delta?.m) && Number.isFinite(s1.delta?.kcal) && s1.hasRoute, JSON.stringify({ reason: s1.reason, delta: s1.delta, urgent: s1.urgent }));
-    c('yerleşik bant (dyn-banner) + dyn-accept + dyn-dismiss görünür; metin boş anahtar içermez', s1.banner && s1.acc && s1.dis && !/\bdyn\.[a-z]/.test(s1.txt || ''), s1.txt);
+    c('yerleşik bant (dyn-banner) ya da karar kartı (route-decision, wire.js varsa) + kabul + vazgeç düğmeleri görünür; metin boş anahtar içermez', s1.banner && s1.acc && s1.dis && !/\bdyn\.[a-z]/.test(s1.txt || ''), s1.txt);
     await shot(p, 'T13_oneri_bant.png');
-    await p.click(tid('dyn-dismiss'));
+    await p.click('[data-testid="dyn-dismiss"], [data-testid="dyn-dismiss"], [data-testid="decision-keep"]');
     await p.waitForFunction(() => window.__dec.length >= 1, null, { timeout: 10000 }).catch(() => {});
-    const dd = await p.evaluate(() => ({ dec: window.__dec[0], banner: !!document.querySelector('[data-testid="dyn-banner"]') }));
+    const dd = await p.evaluate(() => ({ dec: window.__dec[0], banner: !!document.querySelector('[data-testid="dyn-banner"], [data-testid="route-decision"]') }));
     c('"Vazgeç": mm:route-decision {accept:false, reason:deviation}, bant kapanır', dd.dec?.accept === false && dd.dec?.reason === 'deviation' && !dd.banner, JSON.stringify(dd));
 
     // ---- 2) rotaya dön → 45 sn soğuma içinde ikinci öneri YOK
@@ -927,9 +941,9 @@ async function runDyn(browser, t) {
 
     // ---- 3) kabul → yeni rota uygulanır
     const before = await p.evaluate(() => { window.__rr = __mm.routeRun; return { total: Math.round(__mm.routeRun.total), rep: !!__mm.routeRun.replanned }; });
-    await p.click(tid('dyn-accept'));
+    await p.click('[data-testid="dyn-accept"], [data-testid="dyn-accept"], [data-testid="decision-accept"]');
     const rp = await p.waitForFunction(() => __mm.routeRun !== window.__rr && __mm.routeRun?.replanned === true && __mm.routeRun.total > 0, null, { timeout: 30000 }).then(() => true).catch(() => false);
-    const after = await p.evaluate(() => ({ rep: __mm.routeRun?.replanned, total: Math.round(__mm.routeRun?.total || 0), dec: window.__dec.at(-1), busy: __mm.dynState().busy, banner: !!document.querySelector('[data-testid="dyn-banner"]') }));
+    const after = await p.evaluate(() => ({ rep: __mm.routeRun?.replanned, total: Math.round(__mm.routeRun?.total || 0), dec: window.__dec.at(-1), busy: __mm.dynState().busy, banner: !!document.querySelector('[data-testid="dyn-banner"], [data-testid="route-decision"]') }));
     c('"Kabul": routeRun.replanned=true ve rota uzunluğu > 0', rp && after.rep === true && after.total > 0, JSON.stringify({ before, after: { rep: after.rep, total: after.total } }));
     c('"Kabul": mm:route-decision {accept:true, reason:deviation}, bant kapanır, makine meşgul değil', after.dec?.accept === true && after.dec?.reason === 'deviation' && !after.banner && after.busy === false, JSON.stringify(after.dec));
     await shot(p, 'T13_kabul.png');
@@ -937,10 +951,10 @@ async function runDyn(browser, t) {
     // ---- 4) kask kamerası gözlemi (mm:camera-insight) → reason 'observation'
     const waitReason = (reason, ms) => p.waitForFunction((r) => window.__sug.some((s) => s.reason === r), reason, { timeout: ms }).then(() => true).catch(() => false);
     const acceptReason = async (reason, label) => {
-      const b = await p.evaluate((r) => { const e = document.querySelector('[data-testid="dyn-banner"]'); return e ? { reason: e.dataset.reason, txt: e.innerText.replace(/\n/g, ' ').slice(0, 140) } : null; }, reason);
-      c(`${label}: yerleşik bant (dyn-banner, reason=${reason}) görünür`, !!b && b.reason === reason, JSON.stringify(b));
+      const b = await p.evaluate((r) => { const e = document.querySelector('[data-testid="dyn-banner"], [data-testid="route-decision"]'); return e ? { reason: e.dataset.reason ?? window.__sug.at(-1)?.reason, txt: e.innerText.replace(/\n/g, ' ').slice(0, 140) } : null; }, reason);
+      c(`${label}: bant/karar kartı (reason=${reason}) görünür`, !!b && b.reason === reason, JSON.stringify(b));
       await p.evaluate(() => { window.__rr = __mm.routeRun; });
-      await p.click(tid('dyn-accept'));
+      await p.click('[data-testid="dyn-accept"], [data-testid="dyn-accept"], [data-testid="decision-accept"]');
       const ok = await p.waitForFunction(() => __mm.routeRun !== window.__rr && __mm.routeRun?.replanned === true && __mm.routeRun.total > 0, null, { timeout: 30000 }).then(() => true).catch(() => false);
       const dec = await p.evaluate(() => window.__dec.at(-1));
       c(`${label}: "Kabul" → yeni routeRun (replanned=true, uzunluk > 0), karar {accept:true, reason:${reason}}`, ok && dec?.accept === true && dec?.reason === reason, JSON.stringify(dec));
@@ -1018,6 +1032,9 @@ KARARLILIK (${N} koşu): ${stable ? 'KARARLI' : 'KARARSIZ (flaky)'}  genel=${fin
     apiOk = a.status === 200 && a.body.length > 2;
     check(pre, `API ${API}/assumptions çalışıyor`, apiOk, 'HTTP ' + a.status);
     let grid = null; try { grid = JSON.parse((await get(API + '/grid')).body); } catch { /* yok */ }
+    let asm = []; try { asm = JSON.parse(a.body); } catch { /* yok */ }
+    const nogo = asm.find((x) => /Geçilmez eğim/i.test(x.name));
+    check(pre, `API geçilmez eğim eşiği ${IMPASS_DEG}° (/assumptions "Geçilmez eğim")`, !!nogo && Number(nogo.value) === IMPASS_DEG, nogo ? `${nogo.name}=${nogo.value} ${nogo.unit}` : '/assumptions içinde kayıt yok');
     check(pre, `API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)`, !!grid && grid.synthetic === false && grid.width === 1000 && grid.height === 1000 && grid.res_m === 2,
       grid ? `synthetic=${grid.synthetic} ${grid.width}x${grid.height} @ ${grid.res_m} m — "${String(grid.region).slice(0, 40)}"` : '/grid cevap vermedi');
     const cmp = await post(API + '/compare');

@@ -1,0 +1,143 @@
+[
+ {
+  "durum": "yakın (≤10 m: API snap eder) 21°",
+  "A": [
+   41,
+   20
+  ],
+  "B": [
+   131,
+   90
+  ],
+  "egimA": 21,
+  "egimB": 6,
+  "api": {
+   "http": 200,
+   "ozet": "rota var: shortest 0.35 km, balanced 0.35 km, safest 0.35 km"
+  },
+  "secici": {
+   "warn": "A: Bu harita hücresinde hesaplanan eğim 21°; projenin 20° planlama eşiği aşılmış ve yakında eşiğin altında nokta bulunamadı. B: Bu hücrenin eğimi 6.0° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; yakında ana bölgeden nokta bulunamadı.",
+   "hesaplaKapali": true,
+   "canCompute": false,
+   "nearA": null,
+   "nearB": null
+  }
+ },
+ {
+  "durum": "yakın (≤10 m) 27°",
+  "A": [
+   116,
+   20
+  ],
+  "B": [
+   209,
+   90
+  ],
+  "egimA": 27,
+  "egimB": 24,
+  "api": {
+   "http": 422,
+   "ozet": "{\"detail\":\"Başlangıç ile hedef arasında geçilebilir yol yok: başlangıç [116, 20] bileşen #3 (39713 hücre, %3.97), hedef [209, 90] bileşen #2 (70408 hücre, %7.04) içinde kaldı\"}"
+  },
+  "secici": {
+   "warn": "A: Bu harita hücresinde hesaplanan eğim 27°; projenin 20° planlama eşiği aşılmış ve yakında eşiğin altında nokta bulunamadı. B: Bu harita hücresinde hesaplanan eğim 24°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 287 m uzakta; bu insan yürüyüş sınırı değildir.",
+   "hesaplaKapali": true,
+   "canCompute": false,
+   "nearA": null,
+   "nearB": [
+    335,
+    159
+   ]
+  }
+ },
+ {
+  "durum": "yakın (≤10 m) 44°",
+  "A": [
+   653,
+   501
+  ],
+  "B": [
+   744,
+   570
+  ],
+  "egimA": 44,
+  "egimB": 22,
+  "api": {
+   "http": 422,
+   "ozet": "{\"detail\":\"Başlangıç ile hedef arasında geçilebilir yol yok: başlangıç [653, 501] bileşen #1755 (4 hücre, %0.00), hedef [744, 570] bileşen #1 (532486 hücre, %53.25) içinde kaldı\"}"
+  },
+  "secici": {
+   "warn": "A: Bu harita hücresinde hesaplanan eğim 44°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 39 m uzakta; bu insan yürüyüş sınırı değildir. B: Bu harita hücresinde hesaplanan eğim 22°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu insan yürüyüş sınırı değildir.",
+   "hesaplaKapali": true,
+   "canCompute": false,
+   "nearA": [
+    637,
+    490
+   ],
+   "nearB": [
+    744,
+    571
+   ]
+  }
+ },
+ {
+  "durum": "uzak A (>10 m, 24 m) 43°",
+  "A": [
+   200,
+   47
+  ],
+  "B": [
+   290,
+   117
+  ],
+  "egimA": 43,
+  "egimB": 10,
+  "api": {
+   "http": 422,
+   "ozet": "{\"detail\":\"Nokta geçilmez eğimde (43°), 10 m içinde geçilebilir hücre yok: (200, 47)\"}"
+  },
+  "secici": {
+   "warn": "A: Bu harita hücresinde hesaplanan eğim 43°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 351 m uzakta; bu insan yürüyüş sınırı değildir. B: Bu hücrenin eğimi 10.0° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; buradan hedefe yol bulunamaz. Ana bölgedeki en yakın nokta 123 m uzakta.",
+   "hesaplaKapali": true,
+   "canCompute": false,
+   "nearA": [
+    335,
+    159
+   ],
+   "nearB": [
+    335,
+    159
+   ]
+  }
+ },
+ {
+  "durum": "uzak B (>10 m, 24 m) 43°",
+  "A": [
+   290,
+   117
+  ],
+  "B": [
+   200,
+   47
+  ],
+  "egimA": 10,
+  "egimB": 43,
+  "api": {
+   "http": 422,
+   "ozet": "{\"detail\":\"Nokta geçilmez eğimde (43°), 10 m içinde geçilebilir hücre yok: (200, 47)\"}"
+  },
+  "secici": {
+   "warn": "A: Bu hücrenin eğimi 10.0° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; buradan hedefe yol bulunamaz. Ana bölgedeki en yakın nokta 123 m uzakta. B: Bu harita hücresinde hesaplanan eğim 43°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 351 m uzakta; bu insan yürüyüş sınırı değildir.",
+   "hesaplaKapali": true,
+   "canCompute": false,
+   "nearA": [
+    335,
+    159
+   ],
+   "nearB": [
+    335,
+    159
+   ]
+  }
+ }
+]
