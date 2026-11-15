@@ -112,27 +112,43 @@ def cost_surface(L: Layers, w: dict, load_kg: float = 0.0, max_slope_deg: float 
     return c, {"s_per_m": t, "kcal_per_m": k, "risk_per_m": r}
 
 
-# DENEME (Emre, 2026-11-15): sim'in 3B'de çizdiği tespit edilmiş kayalar (sim/data/rocks.json) rotada engel olsun.
-# MARTIAN_ROCK_BLOCK=1 ile açılır; kapalıyken davranış değişmez. Yarıçap sim'in çizdiğiyle aynı: min(d, 2,6 m)/2 + 0,5 m pay.
+# Kaya engeli: Emre'nin #98'deki MARTIAN_ROCK_BLOCK denemesi üstüne kuruldu (tur4/fizik: kind farkındalığı + varsayılan AÇIK).
+# Sim'in 3B'de çizdiği, HiRISE'tan tespit edilmiş kayalar (sim/data/rocks.json) rotada engeldir; sim'deki çarpışma (sim/app/collide.js) ile aynı yarıçap.
+#   kind: rock → d/2; outcrop → 0,86·d/2 (yayvan elipsin ortalaması; sim/app/collide.js OUTCROP_K); shadow → ENGEL DEĞİL (gölge yöntemi artığı, sim çizmiyor).
+#   Pay (MARTIAN_ROCK_MARGIN_M, varsayılan 0,5 m): astronot gövdesi (0,35 m) + ızgara kuantizasyonu için.
+# Kapatmak için MARTIAN_ROCK_BLOCK=0.
 _ROCK_CACHE: dict = {}
+ROCK_BLOCK_KINDS = {"rock": 1.0, "outcrop": 0.86}
+
+
+def rock_block_enabled() -> bool:
+    import os
+    return os.environ.get("MARTIAN_ROCK_BLOCK", "1") != "0"
+
+
+def rock_margin_m() -> float:
+    import os
+    return float(os.environ.get("MARTIAN_ROCK_MARGIN_M", "0.5"))
 
 
 def rock_block_mask(L: Layers):
-    import json, os
+    import json
     from pathlib import Path
     # rocks.json gerçek ızgaranın (contracts/grid.json, 1000×1000, 2 m) piksel uzayında
-    if os.environ.get("MARTIAN_ROCK_BLOCK") != "1" or L.synthetic or L.slope.shape != (1000, 1000):
+    if not rock_block_enabled() or L.synthetic or L.slope.shape != (1000, 1000):
         return None
-    key = (L.slope.shape, L.res_m)
+    margin = rock_margin_m()
+    key = (L.slope.shape, L.res_m, margin)
     if key not in _ROCK_CACHE:
         f = Path(__file__).resolve().parents[2] / "sim" / "data" / "rocks.json"
         m = np.zeros(L.slope.shape, bool)
         h, w = m.shape
         for rk in json.load(open(f, encoding="utf-8")):
-            if rk.get("kind", "rock") != "rock":
-                continue  # outcrop (sırt yüzleği) ve shadow (gölge artığı) tek kaya değil; sim shadow'u çizmiyor, görünmez engel olmasın
+            k = ROCK_BLOCK_KINDS.get(rk.get("kind", "rock"))
+            if k is None:
+                continue  # shadow (gölge artığı) ve bilinmeyen türler görünmez engel olmasın
             x, y = rk["px"]
-            rad = (min(rk["d_m"], 2.6) / 2 + 0.5) / L.res_m  # hücre
+            rad = (rk["d_m"] / 2 * k + margin) / L.res_m  # hücre
             for yy in range(int(y - rad - 1), int(y + rad + 2)):
                 for xx in range(int(x - rad - 1), int(x + rad + 2)):
                     if 0 <= yy < h and 0 <= xx < w and (xx + 0.5 - x) ** 2 + (yy + 0.5 - y) ** 2 <= rad ** 2:
