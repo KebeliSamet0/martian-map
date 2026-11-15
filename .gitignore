@@ -21,3 +21,6 @@ dist/
 .env*
 .DS_Store
 deploy/dist/
+
+# Kask kamerası: indirilen Navcam kareleri (sim/tools/fetch_navcam.py ile üretilir, git dışı)
+sim/data/navcam_all/

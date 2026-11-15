@@ -158,3 +158,7 @@ export function walkSummaryText(sum, t) {
   return { mix, parts, conf: fmt(t.walk_conf, { conf: pct(sum.mean_conf), low: pct(sum.low_conf_frac), lowm: Math.round(sum.low_conf_m) }),
     total: fmt(t.walk_total, { m: Math.round(sum.total_m) }) };
 }
+
+/** Tek indirme: yürüyüş günlüğü, ayak altı okuyucu ve kask kamerası aynı zemin alanını kullanır. */
+let _field = null;
+export const sharedField = (apiBase, grid, fetcher) => (_field ??= loadTerrainField(apiBase, grid, fetcher).catch((e) => { _field = null; throw e; }));

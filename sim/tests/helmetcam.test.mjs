@@ -1,0 +1,66 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadManifest } from '../app/helmetcam-core.js';
+
+const texts = JSON.parse(await readFile(new URL('../data/texts.json', import.meta.url)));
+const tr = (g) => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v.tr]));
+const en = (g) => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v.en]));
+const T = tr(texts.helmetcam), E = en(texts.helmetcam);
+const man = JSON.parse(await readFile(new URL('../data/navcam_manifest.json', import.meta.url)));
+const S = (cf, entropy, px = [10, 10]) => ({ stop_id: 'x', sol: 1, px, class_frac: cf, entropy, files: [{ name: 'a.jpg', sol: 1 }] });
+
+test('manifest: 128 durak, her karenin NASA adresi ve model alanları var', () => {
+  assert.equal(man.stops.length, 128);
+  assert.ok(man.stops.every((s) => s.class_frac && typeof s.entropy === 'number' && s.files.length > 0));
+  assert.ok(man.stops.flatMap((s) => s.files).every((f) => /^https:\/\/mars\.nasa\.gov\/msl-raw-images\/.*\/sol\/\d{5}\/opgs\/edr\/ncam\/.+\.JPG$/.test(f.url)));
+  assert.equal(man.stops.reduce((n, s) => n + s.files.length, 0), 391);
+});
+
+test('model yorumu: şablon örneği, kum yok → uyarı yok, kesinlik yüksek', () => {
+  const r = modelReading(S({ soil: 0.36, bedrock: 0.61, sand: 0.0, bigrock: 0.03 }, 0.28), T);
+  assert.equal(r.text, 'Önünde %61 ana kaya, %36 toprak; kum yok denecek kadar az. Model bu durakta emin.');
+  assert.equal(r.warn, false); assert.equal(r.low, false); assert.ok(r.sandNote);
+});
+
+test('düşük kesinlik: "Model emin değil; kanıt az." ve uyarı eşikleri (kum > %15, büyük kaya > %10)', () => {
+  const lo = modelReading(S({ soil: 0.5, bedrock: 0.3, sand: 0.1, bigrock: 0.1 }, 0.7), T);
+  assert.match(lo.text, /Model emin değil; kanıt az\.$/); assert.equal(lo.low, true); assert.equal(lo.warn, false);   // tam eşikte (0,10) uyarı yok
+  const w = modelReading(S({ soil: 0.4, bedrock: 0.3, sand: 0.18, bigrock: 0.12 }, 0.3), T);
+  assert.deepEqual(w.kinds, ['sand', 'bigrock']); assert.equal(w.warn, true); assert.match(w.warnText, /kum %18, büyük kaya %12/); assert.equal(w.sandNote, null);
+});
+
+test('İngilizce şablon aynı anahtarlarla çalışır', () => {
+  assert.deepEqual(Object.keys(E).sort(), Object.keys(T).sort());
+  assert.match(modelReading(S({ soil: 0.36, bedrock: 0.61, sand: 0, bigrock: 0.03 }, 0.28), E).text, /^Ahead of you: 61% bedrock, 36% soil; almost no sand\./);
+});
+
+test('yakınlık: durak yarıçapı 30 m, ızgara 2 m/px', () => {
+  const stops = [S({}, 0, [100, 100]), { ...S({}, 0, [200, 200]), stop_id: 'y' }];
+  assert.equal(stopAt(stops, [114, 100], 2).stop.stop_id, 'x');   // 28 m
+  assert.equal(stopAt(stops, [116, 100], 2), null);                // 32 m
+  assert.ok(Math.abs(nearestStop(stops, [200, 210], 2).distM - 20) < 1e-9);
+});
+
+test('ileri uyarı: rota üzerinde benzer zeminin ilk uzaklığı; yoksa null', () => {
+  const dense = [[0, 0], [100, 0]], cum = [0, 100], id = (w) => w;
+  const sample = (px) => ({ p: { sand: px[0] >= 40 ? 0.3 : 0, bigrock: 0 }, conf: 1 });
+  const r = aheadSimilar({ dense, cum, s: 10 }, ['sand'], sample, id, { step: 2 });
+  assert.equal(r.kind, 'sand'); assert.ok(r.aheadM >= 30 && r.aheadM <= 32);
+  assert.equal(aheadSimilar({ dense, cum, s: 10 }, ['sand'], () => ({ p: { sand: 1 }, conf: 1 }), id).aheadM, 15);   // durağın hemen çevresi (<15 m) sayılmaz
+  assert.equal(aheadSimilar({ dense, cum, s: 10 }, ['bigrock'], sample, id), null);
+});
+
+test('olay gövdesi ve görüntü adayları', () => {
+  const st = S({ soil: 0.4, bedrock: 0.3, sand: 0.18, bigrock: 0.1 }, 0.3), rd = modelReading(st, T);
+  assert.deepEqual(Object.keys(cameraInsightDetail(st, rd)).sort(), ['classFrac', 'entropy', 'stopId', 'warn']);
+  const c = imageCandidates(st, '/d/');
+  assert.equal(c[0].url, '/d/navcam_all/x/a.jpg'); assert.equal(c[0].mask, '/d/navcam_masks/x/a.png'); assert.equal(c.length, 1);
+  assert.deepEqual(localFallback(st, '/d/'), []); assert.equal(localFallback({ ...st, local: true }, '/d/')[0].url, '/d/navcam/x.jpg');
+  assert.ok(Math.abs(certaintyOf(st) - 0.7) < 1e-9);
+});
+
+test('loadManifest in_grid dışını eler', async () => {
+  const f = async () => ({ ok: true, json: async () => ({ stops: [{ in_grid: true, stop_id: 'a' }, { in_grid: false, stop_id: 'b' }] }) });
+  assert.deepEqual((await loadManifest('u', f)).map((s) => s.stop_id), ['a']);
+});
