@@ -154,6 +154,8 @@ function ensureScanTex() {
   SCAN_TEX.value = tx; SCAN_DIM.value.set(nav.w * nav.cx, nav.h * nav.cz);
 }
 function scanStart(wide = false) {
+  const lock = wire?.scanLocked?.() ?? 0;   // #125 B.7: zor modda ilk tarama gecikir
+  if (lock > 0) { toast(t('hard.scanlock', { s: Math.ceil(lock / 1000) }), true); return; }
   audio?.alert('scan');
   const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
   scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; dispatchEvent(new CustomEvent('mm:scan', { detail: { wide } }));   // #125 B.5

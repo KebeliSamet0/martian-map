@@ -93,6 +93,11 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       flow.onScreen?.('briefing', m);
       const go = await showBriefing(root, briefingInfo(m));
       if (!go) { flow.onScreen?.('select'); flow.onBack?.(); return; }
+      // #125 B.7: zor modda O₂ bütçesi yarıya iner. Katalog bozulmaz, koşuya özel kopya.
+      if (go.hard && Number.isFinite(m.limits?.o2_L)) {
+        selected = { ...m, hard: true, limits: { ...m.limits, o2_L: m.limits.o2_L / 2 } };
+        map.mission = selected; map.setMission(selected, coords);
+      } else if (go.hard) selected = { ...m, hard: true };
       flow.onScreen?.('computing', m);
       await map.compute();
       if (!await pickRoute()) { flow.onScreen?.('select'); flow.onBack?.(); }
@@ -137,9 +142,12 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       void map.compute().then(() => { if (flow.autoWalk) return pickRoute(); toast(t('flow.return.prep')); });
     });
   }
-  let lastPosition;
+  let lastPosition, runStart = 0;
+  // #125 B.7: zor modda ilk tarama 30 sn kilitli. Kalan süreyi main.js sorar.
+  const SCAN_LOCK_MS = 30000;
+  function scanLocked() { return selected?.hard && runStart ? Math.max(0, SCAN_LOCK_MS - (performance.now() - runStart)) : 0; }
   function start(route, position) {
-    clearRun(); observations = []; running = true; const id = generation;
+    clearRun(); observations = []; running = true; runStart = performance.now(); const id = generation;
     planned = structuredClone(route?.raw?.total ?? route?.total ?? {}); limits = planned.budget?.limits ?? selected?.limits ?? {};
     vitals = createVitals({ assumptions, route, arrivalRadiusM: 10, api: available('/step') && route?.source === 'api' ? createStepAdapter({ call, coords, assumptions, observations: () => observations }) : undefined });
     if (route) {
@@ -204,7 +212,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }
   }
-  return { coords, grid, call, available, texts, selectMission, pickRoute, catalog, missionTitle,
+  return { coords, grid, call, available, texts, selectMission, pickRoute, catalog, missionTitle, scanLocked,
     get vitals() { return vitals; }, get machine() { return machine; }, get selected() { return selected; },
     start, stop: clearRun,
     setRoute(route) { vitals?.setRoute(route); },

@@ -700,6 +700,34 @@
       "tr": "Mevcut rotada devam et (risk)",
       "en": "Stay on the current route (risk)"
     },
+    "briefing.difficulty": {
+      "tr": "ZORLUK",
+      "en": "DIFFICULTY"
+    },
+    "diff.normal": {
+      "tr": "Normal",
+      "en": "Normal"
+    },
+    "diff.hard": {
+      "tr": "Zor",
+      "en": "Hard"
+    },
+    "diff.normal.what": {
+      "tr": "Görev dosyasındaki bütçeyle oynarsın.",
+      "en": "You play with the budget from the mission file."
+    },
+    "diff.hard.what": {
+      "tr": "Oksijen bütçesi yarıya iner ve ilk tarama ancak 30 saniye sonra açılır.",
+      "en": "The oxygen budget is halved and the first scan only unlocks after 30 seconds."
+    },
+    "diff.source": {
+      "tr": "Zorluk bir senaryo ayarıdır, ölçüm değildir; planlayıcının sayıları değişmez, yalnız bütçe ve tarayıcı kısıtlanır.",
+      "en": "Difficulty is a scenario setting, not a measurement; the planner's numbers do not change, only the budget and the scanner are constrained."
+    },
+    "hard.scanlock": {
+      "tr": "Zor mod: tarayıcı {s} saniye sonra açılacak.",
+      "en": "Hard mode: the scanner unlocks in {s} s."
+    },
     "check.title": {
       "tr": "GÖREV LİSTESİ",
       "en": "CHECKLIST"

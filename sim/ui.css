@@ -220,6 +220,13 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #125 B.7: brifingte zorluk seçimi */
+.mm-difficulty { margin-top: 14px; }
+.mm-difficulty .mm-alert-acts { justify-content: flex-start; margin-top: 0; }
+.mm-difficulty .mm-btn { min-width: 96px; }
+.mm-difficulty .mm-fine { margin-top: 8px; }
+.mm-diff-src { opacity: .85; }
+
 /* #125 B.5: görev içi mini hedefler (sol üst, görev kartının altında) */
 .mm-checklist {
   position: absolute; left: 18px; top: 172px; width: 280px; padding: 9px 12px;

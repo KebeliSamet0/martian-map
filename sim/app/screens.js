@@ -76,11 +76,32 @@ export function showBriefing(container, mission = {}) {
     cols.append(left, right);
     m.card.append(cols);
     if (mission.science) m.card.append(section(t('briefing.science')), el('p', 'mm-text mm-science', mission.science));
+
+    // #125 B.7: zorluk. Görev seçim ekranı Batu'da olduğu için seçim burada.
+    let hard = false;
+    const diffBox = el('div', 'mm-difficulty');
+    const normalBtn = button(t('diff.normal'), 'primary'), hardBtn = button(t('diff.hard'), 'ghost');
+    normalBtn.dataset.testid = 'diff-normal'; hardBtn.dataset.testid = 'diff-hard';
+    const setHard = (v) => {
+      hard = v;
+      normalBtn.className = `mm-btn mm-btn-${v ? 'ghost' : 'primary'}`;
+      hardBtn.className = `mm-btn mm-btn-${v ? 'primary' : 'ghost'}`;
+      normalBtn.setAttribute('aria-pressed', String(!v)); hardBtn.setAttribute('aria-pressed', String(v));
+      note.textContent = v ? t('diff.hard.what') : t('diff.normal.what');
+    };
+    const note = el('p', 'mm-fine');
+    normalBtn.onclick = () => setHard(false); hardBtn.onclick = () => setHard(true);
+    const row = el('div', 'mm-alert-acts');
+    row.append(normalBtn, hardBtn);
+    diffBox.append(section(t('briefing.difficulty')), row, note, el('p', 'mm-fine mm-diff-src', t('diff.source')));
+    setHard(false);
+    m.card.append(diffBox);
+
     const acts = el('div', 'mm-alert-acts mm-acts-end');
     const back = button(t('briefing.back'), 'ghost'), go = button(t('briefing.start'));
     back.onclick = () => { m.close(); resolve(false); };
     go.dataset.testid = 'briefing-start';
-    go.onclick = () => { m.close(); resolve(true); };
+    go.onclick = () => { m.close(); resolve({ hard }); };
     acts.append(back, go);
     m.card.append(acts);
     go.focus();
