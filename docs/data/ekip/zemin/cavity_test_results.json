@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "cases": [
+    "flat stays bright",
+    "linear slope stays bright",
+    "pit darkens",
+    "NoData excludes pit",
+    "NaN excludes pit"
+  ]
+}

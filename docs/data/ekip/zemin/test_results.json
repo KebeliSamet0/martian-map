@@ -1,0 +1,316 @@
+{
+  "date_utc": "2026-11-14T16:25:59.676Z",
+  "chrome": "157.0.8103.78",
+  "viewport": {
+    "width": 1100,
+    "height": 720
+  },
+  "engine_path": "sim/lib/three.module.js",
+  "command": "node docs/data/ekip/zemin/run_test.cjs",
+  "cases": [
+    {
+      "name": "flat_before",
+      "params": {
+        "shape": "flat",
+        "mode": "before"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 1,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "flat",
+      "mode": "before",
+      "failedPrograms": 0,
+      "elapsed_ms": 1003,
+      "screenshot": "screenshots/flat_before.png"
+    },
+    {
+      "name": "flat_after",
+      "params": {
+        "shape": "flat",
+        "mode": "after"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "flat",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3321,
+      "screenshot": "screenshots/flat_after.png"
+    },
+    {
+      "name": "flat_regular",
+      "params": {
+        "shape": "flat",
+        "mode": "regular"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "flat",
+      "mode": "regular",
+      "failedPrograms": 0,
+      "elapsed_ms": 1598,
+      "screenshot": "screenshots/flat_regular.png"
+    },
+    {
+      "name": "wavy_before",
+      "params": {
+        "shape": "wavy",
+        "mode": "before"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 1,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "wavy",
+      "mode": "before",
+      "failedPrograms": 0,
+      "elapsed_ms": 650,
+      "screenshot": "screenshots/wavy_before.png"
+    },
+    {
+      "name": "wavy_after",
+      "params": {
+        "shape": "wavy",
+        "mode": "after"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3037,
+      "screenshot": "screenshots/wavy_after.png"
+    },
+    {
+      "name": "wavy_regular",
+      "params": {
+        "shape": "wavy",
+        "mode": "regular"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "wavy",
+      "mode": "regular",
+      "failedPrograms": 0,
+      "elapsed_ms": 1428,
+      "screenshot": "screenshots/wavy_regular.png"
+    },
+    {
+      "name": "sand_03_after",
+      "params": {
+        "asset": "sand_03",
+        "shape": "wavy",
+        "mode": "after"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "sand_03",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3218,
+      "screenshot": "screenshots/sand_03_after.png"
+    },
+    {
+      "name": "rock_face_03_after",
+      "params": {
+        "asset": "rock_face_03",
+        "shape": "wavy",
+        "mode": "after"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "rock_face_03",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3325,
+      "screenshot": "screenshots/rock_face_03_after.png"
+    },
+    {
+      "name": "dry_ground_01_after",
+      "params": {
+        "asset": "dry_ground_01",
+        "shape": "wavy",
+        "mode": "after"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "dry_ground_01",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3485,
+      "screenshot": "screenshots/dry_ground_01_after.png"
+    },
+    {
+      "name": "provided_varyings",
+      "params": {
+        "mode": "after",
+        "shape": "wavy",
+        "varyings": "provided"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3184,
+      "screenshot": null
+    },
+    {
+      "name": "far_fade",
+      "params": {
+        "mode": "after",
+        "shape": "wavy",
+        "far": "1"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 784,
+      "screenshot": null
+    },
+    {
+      "name": "three_axis_oblique",
+      "params": {
+        "asset": "rock_face_03",
+        "mode": "after",
+        "shape": "wavy"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "rock_face_03",
+      "shape": "wavy",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 3966,
+      "screenshot": "screenshots/three_axis_oblique.png"
+    },
+    {
+      "name": "tiling_regular",
+      "params": {
+        "mode": "regular",
+        "shape": "flat"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "flat",
+      "mode": "regular",
+      "failedPrograms": 0,
+      "elapsed_ms": 1955,
+      "screenshot": "screenshots/tiling_regular.png"
+    },
+    {
+      "name": "tiling_after",
+      "params": {
+        "mode": "after",
+        "shape": "flat"
+      },
+      "revision": "160",
+      "webgl2": true,
+      "drawCalls": 4,
+      "triangles": 34928,
+      "textures": 4,
+      "programs": 1,
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "asset": "terrain_red_01",
+      "shape": "flat",
+      "mode": "after",
+      "failedPrograms": 0,
+      "elapsed_ms": 4019,
+      "screenshot": "screenshots/tiling_after.png"
+    }
+  ],
+  "console_errors": [],
+  "console_warnings": [],
+  "failed_requests": [],
+  "passed": true
+}

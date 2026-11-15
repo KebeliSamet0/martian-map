@@ -1,0 +1,313 @@
+{
+  "terrain_red_01": {
+    "info": {
+      "source_url": "https://polyhaven.com/a/terrain_red_01",
+      "license": "CC0-1.0 Universal",
+      "license_quote": "Our assets are all licensed as CC0",
+      "access_time_utc": "2026-11-15T06:38:00Z",
+      "author": "Rob Tuytel",
+      "files": {
+        "diffuse": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_diff_1k.jpg",
+        "nor_gl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_nor_gl_1k.jpg",
+        "rough": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_rough_1k.jpg",
+        "ao": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_ao_1k.jpg"
+      }
+    },
+    "downloaded_files": [
+      {
+        "channel": "diffuse",
+        "filename": "terrain_red_01_diff_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/terrain_red_01/terrain_red_01_diff_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_diff_1k.jpg",
+        "http_status": 200,
+        "bytes": 583519,
+        "sha256": "f3f3fa6ebcddce22ece1fc8a343b469cbf67faefafac453ba53bce1fa28fc4b0",
+        "resolution": "1024x1024",
+        "color_space": "sRGB",
+        "normal_type": "N/A"
+      },
+      {
+        "channel": "nor_gl",
+        "filename": "terrain_red_01_nor_gl_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/terrain_red_01/terrain_red_01_nor_gl_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_nor_gl_1k.jpg",
+        "http_status": 200,
+        "bytes": 756034,
+        "sha256": "97b57469b655d40c2e4c39b7c5f8deb9cbaee2af16c0ee19cd85f435f48f1da6",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "OpenGL (+Y up)"
+      },
+      {
+        "channel": "rough",
+        "filename": "terrain_red_01_rough_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/terrain_red_01/terrain_red_01_rough_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_rough_1k.jpg",
+        "http_status": 200,
+        "bytes": 546786,
+        "sha256": "d28d3cb3cb1cff885eff978ebab96e2e887aad9c82294978554bc09ae00b2832",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      },
+      {
+        "channel": "ao",
+        "filename": "terrain_red_01_ao_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/terrain_red_01/terrain_red_01_ao_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/terrain_red_01/terrain_red_01_ao_1k.jpg",
+        "http_status": 200,
+        "bytes": 338135,
+        "sha256": "a7b0b649ca9e6ae319b5f7b7c077b491eee9e3ee34f912c95b4aebd003e050c6",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      }
+    ]
+  },
+  "sand_03": {
+    "info": {
+      "source_url": "https://polyhaven.com/a/sand_03",
+      "license": "CC0-1.0 Universal",
+      "license_quote": "Our assets are all licensed as CC0",
+      "access_time_utc": "2026-11-15T06:38:00Z",
+      "author": "Charlotte Baglioni",
+      "files": {
+        "diffuse": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_diff_1k.jpg",
+        "nor_gl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_nor_gl_1k.jpg",
+        "rough": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_rough_1k.jpg",
+        "ao": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_ao_1k.jpg"
+      }
+    },
+    "downloaded_files": [
+      {
+        "channel": "diffuse",
+        "filename": "sand_03_diff_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/sand_03/sand_03_diff_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_diff_1k.jpg",
+        "http_status": 200,
+        "bytes": 703132,
+        "sha256": "e72144f9d7b81bdb7bbdb34222b53431738dcef79346dd89412d2abd541e4d30",
+        "resolution": "1024x1024",
+        "color_space": "sRGB",
+        "normal_type": "N/A"
+      },
+      {
+        "channel": "nor_gl",
+        "filename": "sand_03_nor_gl_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/sand_03/sand_03_nor_gl_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_nor_gl_1k.jpg",
+        "http_status": 200,
+        "bytes": 884706,
+        "sha256": "1bde5f49ea78f94bcad73592696bf3949711c4ac197133b710c0c8521b6e996b",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "OpenGL (+Y up)"
+      },
+      {
+        "channel": "rough",
+        "filename": "sand_03_rough_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/sand_03/sand_03_rough_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_rough_1k.jpg",
+        "http_status": 200,
+        "bytes": 291218,
+        "sha256": "5c9ead290a94913cfa2d0452a576ba527b50301fe208f2ffc4861e42a8fea45b",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      },
+      {
+        "channel": "ao",
+        "filename": "sand_03_ao_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/sand_03/sand_03_ao_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_03/sand_03_ao_1k.jpg",
+        "http_status": 200,
+        "bytes": 640155,
+        "sha256": "5789af3cb61185c2bab282eb27b1fd78e4d50ca6578855998b0834f71a2d7b74",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      }
+    ]
+  },
+  "rock_face_03": {
+    "info": {
+      "source_url": "https://polyhaven.com/a/rock_face_03",
+      "license": "CC0-1.0 Universal",
+      "license_quote": "Our assets are all licensed as CC0",
+      "access_time_utc": "2026-11-15T06:38:00Z",
+      "author": "Dario Barresi & Rico Cilliers",
+      "files": {
+        "diffuse": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_diff_1k.jpg",
+        "nor_gl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+        "rough": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_rough_1k.jpg",
+        "ao": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_ao_1k.jpg"
+      }
+    },
+    "downloaded_files": [
+      {
+        "channel": "diffuse",
+        "filename": "rock_face_03_diff_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/rock_face_03/rock_face_03_diff_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_diff_1k.jpg",
+        "http_status": 200,
+        "bytes": 927082,
+        "sha256": "ea48e0e47ad42c8bd312476178b1248ec66f0eb19156a26a1c222f2a40caaf2d",
+        "resolution": "1024x1024",
+        "color_space": "sRGB",
+        "normal_type": "N/A"
+      },
+      {
+        "channel": "nor_gl",
+        "filename": "rock_face_03_nor_gl_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+        "http_status": 200,
+        "bytes": 1146788,
+        "sha256": "c6423169583f31715cf0636954bad524e806848a5f2861fcea6794275f726ff0",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "OpenGL (+Y up)"
+      },
+      {
+        "channel": "rough",
+        "filename": "rock_face_03_rough_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/rock_face_03/rock_face_03_rough_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_rough_1k.jpg",
+        "http_status": 200,
+        "bytes": 638904,
+        "sha256": "9e3d9a2fd75244892e7acb6bab2eaed1279299510a7970672c0ee27ff1c19fea",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      },
+      {
+        "channel": "ao",
+        "filename": "rock_face_03_ao_1k.jpg",
+        "rel_path": "docs/data/ekip/varlik/rock_face_03/rock_face_03_ao_1k.jpg",
+        "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_ao_1k.jpg",
+        "http_status": 200,
+        "bytes": 689257,
+        "sha256": "be3536db0cf69c950fff97a196310f486cef8b23d16e6eb48743a58fadef0917",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      }
+    ]
+  },
+  "Rocks012": {
+    "info": {
+      "source_url": "https://ambientcg.com/view?id=Rocks012",
+      "download_url": "https://ambientcg.com/get?file=Rocks012_1K-JPG.zip",
+      "license": "Creative Commons CC0 1.0 Universal",
+      "license_quote": "You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.",
+      "access_time_utc": "2026-11-15T06:38:00Z",
+      "author": "Lennart Demes (ambientCG)",
+      "zip_bytes": 7764703,
+      "zip_sha256": "6043aec4579bec77aba7619af1f5f8e9db612cf409f677648464440f2baef1f3",
+      "http_status": 200
+    },
+    "downloaded_files": [
+      {
+        "filename": "Rocks012_1K-JPG_Color.jpg",
+        "channel": "diffuse",
+        "rel_path": "docs/data/ekip/varlik/Rocks012/Rocks012_1K-JPG_Color.jpg",
+        "url": "https://ambientcg.com/get?file=Rocks012_1K-JPG.zip (içinde Rocks012_1K-JPG_Color.jpg)",
+        "http_status": 200,
+        "bytes": 1500716,
+        "sha256": "5db4b31d41f2d31560a39d2ccf98486a37c0a197dc84b226d5a576085bdacf79",
+        "resolution": "1024x1024",
+        "color_space": "sRGB",
+        "normal_type": "N/A"
+      },
+      {
+        "filename": "Rocks012_1K-JPG_Displacement.jpg",
+        "channel": "other",
+        "rel_path": "docs/data/ekip/varlik/Rocks012/Rocks012_1K-JPG_Displacement.jpg",
+        "url": "https://ambientcg.com/get?file=Rocks012_1K-JPG.zip (içinde Rocks012_1K-JPG_Displacement.jpg)",
+        "http_status": 200,
+        "bytes": 234509,
+        "sha256": "aab547c4aa900dc541d167ee5045fb24f3ee59dfa2d119d94c5c65314020854b",
+        "resolution": "1024x1024",
+        "color_space": "Linear",
+        "normal_type": "N/A"
+      },
+      {
+        "filename": "Rocks012_1K-JPG_NormalDX.jpg",
+        "channel": "normal_dx",
+        "rel_path": "docs/data/ekip/varlik/Rocks012/Rocks012_1K-JPG_NormalDX.jpg",
+        "url": "https://ambientcg.com/get?file=Rocks012_1K-JPG.zip (içinde Rocks012_1K-JPG_NormalDX.jpg)",
+        "http_status": 200,
+        "bytes": 2085269,
+        "sha256": "ec93f11265b6136c0a5b76b24380a16a5d95051ff4b75a6bd6155f5470cbfacf",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "DirectX (-Y down)"
+      },
+      {
+        "filename": "Rocks012_1K-JPG_NormalGL.jpg",
+        "channel": "normal",
+        "rel_path": "docs/data/ekip/varlik/Rocks012/Rocks012_1K-JPG_NormalGL.jpg",
+        "url": "https://ambientcg.com/get?file=Rocks012_1K-JPG.zip (içinde Rocks012_1K-JPG_NormalGL.jpg)",
+        "http_status": 200,
+        "bytes": 2086338,
+        "sha256": "84f70a509062a2869de36e0e03122e660fac9dc59581b3c62c3a872d4e507a3b",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "OpenGL (+Y up)"
+      },
+      {
+        "filename": "Rocks012_1K-JPG_Roughness.jpg",
+        "channel": "roughness",
+        "rel_path": "docs/data/ekip/varlik/Rocks012/Rocks012_1K-JPG_Roughness.jpg",
+        "url": "https://ambientcg.com/get?file=Rocks012_1K-JPG.zip (içinde Rocks012_1K-JPG_Roughness.jpg)",
+        "http_status": 200,
+        "bytes": 394520,
+        "sha256": "f0df7ce0dc8df4ef409fec11307b2dfb3f3467cc5cbc29b41a3b83fbdd564951",
+        "resolution": "1024x1024",
+        "color_space": "Linear (NoColorSpace)",
+        "normal_type": "N/A"
+      }
+    ]
+  },
+  "nasa_gale_photo": {
+    "id": "PIA20755",
+    "title": "Two Sizes of Ripples on Surface of Martian Sand Dune",
+    "mission": "Curiosity Rover / Mars Science Laboratory",
+    "instrument": "Mast Camera (Mastcam)",
+    "sol": 1192,
+    "target": "Namib Dune, Bagnold Dune Field, Gale Crater",
+    "catalog_url": "https://photojournal.jpl.nasa.gov/catalog/PIA20755",
+    "download_url": "https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia20/pia20755/PIA20755.jpg",
+    "http_status": 200,
+    "bytes": 1352810,
+    "sha256": "0f315fa3308b4c83bc9161ce41c4857683c4d9f7cc25fb53ac5c7d0d29cf3161",
+    "resolution": "9091x1089",
+    "credits_verbatim": "Credits: NASA/JPL-Caltech/MSSS",
+    "policy_quote": "Unless otherwise stated, images and video on NASA websites are not copyrighted and are available for educational and informational purposes.",
+    "license": "Public Domain (NASA / US Government Work)",
+    "access_time_utc": "2026-11-15T06:38:00Z",
+    "rgb_stats": {
+      "mean_255": [
+        103.55,
+        105.64,
+        107.41
+      ],
+      "mean_norm_0_1": [
+        0.4061,
+        0.4143,
+        0.4212
+      ],
+      "median_255": [
+        98.0,
+        98.0,
+        97.0
+      ],
+      "std_dev": [
+        60.28,
+        66.27,
+        73.75
+      ],
+      "hex": "#686A6B"
+    }
+  }
+}

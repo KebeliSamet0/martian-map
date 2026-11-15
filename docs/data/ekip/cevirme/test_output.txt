@@ -1,0 +1,325 @@
+{
+  "science_stop_count": 4,
+  "baseline_edge": {
+    "n": 1024,
+    "nodata": 0,
+    "bias_sim_minus_planner_m": 7.177934828828463,
+    "rmse_m": 9.736574517160673,
+    "centered_rmse_m": 6.578611929678927,
+    "median_m": 8.197522007660837,
+    "p95_abs_m": 16.377090841649977,
+    "max_abs_m": 29.90964697300342
+  },
+  "baseline_cell_center": {
+    "n": 1024,
+    "nodata": 0,
+    "bias_sim_minus_planner_m": 7.443230495173886,
+    "rmse_m": 9.80719434062416,
+    "centered_rmse_m": 6.3858735213347355,
+    "median_m": 8.457301042687504,
+    "p95_abs_m": 16.0190302513643,
+    "max_abs_m": 29.61735797607753
+  },
+  "fit": {
+    "search": "[-32,+32] px step 2, +/-2 px step 0.2, +/-0.2 px step 0.02; centered RMSE objective; 512 train / 512 holdout",
+    "dx_px": 15.34,
+    "dy_px": 16.76,
+    "dx_projected_m": 30.68,
+    "dy_south_m": 33.52,
+    "sim_minus_planner_vertical_m": 15.130871724007921,
+    "all": {
+      "n": 1024,
+      "nodata": 0,
+      "bias_sim_minus_planner_m": 15.170361737208793,
+      "rmse_m": 15.219245512075343,
+      "centered_rmse_m": 1.2188349843423727,
+      "median_m": 15.100248149534082,
+      "p95_abs_m": 17.28597715425123,
+      "max_abs_m": 19.32291870299923
+    },
+    "train": {
+      "n": 512,
+      "nodata": 0,
+      "bias_sim_minus_planner_m": 15.130871724007921,
+      "rmse_m": 15.17937489506646,
+      "centered_rmse_m": 1.2124945676543915,
+      "median_m": 15.063409947713808,
+      "p95_abs_m": 17.11596716047038,
+      "max_abs_m": 19.230111955535904
+    },
+    "holdout": {
+      "n": 512,
+      "nodata": 0,
+      "bias_sim_minus_planner_m": 15.209851750409666,
+      "rmse_m": 15.259011950604044,
+      "centered_rmse_m": 1.2238690449705492,
+      "median_m": 15.19446852707506,
+      "p95_abs_m": 17.34898097426653,
+      "max_abs_m": 19.32291870299923
+    },
+    "holdout_after_train_vertical_correction": {
+      "n": 512,
+      "nodata": 0,
+      "bias_sim_minus_planner_m": 0.07898002640156232,
+      "rmse_m": 1.2264148090297653,
+      "centered_rmse_m": 1.2238690449705494,
+      "median_m": 0.06359680306695736,
+      "p95_abs_m": 2.5632439536415403,
+      "max_abs_m": 5.354263745754906
+    }
+  },
+  "tests": {
+    "js": {
+      "pass": true,
+      "n": 1032,
+      "center_modes": 2,
+      "max_geo_m": 1.8562786863185465e-09,
+      "max_roundtrip_px": 1.8627588360686786e-10,
+      "actual_terrain_height_points": 1024,
+      "max_terrain_height_error_m": 1.1368683772161603e-12
+    },
+    "max_python_js_error": 2.842170943040401e-14,
+    "source_inputs_unchanged_during_run": true,
+    "python_assertions": "PASS: dimensions, bounds, >=200 valid, finite guard, known NW, asymmetric tile interpolation, border and NoData"
+  },
+  "api_grid": {
+    "status": 200,
+    "bytes": 70749,
+    "sha256": "e4a41f06880d5b295f43fbd9c5c3cc17940db921a96413b0957c6aa62ecf6dcf",
+    "summary": {
+      "width": 1000,
+      "height": 1000,
+      "res_m": 2.0,
+      "synthetic": false,
+      "provisional_terrain": true,
+      "origin_xy_m": null,
+      "crs": null,
+      "px_note": "Koordinatlar [x, y] = [sütun, satır]; (0,0) sol üst köşe"
+    },
+    "science_stop_count": 4,
+    "dimensions_match_disk": true
+  },
+  "api_route_tests": [
+    {
+      "endpoint": "route",
+      "request": {
+        "start": [
+          433,
+          525
+        ],
+        "goal": [
+          491,
+          774
+        ]
+      },
+      "status": 200,
+      "bytes": 19982,
+      "sha256": "3a3e71bf11aedb84895ca8b2982abbb9642550b73987b5121d82751500625102",
+      "routes": [
+        {
+          "kind": "shortest",
+          "points": 258,
+          "all_inside": true,
+          "valid_l0_heights": 258,
+          "first_px": [
+            433,
+            525
+          ],
+          "last_px": [
+            491,
+            774
+          ],
+          "first_world": {
+            "x": 3131.1778521263163,
+            "z": 4549.496536437015,
+            "lon": 137.37973929912036,
+            "lat": -4.8058461213982895,
+            "inside": true
+          },
+          "last_world": {
+            "x": 3246.770626593502,
+            "z": 5047.496536437015,
+            "lon": 137.38169628928392,
+            "lat": -4.814247682617631,
+            "inside": true
+          }
+        },
+        {
+          "kind": "balanced",
+          "points": 258,
+          "all_inside": true,
+          "valid_l0_heights": 258,
+          "first_px": [
+            433,
+            525
+          ],
+          "last_px": [
+            491,
+            774
+          ],
+          "first_world": {
+            "x": 3131.1778521263163,
+            "z": 4549.496536437015,
+            "lon": 137.37973929912036,
+            "lat": -4.8058461213982895,
+            "inside": true
+          },
+          "last_world": {
+            "x": 3246.770626593502,
+            "z": 5047.496536437015,
+            "lon": 137.38169628928392,
+            "lat": -4.814247682617631,
+            "inside": true
+          }
+        },
+        {
+          "kind": "safest",
+          "points": 258,
+          "all_inside": true,
+          "valid_l0_heights": 258,
+          "first_px": [
+            433,
+            525
+          ],
+          "last_px": [
+            491,
+            774
+          ],
+          "first_world": {
+            "x": 3131.1778521263163,
+            "z": 4549.496536437015,
+            "lon": 137.37973929912036,
+            "lat": -4.8058461213982895,
+            "inside": true
+          },
+          "last_world": {
+            "x": 3246.770626593502,
+            "z": 5047.496536437015,
+            "lon": 137.38169628928392,
+            "lat": -4.814247682617631,
+            "inside": true
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "replan",
+      "request": {
+        "start": [
+          433,
+          525
+        ],
+        "goal": [
+          491,
+          774
+        ],
+        "observations": [
+          {
+            "px": [
+              467,
+              609
+            ],
+            "radius_m": 20,
+            "cls": "sand"
+          }
+        ]
+      },
+      "status": 200,
+      "bytes": 20943,
+      "sha256": "9dde8afd1208a39b950d93b13e605c13679f081d1fe14bcb8ca50085e7fbeeb6",
+      "routes": [
+        {
+          "kind": "shortest",
+          "points": 258,
+          "all_inside": true,
+          "valid_l0_heights": 258,
+          "first_px": [
+            433,
+            525
+          ],
+          "last_px": [
+            491,
+            774
+          ],
+          "first_world": {
+            "x": 3131.1778521263163,
+            "z": 4549.496536437015,
+            "lon": 137.37973929912036,
+            "lat": -4.8058461213982895,
+            "inside": true
+          },
+          "last_world": {
+            "x": 3246.770626593502,
+            "z": 5047.496536437015,
+            "lon": 137.38169628928392,
+            "lat": -4.814247682617631,
+            "inside": true
+          }
+        },
+        {
+          "kind": "balanced",
+          "points": 259,
+          "all_inside": true,
+          "valid_l0_heights": 259,
+          "first_px": [
+            433,
+            525
+          ],
+          "last_px": [
+            491,
+            774
+          ],
+          "first_world": {
+            "x": 3131.1778521263163,
+            "z": 4549.496536437015,
+            "lon": 137.37973929912036,
+            "lat": -4.8058461213982895,
+            "inside": true
+          },
+          "last_world": {
+            "x": 3246.770626593502,
+            "z": 5047.496536437015,
+            "lon": 137.38169628928392,
+            "lat": -4.814247682617631,
+            "inside": true
+          }
+        },
+        {
+          "kind": "safest",
+          "points": 259,
+          "all_inside": true,
+          "valid_l0_heights": 259,
+          "first_px": [
+            433,
+            525
+          ],
+          "last_px": [
+            491,
+            774
+          ],
+          "first_world": {
+            "x": 3131.1778521263163,
+            "z": 4549.496536437015,
+            "lon": 137.37973929912036,
+            "lat": -4.8058461213982895,
+            "inside": true
+          },
+          "last_world": {
+            "x": 3246.770626593502,
+            "z": 5047.496536437015,
+            "lon": 137.38169628928392,
+            "lat": -4.814247682617631,
+            "inside": true
+          }
+        }
+      ]
+    }
+  ],
+  "sim_http_manifest": {
+    "status": 200,
+    "bytes": 47410,
+    "sha256": "529f6641db94a81daf1532252c158fc22a6fbd59ab39efc74909398a5658397e",
+    "matches_disk": true
+  },
+  "tile_files_read": 257
+}

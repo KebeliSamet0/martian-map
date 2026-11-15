@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-14",
+  "texture_checks": [
+    {
+      "asset": "terrain_red_01",
+      "verified_files": 5,
+      "bytes": 2578694,
+      "passed": true
+    },
+    {
+      "asset": "sand_03",
+      "verified_files": 5,
+      "bytes": 3114033,
+      "passed": true
+    },
+    {
+      "asset": "rock_face_03",
+      "verified_files": 5,
+      "bytes": 4195272,
+      "passed": true
+    },
+    {
+      "asset": "dry_ground_01",
+      "verified_files": 5,
+      "bytes": 1863612,
+      "passed": true
+    }
+  ],
+  "total_bytes": 11751611,
+  "render_difference_checks": [
+    {
+      "shape": "flat",
+      "region": [
+        0,
+        430,
+        1100,
+        720
+      ],
+      "mean_absolute_channel_difference_0_255": 7.589755485893417,
+      "fraction_pixels_with_any_channel_difference_gt5": 0.6933793103448276,
+      "passed": true
+    },
+    {
+      "shape": "wavy",
+      "region": [
+        0,
+        430,
+        1100,
+        720
+      ],
+      "mean_absolute_channel_difference_0_255": 7.3634179728317655,
+      "fraction_pixels_with_any_channel_difference_gt5": 0.6795673981191223,
+      "passed": true
+    }
+  ],
+  "browser_cases": 14,
+  "passed": true
+}

@@ -1,0 +1,48 @@
+{
+  "type": 1,
+  "tags": [
+    "gravel",
+    "stones",
+    "rough",
+    "pebbles",
+    "railroad",
+    "pathway",
+    "path"
+  ],
+  "date_published": 1529359200,
+  "name": "Terrain Red 01",
+  "old_id": 114,
+  "categories": [
+    "terrain",
+    "natural",
+    "outdoor",
+    "road",
+    "rock"
+  ],
+  "authors": {
+    "Rob Tuytel": "All"
+  },
+  "dimensions": [
+    2000,
+    2000
+  ],
+  "max_resolution": [
+    8192,
+    8192
+  ],
+  "files_hash": "16bb30d34d23a75c1dea32f0d01cd89212160bc8",
+  "description": "Free 8K texture: coarse reddish-brown gravel with compacted pebbles and rough, matte soil - mixed stone sizes, gritty detail, subtle color variation.",
+  "category_id": "ff767449-ea44-5527-96f0-d74aa52df2d0",
+  "category": "Ground & Terrain/Gravel & Pebbles/Crushed Aggregate",
+  "attributes": {
+    "surface_use": "ground",
+    "origin": "natural",
+    "setting": "outdoor",
+    "condition": [
+      "clean"
+    ]
+  },
+  "img_version": "c12d0b58",
+  "download_count": 48612,
+  "thumbnail_url": "https://cdn.polyhaven.com/asset_img/thumbs/terrain_red_01.png?width=256&height=256&format=webp&v=c12d0b58"
+}
