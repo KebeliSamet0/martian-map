@@ -4,7 +4,7 @@ import { createGridGeo } from './gridgeo.js';
 import { createVitals } from './vitals.js';
 import { createMission, loadMissions } from './mission.js';
 import { initHud } from './hud.js';
-import { showBriefing, showRoutePicker, showAlert, showReport, showHold } from './screens.js';
+import { showBriefing, showRoutePicker, showAlert, showReport, showHold, showDecision } from './screens.js';
 import { loadTexts, t, has, missionText } from './i18n.js';
 import { hudSnapshot, missionDefinition, walkPlan, uiTexts } from './wire-adapters.js';
 import { sandForRoute } from './custommission.js';   // batu:custom
@@ -31,11 +31,32 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const sandZones = await fetch(new URL('../data/sand_zones.json', import.meta.url)).then(r => (r.ok ? r.json() : [])).catch(() => []);   // batu:custom: özel görevde kum olayı yalnız gerçek aday yakınında
   let observations = [];
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false, hold = null;
+  let decisions = [], pendingDecision = null, dynHandlesSand = false;   // #125 A.2
   const sourceLabel = document.getElementById('vitals-source');
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
-  function clearRun() { generation++; running = false; hold?.cancel?.(); hold = null; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  function clearRun() { generation++; running = false; hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+
+  // #125 A.2: Batu'nun önerisi (#122 sözleşmesi) oyuncuya karar olarak sorulur, sonuç geri yollanır.
+  async function askDecision(detail = {}) {
+    const id = generation;
+    pause(true);
+    pendingDecision = showDecision(root, { reason: detail.reason ?? 'observation', delta: detail.delta, urgent: !!detail.urgent });
+    const accept = await pendingDecision;
+    pendingDecision = null;
+    if (id !== generation) return false;
+    decisions.push({ reason: detail.reason ?? 'observation', accept, urgent: !!detail.urgent });
+    window.dispatchEvent(new CustomEvent('mm:route-decision', { detail: { accept, reason: detail.reason ?? 'observation' } }));
+    if (running) pause(false);
+    return accept;
+  }
+  addEventListener('mm:route-suggest', (e) => {
+    const d = e.detail ?? {};
+    if (d.reason === 'sand') dynHandlesSand = true;   // kum artık dynroute'ta: yerleşik akış devre dışı
+    if (!running || pendingDecision) return;
+    void askDecision(d);
+  });
   const missionTitle = m => missionText(m.id, 'title') || m.title;
   function briefingInfo(m) {
     const L = m.limits ?? {}, risks = [];
@@ -111,9 +132,11 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       machine.on('event', async event => {
         pause(true);
         observations.push({ px: selected.sand.px, radius_m: event.radius_m, cls: 'sand' });
-        void showAlert(root, 'sand', { timeoutMs: 5000 });
-        try { await replan({ ...event, px: selected.sand.px }); }
-        finally { if (id === generation && running) { machine.resume(); pause(false); } }
+        try {
+          // #125 A.2: kum da bir karar anı. dynroute kumu devraldıysa (mm:route-suggest reason='sand') burası susar.
+          if (dynHandlesSand) return;
+          if (await askDecision({ reason: 'sand', urgent: true })) await replan({ ...event, px: selected.sand.px });
+        } finally { if (id === generation && running) { machine.resume(); pause(false); } }
       });
       machine.on('arrived', () => { void onArrived(id); });
     }
@@ -152,7 +175,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Görev tamamlandı`;
     const actual = hudSnapshot(vitals.snapshot(), limits);
     flow.onScreen?.('report', selected);
-    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected });
+    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected, decisions: [...decisions] });
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }

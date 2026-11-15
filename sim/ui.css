@@ -220,6 +220,13 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #125 A.2: karar anı kartı ve karnedeki karar listesi */
+.mm-card-urgent { border-top-color: var(--mm-nogo); }
+.mm-decisions .mm-risks li[data-level="ok"]::marker { color: var(--mm-go); }
+.mm-decisions .mm-risks li[data-level="warn"]::marker { color: var(--mm-warn); }
+.mm-decision .mm-stat[data-level="over"] .mm-num { color: var(--mm-nogo); }
+.mm-decision .mm-stat[data-level="ok"] .mm-num { color: var(--mm-go); }
+
 /* #125 A.1: hedefte "E ile numune al" — basılı tut, çubuk dolunca etkileşim tamam */
 .mm-hold {
   position: fixed; left: 50%; bottom: 120px; transform: translateX(-50%); z-index: 2102;

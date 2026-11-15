@@ -158,6 +158,57 @@ export function showAlert(container, kind, { what = '', timeoutMs = 0, actions =
   });
 }
 
+// --- Karar anı (#125 A.2): Batu'nun mm:route-suggest önerisi oyuncuya sorulur ---
+// Çözüm: true (yeni rotayı kabul et) | false (mevcut rotada devam et).
+// delta alanları yoksa satır hiç yazılmaz — sayı uydurulmaz.
+export function showDecision(container, { reason = 'observation', delta = {}, urgent = false, timeoutMs = 0 } = {}) {
+  ensureUiCss();
+  let close = () => {};
+  const p = new Promise((resolve) => {
+    container.querySelector('.mm-decision')?.remove();
+    const back = el('div', 'mm-ui mm-modal mm-overlay mm-decision');
+    back.style.cssText = 'position:fixed; inset:0; z-index:2200; pointer-events:auto; opacity:1';
+    const card = el('section', 'mm-card');
+    card.setAttribute('role', 'alertdialog');
+    card.dataset.testid = 'route-decision';
+    if (urgent) card.classList.add('mm-card-urgent');
+    card.append(
+      el('div', 'mm-kicker', t(`decision.reason.${reason}`)),
+      el('h2', 'mm-card-title', t('decision.title')),
+      el('p', 'mm-text', t(`decision.body.${reason}`)),
+    );
+    const rows = [['m', 'decision.d.m', 0], ['kcal', 'decision.d.kcal', 0], ['o2_L', 'decision.d.o2', 1], ['risk', 'decision.d.risk', 1]]
+      .filter(([k]) => Number.isFinite(delta?.[k]));
+    if (rows.length) {
+      const grid = el('div', 'mm-stats mm-stats-col');
+      for (const [k, key, d] of rows) {
+        const v = delta[k];
+        const s = stat(t(key), `${v > 0 ? '+' : ''}${n(v, d)}`, '');
+        s.dataset.level = v > 0 ? 'over' : v < 0 ? 'ok' : '';
+        grid.append(s);
+      }
+      card.append(section(t('decision.delta')), grid);
+    } else {
+      card.append(el('p', 'mm-fine', t('decision.nodata')));
+    }
+    let timer = 0;
+    const done = (v) => { clearTimeout(timer); back.remove(); document.body.classList.remove('mm-event'); resolve(v); };
+    close = () => done(false);
+    const acts = el('div', 'mm-alert-acts mm-acts-end');
+    const keep = button(t('decision.keep'), 'ghost'), take = button(t('decision.accept'));
+    keep.dataset.testid = 'decision-keep'; take.dataset.testid = 'decision-accept';
+    keep.onclick = () => done(false); take.onclick = () => done(true);
+    acts.append(keep, take);
+    card.append(acts);
+    back.append(card); container.append(back);
+    if (urgent) document.body.classList.add('mm-event');
+    take.focus();
+    if (timeoutMs > 0) timer = setTimeout(() => done(false), timeoutMs);
+  });
+  p.close = () => close();
+  return p;
+}
+
 // --- Basılı tut etkileşimi (#125 A.1): hedefte E ile numune alma ---
 // Dolunca true, dışarıdan iptal edilirse false döner. Bırakınca çubuk geri sayar.
 export function showHold(container, { title, hint, seconds = 6, code = 'KeyE', label = 'E' } = {}) {
@@ -224,7 +275,7 @@ export function showReport(container, opts = {}) {
 }
 export const reportOpen = () => !!activeReport;
 
-function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission } = {}) {
+function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission, decisions = [] } = {}) {
   return new Promise((resolve) => {
     const m = modal(container, title ?? t('report.title'), mission?.id);
     m.card.classList.add('mm-card-wide', 'mm-card-report');
@@ -260,6 +311,19 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
       tbl.append(tr);
     });
 
+    // #125 A.2: görev boyunca verilen rota kararları
+    const dec = el('div', 'mm-decisions');
+    dec.append(section(t('report.decisions')));
+    if (decisions.length) {
+      const ul = el('ul', 'mm-risks');
+      for (const d of decisions) {
+        const li = el('li', null, t(d.accept ? 'report.decision.accept' : 'report.decision.keep', { reason: t(`decision.reason.${d.reason}`) }));
+        li.dataset.level = d.accept ? 'ok' : 'warn';
+        ul.append(li);
+      }
+      dec.append(ul);
+    } else dec.append(el('p', 'mm-fine', t('report.decision.none')));
+
     // "Verinin etkisi": veri desk'inin yuvası. Boşsa bölüm hiç görünmez (uydurma içerik yok).
     const insight = el('div', 'mm-insight');
     insight.hidden = true;
@@ -274,7 +338,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     retry.onclick = () => { m.close(); resolve('retry'); };
     other.onclick = () => { m.close(); resolve('other'); };
     acts.append(retry, other);
-    m.card.append(head, tbl, insight, acts);
+    m.card.append(head, tbl, dec, insight, acts);
     other.focus();
   });
 }

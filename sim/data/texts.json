@@ -624,6 +624,98 @@
       "tr": "Tekrar dene",
       "en": "Try again"
     },
+    "decision.title": {
+      "tr": "ROTA KARARI",
+      "en": "ROUTE DECISION"
+    },
+    "decision.reason.deviation": {
+      "tr": "ROTADAN SAPMA",
+      "en": "OFF ROUTE"
+    },
+    "decision.reason.reserve": {
+      "tr": "KAYNAK REZERVİ",
+      "en": "RESOURCE RESERVE"
+    },
+    "decision.reason.load": {
+      "tr": "YÜK DEĞİŞTİ",
+      "en": "LOAD CHANGED"
+    },
+    "decision.reason.observation": {
+      "tr": "YENİ GÖZLEM",
+      "en": "NEW OBSERVATION"
+    },
+    "decision.reason.sand": {
+      "tr": "KUM ALGILANDI",
+      "en": "SAND DETECTED"
+    },
+    "decision.body.deviation": {
+      "tr": "Planlanan rotadan uzaktasın. Planlayıcı bulunduğun yerden yeni bir rota hesapladı.",
+      "en": "You are off the planned route. The planner has worked out a new route from where you stand."
+    },
+    "decision.body.reserve": {
+      "tr": "Rezerv azalıyor. Planlayıcı kalan bütçeye göre daha güvenli bir rota öneriyor.",
+      "en": "Your reserve is running down. The planner suggests a safer route for the budget you have left."
+    },
+    "decision.body.load": {
+      "tr": "Numune yükü arttı. Kalan yolun maliyeti yeni yükle yeniden hesaplandı.",
+      "en": "The sample load went up. The cost of the rest of the walk was recomputed with it."
+    },
+    "decision.body.observation": {
+      "tr": "Yeni bir gözlem geldi. Planlayıcı bu bilgiyle rotayı güncelledi.",
+      "en": "A new observation came in. The planner updated the route with it."
+    },
+    "decision.body.sand": {
+      "tr": "Önündeki zemin planlanandan yumuşak. Planlayıcı kumu dolaşan bir rota hesapladı.",
+      "en": "The ground ahead is softer than planned. The planner worked out a route around the sand."
+    },
+    "decision.delta": {
+      "tr": "YENİ ROTANIN FARKI",
+      "en": "WHAT THE NEW ROUTE COSTS"
+    },
+    "decision.d.m": {
+      "tr": "Mesafe (m)",
+      "en": "Distance (m)"
+    },
+    "decision.d.kcal": {
+      "tr": "Enerji (kcal)",
+      "en": "Energy (kcal)"
+    },
+    "decision.d.o2": {
+      "tr": "Oksijen (L)",
+      "en": "Oxygen (L)"
+    },
+    "decision.d.risk": {
+      "tr": "Risk (puan)",
+      "en": "Risk (pts)"
+    },
+    "decision.nodata": {
+      "tr": "Fark sayıları planlayıcıdan gelmedi; karşılaştırma gösterilemiyor.",
+      "en": "The planner did not return the differences; no comparison to show."
+    },
+    "decision.accept": {
+      "tr": "Yeni rotayı kabul et",
+      "en": "Accept the new route"
+    },
+    "decision.keep": {
+      "tr": "Mevcut rotada devam et (risk)",
+      "en": "Stay on the current route (risk)"
+    },
+    "report.decisions": {
+      "tr": "KARARLAR",
+      "en": "DECISIONS"
+    },
+    "report.decision.accept": {
+      "tr": "{reason}: yeni rota kabul edildi",
+      "en": "{reason}: new route accepted"
+    },
+    "report.decision.keep": {
+      "tr": "{reason}: mevcut rotada devam edildi",
+      "en": "{reason}: stayed on the current route"
+    },
+    "report.decision.none": {
+      "tr": "Bu görevde rota kararı çıkmadı.",
+      "en": "No route decisions came up on this mission."
+    },
     "sample.hold.title": {
       "tr": "NUMUNE AL",
       "en": "COLLECT SAMPLE"
