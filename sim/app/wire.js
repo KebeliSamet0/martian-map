@@ -9,7 +9,7 @@ import { loadTexts, t, has, missionText } from './i18n.js';
 import { hudSnapshot, missionDefinition, walkPlan, uiTexts } from './wire-adapters.js';
 import { sandForRoute } from './custommission.js';   // batu:custom
 
-export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast, flow = {}, returnToBase, audio }) {
+export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast, flow = {}, returnToBase, audio, dynLine, dynReport }) {   // tur5:dyn: dynLine/dynReport HUD satırı + karne özeti
   const root = document.getElementById('mission-ui'), buttons = document.getElementById('missions');
   const call = async (path, body) => {
     if (API_OFF) throw new Error('API kapalı');
@@ -31,7 +31,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const sandZones = await fetch(new URL('../data/sand_zones.json', import.meta.url)).then(r => (r.ok ? r.json() : [])).catch(() => []);   // batu:custom: özel görevde kum olayı yalnız gerçek aday yakınında
   let observations = [];
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false, hold = null;
-  let decisions = [], pendingDecision = null, dynHandlesSand = false;   // #125 A.2
+  let decisions = [], pendingDecision = null;   // #125 A.2
   let outboundActual = null;   // gidiş sonu anlık görüntüsü (karne karşılaştırması tek yön)
   let plannedOverride = null, replanned = false;   // #52-3: replan sonrası güncel plan
   const sourceLabel = document.getElementById('vitals-source');
@@ -72,8 +72,9 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   }
   addEventListener('mm:route-suggest', (e) => {
     const d = e.detail ?? {};
-    if (d.reason === 'sand') dynHandlesSand = true;   // kum artık dynroute'ta: yerleşik akış devre dışı
-    if (!running || pendingDecision) return;
+    if (!running) return;                // arayüz yok: dynroute yerleşik bandı gösterir
+    e.preventDefault();                  // tur5:dyn tek arayüz: karar kartı bizde, yerleşik bant çıkmasın
+    if (pendingDecision) { window.dispatchEvent(new CustomEvent('mm:route-decision', { detail: { accept: false, reason: d.reason ?? 'observation' } })); return; }   // zaten bir karar açık: ikincisi reddedilir, dynroute meşgul kalmaz
     void askDecision(d);
   });
   const missionTitle = m => missionText(m.id, 'title') || m.title;
@@ -160,9 +161,8 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
         pause(true);
         observations.push({ px: selected.sand.px, radius_m: event.radius_m, cls: 'sand' });
         try {
-          // #125 A.2: kum da bir karar anı. dynroute kumu devraldıysa (mm:route-suggest reason='sand') burası susar.
-          if (dynHandlesSand) return;
-          if (await askDecision({ reason: 'sand', urgent: true })) await replan({ ...event, px: selected.sand.px });
+          // tur5:dyn kum da bir karar anı: replan (main.fireReplan → dynroute.sand) kalan bütçeyle hesaplar, karar kartı mm:route-suggest ile TEK kez çıkar.
+          await replan({ ...event, px: selected.sand.px });
         } finally { if (id === generation && running) { machine.resume(); pause(false); } }
       });
       machine.on('arrived', () => { void onArrived(id); });
@@ -171,7 +171,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     vitals.on('limit', e => { if (id === generation && running) alertLimit(limitText(e.resource)); });
     // #125 B.5: yalnız gerçekten izlenebilen mini hedefler listelenir
     flow.setObjectives?.(selected && (selected.sample_kg ?? 0) > 0 ? ['scan', 'camera', 'sample', 'return'] : ['scan', 'camera']);
-    hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) }, { position: 'br' });
+    hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits), dynLine }, { position: 'br' });   // tur5:dyn
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
     machine?.update(position); lastPosition = [position.x, position.z];
@@ -214,8 +214,10 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (machine.snapshot().leg === 'return' && snapNow.returnPossible !== false) flow.tickObjective?.('return');
     const objectives = flow.objectiveState?.() ?? {};
     flow.onScreen?.('report', selected);
-    const action = await showReport(root, { planned: plannedOverride ?? walkPlan(planned), actual: outboundActual ?? actual, total: outboundActual ? actual : null,
+    const reportP = showReport(root, { planned: plannedOverride ?? walkPlan(planned), actual: outboundActual ?? actual, total: outboundActual ? actual : null,
       replanned, route: map.route, mission: selected, decisions: [...decisions], objectives });
+    if (dynReport) { const w = dynReport(); const box = root.querySelector('.mm-decisions'); if (w && box) { const p = document.createElement('p'); p.className = 'mm-fine'; p.dataset.testid = 'report-dyn'; p.textContent = w; box.append(p); } }   // tur5:dyn karne: yeniden hesap sayısı
+    const action = await reportP;
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }

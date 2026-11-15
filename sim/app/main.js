@@ -27,7 +27,7 @@ import { createWalkFeel } from './walkfeel.js';   // tur4:his
 import { initCollide } from './collide.js';   // tur4:fizik
 import { pickTiles } from './tiles-base.js';
 import { startPrefetch } from './prefetch.js';
-import { createDynRoute, proposeVia, oneWay, deltaOf } from './dynroute.js';   // batu:dyn   // tur4:dogrula
+import { createDynRoute, proposeVia, oneWay, deltaOf, budgetFor } from './dynroute.js';   // batu:dyn   // tur4:dogrula
 
 const BASE = await pickTiles(new URLSearchParams(location.search).get('tiles'));   // tur4:dogrula: varsayılan tiles_fixed, yedek tiles, ?tiles= ile seçilir
 const Q = new URLSearchParams(location.search);
@@ -348,13 +348,9 @@ async function fireReplan(S) {
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
   audio?.alert('sand');
   try {
-    const cur = curPxNow();
-    const t0 = performance.now();
-    const res = await wire.call('/replan', { start: cur, goal: R.r.goalPx, observations: [{ px: S.px, radius_m: S.radius_m, cls: 'sand' }], ...(wire.selected?.limits ? { budget: wire.selected.limits } : {}) });
+    // tur5:dyn kum olayı artık dynroute'ta: kalan bütçe + base_px ile /replan, karar kartı tek (wire.js)
+    await dyn.sand({ ...S, t0: performance.now() });
     if (routeRun !== oldGeneration || state === 'map') return;
-    const rt = res.routes.find((x) => x.kind === R.r.kind) || res.routes[0];
-    // Kum olayı dinamik rota sözleşmesiyle (mm:route-suggest) gider; arayüz yoksa eskisi gibi hemen uygulanır.
-    await dynPropose({ reason: 'sand', route: rt, current: { px: cur }, delta: deltaOf(oneWay(rt.total), oneWay(R.r.raw?.total ?? R.r.total)), urgent: true, t0 });
   } catch (e) { toast(t('flow.replan.fail', { why: e.message }), true); }
 }
 function applyDyn(rt, reason, t0) {
@@ -370,15 +366,29 @@ dyn = createDynRoute({
   propose: (d) => dynPropose(d),
   apply: (rt, reason) => applyDyn(rt, reason),
   onNote: (x) => console.warn(x),
-  ctx: () => {
+  onEval: () => {},   // tur5:dyn HUD satırı dyn.state().last'tan okur
+  ctx: (force) => {   // tur5:dyn force: kum olayında oyun duraklatılmıştır, yine de bağlam gerekir
     const R = routeRun, m = wire?.machine?.snapshot?.();
-    if (!R || R.r.source !== 'api' || paused || state === 'map' || state === 'tour' || m?.state !== 'walking' || !wire.selected) return null;
+    if (!R || R.r.source !== 'api' || state === 'map' || state === 'tour' || !wire.selected) return null;
+    if (!force && (paused || m?.state !== 'walking')) return null;
     const base = R.baseWorld ?? R.r.start?.world;
     return { route: { dense: R.r.dense, goalPx: R.r.goalPx, kind: R.r.kind }, pos: [P.x, P.z], px: curPxNow(), progressM: R.s,
       limits: wire.selected.limits ?? {}, snap: wire.vitals?.snapshot?.() ?? {}, basePx: base ? worldToPx(geo, base[0], base[1]).map(Math.floor) : null,
       worldToPx: (p) => worldToPx(geo, p[0], p[1]), pxToWorld: (p) => pxToWorld(geo, p[0], p[1]) };
   },
 });
+// tur5:dyn HUD satırı + karne özeti. Sayılar yalnız dyn.state() (planlayıcı yanıtı); API yoksa dürüstçe kapalı.
+function dynLineText() {
+  const R = routeRun; if (API_OFF || !R || R.r.source !== 'api') return t('hud.dyn.off');
+  const s = dyn?.state?.(), l = s?.last; if (!l) return t('hud.dyn.wait', { m: 100, s: 60 });
+  const ago = Math.max(0, Math.round(Date.now() / 1000 - l.at));
+  const status = l.go === false ? 'NO-GO' : l.go === true ? 'GO' : '—';
+  return t('hud.dyn.on', { status, s: ago, n: s.recalcs, why: t(`hud.dyn.why.${l.reason}`) });
+}
+function dynReportText() {
+  const s = dyn?.state?.(); if (!s || !s.recalcs) return API_OFF || routeRun?.r?.source !== 'api' ? t('report.dyn.off') : '';
+  return t('report.dyn.n', { n: s.recalcs });
+}
 // Kask kamerası uyarısı (mm:camera-insight, warn): o durağın çevresi gözlem olarak /replan'a verilir (kum/iri taş sınıfı varsa). batu:dyn
 addEventListener('mm:camera-insight', (e) => {
   const d = e.detail ?? {}; if (!d.warn || !dyn) return;
@@ -408,7 +418,8 @@ async function startReturnLeg() {
   const homePx = worldToPx(geo, home[0], home[1]).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
   try {
     if (R.r.source !== 'api') throw new Error(t('route.fallback'));
-    const res = await wire.call('/route', { start: cur, goal: homePx, ...(wire.selected?.limits ? { budget: wire.selected.limits } : {}) });
+    const bud = budgetFor(wire.selected?.limits ?? {}, wire.vitals?.snapshot?.() ?? {});   // tur5:dyn dönüş ayağı KALAN bütçeyle
+    const res = await wire.call('/route', { start: cur, goal: homePx, ...(Object.keys(bud).length ? { budget: bud } : {}) });
     const rt = res.routes.find((x) => x.kind === 'safest') || res.routes[0];
     nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: 'safest' });
     nr.startPx = cur; nr.goalPx = homePx; nr.source = 'api';
@@ -646,7 +657,7 @@ const groundRow = () => {
 
 const pauseFn = (value) => { paused = value; keys.clear(); };
 wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: pauseFn, replan: fireReplan, toast, flow: flowHooks,
-  returnToBase: startReturnLeg, audio });   // #125 A.1: numune sonrası üsse dönüş ayağı
+  returnToBase: startReturnLeg, audio, dynLine: () => dynLineText(), dynReport: () => dynReportText() });   // tur5:dyn   // #125 A.1: numune sonrası üsse dönüş ayağı
 
 void loadGroundLayers();
 ensureScanTex();

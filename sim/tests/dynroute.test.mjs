@@ -119,3 +119,87 @@ test('base_px: hedefe giden isteklerde üs gönderilir, hedef üssün kendisiyse
   const none = setup({ basePx: null }); none.c.pos = [50, DEVIATION_M + 5]; await tick(none.dyn, 8);
   assert.ok(none.calls.every((c) => !('base_px' in c.body)));
 });
+
+// ---------------- tur5:dyn ----------------
+import { PERIODIC_M, PERIODIC_S, PERIODIC_CHANGE, budgetFor, proposeVia } from '../app/dynroute.js';
+
+test('periyodik: ~100 m yürüyünce tek /route (kalan bütçe), ilk hesap sessiz temel; değişiklik yoksa öneri yok', async () => {
+  const s = setup({ pos: [0, 0] }); let n = 0;
+  n = await tick(s.dyn, 22, 1, n); assert.equal(s.calls.length, 0, 'henüz mesafe/süre dolmadı (debounce geçti, mesafe yok)');
+  s.c.pos = [PERIODIC_M + 1, 0]; n = await tick(s.dyn, 2, 1, n); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(s.calls.length, 1); assert.equal(s.calls[0].path, '/route'); assert.deepEqual(s.calls[0].body.goal, [9, 9]);
+  assert.ok(s.calls[0].body.budget.o2_L <= 420);
+  assert.equal(s.proposals.length, 0, 'ilk hesap temel: sessiz');
+  assert.equal(s.dyn.state().recalcs, 1); assert.equal(s.dyn.state().last.reason, 'periodic'); assert.equal(s.dyn.state().last.go, true);
+  s.c.pos = [2 * PERIODIC_M + 2, 0]; n = await tick(s.dyn, 25, 1, n); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(s.dyn.state().recalcs >= 2, true); assert.equal(s.proposals.length, 0, 'maliyet beklenenle aynı: sessiz');
+});
+
+test('periyodik: süre (60 sn) de tetikler; debounce: 20 sn içinde ikinci istek yok', async () => {
+  const s = setup(); let n = await tick(s.dyn, PERIODIC_S + 2); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(s.calls.length, 1); n = await tick(s.dyn, 10, 1, n); assert.equal(s.calls.length, 1, 'debounce');
+});
+
+test('periyodik: maliyet beklentiden ≥%10 sapınca ya da GO→NO-GO olunca "periodic" önerisi', async () => {
+  let o2 = 10, go = true; const props = [];
+  const c = { route: { dense: line, goalPx: [9, 9], kind: 'balanced' }, pos: [0, 0], px: [0, 0], limits: { time_min: 360, o2_L: 420 }, snap: { elapsedSec: 0, o2RemainingL: 400 }, basePx: [1, 1], worldToPx: (p) => p };
+  const dyn = createDynRoute({ call: async () => ({ routes: [{ kind: 'balanced', total: { ...total(0.5, 50, o2), go } }] }), ctx: () => c, propose: async (d) => { props.push(d); return { accept: false }; }, apply() {} });
+  let n = await tick(dyn, PERIODIC_S + 2); await new Promise((r) => setTimeout(r, 20));   // temel o2=10
+  c.snap = { elapsedSec: 0, o2RemainingL: 395 };                                           // 5 L harcandı → beklenen 5
+  o2 = 5 * (1 + PERIODIC_CHANGE / 2); n = await tick(dyn, PERIODIC_S + 2, 1, n); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(props.length, 0, '%5 sapma sessiz');
+  o2 = 5 * (1 + PERIODIC_CHANGE * 2); n = await tick(dyn, PERIODIC_S + 2, 1, n); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(props.length, 1); assert.equal(props[0].reason, 'periodic'); assert.equal(props[0].urgent, false);
+  go = false; n = await tick(dyn, PERIODIC_S + 2, 1, n); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(props.length, 2); assert.equal(props[1].toNoGo, true); assert.equal(props[1].urgent, true);
+});
+
+test('budgetFor: kalan bütçe; tükenmiş kaynak 0.01 (bütçesiz = sınırsız olmasın)', () => {
+  const b = budgetFor({ time_min: 360, o2_L: 100 }, { elapsedSec: 600, o2RemainingL: -3 });
+  assert.equal(b.time_min, 350); assert.equal(b.o2_L, 0.01);
+  assert.deepEqual(budgetFor({}, {}), {});
+});
+
+test('kum: /replan KALAN bütçeyle + base_px; duraklatılmış (force) bağlamla; karar propose üzerinden', async () => {
+  const calls = [], props = [];
+  const c = { route: { dense: line, goalPx: [9, 9], kind: 'balanced' }, pos: [50, 0], px: [25, 0], limits: { time_min: 360, o2_L: 420, kcal: 2000 }, snap: { elapsedSec: 3600, o2RemainingL: 300, kcal: 500 }, basePx: [1, 1], worldToPx: (p) => p };
+  const dyn = createDynRoute({ call: async (path, body) => { calls.push({ path, body }); return { routes: [R(path === '/replan' ? 0.4 : 0.3, 70, 9)] }; },
+    ctx: (force) => (force ? c : null), propose: async (d) => { props.push(d); return { accept: true }; }, apply() {} });
+  const r = await dyn.sand({ px: [30, 2], radius_m: 25 });
+  const rp = calls.find((x) => x.path === '/replan');
+  assert.deepEqual(rp.body.budget, { time_min: 300, o2_L: 300, kcal: 1500 }, 'tam bütçe değil, kalan');
+  assert.deepEqual(rp.body.base_px, [1, 1]); assert.deepEqual(rp.body.observations, [{ px: [30, 2], radius_m: 25, cls: 'sand' }]);
+  assert.equal(props[0].reason, 'sand'); assert.equal(props[0].urgent, true); assert.equal(props[0].delta.m, 100);
+  assert.deepEqual(r, { accept: true }); assert.equal(dyn.state().last.reason, 'sand');
+  const none = createDynRoute({ call: async () => { throw new Error('olmamalı'); }, ctx: () => null, propose: async () => {}, apply() {} });
+  assert.equal(await none.sand({ px: [1, 1], radius_m: 5 }), null);
+});
+
+test('çift arayüz yok: dinleyici preventDefault() derse yerleşik bant çıkmaz; karar olayı busy’yi temizler', async () => {
+  const listeners = {};
+  globalThis.window = { dispatchEvent(e) { (listeners[e.type] ?? []).forEach((f) => f(e)); return !e.defaultPrevented; }, addEventListener(t, f) { (listeners[t] ??= []).push(f); }, removeEventListener(t, f) { listeners[t] = (listeners[t] ?? []).filter((x) => x !== f); } };
+  globalThis.CustomEvent = class { constructor(type, init = {}) { this.type = type; this.detail = init.detail; this.cancelable = init.cancelable; this.defaultPrevented = false; } preventDefault() { if (this.cancelable) this.defaultPrevented = true; } };
+  let banners = 0; const root = { append() { banners++; } };
+  globalThis.document = { createElement: () => ({ style: {}, dataset: {}, append() {}, remove() {} }) };
+  const applied = []; const propose = proposeVia({ t: (k) => k, apply: (rt, r) => applied.push(r), root });
+  window.addEventListener('mm:route-suggest', (e) => { e.preventDefault(); setTimeout(() => window.dispatchEvent(new CustomEvent('mm:route-decision', { detail: { accept: true, reason: e.detail.reason } })), 5); });
+  const res = await propose({ reason: 'deviation', route: { kind: 'x' }, delta: {}, urgent: false });
+  assert.equal(banners, 0, 'yerleşik bant yok'); assert.deepEqual(res, { accept: true }); assert.deepEqual(applied, ['deviation']);
+  // dinleyici yoksa yerleşik bant çıkar (yedek)
+  listeners['mm:route-suggest'] = [];
+  const p2 = propose({ reason: 'deviation', route: { kind: 'x' }, delta: {}, urgent: false }); await new Promise((r) => setTimeout(r, 5));
+  assert.equal(banners, 1, 'dinleyici yoksa bant');
+  window.dispatchEvent(new CustomEvent('mm:route-decision', { detail: { accept: false, reason: 'deviation' } })); assert.deepEqual(await p2, { accept: false });
+  delete globalThis.window; delete globalThis.document; delete globalThis.CustomEvent;
+});
+
+test('422 (geçilemez başlangıç hücresi): başlangıç komşu hücreye kaydırılıp yeniden denenir; diğer hatalar denenmez', async () => {
+  const starts = []; const props = [];
+  const c = { route: { dense: line, goalPx: [9, 9], kind: 'balanced' }, pos: [50, 40], px: [25, 20], limits: {}, snap: {}, worldToPx: (p) => p };
+  const dyn = createDynRoute({ call: async (path, body) => { starts.push(body.start.join()); if (body.start.join() === '25,20' || body.start.join() === '27,20') throw new Error('API 422'); return { routes: [R(0.2, 30, 6)] }; },
+    ctx: () => c, propose: async (d) => { props.push(d); return null; }, apply() {} });
+  await tick(dyn, 8); await new Promise((r) => setTimeout(r, 30));
+  assert.ok(starts.includes('23,20'), 'kaydırılmış başlangıç denendi'); assert.equal(props.length, 1);
+  const hard = []; const dyn2 = createDynRoute({ call: async (p, b) => { hard.push(b.start.join()); throw new Error('API 500'); }, ctx: () => c, propose: async () => {}, apply() {}, onNote() {} });
+  await tick(dyn2, 8); await new Promise((r) => setTimeout(r, 30)); assert.ok(hard.every((x) => x === '25,20' || x === '25,20'.replace('25,20', x)) && !hard.includes('27,20') && !hard.includes('23,20'), '500 yeniden denenmez (kaydırma yok)');
+});
