@@ -1,0 +1,19 @@
+{
+ "hasSand": true,
+ "fired": true,
+ "replanned": true,
+ "rep": false,
+ "hold": false,
+ "ret": null,
+ "toast": "Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı.",
+ "diag": {
+  "paused": false,
+  "state": "auto",
+  "machine": "walking",
+  "leg": "outbound",
+  "s": 765,
+  "total": 765,
+  "hold": false,
+  "screen": "walk"
+ }
+}

@@ -1,0 +1,235 @@
+{
+ "kaynak": "gorevli (kendi üretimi: gerçek ızgara slope.bin + API /route + sand_zones.json) + çalışan 2 ab_ciftleri.json çapraz doğrulama (2 kumlu + 2 kumsuz çift, 3 geçilmez nokta)",
+ "seed": 120,
+ "api": "http://127.0.0.1:8000",
+ "route_denemesi": 7,
+ "pairs": [
+  {
+   "id": "P1",
+   "a": [
+    540,
+    595
+   ],
+   "b": [
+    304,
+    580
+   ],
+   "straightM": 473,
+   "triggers": true,
+   "sand": {
+    "id": "sand_14",
+    "minDistM": 18,
+    "thresholdM": 56.2
+   },
+   "routeKm": 0.78,
+   "routeStatus": "GO"
+  },
+  {
+   "id": "P2",
+   "a": [
+    373,
+    497
+   ],
+   "b": [
+    544,
+    544
+   ],
+   "straightM": 355,
+   "triggers": true,
+   "sand": {
+    "id": "sand_15",
+    "minDistM": 15,
+    "thresholdM": 48
+   },
+   "routeKm": 0.43,
+   "routeStatus": "GO"
+  },
+  {
+   "id": "P3",
+   "a": [
+    179,
+    445
+   ],
+   "b": [
+    131,
+    369
+   ],
+   "straightM": 180,
+   "triggers": false,
+   "sand": null,
+   "routeKm": 0.21,
+   "routeStatus": "GO"
+  },
+  {
+   "id": "P4",
+   "a": [
+    176,
+    770
+   ],
+   "b": [
+    38,
+    860
+   ],
+   "straightM": 330,
+   "triggers": false,
+   "sand": null,
+   "routeKm": 0.39,
+   "routeStatus": "GO"
+  },
+  {
+   "id": "P5",
+   "a": [
+    868,
+    813
+   ],
+   "b": [
+    850,
+    671
+   ],
+   "straightM": 286,
+   "triggers": false,
+   "sand": null,
+   "routeKm": 0.43,
+   "routeStatus": "GO"
+  },
+  {
+   "id": "AB01",
+   "a": [
+    791,
+    844
+   ],
+   "b": [
+    518,
+    999
+   ],
+   "straightM": 628,
+   "triggers": true,
+   "sand": {
+    "id": "sand_9",
+    "min_route_dist_m": 10.03,
+    "threshold_m": 51.8,
+    "triggers": true,
+    "min_any_m": 10.03
+   },
+   "kaynak": "calisan2"
+  },
+  {
+   "id": "AB03",
+   "a": [
+    608,
+    580
+   ],
+   "b": [
+    413,
+    577
+   ],
+   "straightM": 390,
+   "triggers": true,
+   "sand": {
+    "id": "sand_14",
+    "min_route_dist_m": 3.62,
+    "threshold_m": 56.2,
+    "triggers": true,
+    "min_any_m": 3.62
+   },
+   "kaynak": "calisan2"
+  },
+  {
+   "id": "AB09",
+   "a": [
+    877,
+    678
+   ],
+   "b": [
+    774,
+    558
+   ],
+   "straightM": 316,
+   "triggers": false,
+   "sand": {
+    "id": "sand_3",
+    "min_route_dist_m": 396.31,
+    "threshold_m": 65,
+    "triggers": false,
+    "min_any_m": 396.31
+   },
+   "kaynak": "calisan2"
+  },
+  {
+   "id": "AB10",
+   "a": [
+    801,
+    147
+   ],
+   "b": [
+    806,
+    366
+   ],
+   "straightM": 438,
+   "triggers": false,
+   "sand": {
+    "id": "sand_3",
+    "min_route_dist_m": 369.53,
+    "threshold_m": 65,
+    "triggers": false,
+    "min_any_m": 369.53
+   },
+   "kaynak": "calisan2"
+  }
+ ],
+ "impassable": [
+  {
+   "px": [
+    653,
+    501
+   ],
+   "slopeDeg": 44,
+   "nearestPassableM": 3
+  },
+  {
+   "px": [
+    852,
+    725
+   ],
+   "slopeDeg": 46,
+   "nearestPassableM": 4
+  },
+  {
+   "px": [
+    386,
+    565
+   ],
+   "slopeDeg": 33,
+   "nearestPassableM": 2
+  },
+  {
+   "px": [
+    409,
+    724
+   ],
+   "slopeDeg": 25,
+   "nearestPassableM": 2,
+   "kaynak": "calisan2"
+  },
+  {
+   "px": [
+    393,
+    704
+   ],
+   "slopeDeg": 31,
+   "nearestPassableM": 2,
+   "kaynak": "calisan2"
+  },
+  {
+   "px": [
+    437,
+    702
+   ],
+   "slopeDeg": 26,
+   "nearestPassableM": 2,
+   "kaynak": "calisan2"
+  }
+ ],
+ "kendi_cift": 5,
+ "kendi_gecilmez": 3
+}

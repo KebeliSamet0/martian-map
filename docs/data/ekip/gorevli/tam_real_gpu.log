@@ -1,0 +1,313 @@
+  PASS  [ON] API http://127.0.0.1:8000/assumptions çalışıyor  — HTTP 200
+  PASS  [ON] API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)  — synthetic=false 1000x1000 @ 2 m — "Gale / Mount Sharp boxwork bolgesi (Curi"
+  PASS  [ON] API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)  — HTTP 422
+  PASS  [ON] sim sunucusu http://127.0.0.1:8010/sim/  — betik başlattı / yeniden kullandı
+
+== S1 akışı
+  PASS  [T1] S1: brifing açılır  — S1 GÖREV BRİFİNGİ Boxwork'ten Atacama sondajına  Curiosity'nin incelediği boxwork sırtları
+  PASS  [T1] S1: 3 rota kartı  — ["En kısa GO Mesafe 0.55 km Süre","Dengeli GO Mesafe 0.57 km Süre","En güvenli GO Mesafe 0.61 km S"]
+  PASS  [T1] S1: 3 rota API'den (source=api*)  — shortest:api,balanced:api,safest:api
+  PASS  [T1] S1: en güvenli seçilir (kind=safest)  — kind=safest
+  PASS  [T1] S1: 3B yürüyüş başlar (total>0, durum=walking)  — {"total":610,"ms":"walking","sand":true}
+  PASS  [T1] S1: kum olayı tetiklenir  — {"s":225,"tot":610}
+  PASS  [T3] S1: kum olayı machine'den gelir  — {"id":"S1-sand","type":"sand","radius_m":19.4,"trigger_m":59.4,"world":[3209.900517497138,4782.496536437015],"px":3183.9917921845995,"pz":4729.493107490958}
+  PASS  [T3] S1: trigger_m = radius_m + 40  — radius_m=19.4 trigger_m=59.4 beklenen=59.4
+  PASS  [T3] S1: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden  — mesafe=59.0 m, eşik=59.4 m
+  PASS  [T1] S1: rota yeniden planlanır (replan)  — Yeni rota (0 ms): 0.39 km · 12.5 dk · GO — kum bölgesi kaçınıldı.
+  PASS  [T1] S1: hedefte numune ve üsse dönüş ayağı (E basılı tut → dönüş rotası)  — {"hold":true,"ret":true,"rep":true}
+  PASS  [T1] S1: hedefte durur (paused=true)  — paused=true
+  PASS  [T1] S1: karne açılır (.mm-grade-letter)
+  PASS  [T1] S1: karne içeriği boş değil  — C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli.
+  PASS  [T4] S1: 'mission:arrived' window olayı geldi  — olay sayısı=1 detail.state="debrief"
+
+== S2 akışı
+  PASS  [T1] S2: brifing açılır  — S2 GÖREV BRİFİNGİ Kumlu kestirme  Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemd
+  PASS  [T1] S2: 3 rota kartı  — ["En kısa GO Mesafe 0.55 km Süre","Dengeli GO Mesafe 0.58 km Süre","En güvenli GO Mesafe 0.64 km S"]
+  PASS  [T1] S2: 3 rota API'den (source=api*)  — shortest:api,balanced:api,safest:api
+  PASS  [T1] S2: en güvenli seçilir (kind=safest)  — kind=safest
+  PASS  [T1] S2: 3B yürüyüş başlar (total>0, durum=walking)  — {"total":635,"ms":"walking","sand":true}
+  FAIL  [T1] S2: kum olayı tetiklenir  — null
+  FAIL  [T3] S2: kum olayı machine'den gelir  — null
+  PASS  [T1] S2: hedefte numune ve üsse dönüş ayağı (E basılı tut → dönüş rotası)  — {"hold":false,"ret":null,"rep":false}
+  FAIL  [T1] S2: hedefte durur (paused=true)  — paused=false
+  FAIL  [T1] S2: karne açılır (.mm-grade-letter)
+  FAIL  [T1] S2: karne içeriği boş değil
+  FAIL  [T4] S2: 'mission:arrived' window olayı geldi  — olay sayısı=0 detail.state=undefined
+
+== S3 akışı
+  PASS  [T1] S3: brifing açılır  — S3 GÖREV BRİFİNGİ Yarım O₂ tüpü  Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin 
+  PASS  [T1] S3: 3 rota kartı  — ["En kısa NO-GO Mesafe 0.53 km S","Dengeli NO-GO Mesafe 0.55 km S","En güvenli NO-GO Mesafe 0.58 k"]
+  PASS  [T1] S3: 3 rota API'den (source=api*)  — shortest:api,balanced:api,safest:api
+  PASS  [T1] S3: en güvenli seçilir (kind=safest)  — kind=safest
+  PASS  [T1] S3: 3B yürüyüş başlar (total>0, durum=walking)  — {"total":579,"ms":"walking","sand":true}
+  PASS  [T1] S3: kum olayı tetiklenir  — {"s":195,"tot":579}
+  PASS  [T3] S3: kum olayı machine'den gelir  — {"id":"S3-sand","type":"sand","radius_m":19.4,"trigger_m":59.4,"world":[3209.900517497138,4782.496536437015],"px":3183.9917921845995,"pz":4730.823193167112}
+  PASS  [T3] S3: trigger_m = radius_m + 40  — radius_m=19.4 trigger_m=59.4 beklenen=59.4
+  PASS  [T3] S3: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden  — mesafe=57.8 m, eşik=59.4 m
+  PASS  [T1] S3: rota yeniden planlanır (replan)  — Yeni rota (0 ms): 0.38 km · 12.4 dk · GO — kum bölgesi kaçınıldı.
+  PASS  [T1] S3: hedefte numune ve üsse dönüş ayağı (E basılı tut → dönüş rotası)  — {"hold":true,"ret":true,"rep":true}
+  PASS  [T1] S3: hedefte durur (paused=true)  — paused=true
+  PASS  [T1] S3: karne açılır (.mm-grade-letter)
+  PASS  [T1] S3: karne içeriği boş değil  — C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli.
+  PASS  [T4] S3: 'mission:arrived' window olayı geldi  — olay sayısı=1 detail.state="debrief"
+
+== L taraması
+  PASS  [T2] lejant görünür (#scanleg)  — hidden=false
+  PASS  [T2] lejantta 'Dikkat' etiketi  — ═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim) · kaya adayı (HiRISE gölge tespiti, doğrulanmadı, tahmini çap 1.13 m) · 1 m
+  PASS  [T2] lejantta 'Geçilmez' etiketi  — ═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim) · kaya adayı (HiRISE gölge tespiti, doğrulanmadı, tahmini çap 1.13 m) · 1 m
+
+== HUD
+  PASS  [T5] HUD'da 'Zemin (model)' satırı  — Zemin (model)
+eğim 3° · kum 0.03 · iri taş 0.02 · belirsizlik 0.21
+  PASS  [T5] HUD'da 'Gale ortam (REMS)' satırı  — Gale ortam (REMS)
+hava -88…-3.9 °C · zemin -121…7.5 °C · 716–961 Pa
+
+== perf probu (≈30-60 sn)
+  PASS  [T7] prob açıldı (konsolda "[PerfProbe] ... başlatılıyor" + canlı HUD)  — %c[PerfProbe] Martian Map Performans Probu başlatılıyor... color: #00e5ff; font-weight: bold;
+  PASS  [T7] prob 30 sn senaryoyu bitirip rapor açar (#perf-probe-overlay)  — rapor açıldı
+  PASS  [T7] '[PerfProbe HATA]' yok
+  PASS  [T7] perf raporu okundu (ort FPS, p95 ms)  — ort 39.09 FPS, p95 28.4 ms (REAL_GPU)
+  FAIL  [T7] GERÇEK GPU eşiği: p95 <= 22 ms ve ort >= 45 FPS  — p95 28.4 ms, ort 39.09 FPS, GPU: ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001638) Direct3D11 vs_5_0 ps_5_0, D3D11)
+
+== oyun akışı 1280x720 TR (tam)
+  PASS  [T8] [1280×720 TR] açılış ekranı (intro), body.dev yok  — {"screen":"intro","dev":false}
+  PASS  [T8] [1280×720 TR] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)  — [["panel","none"],["mapwrap","none"],["hud","none"],["ctl","none"]]
+  PASS  [T8] [1280×720 TR] intro: başlık, altyazı ve başlat düğmesi dolu  — {"title":"MARTIAN MAP","sub":"EVA PROVASI","btn":"GÖREV SEÇ"}
+  PASS  [T10] [1280×720 TR] 1_intro: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 1_intro: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] "Görev seç" → görev seçimi ekranı  — screen=select
+  FAIL  [T8] [1280×720 TR] 3 görev kartı (S1,S2,S3)  — S1,S2,S3,CUSTOM
+  PASS  [T10] [1280×720 TR] 2_gorev_secimi: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 2_gorev_secimi: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] dil anahtarı: TR → EN (görev kartı düğmesi + <html lang> güncellenir)  — {"lang":"en","go":"Open briefing","btn":"Open briefing","htmlLang":"en"}
+  PASS  [T10] [1280×720 TR] EN'e geçince görev seçimi: boş anahtar yok
+  PASS  [T8] [1280×720 TR] dil anahtarı geri döner  — {"lang":"tr","go":"Brifinge geç","btn":"Brifinge geç"}
+  PASS  [T8] [1280×720 TR] "Geri" → intro  — screen=intro
+  PASS  [T8] [1280×720 TR] S1 → brifing  — screen=briefing
+  PASS  [T10] [1280×720 TR] 3_brifing: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 3_brifing: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] rota seçimi: 3 kart  — kart=3
+  PASS  [T10] [1280×720 TR] 4_rotalar: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 4_rotalar: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır  — screen=walk
+  PASS  [T8] [1280×720 TR] rotalar canlı API'den (çevrimdışı yedek rozeti yok)  — {"alt":"api,api,api","offline":false}
+  PASS  [T8] [1280×720 TR] yürüyüş: durum=auto, rota uzunluğu > 0  — {"st":"auto","tot":610,"hud":true,"dist":"609 m","vit":true}
+  PASS  [T8] [1280×720 TR] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür  — {"st":"auto","tot":610,"hud":true,"dist":"609 m","vit":true}
+  PASS  [T10] [1280×720 TR] 5_yuruyus: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 5_yuruyus: taşma/örtüşme yok
+  PASS  [T10] [1280×720 TR] 5b_yuruyus_tarama: boş anahtar/yer tutucu yok
+  FAIL  [T11] [1280×720 TR] 5b_yuruyus_tarama: taşma/örtüşme yok  — ÖRTÜŞME .mm-mhud × #scanleg: 87×29 px
+  PASS  [T8] [1280×720 TR] kum olayı → rota yeniden planlanır  — {"hasSand":true,"fired":true,"replanned":true,"rep":true,"hold":true,"ret":true,"toast":"Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.","diag":null}
+  PASS  [T8] [1280×720 TR] hedefte karne açılır  — screen=report
+  PASS  [T10] [1280×720 TR] 6_karne: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 6_karne: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] karne: harf + 4 satırlık tablo + iki düğme ("Tekrar oyna", "Başka görev")  — {"grade":"C","rows":5,"btns":["Tekrar oyna","Başka görev"]}
+  PASS  [T8] [1280×720 TR] karne: "Tekrar oyna"/"Başka görev" düğmeleri kaydırmadan görünür  — {"vh":720,"bottoms":[705,705],"kartYuksek":696,"kaydirilabilir":true}
+  PASS  [T8] [1280×720 TR] "Tekrar oyna": yürüyüş yeniden başlar (walk, rota başında, karne kapanır, makine=walking)  — {"st":"auto","s":5,"tot":610,"ms":"walking","report":false,"paused":false}
+  PASS  [T8] [1280×720 TR] Esc → duraklat menüsü açılır (oyun durur, 6 düğme)  — {"menu":true,"paused":true,"btns":["Devam","Görev bilgisi","Veri katmanları","Ses: Açık","Dil: TR","Görevden çık"]}
+  PASS  [T10] [1280×720 TR] 7_duraklat: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 7_duraklat: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] "Devam" → menü kapanır, oyun sürer  — {"menu":false,"paused":false}
+  PASS  [T8] [1280×720 TR] ikinci tur: varış + karne  — {"hasSand":true,"fired":true,"replanned":true,"rep":true,"hold":true,"ret":true,"toast":"Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.","diag":null}
+  FAIL  [T8] [1280×720 TR] "Başka görev": görev seçimine döner (tur, yürüyüş HUD gizli, makine temiz, 3 kart)  — {"st":"tour","walkhud":"none","vit":false,"machine":false,"report":false,"cards":4}
+  PASS  [T8] [1280×720 TR] karne sonrası ikinci görev (S2) brifingi açılır  — screen=briefing
+  PASS  [T8] [1280×720 TR] brifingde "Görevlere dön" → seçime döner  — screen=select
+
+== oyun akışı 1920x1080 EN
+  PASS  [T8] [1920×1080 EN] açılış ekranı (intro), body.dev yok  — {"screen":"intro","dev":false}
+  PASS  [T8] [1920×1080 EN] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)  — [["panel","none"],["mapwrap","none"],["hud","none"],["ctl","none"]]
+  PASS  [T8] [1920×1080 EN] intro: başlık, altyazı ve başlat düğmesi dolu  — {"title":"MARTIAN MAP","sub":"EVA REHEARSAL","btn":"SELECT MISSION"}
+  PASS  [T10] [1920×1080 EN] 1_intro: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 1_intro: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] "Görev seç" → görev seçimi ekranı  — screen=select
+  FAIL  [T8] [1920×1080 EN] 3 görev kartı (S1,S2,S3)  — S1,S2,S3,CUSTOM
+  PASS  [T10] [1920×1080 EN] 2_gorev_secimi: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 2_gorev_secimi: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] S1 → brifing  — screen=briefing
+  PASS  [T10] [1920×1080 EN] 3_brifing: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 3_brifing: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] rota seçimi: 3 kart  — kart=3
+  PASS  [T10] [1920×1080 EN] 4_rotalar: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 4_rotalar: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır  — screen=walk
+  PASS  [T8] [1920×1080 EN] rotalar canlı API'den (çevrimdışı yedek rozeti yok)  — {"alt":"api,api,api","offline":false}
+  PASS  [T8] [1920×1080 EN] yürüyüş: durum=auto, rota uzunluğu > 0  — {"st":"auto","tot":610,"hud":true,"dist":"609 m","vit":true}
+  PASS  [T8] [1920×1080 EN] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür  — {"st":"auto","tot":610,"hud":true,"dist":"609 m","vit":true}
+  FAIL  [T10] [1920×1080 EN] 5_yuruyus: boş anahtar/yer tutucu yok  — EN modda Türkçe: "Sol 4625 · Navcam · büyüt: G" | EN modda Türkçe: "Y: ayrıntı"
+  PASS  [T11] [1920×1080 EN] 5_yuruyus: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] kum olayı → rota yeniden planlanır  — {"hasSand":true,"fired":true,"replanned":true,"rep":true,"hold":true,"ret":true,"toast":"Return route ready. Watch your oxygen and return margin.","diag":null}
+  PASS  [T8] [1920×1080 EN] hedefte karne açılır  — screen=report
+  FAIL  [T10] [1920×1080 EN] 6_karne: boş anahtar/yer tutucu yok  — EN modda Türkçe: "One way, En güvenli route. Cost is measured on the real terr" | EN modda Türkçe: "Rotaların radyasyon farkı Radyasyon: RAD" | EN modda Türkçe:
+  PASS  [T11] [1920×1080 EN] 6_karne: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] karne: harf + 4 satırlık tablo + iki düğme ("Tekrar oyna", "Başka görev")  — {"grade":"C","rows":5,"btns":["Play again","Other mission"]}
+  PASS  [T8] [1920×1080 EN] karne: "Tekrar oyna"/"Başka görev" düğmeleri kaydırmadan görünür  — {"vh":1080,"bottoms":[955,955],"kartYuksek":873,"kaydirilabilir":false}
+
+== klavye
+  PASS  [T9] yürüyüş (auto) başladı
+  PASS  [T9] W: otomatik yürüyüşten devralır (durum=walk) ve ileri gider  — durum auto→walk, {"fwd":12.18,"right":0,"dist":12.18}
+  PASS  [T9] S: geri gider (ileri bileşen < 0)  — {"fwd":-11.94,"right":0,"dist":11.94}
+  PASS  [T9] D: sağa kayar (sağ bileşen > 0)  — {"fwd":0,"right":8.82,"dist":8.82}
+  PASS  [T9] A: sola kayar (sağ bileşen < 0)  — {"fwd":0,"right":-10.68,"dist":10.68}
+  PASS  [T9] Shift+W: koşar (ileri gider)  — {"fwd":21.24,"right":0,"dist":21.24}
+  PASS  [T9] R: rotaya dönülür (durum=auto)  — {"st":"auto","routeRun":true}
+  PASS  [T9] T: astronot görünürlüğü 3. şahıs ↔ 1. şahıs değişir  — önce=true, T sonrası=false, 2. T sonrası=true
+  PASS  [T9] H: vitals HUD gizlenir ve geri gelir  — önce=true, H=false, H=true
+  PASS  [T9] L: tarayıcı lejantı görünür (Dikkat + Geçilmez)  — {"hidden":false,"text":"═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim) · y"}
+  PASS  [T9] ?: yardım penceresi açılır ve tuşları listeler  — ["W A S D","Shift","Fare (tıkla)","R","L / Shift+L","T","[ ]","G","N","H","Esc","?"]
+  PASS  [T9] yardımda vaat edilen tuşlar listede  — eksik: 
+  PASS  [T9] M (normal oyun): harita açılmaz — tasarım gereği yalnız ?dev=1 (yardım listesinde M yok)  — önce=auto, sonra={"st":"auto","map":"none"}
+  PASS  [T9] M (?dev=1): 3B → haritaya döner  — {"st":"map","map":"block","gl":true}
+
+== T12 özel görev
+  PASS  [T12] A–B çiftleri hazır: 9 çift (4 kumlu, 5 kumsuz), 6 geçilmez nokta  — ab_ciftleri_gorevli.json; 7 /route denemesi
+  PASS  [T12] seçim ekranında özel görev kartı (mission-custom) ve düğmesi (mission-go-custom) var  — {"card":true,"go":true}
+  PASS  [T12] "Haritayı aç" → harita ekranı (mappicker)  — screen=picker
+  PASS  [T12] test kancası window.__mm.picker { setA, setB, compute, state, shareUrl } var  — ok
+  PASS  [T12] harita ekranı öğeleri (mp-warn, mp-eta, mp-info, mp-compute, mp-share, mp-o2, mp-back) var  — eksik: 
+  PASS  [T12] T12b: geçilmez A=653,501 (44°): uyarı metni "3 m" ve eğim doğru  — beklenen "A: Bu harita hücresinde hesaplanan eğim 44°; projenin 25° planlama eşiği …" | görülen "A: Bu harita hücresinde hesaplanan eğim 44°; projenin 25° planl
+  PASS  [T12] T12b: geçilmez A=653,501: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Bu harita hücresinde hesaplanan eğim 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki e
+  PASS  [T12] T12b: geçilmez A=852,725 (46°): uyarı metni "4 m" ve eğim doğru  — beklenen "A: Bu harita hücresinde hesaplanan eğim 46°; projenin 25° planlama eşiği …" | görülen "A: Bu harita hücresinde hesaplanan eğim 46°; projenin 25° planl
+  PASS  [T12] T12b: geçilmez A=852,725: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Bu harita hücresinde hesaplanan eğim 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki e
+  PASS  [T12] T12b: geçilmez A=386,565 (33°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Bu harita hücresinde hesaplanan eğim 33°; projenin 25° planlama eşiği …" | görülen "A: Bu harita hücresinde hesaplanan eğim 33°; projenin 25° planl
+  PASS  [T12] T12b: geçilmez A=386,565: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Bu harita hücresinde hesaplanan eğim 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki e
+  PASS  [T12] T12b: geçilmez A=409,724 (25°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Bu harita hücresinde hesaplanan eğim 25°; projenin 25° planlama eşiği …" | görülen "A: Bu harita hücresinde hesaplanan eğim 25°; projenin 25° planl
+  PASS  [T12] T12b: geçilmez A=409,724: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Bu harita hücresinde hesaplanan eğim 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki e
+  PASS  [T12] T12b: geçilmez A=393,704 (31°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Bu harita hücresinde hesaplanan eğim 31°; projenin 25° planlama eşiği …" | görülen "A: Bu harita hücresinde hesaplanan eğim 31°; projenin 25° planl
+  PASS  [T12] T12b: geçilmez A=393,704: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Bu harita hücresinde hesaplanan eğim 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki e
+  PASS  [T12] T12b: geçilmez A=437,702 (26°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Bu harita hücresinde hesaplanan eğim 26°; projenin 25° planlama eşiği …" | görülen "A: Bu harita hücresinde hesaplanan eğim 26°; projenin 25° planl
+  PASS  [T12] T12b: geçilmez A=437,702: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Bu harita hücresinde hesaplanan eğim 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki e
+  PASS  [T12] T12b: geçilebilir çiftte uyarı boş, hesaplanabilir  — {"warn":"","can":true}
+  PASS  [T12] T12b: A–B 15 m'den yakınsa "çok kısa" uyarısı  — A ve B en az 15 m uzakta olmalı (arayüz giriş kuralı).
+  PASS  [T12] T12a: gerçek harita tıklamasıyla A ve B seçilir (±2 px)  — A=540,594 B=304,579 beklenen 540,595→304,580 (tıklama sırası A/B ya da B/A: sıra durumuna bağlı)
+  PASS  [T12] T12a: canlı mesafe/süre (mp-eta) kuş uçuşu ve 0,67056 m/s referansıyla tutarlı  — beklenen "Kuş uçuşu 473 m · kaba süre tahmini ≈ 12 dk" | görülen "Kuş uçuşu 473 m · kaba süre tahmini ≈ 12 dk"
+  PASS  [T12] T12d: shareUrl() aynı A/B'yi taşır (virgül kodu çözülünce ?a=c,r&b=c,r)  — beklenen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 | görülen http://127.0.0.1:8010/sim/?a=540,595&b=304,580
+  PASS  [T12] T12d (kozmetik): bağlantı okunaklı biçimde: virgül %2C ile kodlanmamış  — beklenen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 | görülen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 (URLSearchParams virgülü %2C yapıyor; işlev etk
+  PASS  [T12] T12d: paylaşım düğmesi (mp-share) aynı URL'yi üretir (panoya ya da prompt'a)  — pano=http://127.0.0.1:8010/sim/?a=540,595&b=304,580 prompt=null
+  PASS  [T12] T12e: "Kısıtlı O₂ bütçesi (80 L)" işaretlenince state.o2 = 80  — o2=80
+  PASS  [T12] T12e: paylaşım URL'si &o2=80 içerir  — http://127.0.0.1:8010/sim/?a=540,595&b=304,580&o2=80
+  PASS  [T12] T12e: hesapla → brifing  — screen=briefing
+  PASS  [T12] T12e: görev limitleri O₂ = 80 L ve brifingde 80 görünür  — {"id":"CUSTOM","o2":80,"txt":"CUSTOM GÖREV BRİFİNGİ Özel görev  Kendi seçtiğin iki nokta arasında yürüyeceksin. Rota planlayıcıdan gelir; kum uyarısı yalnız rot
+  PASS  [T12] T12e: 3 rota kartı geldi (80 L bütçede durum rozetleri kaydedildi; NO-GO beklenebilir)  — [{"k":"shortest","why":null},{"k":"balanced","why":null},{"k":"safest","why":null}]
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)  — beklenen {"id":"sand_14","minDistM":18,"thresholdM":56.2} | görülen {"id":"sand_14","min":17,"thr":56.2}
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)  — {"hasSand":true,"fired":true,"replanned":true,"rep":false,"hold":false,"ret":null,"toast":"Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı.","d
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): replan BAŞARILI: toast'ta "başarısız"/"failed" yok  — toast="Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı."
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): bu çiftte /replan, /step vb. 422 yok  — yok
+  FAIL  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): hedefte karne açılır  — screen=walk
+  FAIL  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): "Başka görev" → seçime döner (özel kart yine var)  — screen=walk
+  FAIL  [T12] T12a P2 373,497→544,544 (355 m, kum VAR): İSTİSNA  — page.click: Timeout 20000ms exceeded.
+  PASS  [T12] T12a P3 179,445→131,369 (180 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a P3 179,445→131,369 (180 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a P3 179,445→131,369 (180 m, kum YOK): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a P3 179,445→131,369 (180 m, kum YOK): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c P3 179,445→131,369 (180 m, kum YOK): kum olayı YOK (selected.sand=null)  — beklenen null | görülen null
+  PASS  [T12] T12c P3 179,445→131,369 (180 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ  — {"bad":null,"triggered":[]}
+  PASS  [T12] T12a P3 179,445→131,369 (180 m, kum YOK): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a P3 179,445→131,369 (180 m, kum YOK): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12a P4 176,770→38,860 (330 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a P4 176,770→38,860 (330 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a P4 176,770→38,860 (330 m, kum YOK): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a P4 176,770→38,860 (330 m, kum YOK): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c P4 176,770→38,860 (330 m, kum YOK): kum olayı YOK (selected.sand=null)  — beklenen null | görülen null
+  PASS  [T12] T12c P4 176,770→38,860 (330 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ  — {"bad":null,"triggered":[]}
+  PASS  [T12] T12a P4 176,770→38,860 (330 m, kum YOK): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a P4 176,770→38,860 (330 m, kum YOK): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12a P5 868,813→850,671 (286 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a P5 868,813→850,671 (286 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a P5 868,813→850,671 (286 m, kum YOK): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a P5 868,813→850,671 (286 m, kum YOK): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c P5 868,813→850,671 (286 m, kum YOK): kum olayı YOK (selected.sand=null)  — beklenen null | görülen null
+  PASS  [T12] T12c P5 868,813→850,671 (286 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ  — {"bad":null,"triggered":[]}
+  PASS  [T12] T12a P5 868,813→850,671 (286 m, kum YOK): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a P5 868,813→850,671 (286 m, kum YOK): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12a AB01 791,844→518,999 (628 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a AB01 791,844→518,999 (628 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a AB01 791,844→518,999 (628 m, kum VAR): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a AB01 791,844→518,999 (628 m, kum VAR): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c AB01 791,844→518,999 (628 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)  — beklenen {"id":"sand_9","min_route_dist_m":10.03,"threshold_m":51.8,"triggers":true,"min_any_m":10.03} | görülen {"id":"sand_11","min":10,"thr":60}
+  PASS  [T12] T12c AB01 791,844→518,999 (628 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)  — {"hasSand":true,"fired":true,"replanned":true,"rep":true,"hold":true,"ret":true,"toast":"Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.","diag":null}
+  PASS  [T12] T12c AB01 791,844→518,999 (628 m, kum VAR): replan BAŞARILI: toast'ta "başarısız"/"failed" yok  — toast="Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle."
+  FAIL  [T12] T12c AB01 791,844→518,999 (628 m, kum VAR): bu çiftte /replan, /step vb. 422 yok  — POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route
+  PASS  [T12] T12a AB01 791,844→518,999 (628 m, kum VAR): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a AB01 791,844→518,999 (628 m, kum VAR): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12a AB03 608,580→413,577 (390 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a AB03 608,580→413,577 (390 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a AB03 608,580→413,577 (390 m, kum VAR): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a AB03 608,580→413,577 (390 m, kum VAR): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c AB03 608,580→413,577 (390 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)  — beklenen {"id":"sand_14","min_route_dist_m":3.62,"threshold_m":56.2,"triggers":true,"min_any_m":3.62} | görülen {"id":"sand_16","min":1,"thr":48.9}
+  PASS  [T12] T12c AB03 608,580→413,577 (390 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)  — {"hasSand":true,"fired":true,"replanned":true,"rep":true,"hold":true,"ret":true,"toast":"Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.","diag":null}
+  PASS  [T12] T12c AB03 608,580→413,577 (390 m, kum VAR): replan BAŞARILI: toast'ta "başarısız"/"failed" yok  — toast="Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle."
+  FAIL  [T12] T12c AB03 608,580→413,577 (390 m, kum VAR): bu çiftte /replan, /step vb. 422 yok  — POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST /route POST
+  PASS  [T12] T12a AB03 608,580→413,577 (390 m, kum VAR): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a AB03 608,580→413,577 (390 m, kum VAR): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12a AB09 877,678→774,558 (316 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a AB09 877,678→774,558 (316 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a AB09 877,678→774,558 (316 m, kum YOK): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a AB09 877,678→774,558 (316 m, kum YOK): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c AB09 877,678→774,558 (316 m, kum YOK): kum olayı YOK (selected.sand=null)  — beklenen null | görülen null
+  PASS  [T12] T12c AB09 877,678→774,558 (316 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ  — {"bad":null,"triggered":[]}
+  PASS  [T12] T12a AB09 877,678→774,558 (316 m, kum YOK): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a AB09 877,678→774,558 (316 m, kum YOK): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12a AB10 801,147→806,366 (438 m, kum YOK): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a AB10 801,147→806,366 (438 m, kum YOK): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a AB10 801,147→806,366 (438 m, kum YOK): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a AB10 801,147→806,366 (438 m, kum YOK): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c AB10 801,147→806,366 (438 m, kum YOK): kum olayı YOK (selected.sand=null)  — beklenen null | görülen null
+  PASS  [T12] T12c AB10 801,147→806,366 (438 m, kum YOK): rota boyunca kum olayı TETİKLENMEDİ  — {"bad":null,"triggered":[]}
+  PASS  [T12] T12a AB10 801,147→806,366 (438 m, kum YOK): hedefte karne açılır  — screen=report
+  PASS  [T12] T12a AB10 801,147→806,366 (438 m, kum YOK): "Başka görev" → seçime döner (özel kart yine var)  — screen=select
+  PASS  [T12] T12d: ?a=&b= doğrudan brifinge açar (aynı A/B, O₂ 420 L)  — {"id":"CUSTOM","a":[540,595],"b":[304,580],"o2":420,"intro":false,"brief":true}
+  PASS  [T12] T12d: ?a=&b=&o2=80 doğrudan brifinge açar (aynı A/B, O₂ 80 L)  — {"id":"CUSTOM","a":[540,595],"b":[304,580],"o2":80,"intro":false,"brief":true}
+  PASS  [T12] T12d: geçersiz ?a=5000,5&b=3,3 → özel görev açılmaz, normal intro  — {"screen":"intro","sel":null}
+
+== T13 dinamik rota
+  PASS  [T13] S1 yürüyüşü (auto) başladı  — screen=walk
+  PASS  [T13] test kancası window.__mm.dynState() { devT, busy, cooldown, reserveDone } var  — devT,busy,cooldown,reserveDone,lastTick,noApiNoted,load0,loadSeen,obsSeen
+  PASS  [T13] W: durum walk, routeRun korunur  — {"st":"walk","run":true,"total":610,"dev":0}
+  PASS  [T13] rotadan ≥ 30 m uzaklaşıldı (P += 45 m yönlerinden uygun olan)  — {"dx":45,"dz":0,"distM":33,"home":[3136.025705696788,4554.114228934964]}
+  PASS  [T13] sapma önerisi (mm:route-suggest) ≤ 40 sn içinde geldi  — süre 9.8 sn (API yüklüyse 3 /route isteği ~20 sn sürebilir)
+  PASS  [T13] öneri sebebi "deviation", delta.m ve delta.kcal sayı, rota var  — {"reason":"deviation","delta":{"m":-20,"kcal":-5.4,"o2_L":-1.1,"risk":null},"urgent":false}
+  PASS  [T13] yerleşik bant (dyn-banner) + dyn-accept + dyn-dismiss görünür; metin boş anahtar içermez  — Rotadan uzaklaştın. Buradan yeni rota, rotaya dönüp devam etmeye göre -20 m, -5.4 kcal ve -1.1 L O₂ fark yaratıyor (planlayıcı hesabı). Yeni rotayı al Mevcut ro
+  PASS  [T13] "Vazgeç": mm:route-decision {accept:false, reason:deviation}, bant kapanır  — {"dec":{"accept":false,"reason":"deviation","auto":false},"banner":false}
+  PASS  [T13] rotaya dönülünce (P geri) yeni öneri yok, devT sıfırlanır  — {"n":1,"devT":0}
+  PASS  [T13] soğuma (45 sn) içinde ikinci sapma önerisi YOK (yeniden sapıldı, 43 sn'ye kadar izlendi)  — {"n":1,"cd":"{\"deviation\":60.36259999999404}"}
+  FAIL  [T13] soğuma bitince (sapma sürüyor) ikinci öneri gelir; iki öneri arası ≥ 45 sn  — aralık 43.6 sn
+  PASS  [T13] "Kabul": routeRun.replanned=true ve rota uzunluğu > 0  — {"before":{"total":610,"rep":false},"after":{"rep":true,"total":614}}
+  PASS  [T13] "Kabul": mm:route-decision {accept:true, reason:deviation}, bant kapanır, makine meşgul değil  — {"accept":true,"reason":"deviation","auto":false}
+  PASS  [T13] rotaya en yakın rover durağı bulundu (wire.grid.rover_stops)  — {"id":"msl_s120_d0772","d":0,"px":[480.6,585.2]}
+  PASS  [T13] mm:camera-insight → mm:route-suggest reason=observation ≤ 40 sn, delta.m ve delta.kcal sayı  — süre 3.5 sn, delta {"m":0,"kcal":5.3,"o2_L":1.1,"risk":null}, önceki öneri sayısı 2
+  PASS  [T13] gözlem: yerleşik bant (dyn-banner, reason=observation) görünür  — {"reason":"observation","txt":"Kask kamerası rotaya yakın riskli zemin işaretledi; bu gözlemle yeni rota 0 m, +5.3 kcal ve +1.1 L O₂ fark yaratıyor (model gözle
+  PASS  [T13] gözlem: "Kabul" → yeni routeRun (replanned=true, uzunluk > 0), karar {accept:true, reason:observation}  — {"accept":true,"reason":"observation","auto":false}
+  FAIL  [T13] wire.vitals.addLoad(8) → mm:route-suggest reason=load ≤ 40 sn, delta sayı  — yük önce 10 kg, süre 60 sn, delta undefined
+  PASS  [T10] texts.json ui: 201 anahtarın hepsinde dolu tr + en  — eksik: 
+  PASS  [T10] kodda t('...') ile çağrılan 140 anahtarın hepsi texts.json'da var  — eksik: 
+  PASS  [T10] görev zorluk etiketleri (diff.<zorluk>) tanımlı  — eksik: 
+  FAIL  [T6] konsolda beklenmeyen hata yok (39 hata, 0 tanesi bilinen/hariç)  — [S1] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) <http://127.0.0.1:8000/route> || [S1] Failed to load resource: t
+
+┌──────┬────────────────────────────────────────────┬─────────┬───────┐
+│ ON   │ Ön koşul: API + sim sunucusu               │ PASS    │   4/4 │
+│ T1   │ S1/S2/S3 tam akış                          │ FAIL    │ 28/32 │
+│ T2   │ L taraması: lejant Dikkat + Geçilmez       │ PASS    │   3/3 │
+│ T3   │ Kum olayı radius_m+40 m                    │ FAIL    │   6/7 │
+│ T4   │ 'mission:arrived' window olayı             │ FAIL    │   2/3 │
+│ T5   │ HUD: Zemin (model) + Gale ortam (REMS)     │ PASS    │   2/2 │
+│ T6   │ Konsolda hata yok                          │ FAIL    │   0/1 │
+│ T7   │ ?perf=1 probu                              │ FAIL    │   4/5 │
+│ T8   │ Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev │ FAIL    │ 37/40 │
+│ T9   │ Gerçek klavye: WASD R L H T ? M            │ PASS    │ 14/14 │
+│ T10  │ TR/EN: boş anahtar / yer tutucu yok        │ FAIL    │ 17/19 │
+│ T11  │ Yerleşim 1280x720 + 1920x1080: taşma / örtüşme │ FAIL    │ 13/14 │
+│ T12  │ Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L │ FAIL    │ 114/119 │
+│ T13  │ Dinamik rota (#122): sapma önerisi, soğuma, kabul │ FAIL    │ 16/18 │
+└──────┴────────────────────────────────────────────┴─────────┴───────┘
+GENEL: FAIL  (831 sn)  → C:\Users\Batu\Desktop\martian-map-main\martian-map-main\docs\data\ekip\gorevli\test_sonucu_tam_real_gpu.json
+EXIT 1

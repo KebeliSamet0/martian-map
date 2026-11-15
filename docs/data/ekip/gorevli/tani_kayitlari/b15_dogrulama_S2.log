@@ -1,0 +1,43 @@
+  PASS  [ON] API http://127.0.0.1:8000/assumptions çalışıyor  — HTTP 200
+  PASS  [ON] API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)  — synthetic=false 1000x1000 @ 2 m — "Gale / Mount Sharp boxwork bolgesi (Curi"
+  PASS  [ON] API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)  — HTTP 422
+sunucu zaten 8010'da cevap veriyor; yeniden kullanılıyor
+  PASS  [ON] sim sunucusu http://127.0.0.1:8010/sim/  — betik başlattı / yeniden kullandı
+
+== S2 akışı
+  PASS  [T1] S2: brifing açılır  — S2 GÖREV BRİFİNGİ Kumlu kestirme  Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemd
+  PASS  [T1] S2: 3 rota kartı  — ["En kısa GO Mesafe 0.55 km Süre","Dengeli GO Mesafe 0.58 km Süre","En güvenli GO Mesafe 0.64 km S"]
+  PASS  [T1] S2: 3 rota API'den (source=api*)  — shortest:api,balanced:api,safest:api
+  PASS  [T1] S2: en güvenli seçilir (kind=safest)  — kind=safest
+  PASS  [T1] S2: 3B yürüyüş başlar (total>0, durum=walking)  — {"total":635,"ms":"walking","sand":true}
+  PASS  [T1] S2: kum olayı tetiklenir  — {"route_s":252}
+  PASS  [T3] S2: kum olayı machine'den gelir  — {"id":"S2-sand","type":"sand","radius_m":20,"trigger_m":60,"world":[3239.7952005489965,4844.496536437015],"px":3223.851369587078,"pz":4787.018346288599}
+  PASS  [T3] S2: trigger_m = radius_m + 40  — radius_m=20 trigger_m=60 beklenen=60
+  PASS  [T3] S2: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden  — mesafe=59.6 m, eşik=60 m
+  PASS  [T1] S2: kum olayında karar penceresi (route-decision) açılır; "kabul" ile yeniden plan başlar  — KUM ALGILANDI ROTA KARARI Önündeki zemin planlanandan yumuşak. Planlayıcı kumu dolaşan bir rota hesapladı. Far
+  PASS  [T1] S2: rota yeniden planlanır (replan)  — Gevşek kaya: ayağın kaydı, adım yavaşladı.
+  PASS  [T1] S2: hedefte numune (E basılı tut) ve üsse dönüş ayağı  — {"hold":true,"ret":true}
+  PASS  [T1] S2: hedefte durur (paused=true)  — paused=true
+  PASS  [T1] S2: karne açılır (.mm-grade-letter)
+  PASS  [T1] S2: karne içeriği boş değil  — C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli.
+  PASS  [T4] S2: 'mission:arrived' window olayı geldi  — olay sayısı=1 detail.state="debrief"
+  FAIL  [T6] konsolda beklenmeyen hata yok (3 hata, 0 tanesi bilinen/hariç)  — [S2] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) <http://127.0.0.1:8000/route> || [S2] Failed to load resource: t
+
+┌──────┬────────────────────────────────────────────┬─────────┬───────┐
+│ ON   │ Ön koşul: API + sim sunucusu               │ PASS    │   4/4 │
+│ T1   │ S1/S2/S3 tam akış                          │ PASS    │ 12/12 │
+│ T2   │ L taraması: lejant Dikkat + Geçilmez       │ ATLANDI │   0/0 │
+│ T3   │ Kum olayı radius_m+40 m                    │ PASS    │   3/3 │
+│ T4   │ 'mission:arrived' window olayı             │ PASS    │   1/1 │
+│ T5   │ HUD: Zemin (model) + Gale ortam (REMS)     │ ATLANDI │   0/0 │
+│ T6   │ Konsolda hata yok                          │ FAIL    │   0/1 │
+│ T7   │ ?perf=1 probu                              │ ATLANDI │   0/0 │
+│ T8   │ Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev │ ATLANDI │   0/0 │
+│ T9   │ Gerçek klavye: WASD R L H T ? M            │ ATLANDI │   0/0 │
+│ T10  │ TR/EN: boş anahtar / yer tutucu yok        │ ATLANDI │   0/0 │
+│ T11  │ Yerleşim 1280x720 + 1920x1080: taşma / örtüşme │ ATLANDI │   0/0 │
+│ T12  │ Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L │ ATLANDI │   0/0 │
+│ T13  │ Dinamik rota (#122): sapma önerisi, soğuma, kabul │ ATLANDI │   0/0 │
+└──────┴────────────────────────────────────────────┴─────────┴───────┘
+GENEL: FAIL  (83 sn)  → C:\Users\Batu\Desktop\martian-map-main\martian-map-main\docs\data\ekip\gorevli\b15_dogrulama_S2.json
+EXIT 1

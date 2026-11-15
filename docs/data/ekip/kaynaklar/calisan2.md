@@ -1758,3 +1758,63 @@ Tablodaki saat **kay?t olu?turma/eri?im saatidir**. Ge?mi? raporlar?n ?zg?n okum
 | 2026-11-15T09:29:33+03:00 | C:\Users\Batu\Desktop\martian-map-main\martian-map-main\docs\data\ekip\duyarlilik_analizi_tam.md; SHA256=49c41c13ba5ca762b2935016f69edd1089aa6fa55adb285e022cba05e62c4bef | — | Son UTF-8 rapor; 52 ölçüm, kod/birim denetimi ve JSON doğrulama; önceki bu rapor hash kaydını düzeltir | TAM OKUNDU | duyarlilik_analizi_tam.md |
 
 Kalıcı kullanıcı kuralı (2026-11-15): Mars g=3.71 m/s², sol=88775.244 s, yaklaşık 668.6 sol/yıl, Ls/mevsim, 25.19° eksen, 3396.19 km yarıçap/areoid ayrımı, P/T/toz, yaklaşık 590 W/m² güneş ve radyasyon bağlamı her işte denetlenir. Dünya sabitleri ve kurumlar arasındaki tanım/değer farkları raporda açıklanır. Her kaynak için okuma düzeyi ve erişim sorunu bu deftere eklenir; önceki kayıtlar üzerine yazılmaz. Bu paragraf görev anındaki kullanıcı talimatının kaydıdır.
+
+## A?B kabul verisi kaynak kayd? (2026-11-15)
+
+| Tarih/saat UTC | Kaynak yolu + commit | URL/DOI | Ne i?in bak?ld? | Durum | Rapor |
+|---|---|---|---|---|---|
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\contracts\grid.json @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | 1000x1000 grid metadata and px/resolution; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\api\planner\params.py @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | Mars gravity, presets and limits; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\api\planner\layers.py @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | real layer loading and connectivity/reachability; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\api\planner\route.py @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | plan_one route metrics and thresholds; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\layers\demo_scenarios.json @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | scenario endpoints and control context; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\layers\science_stops.json @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | science stop selection; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\layers\rover_stops.json @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | Curiosity stop selection; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\sim\data\sand_zones.json @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | 16 sand centers and radii; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\layers\slope.npy @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | slope/passability selection; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\layers\p_sand.npy @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | sand rule and categories; route acceptance dataset | TAM OKUNDU | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | C:\Users\Batu\Desktop\mm-pr\main-wt\sim\data\missions.json @ 7e09f930175e1f76328324cba917ba04c23ce1c6 | local source | mission limits and endpoints; route acceptance dataset | ?ZET | ab_ciftleri.json/.md |
+| 2026-11-15T08:16:42+00:00 | requests import/API edge-case attempt | ? | Live HTTP attempt; system environment lacked requests, response not measured | OKUNAMADI-requests module missing | ab_ciftleri.md |
+
+## A?B kabul verisi ve y?zlek denetimi kaynak kayd? (2026-11-15)
+
+| Tarih/saat UTC | Dosya + commit | URL | Ama? | Durum | Rapor |
+|---|---|---|---|---|---|
+| 2026-11-15T08:17:33+00:00 | `sim/data/rocks.json` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | kind say?s?, px bounds ve d_m/e?im/p_bedrock ?rnekleri; NumPy ?l??m? | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `ml/orbital/VALIDATION.md` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | 3 kaya = 123 b?y?k aday i?indeki etiket; 706 k???k varsay?lan | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `ml/orbital/export_sim.py` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | Exporter kind alan? ?retiyor mu, e?ik/filtre | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `sim/app/hazards.js` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | outcrop/shadow g?rsel kural? ve 0.13 oran? | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `layers/slope.npy` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | kind konumlar?nda derece ?rne?i | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `layers/p_bedrock.npy` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | kind konumlar?nda olas?l?k ?rne?i | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `contracts/grid.json` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | grid boyutu/resolution/px tan?m? | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `ml/orbital/labels.csv` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | etiket karar tablosu; bu turda okunmad? | OKUNAMADI-bu turda a??lmad? | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `sim/data/sand_zones.json` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | A-B kabul verisi 16 kum merkezi/radius | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `layers/science_stops.json` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | 4 science stop | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `layers/rover_stops.json` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | rover stop ?rnekleri | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `api/planner/route.py` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | plan_one preset sonu?lar?/edge planner | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `api/planner/layers.py` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | connectivity/reachability | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+| 2026-11-15T08:17:33+00:00 | `api/planner/params.py` @ f5fdcaddefb4068dc45baff60637197b607eb93a | yerel dosya | Mars/D?nya sabitleri ve presetler | TAM OKUNDU | yuzlek_veri_denetimi.md / ab_ciftleri.json/.md |
+
+## A?B ba??ms?z kum mesafesi do?rulamas? (2026-11-15T08:22:06+00:00)
+
+|UTC|Kaynak|URL|Ne i?in|Durum|Rapor|
+|---|---|---|---|---|---|
+|2026-11-15T08:22:06+00:00|`api/planner/route.py`, `sim/data/sand_zones.json`, `contracts/grid.json` @ e5806059629cf962ff6c537cd1de63e742169fc3|yerel kaynak|8 ?iftin balanced dense yolundaki h?cre merkezlerini 16 kum merkeziyle yeniden kar??la?t?rd?m; nearest id/distance/radius+40 boolean g?ncellendi|TAM OKUNDU|ab_ciftleri.json/.md|
+
+## Dinamik rota ba??ms?z beklenen de?erler kaynak kayd? (2026-11-15T08:26:32+00:00)
+
+|UTC|Kaynak yolu + HEAD|URL|Ama?|Durum|Rapor|
+|---|---|---|---|---|---|
+|2026-11-15T08:26:32+00:00|`sim/app/dynroute.js`, `api/planner/route.py`, `api/planner/cost.py`, `api/planner/params.py`, `layers/demo_scenarios.json`, `sim/data/missions.json`, `contracts/grid.json` @ cc81ac3220677d4a59342542de1ab7be6f2c7b2c|yerel|S1/S2/S3 budget thresholds and actual outbound/return expected values|TAM OKUNDU|dinamik_rota_beklenen.md/.json|
+
+## Dinamik rota UTF-8/sapma/uzun S3 ek kayd? (2026-11-15T08:37:10+00:00)
+
+|UTC|Kaynak|URL|Ama?|Durum|Rapor|
+|---|---|---|---|---|---|
+|2026-11-15T08:37:10+00:00|`sim/app/dynroute.js`, `api/planner/route.py`, mevcut katmanlar @ cc81ac3220677d4a59342542de1ab7be6f2c7b2c|yerel|UTF-8 d?zeltmesi, sentetik sapma delta ve 2.22km S3/80L e?i?i|TAM OKUNDU|dinamik_rota_beklenen.md/.json|
+## Dinamik rota UTF-8, sentetik sapma ve uzun S3 düzeltmesi (2026-11-15)
+
+|UTC|Kaynak|URL|Amaç|Durum|Rapor|
+|---|---|---|---|---|---|
+|2026-11-15|`sim/app/dynroute.js`, `api/planner/route.py`, `api/planner/cost.py`, current layers @ `cc81ac3220677d4a59342542de1ab7be6f2c7b2c`|yerel|UTF-8 düzeltmesi; sentetik 19.7 m sapma delta ve 2.22 km S3/80 L eşik testi|TAM OKUNDU|dinamik_rota_beklenen.md/.json|
+\n## Dinamik rota UTF-8 / sapma / uzun S3 doğrulama kaydı (2026-11-15)\n\n|Tarih|Kaynak|Ne için|Durum|Rapor|\n|---|---|---|---|---|\n|2026-11-15|sim/app/dynroute.js, pi/planner/route.py, pi/planner/cost.py, gerçek katmanlar @ cc81ac3220677d4a59342542de1ab7be6f2c7b2c|UTF-8 bayt kontrolü; sentetik 19.7 m sapma ve S3/80 L uzun rota tetik metreleri; eski ek satırda karakter kodlaması bozulduğu için temiz tekrar kayıt|TAM OKUNDU|dinamik_rota_beklenen.md / .json|\n

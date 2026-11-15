@@ -1,0 +1,74 @@
+  PASS  [ON] API http://127.0.0.1:8000/assumptions çalışıyor  — HTTP 200
+  PASS  [ON] API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)  — synthetic=false 1000x1000 @ 2 m — "Gale / Mount Sharp boxwork bolgesi (Curi"
+  PASS  [ON] API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)  — HTTP 422
+  PASS  [ON] sim sunucusu http://127.0.0.1:8010/sim/  — betik başlattı / yeniden kullandı
+
+== T12 özel görev
+  PASS  [T12] A–B çiftleri hazır: 9 çift (4 kumlu, 5 kumsuz), 6 geçilmez nokta  — ab_ciftleri_gorevli.json; 7 /route denemesi
+  PASS  [T12] seçim ekranında özel görev kartı (mission-custom) ve düğmesi (mission-go-custom) var  — {"card":true,"go":true}
+  PASS  [T12] "Haritayı aç" → harita ekranı (mappicker)  — screen=picker
+  PASS  [T12] test kancası window.__mm.picker { setA, setB, compute, state, shareUrl } var  — ok
+  PASS  [T12] harita ekranı öğeleri (mp-warn, mp-eta, mp-info, mp-compute, mp-share, mp-o2, mp-back) var  — eksik: 
+  PASS  [T12] T12b: geçilmez A=653,501 (44°): uyarı metni "3 m" ve eğim doğru  — beklenen "A: Burası 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…" | görülen "A: Burası 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altı
+  PASS  [T12] T12b: geçilmez A=653,501: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Burası 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 3 m uzakta; bu i
+  PASS  [T12] T12b: geçilmez A=852,725 (46°): uyarı metni "4 m" ve eğim doğru  — beklenen "A: Burası 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…" | görülen "A: Burası 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altı
+  PASS  [T12] T12b: geçilmez A=852,725: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Burası 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 4 m uzakta; bu i
+  PASS  [T12] T12b: geçilmez A=386,565 (33°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Burası 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…" | görülen "A: Burası 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altı
+  PASS  [T12] T12b: geçilmez A=386,565: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Burası 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i
+  PASS  [T12] T12b: geçilmez A=409,724 (25°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Burası 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…" | görülen "A: Burası 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altı
+  PASS  [T12] T12b: geçilmez A=409,724: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Burası 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i
+  PASS  [T12] T12b: geçilmez A=393,704 (31°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Burası 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…" | görülen "A: Burası 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altı
+  PASS  [T12] T12b: geçilmez A=393,704: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Burası 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i
+  PASS  [T12] T12b: geçilmez A=437,702 (26°): uyarı metni "2 m" ve eğim doğru  — beklenen "A: Burası 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…" | görülen "A: Burası 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altı
+  PASS  [T12] T12b: geçilmez A=437,702: hesapla düğmesi kapalı, canCompute=false  — {"dis":true,"can":false}
+  PASS  [T12] T12b: geçilmez nokta B olarak seçilince uyarı "B:" ile başlar  — B: Burası 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i
+  PASS  [T12] T12b: geçilebilir çiftte uyarı boş, hesaplanabilir  — {"warn":"","can":true}
+  PASS  [T12] T12b: A–B 15 m'den yakınsa "çok kısa" uyarısı  — A ile B arası çok kısa: en az 15 m uzaklıkta farklı noktalar seç.
+  PASS  [T12] T12a: gerçek harita tıklamasıyla A ve B seçilir (±2 px)  — A=540,594 B=304,579 beklenen 540,595→304,580 (tıklama sırası A/B ya da B/A: sıra durumuna bağlı)
+  PASS  [T12] T12a: canlı mesafe/süre (mp-eta) kuş uçuşu ve 0,67056 m/s referansıyla tutarlı  — beklenen "Kuş uçuşu 473 m · tahmini süre ≈ 12 dk" | görülen "Kuş uçuşu 473 m · tahmini süre ≈ 12 dk"
+  PASS  [T12] T12d: shareUrl() aynı A/B'yi taşır (virgül kodu çözülünce ?a=c,r&b=c,r)  — beklenen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 | görülen http://127.0.0.1:8010/sim/?a=540,595&b=304,580
+  PASS  [T12] T12d (kozmetik): bağlantı okunaklı biçimde: virgül %2C ile kodlanmamış  — beklenen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 | görülen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 (URLSearchParams virgülü %2C yapıyor; işlev etk
+  PASS  [T12] T12d: paylaşım düğmesi (mp-share) aynı URL'yi üretir (panoya ya da prompt'a)  — pano=http://127.0.0.1:8010/sim/?a=540,595&b=304,580 prompt=null
+  PASS  [T12] T12e: "Kısıtlı O₂ bütçesi (80 L)" işaretlenince state.o2 = 80  — o2=80
+  PASS  [T12] T12e: paylaşım URL'si &o2=80 içerir  — http://127.0.0.1:8010/sim/?a=540,595&b=304,580&o2=80
+  PASS  [T12] T12e: hesapla → brifing  — screen=briefing
+  PASS  [T12] T12e: görev limitleri O₂ = 80 L ve brifingde 80 görünür  — {"id":"CUSTOM","o2":80,"txt":"CUSTOM GÖREV BRİFİNGİ Özel görev  Kendi seçtiğin iki nokta arasında yürüyeceksin. Rota planlayıcıdan gelir; kum uyarısı yalnız rot
+  PASS  [T12] T12e: 3 rota kartı geldi (80 L bütçede durum rozetleri kaydedildi; NO-GO beklenebilir)  — [{"k":"shortest","why":null},{"k":"balanced","why":null},{"k":"safest","why":null}]
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)  — {"can":true,"warn":""}
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)  — screen=briefing
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): 3 rota kartı, kaynak api  — {"n":3,"src":"api,api,api","why":null}
+  PASS  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): yürüyüş başlar (walk, durum=auto)  — screen=walk
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)  — beklenen {"id":"sand_14","minDistM":18,"thresholdM":56.2} | görülen {"id":"sand_14","min":17,"thr":56.2}
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)  — {"hasSand":true,"fired":true,"replanned":true,"rep":false,"toast":"Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı.","diag":{"paused":false,"st
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): replan BAŞARILI: toast'ta "başarısız"/"failed" yok  — toast="Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı."
+  PASS  [T12] T12c P1 540,595→304,580 (473 m, kum VAR): bu çiftte /replan, /step vb. 422 yok  — yok
+  FAIL  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): hedefte karne açılır  — screen=walk
+  FAIL  [T12] T12a P1 540,595→304,580 (473 m, kum VAR): "Başka görev" → seçime döner (özel kart yine var)  — screen=walk
+  PASS  [T12] T12d: ?a=&b= doğrudan brifinge açar (aynı A/B, O₂ 420 L)  — {"id":"CUSTOM","a":[540,595],"b":[304,580],"o2":420,"intro":false,"brief":true}
+  PASS  [T12] T12d: ?a=&b=&o2=80 doğrudan brifinge açar (aynı A/B, O₂ 80 L)  — {"id":"CUSTOM","a":[540,595],"b":[304,580],"o2":80,"intro":false,"brief":true}
+  PASS  [T12] T12d: geçersiz ?a=5000,5&b=3,3 → özel görev açılmaz, normal intro  — {"screen":"intro","sel":null}
+  PASS  [T6] konsolda beklenmeyen hata yok (0 hata, 0 tanesi bilinen/hariç)
+
+┌──────┬────────────────────────────────────────────┬─────────┬───────┐
+│ ON   │ Ön koşul: API + sim sunucusu               │ PASS    │   4/4 │
+│ T1   │ S1/S2/S3 tam akış                          │ ATLANDI │   0/0 │
+│ T2   │ L taraması: lejant Dikkat + Geçilmez       │ ATLANDI │   0/0 │
+│ T3   │ Kum olayı radius_m+40 m                    │ ATLANDI │   0/0 │
+│ T4   │ 'mission:arrived' window olayı             │ ATLANDI │   0/0 │
+│ T5   │ HUD: Zemin (model) + Gale ortam (REMS)     │ ATLANDI │   0/0 │
+│ T6   │ Konsolda hata yok                          │ PASS    │   1/1 │
+│ T7   │ ?perf=1 probu                              │ ATLANDI │   0/0 │
+│ T8   │ Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev │ ATLANDI │   0/0 │
+│ T9   │ Gerçek klavye: WASD R L H T ? M            │ ATLANDI │   0/0 │
+│ T10  │ TR/EN: boş anahtar / yer tutucu yok        │ ATLANDI │   0/0 │
+│ T11  │ Yerleşim 1280x720 + 1920x1080: taşma / örtüşme │ ATLANDI │   0/0 │
+│ T12  │ Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L │ FAIL    │ 48/50 │
+│ T13  │ Dinamik rota (#122): sapma önerisi, soğuma, kabul │ ATLANDI │   0/0 │
+└──────┴────────────────────────────────────────────┴─────────┴───────┘
+GENEL: FAIL  (136 sn)  → C:\Users\Batu\Desktop\martian-map-main\martian-map-main\docs\data\ekip\gorevli\p1_diag2.json
+EXIT 1

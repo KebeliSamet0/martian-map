@@ -1,0 +1,634 @@
+{
+  "source": {
+    "head": "e5806059629cf962ff6c537cd1de63e742169fc3",
+    "grid": [
+      1000,
+      1000
+    ],
+    "res_m": 2,
+    "synthetic": false,
+    "pairs_count": 8,
+    "selection_counts": {
+      "trigger": 4,
+      "far": 5,
+      "border": 5
+    },
+    "independent_nearest_sand": "independently recomputed dense balanced paths ? 16 sand centers ? 2m"
+  },
+  "pairs": [
+    {
+      "id": "AB01",
+      "a": [
+        791,
+        844
+      ],
+      "b": [
+        518,
+        999
+      ],
+      "straight_m": 627.9,
+      "presets": {
+        "shortest": {
+          "km": 2.72,
+          "min": 120.8,
+          "kcal": 597.0,
+          "o2_L": 249.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 2.85,
+          "min": 122.3,
+          "kcal": 602.0,
+          "o2_L": 251.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 3.03,
+          "min": 124.8,
+          "kcal": 611.0,
+          "o2_L": 254.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_9",
+        "min_route_dist_m": 10.03,
+        "threshold_m": 51.8,
+        "triggers": true,
+        "min_any_m": 10.03
+      }
+    },
+    {
+      "id": "AB03",
+      "a": [
+        608,
+        580
+      ],
+      "b": [
+        413,
+        577
+      ],
+      "straight_m": 390.0,
+      "presets": {
+        "shortest": {
+          "km": 0.45,
+          "min": 15.4,
+          "kcal": 74.0,
+          "o2_L": 31.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 0.46,
+          "min": 15.6,
+          "kcal": 75.0,
+          "o2_L": 31.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 0.49,
+          "min": 16.2,
+          "kcal": 77.0,
+          "o2_L": 32.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_14",
+        "min_route_dist_m": 3.62,
+        "threshold_m": 56.2,
+        "triggers": true,
+        "min_any_m": 3.62
+      }
+    },
+    {
+      "id": "AB04",
+      "a": [
+        489,
+        600
+      ],
+      "b": [
+        539,
+        319
+      ],
+      "straight_m": 570.8,
+      "presets": {
+        "shortest": {
+          "km": 0.62,
+          "min": 19.9,
+          "kcal": 94.0,
+          "o2_L": 39.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 0.65,
+          "min": 20.1,
+          "kcal": 94.0,
+          "o2_L": 39.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 0.7,
+          "min": 21.3,
+          "kcal": 99.0,
+          "o2_L": 41.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_14",
+        "min_route_dist_m": 17.35,
+        "threshold_m": 56.2,
+        "triggers": true,
+        "min_any_m": 17.35
+      }
+    },
+    {
+      "id": "AB05",
+      "a": [
+        400,
+        207
+      ],
+      "b": [
+        134,
+        679
+      ],
+      "straight_m": 1083.6,
+      "presets": {
+        "shortest": {
+          "km": 1.85,
+          "min": 60.0,
+          "kcal": 282.0,
+          "o2_L": 117.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 1.88,
+          "min": 60.4,
+          "kcal": 282.0,
+          "o2_L": 118.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 2.11,
+          "min": 64.1,
+          "kcal": 296.0,
+          "o2_L": 124.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_2",
+        "min_route_dist_m": 0.72,
+        "threshold_m": 49.7,
+        "triggers": true,
+        "min_any_m": 0.72
+      }
+    },
+    {
+      "id": "AB09",
+      "a": [
+        877,
+        678
+      ],
+      "b": [
+        774,
+        558
+      ],
+      "straight_m": 316.3,
+      "presets": {
+        "shortest": {
+          "km": 0.35,
+          "min": 19.7,
+          "kcal": 100.0,
+          "o2_L": 42.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 0.35,
+          "min": 19.8,
+          "kcal": 101.0,
+          "o2_L": 42.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 0.36,
+          "min": 19.8,
+          "kcal": 101.0,
+          "o2_L": 42.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_3",
+        "min_route_dist_m": 396.31,
+        "threshold_m": 65.0,
+        "triggers": false,
+        "min_any_m": 396.31
+      }
+    },
+    {
+      "id": "AB10",
+      "a": [
+        801,
+        147
+      ],
+      "b": [
+        806,
+        366
+      ],
+      "straight_m": 438.1,
+      "presets": {
+        "shortest": {
+          "km": 0.57,
+          "min": 26.6,
+          "kcal": 132.0,
+          "o2_L": 55.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 0.58,
+          "min": 26.7,
+          "kcal": 132.0,
+          "o2_L": 55.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 0.6,
+          "min": 27.0,
+          "kcal": 133.0,
+          "o2_L": 55.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_3",
+        "min_route_dist_m": 369.53,
+        "threshold_m": 65.0,
+        "triggers": false,
+        "min_any_m": 369.53
+      }
+    },
+    {
+      "id": "AB12",
+      "a": [
+        217,
+        702
+      ],
+      "b": [
+        173,
+        358
+      ],
+      "straight_m": 693.6,
+      "presets": {
+        "shortest": {
+          "km": 0.77,
+          "min": 38.2,
+          "kcal": 185.0,
+          "o2_L": 77.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 0.78,
+          "min": 38.3,
+          "kcal": 186.0,
+          "o2_L": 77.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 0.8,
+          "min": 38.6,
+          "kcal": 188.0,
+          "o2_L": 78.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_6",
+        "min_route_dist_m": 355.35,
+        "threshold_m": 58.7,
+        "triggers": false,
+        "min_any_m": 355.35
+      }
+    },
+    {
+      "id": "AB13",
+      "a": [
+        704,
+        529
+      ],
+      "b": [
+        762,
+        416
+      ],
+      "straight_m": 254.0,
+      "presets": {
+        "shortest": {
+          "km": 0.32,
+          "min": 17.4,
+          "kcal": 88.0,
+          "o2_L": 37.0,
+          "status": "GO"
+        },
+        "balanced": {
+          "km": 0.34,
+          "min": 17.5,
+          "kcal": 89.0,
+          "o2_L": 37.0,
+          "status": "GO"
+        },
+        "safest": {
+          "km": 0.35,
+          "min": 17.7,
+          "kcal": 90.0,
+          "o2_L": 37.0,
+          "status": "GO"
+        }
+      },
+      "nearest_sand": {
+        "id": "sand_14",
+        "min_route_dist_m": 408.31,
+        "threshold_m": 56.2,
+        "triggers": false,
+        "min_any_m": 408.31
+      }
+    }
+  ],
+  "impassable": [
+    {
+      "px": [
+        409,
+        724
+      ],
+      "slope_deg": 25.17,
+      "p_sand": 0.0009,
+      "nearest_passable_px": [
+        408,
+        724
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "ridge_steep"
+    },
+    {
+      "px": [
+        393,
+        704
+      ],
+      "slope_deg": 30.98,
+      "p_sand": 0.0009,
+      "nearest_passable_px": [
+        392,
+        704
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "ridge_steep"
+    },
+    {
+      "px": [
+        437,
+        702
+      ],
+      "slope_deg": 25.92,
+      "p_sand": 0.0009,
+      "nearest_passable_px": [
+        436,
+        702
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "ridge_steep"
+    },
+    {
+      "px": [
+        417,
+        443
+      ],
+      "slope_deg": 26.32,
+      "p_sand": 0.0007,
+      "nearest_passable_px": [
+        416,
+        443
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "ridge_steep"
+    },
+    {
+      "px": [
+        384,
+        421
+      ],
+      "slope_deg": 26.96,
+      "p_sand": 0.0007,
+      "nearest_passable_px": [
+        383,
+        421
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "ridge_steep"
+    },
+    {
+      "px": [
+        468,
+        558
+      ],
+      "slope_deg": 25.03,
+      "p_sand": 0.4116,
+      "nearest_passable_px": [
+        467,
+        558
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "sand_or_steep_fallback"
+    },
+    {
+      "px": [
+        440,
+        475
+      ],
+      "slope_deg": 26.22,
+      "p_sand": 0.3835,
+      "nearest_passable_px": [
+        439,
+        475
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "sand_or_steep_fallback"
+    },
+    {
+      "px": [
+        346,
+        427
+      ],
+      "slope_deg": 61.91,
+      "p_sand": 0.3835,
+      "nearest_passable_px": [
+        348,
+        427
+      ],
+      "nearest_passable_m": 4.0,
+      "class": "sand_or_steep_fallback"
+    },
+    {
+      "px": [
+        324,
+        415
+      ],
+      "slope_deg": 46.75,
+      "p_sand": 0.3761,
+      "nearest_passable_px": [
+        322,
+        416
+      ],
+      "nearest_passable_m": 4.47,
+      "class": "sand_or_steep_fallback"
+    },
+    {
+      "px": [
+        622,
+        598
+      ],
+      "slope_deg": 26.66,
+      "p_sand": 0.3723,
+      "nearest_passable_px": [
+        622,
+        597
+      ],
+      "nearest_passable_m": 2.0,
+      "class": "sand_or_steep_fallback"
+    }
+  ],
+  "stops": [
+    {
+      "id": "sci_1_sol4617",
+      "px": [
+        433.5,
+        525.2
+      ],
+      "sol": [
+        4617,
+        4634
+      ],
+      "name": "Boxwork inceleme alanı (sol 4617–4634)",
+      "type": "science"
+    },
+    {
+      "id": "sci_2_sol4635",
+      "px": [
+        421.2,
+        545.3
+      ],
+      "sol": [
+        4635,
+        4653
+      ],
+      "name": "Boxwork inceleme alanı (sol 4635–4653)",
+      "type": "science"
+    },
+    {
+      "id": "sci_3_sol4668",
+      "px": [
+        470.5,
+        589.1
+      ],
+      "sol": [
+        4668,
+        4803
+      ],
+      "name": "Boxwork inceleme alanı (sol 4668–4803)",
+      "type": "science"
+    },
+    {
+      "id": "sci_4_sol4869",
+      "px": [
+        491.3,
+        774.6
+      ],
+      "sol": [
+        4869,
+        4914
+      ],
+      "name": "Atacama sondaj alanı, katmanlı sülfat (sol 4869–4914)",
+      "type": "science"
+    },
+    {
+      "id": "msl_s117_d0384",
+      "px": [
+        479.8,
+        419.5
+      ],
+      "sol": 4580,
+      "name": "site 117 drive 384",
+      "type": "curiosity_rover"
+    },
+    {
+      "id": "msl_s117_d0420",
+      "px": [
+        477.8,
+        420.8
+      ],
+      "sol": 4580,
+      "name": "site 117 drive 420",
+      "type": "curiosity_rover"
+    }
+  ],
+  "edge_cases": [
+    {
+      "case": "same",
+      "start": [
+        433,
+        525
+      ],
+      "goal": [
+        433,
+        525
+      ],
+      "http_status": "not_live_tested",
+      "planner_status": "accepted",
+      "message": "route succeeded",
+      "straight_m": 0.0
+    },
+    {
+      "case": "out_of_grid",
+      "start": [
+        -1,
+        500
+      ],
+      "goal": [
+        433,
+        525
+      ],
+      "http_status": "not_live_tested",
+      "planner_status": "rejected",
+      "message": "Nokta ızgara dışında: [-1, 500] (genişlik 1000, yükseklik 1000)",
+      "straight_m": 869.44
+    },
+    {
+      "case": "impassable_B",
+      "start": [
+        433,
+        525
+      ],
+      "goal": [
+        485,
+        500
+      ],
+      "http_status": "not_live_tested",
+      "planner_status": "accepted",
+      "message": "route succeeded",
+      "straight_m": 115.39
+    },
+    {
+      "case": "shorter_than_15m",
+      "start": [
+        433,
+        525
+      ],
+      "goal": [
+        439,
+        525
+      ],
+      "http_status": "not_live_tested",
+      "planner_status": "accepted",
+      "message": "route succeeded",
+      "straight_m": 12.0
+    }
+  ]
+}

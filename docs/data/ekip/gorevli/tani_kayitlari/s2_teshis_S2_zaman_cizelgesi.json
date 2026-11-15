@@ -1,0 +1,429 @@
+{
+ "konsol": [],
+ "log": [
+  {
+   "t": 1007,
+   "k": "tick",
+   "s": 2,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3238,
+    4586
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 2013,
+   "k": "tick",
+   "s": 3,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3238,
+    4587
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 3006,
+   "k": "tick",
+   "s": 6,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3238,
+    4590
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 4010,
+   "k": "tick",
+   "s": 8,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3237,
+    4591
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 5001,
+   "k": "tick",
+   "s": 10,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3236,
+    4593
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 6011,
+   "k": "tick",
+   "s": 12,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4594
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 7009,
+   "k": "tick",
+   "s": 168,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 8007,
+   "k": "tick",
+   "s": 348,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 9004,
+   "k": "tick",
+   "s": 528,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 9919,
+   "k": "SICRAMA",
+   "total": 635,
+   "replanned": false
+  },
+  {
+   "t": 10005,
+   "k": "tick",
+   "s": 627,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 11001,
+   "k": "tick",
+   "s": 628,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 12001,
+   "k": "tick",
+   "s": 630,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 13001,
+   "k": "tick",
+   "s": 631,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 14011,
+   "k": "tick",
+   "s": 632,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 15001,
+   "k": "tick",
+   "s": 634,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 16003,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 17004,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 18203,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 19015,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 20010,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 21009,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  },
+  {
+   "t": 22010,
+   "k": "tick",
+   "s": 635,
+   "tot": 635,
+   "leg": null,
+   "P": [
+    3234,
+    4598
+   ],
+   "ms": "walking",
+   "mleg": "outbound",
+   "paused": false,
+   "st": "auto",
+   "hold": false,
+   "alert": null,
+   "flow": null,
+   "report": false
+  }
+ ]
+}
