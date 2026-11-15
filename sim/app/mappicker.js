@@ -3,8 +3,9 @@
 // Hiçbir şey uydurulmaz: eğim ve belirsizlik planlayıcı katmanlarından; durak bilgisi /grid yanıtından. API yoksa seçim yapılabilir, uyarı verilmez.
 import { el, button } from './screens.js';
 import { t } from './i18n.js';
-import { GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
+import { RES_M, GRID_W, GRID_H, IMPASSABLE_DEG, MIN_STRAIGHT_M, O2_LIMITED_L, cellInfo, nearestPassable, straightMeters, etaMinutes, buildCustomMission, shareQuery, inGrid } from './custommission.js';
 
+const ZOOM_MAX = 8, TILE_ZOOM_MIN = 1.5;   // 8× → 0,25 m/piksel karo dokusu (HiRISE)
 const CSS = `
 .mm-picker{position:fixed;inset:0;z-index:2400;display:grid;grid-template-columns:minmax(0,1fr) 340px;background:#0b0e13;color:#e8e6e1;font:14px/1.45 system-ui,sans-serif}
 .mm-picker-map{display:grid;place-items:center;min-width:0;min-height:0;background:#0b0e13}
@@ -19,6 +20,9 @@ const CSS = `
 .mm-picker .mp-info:empty{display:none}
 .mm-picker label{display:flex;gap:6px;align-items:center;cursor:pointer}
 .mm-picker .mp-fine{font-size:12px;color:#9aa1ad}
+.mm-picker .mp-zoom{display:flex;gap:6px;align-items:center}
+.mm-picker .mp-zoom button{min-width:38px}
+.mm-picker canvas.mp-drag{cursor:grabbing}
 @media(max-width:900px){.mm-picker{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}}
 `;
 
@@ -56,8 +60,41 @@ export function openMapPicker(opts) {
 
   // Izgara (px) ↔ dünya doğrusal (eqc): köşelerden iki nokta yeter.
   const w0 = coords.pxToWorld([0, 0]), w1 = coords.pxToWorld([GRID_W, GRID_H]);
-  const toCanvas = ([c, r]) => [(c / GRID_W) * cv.width, (r / GRID_H) * cv.height];
-  const toPx = (cx, cy) => [Math.floor((cx / cv.width) * GRID_W), Math.floor((cy / cv.height) * GRID_H)];
+  // Görünüm: ızgara birimiyle kare pencere {x0, y0, w}; w = 1000 tüm harita, küçüldükçe yakınlaşır (en fazla ZOOM_MAX ×).
+  const view = { x0: 0, y0: 0, w: GRID_W };
+  const zoomOf = () => GRID_W / view.w;
+  const clampView = () => { view.w = Math.max(GRID_W / ZOOM_MAX, Math.min(GRID_W, view.w)); view.x0 = Math.max(0, Math.min(GRID_W - view.w, view.x0)); view.y0 = Math.max(0, Math.min(GRID_H - view.w, view.y0)); };
+  const toCanvas = ([c, r]) => [((c - view.x0) / view.w) * cv.width, ((r - view.y0) / view.w) * cv.height];
+  const toPx = (cx, cy) => [Math.floor(view.x0 + (cx / cv.width) * view.w), Math.floor(view.y0 + (cy / cv.height) * view.w)];
+  const zoomAt = (cxFrac, cyFrac, factor) => {   // imleç altındaki nokta yerinde kalır
+    const gx = view.x0 + cxFrac * view.w, gy = view.y0 + cyFrac * view.w;
+    view.w /= factor; clampView(); view.x0 = gx - cxFrac * view.w; view.y0 = gy - cyFrac * view.w; clampView(); draw();
+  };
+
+  // Yakında yüksek çözünürlük: görünür pencere için HiRISE doku karoları (3B sahnenin kullandığı /t/k/cx_cy.jpg dosyaları).
+  const tileBase = overviewUrl.replace(/\/[^/]*$/, ''), tileCache = new Map();
+  let raf = 0; const redraw = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); }); };
+  const getTile = (k, cx, cy) => {
+    const key = `${k}/${cx}_${cy}`; let e = tileCache.get(key);
+    if (!e) { e = { img: new Image(), ok: false }; e.img.onload = () => { e.ok = true; redraw(); }; e.img.src = `${tileBase}/t/${key}.jpg`; tileCache.set(key, e); }
+    return e.ok ? e.img : null;
+  };
+  const tileMpp = (k) => (geo.resX * 128 * 2 ** k) / (k === 0 ? 512 : 256);   // karo doku çözünürlüğü (m/piksel)
+  const drawTiles = () => {
+    if (zoomOf() < TILE_ZOOM_MIN) return;
+    const mpp = (view.w * RES_M) / cv.width;                   // tuvalin bir pikseli kaç metre
+    let k = 0; while (k < 7 && tileMpp(k + 1) <= mpp) k++;      // yeterince keskin en kaba düzey
+    const sx = geo.resX * 128 * 2 ** k, sz = geo.resZ * 128 * 2 ** k;
+    const gxOf = (X) => ((X - w0[0]) / (w1[0] - w0[0])) * GRID_W, gyOf = (Z) => ((Z - w0[1]) / (w1[1] - w0[1])) * GRID_H;
+    const fx = (X) => ((gxOf(X) - view.x0) / view.w) * cv.width, fy = (Z) => ((gyOf(Z) - view.y0) / view.w) * cv.height;
+    const wxOf = (gx) => w0[0] + (gx / GRID_W) * (w1[0] - w0[0]), wzOf = (gy) => w0[1] + (gy / GRID_H) * (w1[1] - w0[1]);
+    const xa = wxOf(view.x0), xb = wxOf(view.x0 + view.w), za = wzOf(view.y0), zb = wzOf(view.y0 + view.w);
+    for (let ty = Math.floor(za / sz); ty <= Math.floor(zb / sz); ty++) for (let tx = Math.floor(xa / sx); tx <= Math.floor(xb / sx); tx++) {
+      if (tx < 0 || ty < 0) continue;
+      const im = getTile(k, tx, ty); if (!im) continue;
+      g.drawImage(im, fx(tx * sx), fy(ty * sz), fx((tx + 1) * sx) - fx(tx * sx) + 0.6, fy((ty + 1) * sz) - fy(ty * sz) + 0.6);
+    }
+  };
 
   // Ön-render: geçilmez alan ve belirsizlik katmanı (1000×1000 → canvas ölçeği).
   const paintLayer = (arr, fn) => {
@@ -71,13 +108,17 @@ export function openMapPicker(opts) {
   const entLayer = paintLayer(layers.entropy, (e) => (e >= 0.6 ? [180, 120, 255, Math.round(40 + 90 * Math.min(1, (e - 0.6) / 0.4))] : null));
 
   function draw() {
+    zoomLbl.textContent = `${zoomOf().toFixed(1)}×`; zout.disabled = zoomOf() <= 1.001; zin.disabled = zoomOf() >= ZOOM_MAX - 0.001;
     g.clearRect(0, 0, cv.width, cv.height);
     if (imgOk) {
       const u = (x) => (x / geo.sizeX) * img.naturalWidth, v = (z) => (z / geo.sizeZ) * img.naturalHeight;
-      g.drawImage(img, u(w0[0]), v(w0[1]), u(w1[0] - w0[0]), v(w1[1] - w0[1]), 0, 0, cv.width, cv.height);
+      const wx = (f) => w0[0] + f * (w1[0] - w0[0]), wz = (f) => w0[1] + f * (w1[1] - w0[1]);
+      g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+      g.drawImage(img, u(wx(view.x0 / GRID_W)), v(wz(view.y0 / GRID_H)), u(wx((view.x0 + view.w) / GRID_W) - wx(view.x0 / GRID_W)), v(wz((view.y0 + view.w) / GRID_H) - wz(view.y0 / GRID_H)), 0, 0, cv.width, cv.height);
+      drawTiles();
     } else { g.fillStyle = '#1a2029'; g.fillRect(0, 0, cv.width, cv.height); }
-    if (st.layersOn.ent && entLayer) g.drawImage(entLayer, 0, 0, cv.width, cv.height);
-    if (st.layersOn.imp && impLayer) g.drawImage(impLayer, 0, 0, cv.width, cv.height);
+    if (st.layersOn.ent && entLayer) g.drawImage(entLayer, view.x0, view.y0, view.w, view.w, 0, 0, cv.width, cv.height);
+    if (st.layersOn.imp && impLayer) { g.imageSmoothingEnabled = false; g.drawImage(impLayer, view.x0, view.y0, view.w, view.w, 0, 0, cv.width, cv.height); g.imageSmoothingEnabled = true; }
     if (st.layersOn.rover) for (const s of grid.rover_stops ?? []) { const [x, y] = toCanvas(s.px); g.fillStyle = 'rgba(242,169,59,.9)'; g.beginPath(); g.arc(x, y, 3.2, 0, 7); g.fill(); }
     if (st.layersOn.sci) for (const s of grid.science_stops ?? []) {
       const [x, y] = toCanvas(s.px); g.strokeStyle = '#4fd1ff'; g.lineWidth = 3; g.fillStyle = 'rgba(79,209,255,.25)';
@@ -111,9 +152,15 @@ export function openMapPicker(opts) {
   const compute = button(t('custom.compute')); compute.dataset.testid = 'mp-compute';
   const share = button(t('custom.share'), 'ghost'); share.dataset.testid = 'mp-share';
   const back = button(t('custom.back'), 'ghost'); back.dataset.testid = 'mp-back';
+  const zin = button('+', 'ghost'), zout = button('−', 'ghost'), zreset = button(t('custom.zoom.reset'), 'ghost');
+  zin.dataset.testid = 'mp-zoom-in'; zout.dataset.testid = 'mp-zoom-out'; zreset.dataset.testid = 'mp-zoom-reset';
+  zin.setAttribute('aria-label', t('custom.zoom.in')); zout.setAttribute('aria-label', t('custom.zoom.out'));
+  const zoomRow = el('div', 'mp-zoom'); const zoomLbl = el('span', 'mp-fine'); zoomLbl.dataset.testid = 'mp-zoom-label'; zoomRow.append(zout, zin, zreset, zoomLbl);
+  const zoomHint = el('div', 'mp-fine', t('custom.zoom.hint'));
+  zin.onclick = () => zoomAt(0.5, 0.5, 1.6); zout.onclick = () => zoomAt(0.5, 0.5, 1 / 1.6); zreset.onclick = () => { view.x0 = 0; view.y0 = 0; view.w = GRID_W; draw(); };
   const row = el('div', 'mp-row'); row.append(compute, share, back);
   const note = el('div', 'mp-fine', t('custom.eta.note'));
-  side.append(title, help, abLine, etaLine, warnBox, infoBox, toggles, o2Box, o2Hint, row, note);
+  side.append(title, help, zoomRow, zoomHint, abLine, etaLine, warnBox, infoBox, toggles, o2Box, o2Hint, row, note);
 
   const fmt = (p) => (p ? `${p[0]}, ${p[1]}` : '—');
   function stopInfo(p) {
@@ -163,7 +210,21 @@ export function openMapPicker(opts) {
   };
   compute.onclick = doCompute;
   back.onclick = () => { close(); onBack?.(); };
+  // Tekerlek = yakınlaştır (imleç noktasında); sürükle = kaydır; kısa tık = nokta seç.
+  const frac = (e) => { const rc = cv.getBoundingClientRect(); return [(e.clientX - rc.left) / rc.width, (e.clientY - rc.top) / rc.height]; };
+  cv.addEventListener('wheel', (e) => { e.preventDefault(); const [fx, fy] = frac(e); zoomAt(fx, fy, e.deltaY < 0 ? 1.25 : 1 / 1.25); }, { passive: false });
+  let drag = null, moved = false;
+  cv.addEventListener('pointerdown', (e) => { if (e.button !== 0) return; drag = { x: e.clientX, y: e.clientY, x0: view.x0, y0: view.y0 }; moved = false; });
+  cv.addEventListener('pointermove', (e) => {
+    if (!drag) return; const rc = cv.getBoundingClientRect(), dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!moved && Math.hypot(dx, dy) < 5) return;
+    moved = true; cv.classList.add('mp-drag'); try { cv.setPointerCapture(e.pointerId); } catch {}
+    view.x0 = drag.x0 - (dx / rc.width) * view.w; view.y0 = drag.y0 - (dy / rc.height) * view.w; clampView(); draw();
+  });
+  const endDrag = () => { drag = null; cv.classList.remove('mp-drag'); };
+  cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
   cv.addEventListener('click', (e) => {
+    if (moved) { moved = false; return; }
     const rc = cv.getBoundingClientRect(); const [c, r] = toPx(((e.clientX - rc.left) / rc.width) * cv.width, ((e.clientY - rc.top) / rc.height) * cv.height);
     setPoint(st.next, c, r);
   });
@@ -171,7 +232,7 @@ export function openMapPicker(opts) {
   addEventListener('keydown', onKey);
   function close() { removeEventListener('keydown', onKey); wrap.remove(); if (window.__mm?.picker === api) delete window.__mm.picker; }
 
-  const api = { close, setA: (c, r) => setPoint('a', c, r), setB: (c, r) => setPoint('b', c, r), compute: doCompute, shareUrl,
+  const api = { close, view: () => ({ ...view, zoom: zoomOf() }), zoomBy: (f, fx = 0.5, fy = 0.5) => zoomAt(fx, fy, f), setA: (c, r) => setPoint('a', c, r), setB: (c, r) => setPoint('b', c, r), compute: doCompute, shareUrl,
     state: () => ({ a: st.a, b: st.b, o2: st.o2, warn: st.warn, info: st.info, straightM: st.a && st.b ? straightMeters(st.a, st.b) : null,
       etaMin: st.a && st.b ? etaMinutes(straightMeters(st.a, st.b)) : null, canCompute: !compute.disabled, nearA: st.nearA ?? null, nearB: st.nearB ?? null }) };
   window.__mm = window.__mm ?? {}; window.__mm.picker = api;
