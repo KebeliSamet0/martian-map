@@ -1,6 +1,6 @@
 # Martian Map: project page text (EN)
 
-> **Martian Map** · Team SÜNOVA · NASA Space Apps Challenge 2026, Konya · Code: https://github.com/KebeliSamet0/martian-map · Demo video (30 s): VIDEO_LINK
+> **Martian Map** · Team SÜNOVA · NASA Space Apps Challenge 2026, Konya · Code: https://github.com/KebeliSamet0/martian-map · Demo video (30 s): https://drive.google.com/file/d/1jOECtoLMXyspmYlgoZ585UGYudv-8io3/view
 > Every number below carries its source in `[brackets]` (paths are relative to the repo root).
 
 ## Summary
@@ -89,7 +89,7 @@ Selçuk University, Konya (Türkiye), NASA Space Apps Challenge 2026, challenge 
 |---|---|---|
 | Project name | Martian Map | Ready |
 | High-level summary | "Summary" above (first paragraph) | Ready |
-| Demo video (≤ 30 s, public link) | `MartianMap_demo_30s.mp4` (29.8 s, English captions + ElevenLabs voice-over), unlisted YouTube | Paste VIDEO_LINK |
+| Demo video (≤ 30 s, public link) | https://drive.google.com/file/d/1jOECtoLMXyspmYlgoZ585UGYudv-8io3/view (29.8 s, English captions + voice-over, Google Drive, anyone with the link) | Ready |
 | Final project link | https://github.com/KebeliSamet0/martian-map (public) | Ready |
 | Project details | "How it works", "What makes it different", "Validation", "Limitations" | Ready |
 | NASA data used | "NASA data used" table + `REFERENCES.md` §NASA and USGS data | Ready |

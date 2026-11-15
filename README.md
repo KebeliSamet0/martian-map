@@ -4,7 +4,7 @@
 
 Team **SÜNOVA** · NASA Space Apps Challenge 2026 · Konya, Türkiye · Challenge: *Interplanetary Survival Guide: Martian Map*
 
-▶ **30-second demo video:** VIDEO_LINK  
+▶ **30-second demo video:** https://drive.google.com/file/d/1jOECtoLMXyspmYlgoZ585UGYudv-8io3/view  
 📄 Project text: [`docs/submission/PROJECT.md`](docs/submission/PROJECT.md) · Model card: [`MODEL_CARD.md`](docs/submission/MODEL_CARD.md) · References: [`REFERENCES.md`](docs/submission/REFERENCES.md)
 
 | Plan: three routes, each with a price | Rehearse: Curiosity's real photo, read by our model |

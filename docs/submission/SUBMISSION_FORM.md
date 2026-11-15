@@ -1,6 +1,6 @@
 # Space Apps submission form — paste-ready (Team SÜNOVA)
 
-Fill `VIDEO_LINK` with the unlisted YouTube URL of `MartianMap_demo_30s.mp4` (29.8 s, English captions). Longer source text: [`PROJECT.md`](PROJECT.md).
+Demo video: `MartianMap_demo_30s_sesli.mp4` (29.8 s, English captions and voice-over), public Google Drive link below. Longer source text: [`PROJECT.md`](PROJECT.md).
 
 ## Project name
 Martian Map
@@ -12,7 +12,7 @@ Interplanetary Survival Guide: Martian Map
 Martian Map is an astronaut EVA rehearsal simulator on real Mars terrain. On the Gale Crater / Mount Sharp boxwork area that Curiosity explored in 2025–2026, the astronaut compares three planned routes by time, energy, oxygen and radiation dose, then walks the chosen one in 3D while the life-support budget drains. The route is re-planned live from wherever the astronaut stands; a helmet camera shows Curiosity's real Navcam photo of that spot read by our AI4Mars-trained terrain model; a scanner marks caution / no-go ground and where the model has little evidence. Every number comes from NASA data, a published equation or a labelled planning assumption.
 
 ## Link to final project (demo)
-VIDEO_LINK
+https://drive.google.com/file/d/1jOECtoLMXyspmYlgoZ585UGYudv-8io3/view
 
 ## Link to project repository
 https://github.com/KebeliSamet0/martian-map
