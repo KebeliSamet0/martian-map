@@ -11,8 +11,8 @@
       "objective": "Kum adayını dolaşarak hedef noktaya, Atacama sondaj durağının güneyine ulaş ve numune al."
     },
     "S3": {
-      "title": "Yarım O₂ tüpü",
-      "brief": "Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedef yaklaşık 0,55 km uzakta ve oraya varmak garanti değil. Oksijeni izle; dönüş noktasını kaçırma.",
+      "title": "Kısıtlı O₂ bütçesi",
+      "brief": "Bu senaryoda oksijen bütçen 80 L'ye düşürüldü. Hedef yaklaşık 0,55 km uzakta ve oraya varmak garanti değil. Oksijeni izle; dönüş kararını zamanında ver.",
       "objective": "Oksijen yeterse Atacama'ya ulaş; yetmezse zamanında geri dön."
     }
   },
@@ -24,6 +24,7 @@
     "effort": "Efor",
     "load": "Yük",
     "return": "Üsse dönüş",
+    "ground_model_hint": "p_sand, modelin kum olasılığı skorudur; 0,4 ve üstü dikkat eşiğidir. Zemin ölçümü, kayma yüzdesi ya da insan için geçiş sınırı değildir.",
     "status_go": "GO · Bütçe içinde",
     "status_caution": "DİKKAT · Sınıra yaklaşılıyor",
     "status_nogo": "NO-GO · Sınır aşıldı ya da dönüş payı yok"
@@ -35,8 +36,8 @@
     "unknown": "Model emin değil"
   },
   "alerts": {
-    "sand": "Önünde kum var. Rota yeniden hesaplanıyor.",
-    "replan_done": "Yeni rota hazır. Kumun çevresinden geçiliyor.",
+    "sand": "Kum uyarısı: Curiosity kum dalgalarını geçerken %77'ye varan kayma yaşadı. Bu rover verisidir, insan sınırı değil. Rota yeniden hesaplanıyor.",
+    "replan_done": "Yeni rota hazır; bildirilen kum alanı planlamaya eklendi. Bu bir model önerisidir.",
     "limit_o2": "Oksijen sınırına ulaşıldı. Üsse dönüşe başla.",
     "limit_time": "Süre sınırına ulaşıldı. Üsse dönüşe başla.",
     "turn_back": "Dönüş payı tükeniyor. Geri dönme zamanı.",
