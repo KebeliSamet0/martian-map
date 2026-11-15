@@ -120,7 +120,7 @@ function renderAlign(c, side = Math.min(innerWidth, innerHeight)) {
     `<div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;background:rgba(14,10,8,.88);color:#f3e3d3;font:12px system-ui;pointer-events:auto;max-width:94vw;flex-wrap:wrap;justify-content:center">` +
     (fr && fr.n > 1 ? `<button class="mm-hc-prev">▲</button><span>${esc(fmt(T.frame, { i: fr.i + 1, n: fr.n }))}</span><button class="mm-hc-next">▼</button>` : '') +
     `<button class="mm-hc-back">${esc(T.btn_back)}</button><span style="opacity:.7;max-width:46ch">${esc(T.align_note)}</span></div>`;
-  document.body.append(root); S.alignEl = root;
+  document.body.append(root); S.alignEl = root; liveBadge();
   const setWipe = (f) => { A.wipe = Math.max(0, Math.min(1, f)); const x = left + side * A.wipe; root.querySelector('.mm-hc-photo').style.clipPath = `inset(0 ${(1 - A.wipe) * 100}% 0 0)`; root.querySelector('.mm-hc-bar').style.left = `${x - 1}px`; root.querySelector('.mm-hc-knob').style.left = `${x - 16}px`; };
   A.setWipe = setWipe;
   const knob = root.querySelector('.mm-hc-knob');
@@ -163,10 +163,17 @@ function renderStop() {
 }
 
 // #127 B (Emre): canlı çıkarım hazır maskenin yerine geçer; hata olursa hazır maske kalır. Kart değiştiyse sonuç atılır.
+// Karşılaştırma (hizalama) görünümü kartı gizler; canlı model durumu orada da görünsün (Geri → kartta maske).
+function liveBadge() {
+  const root = S.alignEl; if (!root || !S.liveMsg) return;
+  let b = root.querySelector('.mm-hc-live');
+  if (!b) { b = document.createElement('div'); b.className = 'mm-hc-live'; Object.assign(b.style, { position: 'absolute', left: '50%', top: '10px', transform: 'translateX(-50%)', padding: '3px 10px', borderRadius: '6px', background: 'rgba(14,10,8,.85)', color: '#ffd9b8', font: '12px system-ui', pointerEvents: 'none' }); root.append(b); }
+  b.textContent = S.liveMsg + ' · maske için Geri';
+}
 function hookLive(o, c, img, mask, el) {
   const label = el.querySelector('.mm-hc-masklabel');
   const loaded = (im) => new Promise((res) => { if (im.complete && im.naturalWidth) res(true); else { im.addEventListener('load', () => res(true), { once: true }); im.addEventListener('error', () => res(false), { once: true }); } });
-  const say = (txt) => { if (label) { label.hidden = false; label.textContent = txt; } };
+  const say = (txt) => { S.liveMsg = txt; if (label) { label.hidden = false; label.textContent = txt; } liveBadge(); };
   say('Model tarayıcıda yükleniyor…');
   (async () => {
     const okImg = await loaded(img); const okMask = c.mask ? await loaded(mask) : false;
