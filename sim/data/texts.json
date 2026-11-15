@@ -139,6 +139,10 @@
       "tr": "dk",
       "en": "min"
     },
+    "unit.hm": {
+      "tr": "sa:dk",
+      "en": "hh:mm"
+    },
     "unit.m": {
       "tr": "m",
       "en": "m"
