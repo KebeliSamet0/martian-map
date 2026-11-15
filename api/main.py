@@ -61,6 +61,8 @@ class RouteInput(Input):
     terrain_model: bool = True  # False: "yalnız eğim" naif rota (zemin modeli + kaya bilinmez; maliyet gerçek katmanda)
     # DENEME (Emre): simülatörün "Azami eğim" ayarı. 25° üstü verilirse planlayıcının 25° kuralı geçerli kalır.
     max_slope_deg: float | None = Field(default=None, ge=5, le=45)
+    # Verilirse dönüş ayağı hedeften bu piksele (üs) hesaplanır; verilmezse dönüş aynı yoldan (eski davranış).
+    base_px: Pixel | None = None
 
 
 class Observation(Input):
@@ -110,7 +112,8 @@ def result(layers, body: RouteInput):
                           weights=body.weights.model_dump() if body.weights else None,
                           budget=body.budget.model_dump() if body.budget else None,
                           terrain_model=body.terrain_model,
-                          max_slope_deg=body.max_slope_deg)
+                          max_slope_deg=body.max_slope_deg,
+                          base_px=body.base_px)
     info = layers.grid_info()
     return {"grid": {k: info[k] for k in ("region", "width", "height", "res_m", "synthetic", "px_note")},
             "routes": routes}

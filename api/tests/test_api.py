@@ -191,3 +191,25 @@ def test_contract_is_actual_output(layers):
     actual = planner.plan(layers, route['start']['px'], route['goal']['px'])[1]
     assert route == actual
     assert len(route['segments']) >= 2
+
+
+# #52 madde 2: base_px verilirse dönüş ayağı hedeften üsse; verilmezse eski davranış.
+def test_base_px_return_leg(client, layers, routes):
+    mid = [130, 130]  # replan'ın yeni başlangıcı; üs ise asıl başlangıç
+    no_base = client.post("/replan", json={"start": mid, "goal": GOAL, "observations": []}).json()["routes"]
+    with_base = client.post("/replan", json={"start": mid, "goal": GOAL, "observations": [], "base_px": START}).json()["routes"]
+    for a, b in zip(no_base, with_base):
+        assert "return_from" not in a["total"]["budget"]
+        assert b["total"]["budget"]["return_from"] == "base_px"
+        assert a["total"]["consumption"]["return"] == a["total"]["consumption"]["outbound"]
+        assert b["total"]["consumption"]["return"] != b["total"]["consumption"]["outbound"]
+        assert b["total"]["consumption"]["return"]["min"] > a["total"]["consumption"]["return"]["min"]  # üs, ortadan çok daha uzak
+        assert b["total"]["budget"]["used"]["o2_L"] > a["total"]["budget"]["used"]["o2_L"]
+        c = b["total"]["consumption"]
+        assert abs(c["committed"]["min"] - (c["outbound"]["min"] + c["return"]["min"] + c["science"]["min"] + c["reserve"]["min"])) < 0.02
+    # base_px yok: /route yanıtı değişmedi
+    assert client.post("/route", json={"start": START, "goal": GOAL}).json()["routes"] == routes
+
+
+def test_base_px_validation(client):
+    assert client.post("/route", json={"start": START, "goal": GOAL, "base_px": [1.5, 2]}).status_code == 422

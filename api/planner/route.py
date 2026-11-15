@@ -316,19 +316,24 @@ def _segments(L: Layers, path: np.ndarray, prof) -> list[dict]:
     return segs
 
 
-def _budget(prof, segs, path, limits=None, max_slope_deg: float | None = None, exempt=()) -> dict:
+def _budget(prof, segs, path, limits=None, max_slope_deg: float | None = None, exempt=(), ret=None) -> dict:
+    """ret: verilirse hedeften üsse hesaplanmış dönüş ayağının profili (base_px). Yoksa dönüş aynı yoldan, iniş/çıkış simetrik (|eğim| modeli)."""
     out_min = float(prof["sec"].sum()) / 60
     kcal_out = float(prof["kcal"].sum())
-    # Dönüş aynı yoldan; iniş/çıkış simetrik kabul (|eğim| modeli)
-    eva_min = 2 * out_min + P.SCIENCE_STOP_MIN
+    ret_min = out_min if ret is None else float(ret["sec"].sum()) / 60
+    ret_kcal = kcal_out if ret is None else float(ret["kcal"].sum())
+    eva_min = out_min + ret_min + P.SCIENCE_STOP_MIN
     limit_min = P.EVA_MAX_H * 60
     limits = {**{"time_min": limit_min, "kcal": P.EVA_MAX_KCAL,
                  "o2_L": P.EVA_MAX_O2_L, "dose_uGy": P.EVA_MAX_DOSE_UGY,
                  "reserve_min": P.RESERVE_MIN}, **(limits or {})}
     limit_min = limits["time_min"]
     cum = np.cumsum(prof["sec"]) / 60
-    committed_min = 2 * cum + P.SCIENCE_STOP_MIN + limits["reserve_min"]
-    committed_kcal = (2 * np.cumsum(prof["kcal"]) +
+    # Dönüş payı: aynı yoldan ise o noktaya kadarki yol kadar; base_px verildiyse hedeften üsse sabit ayak.
+    back_min = cum if ret is None else ret_min
+    back_kcal = np.cumsum(prof["kcal"]) if ret is None else ret_kcal
+    committed_min = cum + back_min + P.SCIENCE_STOP_MIN + limits["reserve_min"]
+    committed_kcal = (np.cumsum(prof["kcal"]) + back_kcal +
                       (P.SCIENCE_STOP_MIN + limits["reserve_min"]) * 60 * P.STOP_METABOLIC_W / 4184)
     usage = {"time_min": committed_min, "kcal": committed_kcal,
              "o2_L": committed_kcal / P.KCAL_PER_L_O2,
@@ -338,7 +343,7 @@ def _budget(prof, segs, path, limits=None, max_slope_deg: float | None = None, e
     first = int(over[0]) if len(over) else None
     walkback_ok = not bool(exceeded["time_min"][-1])
     exceeded_at = round(float(prof["cum_m"][first]), 1) if first is not None else None
-    total_kcal = 2 * kcal_out
+    total_kcal = kcal_out + ret_kcal
     slope_limit = P.SLOPE_NOGO_DEG if max_slope_deg is None else min(float(max_slope_deg), P.SLOPE_NOGO_DEG)
     keep = np.ones(len(prof["slope"]), bool)
     keep[list(exempt)] = False
@@ -350,7 +355,7 @@ def _budget(prof, segs, path, limits=None, max_slope_deg: float | None = None, e
     stop_kcal = lambda m: m * 60 * P.STOP_METABOLIC_W / 4184
     consumption = {
         "outbound": _scope(out_min, kcal_out),
-        "return": _scope(out_min, kcal_out),  # VARSAYIM: aynı yoldan dönüş, |eğim| modeli iniş/çıkışı ayırmaz
+        "return": _scope(ret_min, ret_kcal),  # base_px yoksa VARSAYIM: aynı yoldan dönüş, |eğim| modeli iniş/çıkışı ayırmaz
         "science": _scope(P.SCIENCE_STOP_MIN, stop_kcal(P.SCIENCE_STOP_MIN)),
         "reserve": _scope(limits["reserve_min"], stop_kcal(limits["reserve_min"])),
     }
@@ -382,12 +387,13 @@ def _budget(prof, segs, path, limits=None, max_slope_deg: float | None = None, e
         "budget": {"limits": limits, "used": {k: round(float(v[-1]), 3) for k, v in usage.items()},
                    "exceeded": [k for k, v in exceeded.items() if v[-1]],
                    "first_exceeded": [k for k, v in exceeded.items() if first is not None and v[first]],
-                   "return_min": round(out_min, 3), "return_kcal": round(kcal_out, 3)},
+                   "return_min": round(ret_min, 3), "return_kcal": round(ret_kcal, 3),
+                   **({"return_from": "base_px"} if ret is not None else {})},
     }
 
 
 def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None,
-             max_slope_deg: float | None = None) -> dict:
+             max_slope_deg: float | None = None, base_px=None) -> dict:
     presets = P.PRESETS if L.synthetic else P.REAL_PRESETS
     w = dict(presets.get(kind, presets["balanced"]))
     if weights:
@@ -395,10 +401,14 @@ def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | Non
     path, terms, info = shortest_path_info(L, start, goal, w, max_slope_deg)
     prof = _profile(L, path, terms)
     segs = _segments(L, path, prof)
+    ret = None
+    if base_px is not None:  # dönüş ayağı hedeften üsse (replan: yeni başlangıçtan değil)
+        rpath, rterms, _ = shortest_path_info(L, goal, base_px, w, max_slope_deg)
+        ret = _profile(L, rpath, rterms)
     # F03: istenen ucun kendisi geçilmezse (snap) o hücre go kararından muaf; ama uyarıyla görünür
     exempt = [i for i, name in ((0, "start"), (len(path) - 1, "goal"))
               if info["endpoints"][name]["snap_m"] > 0 and L.slope[tuple(path[i])] >= P.SLOPE_NOGO_DEG]
-    total = _budget(prof, segs, path, budget, max_slope_deg=max_slope_deg, exempt=exempt)
+    total = _budget(prof, segs, path, budget, max_slope_deg=max_slope_deg, exempt=exempt, ret=ret)
     total["endpoints"] = info["endpoints"]
     total["snap_connector_cells"] = info["snap_connector_cells"]
     total["slope_limit_violations"] = info["slope_limit_violations"]
@@ -487,10 +497,10 @@ def _contrast(chosen: dict, alt: dict, res_m: float, min_dev_m: float = 40.0):
 
 
 def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None,
-         terrain_model: bool = True, max_slope_deg: float | None = None) -> list[dict]:
+         terrain_model: bool = True, max_slope_deg: float | None = None, base_px=None) -> list[dict]:
     """terrain_model=False: yol zemin sınıfı/kaya bilinmeden (yalnız eğim) aranır, maliyet gerçek katmanlarda ölçülür."""
     if terrain_model:
-        routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget, max_slope_deg) for k in kinds]
+        routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget, max_slope_deg, base_px) for k in kinds]
     else:
         from .insight import plan_one_naive
         routes = [plan_one_naive(L, start, goal, k, budget) for k in kinds]
