@@ -79,3 +79,10 @@ paftalardan yapıldı, kesin yer gerçeği değil.
 - Durak başına tek oran: durağın 30 m çevresindeki karışım haritada 200 m'ye kadar tek değer olarak yayılır.
 - `contracts/grid.json` içindeki `rover_stops` kaydı hâlâ 18 durağı (`rover_stops_selected.json`) gösteriyor; planlayıcının
   "kanıta uzaklık" hesabı onu kullanıyor. 128 durağa çevirmek grid.json sahibinin kararı.
+
+## Kask kamerası maskeleri (`export_masks.py`)
+- Ağırlık gelince tek komut: `python ml/rover_terrain/export_masks.py --model <best.pt> --mask-model <mask.pt>` (CUDA/MPS/CPU otomatik; model kurulumu `infer_stops.py` ile aynı).
+- Girdi `sim/data/navcam_all/<durak>/<kare>.jpg`; çıktı `sim/data/navcam_masks/<durak>/<kare>.png` (RGBA sınıf haritası, gövde ve >30 m şeffaf, `helmetcam.js` bu yolu arar) ve `<kare>_unc.png` (MC Dropout belirsizliği, gri).
+- Renkler: toprak `#b07a4a`, ana kaya `#8a8a8a`, kum `#e8c35a`, büyük kaya `#d0443a`.
+- Kare başına sınıf oranları `navcam_masks/frame_fracs.csv`'ye yazılır; durak toplamı `stops_128.csv` ile karşılaştırılıp en büyük fark basılır (`--mask-model` verilmezse oranlar sapar).
+- Deneme: `--random-init --limit-stops 1 --limit-frames 2 --out <geçici dizin>` (ağırlıksız biçim testi; çıktıyı commit'leme).
