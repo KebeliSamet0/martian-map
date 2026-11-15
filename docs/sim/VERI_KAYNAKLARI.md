@@ -39,20 +39,21 @@ Dikkat: segmentler 40–70 m uzunluğunda; tek dik hücre tüm segmenti boyar. 2
 272 W Ay ortalaması. NASA Mars skafandrı tasarım ortalaması 352 W; skafandrlı eve dönüş testinde ~500 W ölçüldü
 (Norcross vd. 2009; Ogilvie vd. 2026). **Rota enerji tahminlerimiz alt sınır olarak okunmalı.**
 
-## 3. Limitler ve tutarsızlık (açık karar)
+## 3. Limitler (2026-11-15: kaynaklı değerler uygulandı, #147)
 
-| Parametre | Kodda şu an (`params.py`, `missions.json`, HUD) | Araştırmanın önerisi (`docs/eva_parameters.md`) | Durum |
-|---|---|---|---|
-| O₂ bütçesi | **420 L** (VARSAYIM) | **370 L** = 1800 kcal ÷ 4.86 | Öneri **uygulanmadı** |
-| Enerji bütçesi | 2000 kcal | 1800 kcal (Apollo 15–17 PLSS, SP-368) | Uygulanmadı |
-| EVA süresi | 6 sa | 7 sa (SP-368) | Uygulanmadı |
-| Astronot / skafandr / ekipman | 80 / 120 / 10 kg | 82 / 104 / 23 kg (NASA-STD-3001; Ogilvie vd. 2026) | Uygulanmadı |
-| Yürüme hızı | 0.8 m/s | 0.75 m/s (Jones, ALSJ; Ogilvie vd. 2026) | Uygulanmadı |
-| Yedek süre 30 dk, bilim durağı 30 dk | 30 / 30 | kaynak bulunamadı | VARSAYIM kalır |
+| Parametre | Kodda (`params.py`, `missions.json`) | Kaynak |
+|---|---|---|
+| O₂ bütçesi | **375 L** | Türetilmiş: 1800 kcal ÷ 4.8 kcal/L (belgede 4.86 ile ≈370 L) |
+| Enerji bütçesi | **1800 kcal** | Apollo 15–17 PLSS ısı kapasitesi (SP-368) |
+| EVA süresi | **7 sa** | Apollo 15–17 PLSS (SP-368) |
+| Astronot / skafandr / ekipman | **82 / 104 / 23 kg** | NASA-STD-3001; Ogilvie vd. 2026 |
+| Yürüme hızı | **0.75 m/s** | Jones, ALSJ; Ogilvie vd. 2026 |
+| Doz bütçesi | **≈61 µGy** | Türetilmiş: 7 sa × RAD yüzey doz hızı (Hassler vd. 2014). Beklenen doz, sağlık limiti değil |
+| Yedek süre 30 dk | 30 dk | Apollo OPS acil sisteminin asgari süresi (SP-368); Mars için genel pay değil |
+| Bilim durağı 30 dk | 30 dk | Kaynak yok: VARSAYIM (görev planı girdisi) |
 
-HUD'daki "Oksijen 419 L kaldı" `sim/data/missions.json` limitinden (420 L) geliyor. Kaynaklı değer 370 L.
-Planlayıcı parametreleri (`api/planner/params.py`) ve görev limitleri Samet/Elif Nisa'nın alanı: **bu belge onları
-değiştirmez; karar onlarda.** Sunumda "limitler tıbbi eşik değil, planlama varsayımıdır" denmeli
+HUD'daki O₂ kalanı `sim/data/missions.json` limitinden (375 L) gelir; S3'ün 80 L "yarım tüp" senaryo bütçesi değişmedi.
+Değerler Ay (Apollo) ve NASA tasarım hedeflerinden; Mars için doğrulanmış EVA bütçesi yok. Sunumda "limitler tıbbi eşik değil, planlama varsayımıdır" denmeli
 (`docs/eva_parameters.md` §2.4).
 
 ## 4. Sim'e özgü (görsel) veriler

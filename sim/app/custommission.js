@@ -7,7 +7,7 @@ export const IMPASSABLE_DEG = 20;          // planlayıcı SLOPE_NOGO_DEG: NASA 
 export const SAND_TRIGGER_EXTRA_M = 40;    // #49: olay merkeze radius_m + 40 m yaklaşınca
 export const MIN_STRAIGHT_M = 15;          // /route bundan kısa A–B'yi anlamsız sayar
 export const SUIT_SPEED_MS = 0.67056;      // NASA APACHE benchmark hızı (N=1); yalnız TAHMİNİ süre için
-export const DEFAULT_LIMITS = { time_min: 360, o2_L: 420, kcal: 2000, dose_uGy: 60 };   // S1 ile aynı varsayılan EVA bütçesi
+export const DEFAULT_LIMITS = { time_min: 420, o2_L: 375, kcal: 1800, dose_uGy: 61.25 };   // S1 ile aynı varsayılan EVA bütçesi
 export const O2_LIMITED_L = 80;            // 'Kısıtlı O₂ bütçesi (80 L)' (S3 bütçesi)
 
 const isInt = (n) => Number.isInteger(n);

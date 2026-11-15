@@ -31,16 +31,16 @@
       "total": {
         "consumption": {
           "outbound": {
-            "min": 42.12,
-            "kcal": 193.612,
-            "o2_L": 40.336,
-            "dose_uGy": 6.142
+            "min": 44.928,
+            "kcal": 207.362,
+            "o2_L": 43.2,
+            "dose_uGy": 6.552
           },
           "return": {
-            "min": 42.12,
-            "kcal": 193.612,
-            "o2_L": 40.336,
-            "dose_uGy": 6.142
+            "min": 44.928,
+            "kcal": 207.362,
+            "o2_L": 43.2,
+            "dose_uGy": 6.552
           },
           "science": {
             "min": 30.0,
@@ -55,21 +55,21 @@
             "dose_uGy": 4.375
           },
           "committed": {
-            "min": 144.24,
-            "kcal": 621.258,
-            "o2_L": 129.429,
-            "dose_uGy": 21.035
+            "min": 149.856,
+            "kcal": 648.759,
+            "o2_L": 135.158,
+            "dose_uGy": 21.854
           },
           "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
         },
         "km": 1.41,
-        "min": 42.1,
-        "eva_min": 114.2,
-        "eva_limit_min": 360.0,
-        "kcal": 194.0,
-        "eva_kcal": 387.0,
-        "o2_L": 81.0,
-        "dose_uGy": 16.7,
+        "min": 44.9,
+        "eva_min": 119.9,
+        "eva_limit_min": 420.0,
+        "kcal": 207.0,
+        "eva_kcal": 415.0,
+        "o2_L": 86.0,
+        "dose_uGy": 17.5,
         "slope_max": 10.1,
         "low_conf_m": 309.0,
         "walkback_ok": true,
@@ -81,22 +81,22 @@
         "limit_exceeded_at_index": null,
         "budget": {
           "limits": {
-            "time_min": 360.0,
-            "kcal": 2000.0,
-            "o2_L": 420.0,
-            "dose_uGy": 60.0,
+            "time_min": 420.0,
+            "kcal": 1800.0,
+            "o2_L": 375.0,
+            "dose_uGy": 61.25,
             "reserve_min": 30.0
           },
           "used": {
-            "time_min": 144.24,
-            "kcal": 621.258,
-            "o2_L": 129.429,
-            "dose_uGy": 21.035
+            "time_min": 149.856,
+            "kcal": 648.759,
+            "o2_L": 135.158,
+            "dose_uGy": 21.854
           },
           "exceeded": [],
           "first_exceeded": [],
-          "return_min": 42.12,
-          "return_kcal": 193.612
+          "return_min": 44.928,
+          "return_kcal": 207.362
         },
         "endpoints": {
           "start": {
@@ -183,11 +183,11 @@
           "entropy": 0.42,
           "conf": "mid",
           "nearest_evidence_m": 111.0,
-          "kcal": 12.7,
-          "min": 2.7,
+          "kcal": 13.6,
+          "min": 2.8,
           "risk": 11.02,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%91 kcal."
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%92 kcal."
         },
         {
           "id": 2,
@@ -215,11 +215,11 @@
           "entropy": 0.62,
           "conf": "low",
           "nearest_evidence_m": 108.0,
-          "kcal": 5.5,
+          "kcal": 5.9,
           "min": 1.1,
           "risk": 4.44,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%63); düz ana kayaya göre +%199 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
+          "reason": "Kum ağırlıklı (%63); düz ana kayaya göre +%201 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
         },
         {
           "id": 3,
@@ -275,11 +275,11 @@
           "entropy": 0.61,
           "conf": "low",
           "nearest_evidence_m": 108.0,
-          "kcal": 27.1,
-          "min": 5.2,
+          "kcal": 29.1,
+          "min": 5.5,
           "risk": 17.07,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%64); düz ana kayaya göre +%228 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
+          "reason": "Kum ağırlıklı (%64); düz ana kayaya göre +%230 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
         },
         {
           "id": 4,
@@ -303,11 +303,11 @@
           "entropy": 0.79,
           "conf": "low",
           "nearest_evidence_m": 144.0,
-          "kcal": 2.2,
-          "min": 0.4,
+          "kcal": 2.4,
+          "min": 0.5,
           "risk": 1.96,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%140 kcal. Model emin değil: en yakın rover kanıtı 144 m uzakta."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%145 kcal. Model emin değil: en yakın rover kanıtı 144 m uzakta."
         },
         {
           "id": 5,
@@ -335,11 +335,11 @@
           "entropy": 0.75,
           "conf": "low",
           "nearest_evidence_m": 152.0,
-          "kcal": 3.7,
+          "kcal": 4.0,
           "min": 0.8,
           "risk": 4.02,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%101 kcal. Model emin değil: en yakın rover kanıtı 152 m uzakta."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%104 kcal. Model emin değil: en yakın rover kanıtı 152 m uzakta."
         },
         {
           "id": 6,
@@ -399,8 +399,8 @@
           "entropy": 0.56,
           "conf": "mid",
           "nearest_evidence_m": 169.0,
-          "kcal": 12.8,
-          "min": 2.8,
+          "kcal": 13.7,
+          "min": 3.0,
           "risk": 15.32,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%53 kcal."
@@ -475,8 +475,8 @@
           "entropy": 0.5,
           "conf": "mid",
           "nearest_evidence_m": 244.0,
-          "kcal": 11.4,
-          "min": 2.6,
+          "kcal": 12.2,
+          "min": 2.8,
           "risk": 14.83,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%35 kcal."
@@ -547,8 +547,8 @@
           "entropy": 0.68,
           "conf": "low",
           "nearest_evidence_m": 300.0,
-          "kcal": 14.3,
-          "min": 3.1,
+          "kcal": 15.3,
+          "min": 3.3,
           "risk": 18.68,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%72 kcal. Model emin değil: en yakın rover kanıtı 300 m uzakta."
@@ -619,11 +619,11 @@
           "entropy": 0.57,
           "conf": "mid",
           "nearest_evidence_m": 349.0,
-          "kcal": 10.9,
-          "min": 2.6,
+          "kcal": 11.6,
+          "min": 2.7,
           "risk": 11.65,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%31 kcal."
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%30 kcal."
         },
         {
           "id": 10,
@@ -687,8 +687,8 @@
           "entropy": 0.49,
           "conf": "mid",
           "nearest_evidence_m": 377.0,
-          "kcal": 10.2,
-          "min": 2.5,
+          "kcal": 10.9,
+          "min": 2.7,
           "risk": 11.99,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%20 kcal."
@@ -747,8 +747,8 @@
           "entropy": 0.54,
           "conf": "mid",
           "nearest_evidence_m": 406.0,
-          "kcal": 11.5,
-          "min": 2.7,
+          "kcal": 12.3,
+          "min": 2.8,
           "risk": 20.04,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%39 kcal."
@@ -811,11 +811,11 @@
           "entropy": 0.56,
           "conf": "mid",
           "nearest_evidence_m": 419.0,
-          "kcal": 12.0,
-          "min": 2.7,
+          "kcal": 12.9,
+          "min": 2.8,
           "risk": 20.34,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%58 kcal."
+          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%60 kcal."
         },
         {
           "id": 13,
@@ -871,11 +871,11 @@
           "entropy": 0.52,
           "conf": "mid",
           "nearest_evidence_m": 383.0,
-          "kcal": 14.0,
-          "min": 2.8,
+          "kcal": 15.0,
+          "min": 3.0,
           "risk": 12.95,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%139 kcal."
+          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%140 kcal."
         },
         {
           "id": 14,
@@ -919,11 +919,11 @@
           "entropy": 0.65,
           "conf": "low",
           "nearest_evidence_m": 360.0,
-          "kcal": 7.5,
-          "min": 1.6,
+          "kcal": 8.1,
+          "min": 1.7,
           "risk": 8.48,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%92 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
+          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%95 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
         },
         {
           "id": 15,
@@ -995,11 +995,11 @@
           "entropy": 0.41,
           "conf": "mid",
           "nearest_evidence_m": 284.0,
-          "kcal": 12.2,
-          "min": 2.8,
+          "kcal": 13.1,
+          "min": 3.0,
           "risk": 11.23,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%44 kcal."
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%45 kcal."
         },
         {
           "id": 16,
@@ -1071,11 +1071,11 @@
           "entropy": 0.2,
           "conf": "high",
           "nearest_evidence_m": 236.0,
-          "kcal": 12.3,
-          "min": 2.8,
+          "kcal": 13.2,
+          "min": 3.0,
           "risk": 7.06,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%37 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%38 kcal."
         },
         {
           "id": 17,
@@ -1139,11 +1139,11 @@
           "entropy": 0.24,
           "conf": "high",
           "nearest_evidence_m": 227.0,
-          "kcal": 11.7,
-          "min": 2.7,
+          "kcal": 12.5,
+          "min": 2.9,
           "risk": 6.01,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%33 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%34 kcal."
         },
         {
           "id": 18,
@@ -1171,7 +1171,7 @@
           "entropy": 0.37,
           "conf": "mid",
           "nearest_evidence_m": 215.0,
-          "kcal": 1.6,
+          "kcal": 1.7,
           "min": 0.4,
           "risk": 1.5,
           "rejected_alt": null,
@@ -1202,16 +1202,16 @@
       "total": {
         "consumption": {
           "outbound": {
-            "min": 42.189,
-            "kcal": 194.079,
-            "o2_L": 40.433,
-            "dose_uGy": 6.153
+            "min": 45.001,
+            "kcal": 207.867,
+            "o2_L": 43.306,
+            "dose_uGy": 6.563
           },
           "return": {
-            "min": 42.189,
-            "kcal": 194.079,
-            "o2_L": 40.433,
-            "dose_uGy": 6.153
+            "min": 45.001,
+            "kcal": 207.867,
+            "o2_L": 43.306,
+            "dose_uGy": 6.563
           },
           "science": {
             "min": 30.0,
@@ -1226,21 +1226,21 @@
             "dose_uGy": 4.375
           },
           "committed": {
-            "min": 144.378,
-            "kcal": 622.192,
-            "o2_L": 129.623,
-            "dose_uGy": 21.055
+            "min": 150.003,
+            "kcal": 649.768,
+            "o2_L": 135.368,
+            "dose_uGy": 21.875
           },
           "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
         },
         "km": 1.41,
-        "min": 42.2,
-        "eva_min": 114.4,
-        "eva_limit_min": 360.0,
-        "kcal": 194.0,
-        "eva_kcal": 388.0,
-        "o2_L": 81.0,
-        "dose_uGy": 16.7,
+        "min": 45.0,
+        "eva_min": 120.0,
+        "eva_limit_min": 420.0,
+        "kcal": 208.0,
+        "eva_kcal": 416.0,
+        "o2_L": 87.0,
+        "dose_uGy": 17.5,
         "slope_max": 10.1,
         "low_conf_m": 317.0,
         "walkback_ok": true,
@@ -1252,22 +1252,22 @@
         "limit_exceeded_at_index": null,
         "budget": {
           "limits": {
-            "time_min": 360.0,
-            "kcal": 2000.0,
-            "o2_L": 420.0,
-            "dose_uGy": 60.0,
+            "time_min": 420.0,
+            "kcal": 1800.0,
+            "o2_L": 375.0,
+            "dose_uGy": 61.25,
             "reserve_min": 30.0
           },
           "used": {
-            "time_min": 144.378,
-            "kcal": 622.192,
-            "o2_L": 129.623,
-            "dose_uGy": 21.055
+            "time_min": 150.003,
+            "kcal": 649.768,
+            "o2_L": 135.368,
+            "dose_uGy": 21.875
           },
           "exceeded": [],
           "first_exceeded": [],
-          "return_min": 42.189,
-          "return_kcal": 194.079
+          "return_min": 45.001,
+          "return_kcal": 207.867
         },
         "endpoints": {
           "start": {
@@ -1354,11 +1354,11 @@
           "entropy": 0.42,
           "conf": "mid",
           "nearest_evidence_m": 111.0,
-          "kcal": 12.7,
-          "min": 2.7,
+          "kcal": 13.6,
+          "min": 2.8,
           "risk": 11.02,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%91 kcal."
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%92 kcal."
         },
         {
           "id": 2,
@@ -1386,11 +1386,11 @@
           "entropy": 0.62,
           "conf": "low",
           "nearest_evidence_m": 108.0,
-          "kcal": 5.5,
+          "kcal": 5.9,
           "min": 1.1,
           "risk": 4.44,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%63); düz ana kayaya göre +%199 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
+          "reason": "Kum ağırlıklı (%63); düz ana kayaya göre +%201 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
         },
         {
           "id": 3,
@@ -1446,11 +1446,11 @@
           "entropy": 0.61,
           "conf": "low",
           "nearest_evidence_m": 108.0,
-          "kcal": 27.1,
-          "min": 5.2,
+          "kcal": 29.1,
+          "min": 5.5,
           "risk": 17.07,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%64); düz ana kayaya göre +%228 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
+          "reason": "Kum ağırlıklı (%64); düz ana kayaya göre +%230 kcal. Model emin değil: en yakın rover kanıtı 108 m uzakta."
         },
         {
           "id": 4,
@@ -1474,11 +1474,11 @@
           "entropy": 0.79,
           "conf": "low",
           "nearest_evidence_m": 144.0,
-          "kcal": 2.2,
-          "min": 0.4,
+          "kcal": 2.4,
+          "min": 0.5,
           "risk": 1.96,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%140 kcal. Model emin değil: en yakın rover kanıtı 144 m uzakta."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%145 kcal. Model emin değil: en yakın rover kanıtı 144 m uzakta."
         },
         {
           "id": 5,
@@ -1506,11 +1506,11 @@
           "entropy": 0.75,
           "conf": "low",
           "nearest_evidence_m": 152.0,
-          "kcal": 3.7,
+          "kcal": 4.0,
           "min": 0.8,
           "risk": 4.02,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%101 kcal. Model emin değil: en yakın rover kanıtı 152 m uzakta."
+          "reason": "Toprak zemin, eğim 8°; düz ana kayaya göre +%104 kcal. Model emin değil: en yakın rover kanıtı 152 m uzakta."
         },
         {
           "id": 6,
@@ -1570,8 +1570,8 @@
           "entropy": 0.54,
           "conf": "mid",
           "nearest_evidence_m": 169.0,
-          "kcal": 12.9,
-          "min": 2.8,
+          "kcal": 13.8,
+          "min": 3.0,
           "risk": 14.34,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%54 kcal."
@@ -1646,8 +1646,8 @@
           "entropy": 0.5,
           "conf": "mid",
           "nearest_evidence_m": 244.0,
-          "kcal": 11.4,
-          "min": 2.6,
+          "kcal": 12.2,
+          "min": 2.8,
           "risk": 14.83,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%35 kcal."
@@ -1722,11 +1722,11 @@
           "entropy": 0.68,
           "conf": "low",
           "nearest_evidence_m": 300.0,
-          "kcal": 15.3,
-          "min": 3.3,
+          "kcal": 16.4,
+          "min": 3.5,
           "risk": 19.61,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%70 kcal. Model emin değil: en yakın rover kanıtı 300 m uzakta."
+          "reason": "Ana kaya zemin, eğim 6°; düz ana kayaya göre +%71 kcal. Model emin değil: en yakın rover kanıtı 300 m uzakta."
         },
         {
           "id": 9,
@@ -1794,8 +1794,8 @@
           "entropy": 0.56,
           "conf": "mid",
           "nearest_evidence_m": 352.0,
-          "kcal": 10.7,
-          "min": 2.5,
+          "kcal": 11.4,
+          "min": 2.7,
           "risk": 11.31,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%28 kcal."
@@ -1862,11 +1862,11 @@
           "entropy": 0.5,
           "conf": "mid",
           "nearest_evidence_m": 378.0,
-          "kcal": 11.4,
-          "min": 2.7,
+          "kcal": 12.2,
+          "min": 2.9,
           "risk": 13.7,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%26 kcal."
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%27 kcal."
         },
         {
           "id": 11,
@@ -1922,11 +1922,11 @@
           "entropy": 0.55,
           "conf": "mid",
           "nearest_evidence_m": 416.0,
-          "kcal": 11.6,
-          "min": 2.7,
+          "kcal": 12.4,
+          "min": 2.9,
           "risk": 18.55,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%40 kcal."
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%41 kcal."
         },
         {
           "id": 12,
@@ -1982,8 +1982,8 @@
           "entropy": 0.56,
           "conf": "mid",
           "nearest_evidence_m": 419.0,
-          "kcal": 10.2,
-          "min": 2.3,
+          "kcal": 10.9,
+          "min": 2.4,
           "risk": 18.17,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%60 kcal."
@@ -2042,11 +2042,11 @@
           "entropy": 0.52,
           "conf": "mid",
           "nearest_evidence_m": 383.0,
-          "kcal": 14.0,
-          "min": 2.8,
+          "kcal": 15.0,
+          "min": 3.0,
           "risk": 12.95,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%139 kcal."
+          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%140 kcal."
         },
         {
           "id": 14,
@@ -2090,11 +2090,11 @@
           "entropy": 0.65,
           "conf": "low",
           "nearest_evidence_m": 360.0,
-          "kcal": 7.5,
-          "min": 1.6,
+          "kcal": 8.1,
+          "min": 1.7,
           "risk": 8.48,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%92 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
+          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%95 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
         },
         {
           "id": 15,
@@ -2166,11 +2166,11 @@
           "entropy": 0.41,
           "conf": "mid",
           "nearest_evidence_m": 284.0,
-          "kcal": 12.2,
-          "min": 2.8,
+          "kcal": 13.1,
+          "min": 3.0,
           "risk": 11.23,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%44 kcal."
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%45 kcal."
         },
         {
           "id": 16,
@@ -2242,11 +2242,11 @@
           "entropy": 0.2,
           "conf": "high",
           "nearest_evidence_m": 233.0,
-          "kcal": 11.9,
-          "min": 2.7,
+          "kcal": 12.8,
+          "min": 2.9,
           "risk": 6.85,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%36 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%38 kcal."
         },
         {
           "id": 17,
@@ -2310,8 +2310,8 @@
           "entropy": 0.22,
           "conf": "high",
           "nearest_evidence_m": 221.0,
-          "kcal": 11.8,
-          "min": 2.7,
+          "kcal": 12.6,
+          "min": 2.9,
           "risk": 4.88,
           "rejected_alt": null,
           "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%35 kcal."
@@ -2342,11 +2342,11 @@
           "entropy": 0.35,
           "conf": "mid",
           "nearest_evidence_m": 215.0,
-          "kcal": 2.0,
+          "kcal": 2.1,
           "min": 0.5,
           "risk": 1.65,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%28 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%26 kcal."
         }
       ]
     },
@@ -2373,16 +2373,16 @@
       "total": {
         "consumption": {
           "outbound": {
-            "min": 43.978,
-            "kcal": 202.562,
-            "o2_L": 42.2,
-            "dose_uGy": 6.413
+            "min": 46.91,
+            "kcal": 216.978,
+            "o2_L": 45.204,
+            "dose_uGy": 6.841
           },
           "return": {
-            "min": 43.978,
-            "kcal": 202.562,
-            "o2_L": 42.2,
-            "dose_uGy": 6.413
+            "min": 46.91,
+            "kcal": 216.978,
+            "o2_L": 45.204,
+            "dose_uGy": 6.841
           },
           "science": {
             "min": 30.0,
@@ -2397,21 +2397,21 @@
             "dose_uGy": 4.375
           },
           "committed": {
-            "min": 147.956,
-            "kcal": 639.159,
-            "o2_L": 133.158,
-            "dose_uGy": 21.577
+            "min": 153.82,
+            "kcal": 667.99,
+            "o2_L": 139.164,
+            "dose_uGy": 22.432
           },
           "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
         },
         "km": 1.38,
-        "min": 44.0,
-        "eva_min": 118.0,
-        "eva_limit_min": 360.0,
-        "kcal": 203.0,
-        "eva_kcal": 405.0,
-        "o2_L": 84.0,
-        "dose_uGy": 17.2,
+        "min": 46.9,
+        "eva_min": 123.8,
+        "eva_limit_min": 420.0,
+        "kcal": 217.0,
+        "eva_kcal": 434.0,
+        "o2_L": 90.0,
+        "dose_uGy": 18.1,
         "slope_max": 10.1,
         "low_conf_m": 82.0,
         "walkback_ok": true,
@@ -2423,22 +2423,22 @@
         "limit_exceeded_at_index": null,
         "budget": {
           "limits": {
-            "time_min": 360.0,
-            "kcal": 2000.0,
-            "o2_L": 420.0,
-            "dose_uGy": 60.0,
+            "time_min": 420.0,
+            "kcal": 1800.0,
+            "o2_L": 375.0,
+            "dose_uGy": 61.25,
             "reserve_min": 30.0
           },
           "used": {
-            "time_min": 147.956,
-            "kcal": 639.159,
-            "o2_L": 133.158,
-            "dose_uGy": 21.577
+            "time_min": 153.82,
+            "kcal": 667.99,
+            "o2_L": 139.164,
+            "dose_uGy": 22.432
           },
           "exceeded": [],
           "first_exceeded": [],
-          "return_min": 43.978,
-          "return_kcal": 202.562
+          "return_min": 46.91,
+          "return_kcal": 216.978
         },
         "endpoints": {
           "start": {
@@ -2501,11 +2501,11 @@
           "entropy": 0.6,
           "conf": "mid",
           "nearest_evidence_m": 96.0,
-          "kcal": 5.2,
+          "kcal": 5.5,
           "min": 1.1,
           "risk": 5.3,
           "rejected_alt": "En kısa rota burada ayrılıyor (557 m): daha yüksek risk. Dengeli rota burada ayrılıyor (557 m): daha yüksek risk.",
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%109 kcal."
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%107 kcal."
         },
         {
           "id": 2,
@@ -2549,11 +2549,11 @@
           "entropy": 0.57,
           "conf": "mid",
           "nearest_evidence_m": 48.0,
-          "kcal": 11.0,
-          "min": 2.2,
+          "kcal": 11.8,
+          "min": 2.3,
           "risk": 6.27,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%67); düz ana kayaya göre +%182 kcal."
+          "reason": "Kum ağırlıklı (%67); düz ana kayaya göre +%184 kcal."
         },
         {
           "id": 3,
@@ -2605,11 +2605,11 @@
           "entropy": 0.18,
           "conf": "high",
           "nearest_evidence_m": 0.0,
-          "kcal": 18.7,
-          "min": 3.6,
+          "kcal": 20.1,
+          "min": 3.9,
           "risk": 4.28,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%94); düz ana kayaya göre +%260 kcal."
+          "reason": "Kum ağırlıklı (%94); düz ana kayaya göre +%262 kcal."
         },
         {
           "id": 4,
@@ -2677,11 +2677,11 @@
           "entropy": 0.3,
           "conf": "high",
           "nearest_evidence_m": 16.0,
-          "kcal": 20.6,
-          "min": 4.2,
+          "kcal": 22.1,
+          "min": 4.5,
           "risk": 6.35,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%80); düz ana kayaya göre +%164 kcal."
+          "reason": "Kum ağırlıklı (%80); düz ana kayaya göre +%166 kcal."
         },
         {
           "id": 5,
@@ -2745,11 +2745,11 @@
           "entropy": 0.37,
           "conf": "mid",
           "nearest_evidence_m": 97.0,
-          "kcal": 14.1,
-          "min": 3.1,
+          "kcal": 15.1,
+          "min": 3.3,
           "risk": 10.37,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%56 kcal."
+          "reason": "Ana kaya zemin, eğim 5°; düz ana kayaya göre +%57 kcal."
         },
         {
           "id": 6,
@@ -2781,11 +2781,11 @@
           "entropy": 0.51,
           "conf": "mid",
           "nearest_evidence_m": 146.0,
-          "kcal": 4.3,
+          "kcal": 4.6,
           "min": 1.0,
           "risk": 4.16,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%56 kcal."
+          "reason": "Ana kaya zemin, eğim 3°; düz ana kayaya göre +%57 kcal."
         },
         {
           "id": 7,
@@ -2841,11 +2841,11 @@
           "entropy": 0.55,
           "conf": "mid",
           "nearest_evidence_m": 175.0,
-          "kcal": 14.1,
-          "min": 3.4,
+          "kcal": 15.1,
+          "min": 3.6,
           "risk": 14.36,
           "rejected_alt": null,
-          "reason": "Kum ağırlıklı (%72); düz ana kayaya göre +%70 kcal."
+          "reason": "Kum ağırlıklı (%72); düz ana kayaya göre +%71 kcal."
         },
         {
           "id": 8,
@@ -2877,8 +2877,8 @@
           "entropy": 0.83,
           "conf": "low",
           "nearest_evidence_m": 268.0,
-          "kcal": 5.8,
-          "min": 1.2,
+          "kcal": 6.2,
+          "min": 1.3,
           "risk": 5.96,
           "rejected_alt": null,
           "reason": "Kum ağırlıklı (%40); düz ana kayaya göre +%111 kcal. Model emin değil: en yakın rover kanıtı 268 m uzakta."
@@ -2937,11 +2937,11 @@
           "entropy": 0.56,
           "conf": "mid",
           "nearest_evidence_m": 301.0,
-          "kcal": 13.1,
-          "min": 2.9,
+          "kcal": 14.0,
+          "min": 3.1,
           "risk": 11.7,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%58 kcal."
+          "reason": "Ana kaya zemin, eğim 7°; düz ana kayaya göre +%59 kcal."
         },
         {
           "id": 10,
@@ -3001,11 +3001,11 @@
           "entropy": 0.5,
           "conf": "mid",
           "nearest_evidence_m": 377.0,
-          "kcal": 11.1,
-          "min": 2.6,
+          "kcal": 11.9,
+          "min": 2.8,
           "risk": 11.53,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%28 kcal."
+          "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%29 kcal."
         },
         {
           "id": 11,
@@ -3061,8 +3061,8 @@
           "entropy": 0.57,
           "conf": "mid",
           "nearest_evidence_m": 424.0,
-          "kcal": 12.0,
-          "min": 2.7,
+          "kcal": 12.8,
+          "min": 2.9,
           "risk": 17.65,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 4°; düz ana kayaya göre +%45 kcal."
@@ -3129,8 +3129,8 @@
           "entropy": 0.56,
           "conf": "mid",
           "nearest_evidence_m": 419.0,
-          "kcal": 12.8,
-          "min": 2.8,
+          "kcal": 13.7,
+          "min": 3.0,
           "risk": 19.39,
           "rejected_alt": null,
           "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%67 kcal."
@@ -3189,11 +3189,11 @@
           "entropy": 0.52,
           "conf": "mid",
           "nearest_evidence_m": 383.0,
-          "kcal": 14.0,
-          "min": 2.8,
+          "kcal": 15.0,
+          "min": 3.0,
           "risk": 12.95,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%139 kcal."
+          "reason": "Ana kaya zemin, eğim 10°; düz ana kayaya göre +%140 kcal."
         },
         {
           "id": 14,
@@ -3237,11 +3237,11 @@
           "entropy": 0.65,
           "conf": "low",
           "nearest_evidence_m": 360.0,
-          "kcal": 7.5,
-          "min": 1.6,
+          "kcal": 8.1,
+          "min": 1.7,
           "risk": 8.48,
           "rejected_alt": null,
-          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%92 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
+          "reason": "Ana kaya zemin, eğim 8°; düz ana kayaya göre +%95 kcal. Model emin değil: en yakın rover kanıtı 360 m uzakta."
         },
         {
           "id": 15,
@@ -3313,11 +3313,11 @@
           "entropy": 0.41,
           "conf": "mid",
           "nearest_evidence_m": 284.0,
-          "kcal": 12.2,
-          "min": 2.8,
+          "kcal": 13.1,
+          "min": 3.0,
           "risk": 11.23,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%44 kcal."
+          "reason": "Toprak zemin, eğim 5°; düz ana kayaya göre +%45 kcal."
         },
         {
           "id": 16,
@@ -3389,11 +3389,11 @@
           "entropy": 0.2,
           "conf": "high",
           "nearest_evidence_m": 230.0,
-          "kcal": 11.6,
-          "min": 2.7,
+          "kcal": 12.4,
+          "min": 2.8,
           "risk": 6.69,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%37 kcal."
+          "reason": "Toprak zemin, eğim 3°; düz ana kayaya göre +%38 kcal."
         },
         {
           "id": 17,
@@ -3457,8 +3457,8 @@
           "entropy": 0.19,
           "conf": "high",
           "nearest_evidence_m": 216.0,
-          "kcal": 12.0,
-          "min": 2.7,
+          "kcal": 12.8,
+          "min": 2.9,
           "risk": 4.4,
           "rejected_alt": null,
           "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%37 kcal."
@@ -3489,11 +3489,11 @@
           "entropy": 0.34,
           "conf": "high",
           "nearest_evidence_m": 215.0,
-          "kcal": 2.3,
-          "min": 0.5,
+          "kcal": 2.5,
+          "min": 0.6,
           "risk": 1.89,
           "rejected_alt": null,
-          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%25 kcal."
+          "reason": "Toprak zemin, eğim 4°; düz ana kayaya göre +%28 kcal."
         }
       ]
     }
