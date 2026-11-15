@@ -135,6 +135,9 @@ def classify_scan(slope, p_sand, entropy, rock_cfa):
     return out.astype(np.float32)
 
 
+MARS_VALIDATION_NOTE = "Pandolf Dünya modeli, Mars için g-ölçekli; doğrulanmamış."
+
+
 def assumptions(provisional_terrain: bool = False):
     """Arayüzde gösterilecek varsayım tablosu."""
     items = [
@@ -143,7 +146,7 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Ekipman", "value": TOOLS_KG, "unit": "kg", "source": "VARSAYIM"},
         {"name": "Varsayılan ek yük (load_kg)", "value": DEFAULT_LOAD_KG, "unit": "kg", "source": "VARSAYIM: Pandolf L = SUIT_KG + TOOLS_KG + load_kg terimine eklenir"},
         {"name": "Temel yürüme hızı", "value": BASE_SPEED_MS, "unit": "m/s", "source": "VARSAYIM (doğrulanacak)"},
-        {"name": "Düz zemin metabolik düzeyi", "value": FLAT_REFERENCE_W, "unit": "W", "source": "Apollo EVA ortalaması, Waligora & Horrigan 1975 (doğrulanacak)"},
+        {"name": "Düz zemin metabolik düzeyi", "value": FLAT_REFERENCE_W, "unit": "W", "source": "Apollo EVA ortalaması, Waligora & Horrigan 1975 (doğrulanacak)", "mars_validated": False},
         {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": TERRAIN_SOURCE},
         {"name": "Hücre maliyet katmanı eğim özeti", "value": "|slope| ile çıkış (yönsüz hücre özeti); yönlü yol hesabı /step ucunda", "unit": "-", "source": "VARSAYIM: tek hücrede yürüyüş yönü bilinmediğinden |G| = tan(slope)·100 kullanılır"},
         {"name": "Oksijen dönüşümü", "value": {"kcal_per_L_o2": KCAL_PER_L_O2, "g_per_L_o2": O2_G_PER_L}, "unit": "kcal/L, g/L", "source": "Dolaylı kalorimetri (4.8 kcal/L O₂) ve STP yoğunluğu (1.429 g/L)"},
@@ -155,7 +158,9 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Rota ön ayar ağırlıkları (t, k, r)", "value": {k: {x: v[x] for x in ("t", "k", "r")} for k, v in REAL_PRESETS.items()}, "unit": "-", "source": "VARSAYIM: gerçek veride süre/enerji/risk ödünleşimi kalibrasyonu"},
         {"name": "Maksimum EVA süresi", "value": EVA_MAX_H, "unit": "saat", "source": "VARSAYIM"},
         {"name": "Yüzey doz hızı", "value": round(DOSE_UGY_PER_H, 2), "unit": "µGy/saat", "source": "Curiosity RAD, Hassler et al. 2014"},
-        {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir"},
+        {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir",
+         "mars_validated": False},
+        {"name": "Metabolik model Mars doğrulaması", "value": False, "unit": "-", "mars_validated": False, "source": MARS_VALIDATION_NOTE},
     ]
     if provisional_terrain:
         items.append({
