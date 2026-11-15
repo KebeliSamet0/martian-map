@@ -61,3 +61,14 @@ test('Veri katmanları: 5 satır, ≥3 ölçüm türü, tüm metinler ve kaynakl
   assert.ok(countMeasuredTypes(rows) >= 4);
   assert.equal(rows.find((r) => r.id === 'model').kind, 'model tahmini');
 });
+
+import { signalAlpha, nearAnyStop, SIGNAL_THRESHOLD } from '../app/science.js';
+test('3B örtü yalnız mineral imzalı pikselleri boyar; yerel mod durak yarıçapıyla sınırlı', () => {
+  assert.equal(signalAlpha(10, 10), 0);
+  assert.equal(signalAlpha(SIGNAL_THRESHOLD - 1, 0), 0);
+  assert.equal(signalAlpha(200, 0, false), 0);
+  assert.ok(signalAlpha(164, 15) > signalAlpha(SIGNAL_THRESHOLD, 0));
+  assert.ok(signalAlpha(255, 255) <= 170);
+  assert.ok(nearAnyStop(259, 370, [[259.16, 370.53]], 90));
+  assert.ok(!nearAnyStop(300, 370, [[259.16, 370.53]], 90));
+});

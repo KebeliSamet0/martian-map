@@ -80,12 +80,17 @@ export const BL_CSS = `
 .bl-x{background:none;border:0;color:var(--dim,#c9b4a2);font-size:16px;line-height:1;cursor:pointer;padding:0 2px}
 #bl-rad{right:14px;top:300px;width:290px}
 #bl-rad .big{font-size:22px;font-weight:700}
+.bl-inline{position:static;width:auto;box-shadow:none;background:none;border:0;padding:0}
+.bl-line{position:fixed;z-index:12;box-sizing:border-box;padding:5px 10px 6px;background:#14100df0;border:1px solid var(--line,#5a4332);border-left:3px solid #5fd0ff;border-radius:4px;color:var(--ink,#f3e3d3);pointer-events:auto;cursor:pointer;font:11px/1.3 system-ui,sans-serif}.bl-line[hidden]{display:none}
+.bl-line .t{display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:baseline}
+.bl-line .k{color:#9be1ff;letter-spacing:.08em;font-weight:600}.bl-line .v{text-align:right;font-variant-numeric:tabular-nums}
+.bl-line .bl-bar{margin:3px 0 0;height:6px}
 .bl-bar{position:relative;height:10px;border-radius:5px;background:#2b1f18;border:1px solid #4b3a2c;margin:6px 0 2px;overflow:hidden}
 .bl-bar i{position:absolute;left:0;top:0;bottom:0;background:#5fd0ff;transition:width .3s}
 .bl-bar u{position:absolute;top:0;bottom:0;background:#5fd0ff55;transition:left .3s,width .3s}
 .bl-bar[data-level=warn] i{background:#ffd60a}.bl-bar[data-level=over] i{background:#ff453a}
 .bl-row{display:flex;justify-content:space-between;gap:10px}
-#bl-rad canvas{display:block;width:100%;height:44px;margin-top:6px;background:#0f0b09;border-radius:6px}
+#bl-rad canvas,.bl-inline canvas{display:block;width:100%;height:44px;margin-top:6px;background:#0f0b09;border-radius:6px}
 .bl-cmp{margin-top:14px;padding-top:10px;border-top:1px solid #4b3a2c}
 .bl-cmp h4{margin:0 0 6px;font-size:13px}
 .bl-cmp .r{display:grid;grid-template-columns:96px 1fr 84px;gap:8px;align-items:center;margin:4px 0}
@@ -99,17 +104,17 @@ export function ensureBlCss() {
 }
 
 /** Yürüyüş sırasında doz çubuğu + grafik. get(): {doseUGy, elapsedSec, budgetUGy, plan:{min}|null} */
-export function createDosePanel(parent, { texts, params, rateUGyH, rateSource }) {
+export function createDosePanel(parent, { texts, params, rateUGyH, rateSource, inline = false, log: sharedLog = null }) {
   ensureBlCss();
   const T = (k, d) => tx(texts, `bilim.rad.${k}`, d);
-  const root = el('section', 'bl-card'); root.id = 'bl-rad'; root.hidden = true; root.setAttribute('aria-label', T('title'));
+  const root = el('section', inline ? 'bl-card bl-inline' : 'bl-card'); if (!inline) { root.id = 'bl-rad'; root.hidden = true; } root.setAttribute('aria-label', T('title'));
   const head = el('div', 'bl-head'); head.append(el('span', 'bl-title', T('title')), el('span', 'bl-badge rad', tx(texts, 'bilim.badge_rad')));
   const big = el('div', 'big'); const sub = el('div', 'bl-row bl-dim'); const bar = el('div', 'bl-bar'); const fill = el('i'); const band = el('u'); bar.append(band, fill);
   const budgetRow = el('div', 'bl-row bl-dim'); const canvas = el('canvas'); canvas.width = 540; canvas.height = 128;
   const cav = el('div', 'bl-tiny', T('caveat'));
   root.append(head, big, sub, bar, budgetRow, canvas, cav); parent.append(root);
   const eqLine = el('div', 'bl-tiny'); root.insertBefore(eqLine, canvas);
-  const log = createDoseLog({});
+  const log = sharedLog ?? createDoseLog({});
   let lastBudget = null, lastPlan = null;
 
   function draw(budget, plan) {
@@ -166,4 +171,29 @@ export function renderDoseCompare(rows, { texts }) {
   }
   root.append(el('div', 'bl-tiny', `${T('compare_note')} ${T('caveat')}`));
   return root;
+}
+
+/** Sağ altta, yaşam destek bloğunun hemen üstünde tek satırlık şerit (kendi öğemiz; akışın HUD'una dokunmaz). place(hudEl) bloğun konumunu OKUR. */
+export function createDoseLine({ texts, params, onOpen }) {
+  ensureBlCss();
+  const T = (k, d) => tx(texts, `bilim.rad.${k}`, d);
+  const root = el('div', 'bl-line'); root.title = T('line_hint'); root.hidden = true; root.setAttribute('role', 'button');
+  const top = el('div', 't'), k = el('span', 'k', 'RAD'), v = el('span', 'v'), h = el('span', 'bl-dim', T('line_key'));
+  const bar = el('div', 'bl-bar'), fill = el('i'), band = el('u'); bar.append(band, fill);
+  top.append(k, v, h); root.append(top, bar); root.onclick = () => onOpen?.();
+  document.body.append(root);
+  return { el: root,
+    place(hudEl) {
+      const r = hudEl?.getBoundingClientRect();
+      if (!r || !r.width) { root.style.visibility = 'hidden'; return; }
+      Object.assign(root.style, { visibility: 'visible', width: `${r.width}px`, right: `${innerWidth - r.right}px`, bottom: `${innerHeight - r.top + 6}px` });
+    },
+    update(doseUGy, budgetUGy) {
+      const frac = fin(doseUGy) && fin(budgetUGy) && budgetUGy > 0 ? doseUGy / budgetUGy : null;
+      v.textContent = fin(doseUGy) ? `${fmt(doseUGy, 2)} µGy · %${fmt((frac ?? 0) * 100, 0)}` : '—';
+      fill.style.width = `${Math.min(100, (frac ?? 0) * 100)}%`;
+      const b = fin(doseUGy) ? doseBand(doseUGy, params.relUnc) : null;
+      if (b && fin(budgetUGy) && budgetUGy > 0) { const lo = Math.min(100, (b[0] / budgetUGy) * 100), hi = Math.min(100, (b[1] / budgetUGy) * 100); band.style.left = `${lo}%`; band.style.width = `${Math.max(0, hi - lo)}%`; } else band.style.width = '0';
+      bar.dataset.level = frac == null ? '' : frac > 1 ? 'over' : frac > 0.8 ? 'warn' : 'ok';
+    } };
 }

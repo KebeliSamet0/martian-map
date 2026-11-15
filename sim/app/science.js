@@ -154,8 +154,24 @@ export function addScienceMarkers(L, map, stops, onPick) {
 }
 
 // ---------------------------------------------------------------- THREE
-/** CRISM HYD'yi arazi üzerine yarı saydam örtü olarak çizer (ızgara kutusu). groundY(x,z) → yükseklik|null. */
-export function createCrismTerrainOverlay(THREE, { crism, grid, pxToWorld, groundY, base = new URL('../', import.meta.url), segments = 200, opacity = 0.3, lift = 0.35 }) {
+/** Mineral imzası pikseli: SINDEX2 ya da BD2100_2 (hidratlı sülfat) eşiğin üstündeyse alfa 90–170 (hafif), değilse 0. Eşik tasarım ayarıdır (göreli 0–255 indeks). */
+export const SIGNAL_THRESHOLD = 100;
+export function signalAlpha(r, g, valid = true, thr = SIGNAL_THRESHOLD) {
+  const v = Math.max(r, g);
+  if (!valid || v < thr) return 0;
+  return Math.round(90 + (80 * (v - thr)) / (255 - thr));
+}
+
+/** CRISM piksel (i,j) durağa en çok maxM metre uzakta mı? (18 m piksel merkezine göre) */
+export function nearAnyStop(i, j, stopPx, maxM, pxM = 18) {
+  return stopPx.some(([si, sj]) => Math.hypot(i + 0.5 - si, j + 0.5 - sj) * pxM <= maxM);
+}
+
+/**
+ * CRISM HYD'yi arazi üzerine yarı saydam örtü olarak çizer. YALNIZ mineral imzası olan pikseller (tek renk, güce göre alfa).
+ * Modlar: 'off' | 'local' (bilim duraklarının localM yarıçapında) | 'all' (ızgara kutusunun tamamı).
+ */
+export function createCrismTerrainOverlay(THREE, { crism, grid, pxToWorld, groundY, stopCrismPx = [], localM = 90, base = new URL('../', import.meta.url), segments = 200, opacity = 0.6, lift = 0.35 }) {
   const mi = crism.map_info, N = segments, pos = new Float32Array((N + 1) ** 2 * 3), uv = new Float32Array((N + 1) ** 2 * 2);
   let k = 0, u = 0, lastY = 0;
   for (let r = 0; r <= N; r++) for (let c = 0; c <= N; c++) {
@@ -168,11 +184,29 @@ export function createCrismTerrainOverlay(THREE, { crism, grid, pxToWorld, groun
   for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const a = r * (N + 1) + c, b = a + 1, d = a + N + 1, e = d + 1; idx.set([a, d, b, b, d, e], q); q += 6; }
   const geom = new THREE.BufferGeometry();
   geom.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geom.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); geom.setIndex(new THREE.BufferAttribute(idx, 1));
-  const tex = new THREE.TextureLoader().load(new URL(crism.product.file, base).href);
-  tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false; tex.colorSpace = THREE.SRGBColorSpace;
-  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, toneMapped: false });
+  const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, toneMapped: false });
   const mesh = new THREE.Mesh(geom, mat); mesh.name = 'bl-crism-overlay'; mesh.frustumCulled = false; mesh.renderOrder = 5; mesh.visible = false;
-  return { mesh, setVisible(on) { mesh.visible = !!on; }, setOpacity(o) { mat.opacity = o; }, dispose() { geom.dispose(); mat.dispose(); tex.dispose(); } };
+  const tex = { all: null, local: null }; let mode = 'off';
+  const apply = () => { mat.map = mode === 'all' ? tex.all : tex.local; mat.needsUpdate = true; mesh.visible = mode !== 'off' && !!mat.map; };
+  const img = new Image();
+  img.onload = () => {
+    const cv = document.createElement('canvas'); cv.width = img.width; cv.height = img.height;
+    const g = cv.getContext('2d', { willReadFrequently: true }); g.drawImage(img, 0, 0);
+    const src = g.getImageData(0, 0, cv.width, cv.height);
+    const make = (local) => {
+      const out = new ImageData(cv.width, cv.height);
+      for (let j = 0; j < cv.height; j++) for (let i = 0; i < cv.width; i++) {
+        const o = (j * cv.width + i) * 4, a = signalAlpha(src.data[o], src.data[o + 1], src.data[o + 3] > 0);
+        if (!a || (local && !nearAnyStop(i, j, stopCrismPx, localM))) continue;
+        out.data[o] = 167; out.data[o + 1] = 139; out.data[o + 2] = 250; out.data[o + 3] = a;
+      }
+      const c2 = document.createElement('canvas'); c2.width = cv.width; c2.height = cv.height; c2.getContext('2d').putImageData(out, 0, 0);
+      const t = new THREE.CanvasTexture(c2); t.magFilter = THREE.NearestFilter; t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; t.colorSpace = THREE.SRGBColorSpace; return t;
+    };
+    tex.all = make(false); tex.local = make(true); apply();
+  };
+  img.src = new URL(crism.product.file, base).href;
+  return { mesh, get mode() { return mode; }, setMode(m) { if (m !== mode) { mode = m; apply(); } }, setOpacity(o) { mat.opacity = o; }, dispose() { geom.dispose(); mat.dispose(); tex.all?.dispose(); tex.local?.dispose(); } };
 }
 
 /** Bilim duraklarına ince ışık sütunu (3B'de yer işareti). */
