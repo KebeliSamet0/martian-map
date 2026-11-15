@@ -85,3 +85,26 @@ test('ctx yoksa (yürüyüş yok) hiçbir şey yapılmaz', async () => {
   const dyn = createDynRoute({ call: async () => { throw new Error('olmamalı'); }, ctx: () => null, propose: async () => { throw new Error('olmamalı'); }, apply() {} });
   await tick(dyn, 10);
 });
+
+import { LOAD_STEP_KG, OBS_RADIUS_M, OBS_NEAR_ROUTE_M } from '../app/dynroute.js';
+
+test('yük değişimi: numune alınınca (yük ≥ 0.5 kg artış) kalan rota + dönüş yeni yükle, load_kg gövdede', async () => {
+  const s = setup({ snap: { elapsedSec: 0, o2RemainingL: 400, loadKg: 18 } }); await tick(s.dyn, 3);
+  assert.equal(s.calls.length, 0, 'ilk okuma temel yük');
+  s.c.snap = { elapsedSec: 0, o2RemainingL: 400, loadKg: 18 + 8 }; await tick(s.dyn, 2, 1, 10); await new Promise((r) => setTimeout(r, 20));
+  assert.equal(s.calls.length, 3); assert.ok(s.calls.some((x) => x.body.load_kg === 8) && s.calls.some((x) => x.body.load_kg === 0));
+  assert.equal(s.proposals[0].reason, 'load'); assert.equal(s.proposals[0].extraKg, 8);
+  await tick(s.dyn, 5, 1, 30); assert.equal(s.proposals.length, 1, 'aynı yük için ikinci öneri yok');
+  s.c.snap = { ...s.c.snap, loadKg: 18 + 8 + LOAD_STEP_KG / 10 }; await tick(s.dyn, 3, 1, 40); assert.equal(s.proposals.length, 1, 'küçük artış yok sayılır');
+});
+
+test('gözlem: rotaya yakın kum gözlemi /replan (observations) ile; uzak gözlem ve tekrar yok sayılır', async () => {
+  const s = setup({ pxToWorld: ([c, r]) => [c * 2, r * 2] });
+  assert.equal(s.dyn.observe({ px: [50.7, 5.2], cls: 'sand' }), true);          // dünya (100,10): rotaya 10 m
+  assert.equal(s.dyn.observe({ px: [50.7, 5.2], cls: 'sand' }), false, 'aynı gözlem bir kez');
+  assert.equal(s.dyn.observe({ px: [50, 400], cls: 'sand' }), false, `rotadan > ${OBS_NEAR_ROUTE_M + OBS_RADIUS_M} m`);
+  assert.equal(s.dyn.observe({ px: [50, 5] }), false, 'sınıf yok');
+  await tick(s.dyn, 3); await new Promise((r) => setTimeout(r, 20));
+  const rp = s.calls.find((x) => x.path === '/replan'); assert.ok(rp); assert.deepEqual(rp.body.observations, [{ px: [50, 5], radius_m: OBS_RADIUS_M, cls: 'sand' }]);
+  assert.equal(s.proposals[0].reason, 'observation'); assert.equal(s.proposals[0].observation.cls, 'sand');
+});

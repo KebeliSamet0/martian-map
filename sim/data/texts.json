@@ -797,8 +797,8 @@
       "en": "Your load increased; the rest of the route and the return were recomputed ({m} m, {kcal} kcal, {o2} L O₂ difference)."
     },
     "dyn.msg.observation": {
-      "tr": "Yakın rotada geçilmez bir bölge görüldü; yeni rota {m} m, {kcal} kcal, {o2} L O₂ fark yaratıyor.",
-      "en": "An impassable area was seen near the route; a new route differs by {m} m, {kcal} kcal, {o2} L O₂."
+      "tr": "Kask kamerası rotaya yakın riskli zemin işaretledi; bu gözlemle yeni rota {m} m, {kcal} kcal ve {o2} L O₂ fark yaratıyor (model gözlemi, ölçüm değil).",
+      "en": "The helmet camera flagged risky ground near the route; with this observation a new route differs by {m} m, {kcal} kcal and {o2} L O₂ (model observation, not a measurement)."
     },
     "dyn.urgent": {
       "tr": "Dönüş maliyeti kalan bütçeye yaklaşıyor: dönüşü olmayan nokta olabilir.",

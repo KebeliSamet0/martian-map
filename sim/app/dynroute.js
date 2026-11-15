@@ -11,6 +11,9 @@ export const RESERVE_FRAC = 0.4;     // O₂ ya da süre payı bunun altına ini
 export const RETURN_NEAR = 0.8;      // dönüş maliyeti kalan bütçenin bu oranına yaklaşırsa "dönüşü olmayan nokta"
 export const COOLDOWN_S = 45;        // aynı sebep için iki öneri arası
 export const DECISION_TIMEOUT_S = 25;
+export const LOAD_STEP_KG = 0.5;      // yük bu kadar artınca (numune) kalan rota + dönüş yeni yükle yeniden hesaplanır
+export const OBS_RADIUS_M = 20;       // kask kamerası gözlemi için tasarım yarıçapı (≈ maskeli görüş menzili; kaynaklı ölçüm değil)
+export const OBS_NEAR_ROUTE_M = 40;   // gözlem yalnız rotaya bu kadar yakınsa dikkate alınır
 
 /** pos [x,z] ile polyline [[x,z]...] arasındaki en kısa mesafe: {dist, idx (en yakın segment başlangıcı), point}. */
 export function distToPolyline(pos, dense) {
@@ -51,7 +54,7 @@ const sum = (a, b) => ({ m: (a.m ?? 0) + (b.m ?? 0), kcal: (a.kcal ?? 0) + (b.kc
  */
 export function createDynRoute(deps) {
   const { call, ctx, propose, apply } = deps;
-  const st = { devT: 0, busy: false, cooldown: {}, reserveDone: false, lastTick: 0, noApiNoted: false };
+  const st = { devT: 0, busy: false, cooldown: {}, reserveDone: false, lastTick: 0, noApiNoted: false, load0: null, loadSeen: null, obsSeen: new Set() };
   const budgetBody = (c) => { const r = remainingBudget(c.limits, c.snap); const b = {}; for (const k of ['time_min', 'o2_L', 'kcal', 'dose_uGy']) if (r[k] != null && r[k] > 0) b[k] = Math.round(r[k] * 100) / 100; return b; };
   const pick = (res, kind) => res?.routes?.find((x) => x.kind === kind) ?? res?.routes?.[0];
   const cdOk = (reason, now) => (st.cooldown[reason] ?? -1e9) + COOLDOWN_S <= now;
@@ -82,18 +85,51 @@ export function createDynRoute(deps) {
     } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
   }
 
+  async function load(c, extraKg, now) {
+    st.busy = true; st.cooldown.load = now;
+    try {
+      const body = (g, ld) => ({ start: c.px, goal: g, load_kg: ld, ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) });
+      const [withL, noL, backL] = await Promise.all([call('/route', body(c.route.goalPx, extraKg)), call('/route', body(c.route.goalPx, 0)), c.basePx ? call('/route', body(c.basePx, extraKg)) : null]);
+      const n = pick(withL, c.route.kind), o = pick(noL, c.route.kind); if (!n || !o) { deps.onNote?.('dynroute: yük için rota hesaplanamadı'); return; }
+      const back = backL ? pick(backL, 'safest') : null;
+      await propose({ reason: 'load', route: n, current: { px: c.px }, delta: deltaOf(oneWay(n.total), oneWay(o.total)), extraKg,
+        via: { returnWithLoad: back ? oneWay(back.total) : null }, urgent: back?.total?.go === false });
+    } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
+  }
+
+  async function observe(c, obs, now) {
+    st.busy = true; st.cooldown.observation = now;
+    try {
+      const body = { start: c.px, goal: c.route.goalPx, observations: [{ px: obs.px.map(Math.floor), radius_m: obs.radius_m ?? OBS_RADIUS_M, cls: obs.cls }], ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) };
+      const [res, base] = await Promise.all([call('/replan', body), call('/route', { start: c.px, goal: c.route.goalPx, ...(Object.keys(budgetBody(c)).length ? { budget: budgetBody(c) } : {}) })]);
+      const n = pick(res, c.route.kind), o = pick(base, c.route.kind); if (!n || !o) { deps.onNote?.('dynroute: gözlem için rota hesaplanamadı'); return; }
+      await propose({ reason: 'observation', route: n, current: { px: c.px }, delta: deltaOf(oneWay(n.total), oneWay(o.total)), observation: { ...obs, radius_m: obs.radius_m ?? OBS_RADIUS_M }, urgent: false });
+    } catch (e) { deps.onNote?.(`dynroute: ${e.message}`); } finally { st.busy = false; }
+  }
+
+  let pendingObs = null;
   return {
+    /** Kask kamerası ya da tarayıcı gözlemi: {px:[c,r], cls:'sand'|'bigrock'|..., radius_m?}. Rotaya yakın değilse yok sayılır. */
+    observe(obs) {
+      const c = ctx(); if (!c || !obs?.px || !obs.cls) return false;
+      const key = obs.px.join(',') + obs.cls; if (st.obsSeen.has(key)) return false;
+      const w = c.pxToWorld?.(obs.px); if (w && distToPolyline(w, c.route.dense).dist > OBS_NEAR_ROUTE_M + (obs.radius_m ?? OBS_RADIUS_M)) return false;
+      st.obsSeen.add(key); pendingObs = obs; return true;
+    },
     /** Her kare: dt (sn, gerçek zaman), now (sn). */
     update(dt, now = st.lastTick + dt) {
       st.lastTick = now;
       const c = ctx(); if (!c || st.busy) { if (!c) st.devT = 0; return; }
       const near = distToPolyline(c.pos, c.route.dense);
       st.devT = near.dist > DEVIATION_M ? st.devT + dt : 0;
+      const ld = c.snap?.loadKg;
+      if (Number.isFinite(ld)) { st.load0 ??= ld; if (st.loadSeen == null) st.loadSeen = ld; if (ld - st.loadSeen >= LOAD_STEP_KG && cdOk('load', now)) { const extra = Math.round((ld - st.load0) * 10) / 10; st.loadSeen = ld; void load(c, extra, now); return; } }
+      if (pendingObs && cdOk('observation', now)) { const o = pendingObs; pendingObs = null; void observe(c, o, now); return; }
       const rf = remainingBudget(c.limits, c.snap), low = Math.min(rf.fracO2 ?? 1, rf.fracTime ?? 1) < RESERVE_FRAC;
       if (low && !st.reserveDone && cdOk('reserve', now) && c.basePx) { void reserve(c, now); return; }
       if (st.devT >= DEVIATION_HOLD_S && cdOk('deviation', now)) { st.devT = 0; void deviation(c, near, now); }
     },
-    reset() { st.devT = 0; st.busy = false; st.cooldown = {}; st.reserveDone = false; },
+    reset() { st.devT = 0; st.busy = false; st.cooldown = {}; st.reserveDone = false; st.load0 = null; st.loadSeen = null; st.obsSeen = new Set(); pendingObs = null; },
     state: () => ({ ...st }),
   };
 }

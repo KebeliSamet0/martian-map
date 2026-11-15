@@ -367,8 +367,15 @@ dyn = createDynRoute({
     const base = R.baseWorld ?? R.r.start?.world;
     return { route: { dense: R.r.dense, goalPx: R.r.goalPx, kind: R.r.kind }, pos: [P.x, P.z], px: curPxNow(), progressM: R.s,
       limits: wire.selected.limits ?? {}, snap: wire.vitals?.snapshot?.() ?? {}, basePx: base ? worldToPx(geo, base[0], base[1]).map(Math.floor) : null,
-      worldToPx: (p) => worldToPx(geo, p[0], p[1]) };
+      worldToPx: (p) => worldToPx(geo, p[0], p[1]), pxToWorld: (p) => pxToWorld(geo, p[0], p[1]) };
   },
+});
+// Kask kamerası uyarısı (mm:camera-insight, warn): o durağın çevresi gözlem olarak /replan'a verilir (kum/iri taş sınıfı varsa). batu:dyn
+addEventListener('mm:camera-insight', (e) => {
+  const d = e.detail ?? {}; if (!d.warn || !dyn) return;
+  const stop = wire?.grid?.rover_stops?.find((s) => s.stop_id === d.stopId); if (!stop) return;
+  const kinds = d.kinds ?? [], cls = kinds.includes('sand') ? 'sand' : (kinds.includes('bigrock') || kinds.includes('rock')) ? 'bigrock' : null;
+  if (cls) dyn.observe({ px: stop.px, cls, source: 'camera' });
 });
 
 function stepPlayer(dt, t) {

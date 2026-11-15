@@ -65,3 +65,5 @@ Yürüyüş boyunca durumu izler ve MEVCUT konumdan yeni plan önerir; sayılar 
 - Kum: mevcut `/replan` aynı sözleşmeyle (`reason:'sand'`, `urgent:true`); arayüz yoksa eskisi gibi hemen uygulanır.
 - Olaylar: `window` `mm:route-suggest` {reason, route, current, delta:{m,kcal,o2_L,risk}, urgent} (iptal edilebilir: dinleyici `preventDefault()` derse arayüz onda; yoksa yerleşik bant) ve `mm:route-decision` {accept, reason}.
 - Test: `sim/tests/dynroute.test.mjs` (API taklidiyle eşik, debounce, soğuma, olay üretimi).
+- Yük (#122-3): vitals `loadKg` ≥ 0.5 kg artınca (numune) kalan rota ve üsse dönüş `load_kg` ile yeniden hesaplanır (`reason:'load'`; dönüş NO-GO ise `urgent`).
+- Gözlem (#122-4): `mm:camera-insight` (warn, kinds sand/bigrock) → durağın çevresi (`OBS_RADIUS_M`=20 m tasarım yarıçapı) `/replan` gözlemi (`reason:'observation'`); rotadan > 60 m uzakta yok sayılır. Tarayıcı kaynaklı gözlem yok: geçilmez alan zaten planlayıcı maskesinde.
