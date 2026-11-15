@@ -7,8 +7,8 @@ Rules: max 30 s, English, public link. Captions equal the voice-over. Record fro
 | 1 | 0–4 s | Briefing screen, S1 "Boxwork to Atacama" `[SHOT-BRIEFING]` | slow push-in on the objective card | "Mission briefing: reach the Atacama drill site on Mars." |
 | 2 | 4–9 s | Route planner, three routes with budgets `[SHOT-ROUTES]` | cursor hovers shortest, balanced, safest; selects safest | "Three routes. Each costs time, energy, oxygen and radiation." |
 | 3 | 9–15 s | 3D walk, HUD gauges `[SHOT-HUD]` | third-person walk, O₂ / energy / time / dose tick down | "Walk Curiosity's real terrain and watch the budget drain." |
-| 4 | 15–19 s | Helmet scanner overlay `[SHOT-SCAN]` | scanner sweeps; cells show safe / caution / no-go / "model not sure" | "The scanner shows what the model knows, and what it does not." |
-| 5 | 19–25 s | Sand warning, re-plan `[SHOT-REPLAN]` | sand appears; new route line draws around it | "Sand ahead. The route is re-planned on the spot." |
+| 4 | 15–19 s | Helmet scanner overlay `[SHOT-SCAN]` | scanner sweeps; caution / no-go marks and low-evidence areas | "The scanner warns, and shows where the model has little evidence." |
+| 5 | 19–25 s | Sand warning, re-plan `[SHOT-REPLAN]` | sand appears; new route line draws around it | "A sand patch in the scenario. The planner finds a new route." |
 | 6 | 25–30 s | Debrief card `[SHOT-DEBRIEF]` + title card | planned vs actual; end card with name and NASA data credit | "Rehearse the EVA before you take it. [PROJECT NAME]." |
 
 Notes:
