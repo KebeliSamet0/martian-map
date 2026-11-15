@@ -86,3 +86,55 @@ gerçek kayaları da atabilir (Bora'nın kararı).
 - Sarılar (şüpheli) kaya mı değil mi belli değil, iki ihtimal de tabloda gösterildi.
 - 1 m'den küçük kayalar fotoğrafta görünmüyor, bu karneye dahil değil.
 - Ayrıntılı karar sütunu: `docs/data/img/validation_sample.csv`.
+
+## 6. Büyük tespitler gözle sınıflandırıldı: `kind` alanı (15 Kasım 2026)
+
+`sim/data/rocks.json` 829 tespit içeriyor (S1–S3 koridoru). **Çapı 2,6 m'den büyük 123 tespitin hepsine** ortofotoda tek tek bakıldı
+(`docs/data/img/kind_check/sheet_1…7.png`, her kare 48 m, kırmızı işaret tespitin merkezi; karar tablosu `labels.csv`).
+Sonuç, `rocks.json`'daki `kind` alanında:
+
+| kind | Adet | Anlamı |
+|---|---|---|
+| `outcrop` | 110 | Boxwork sırtının/duvarının yüzleği; ışıklı ve gölgeli yüzü olan ana kaya basamağı, tek kaya değil |
+| `shadow` | 10 | Gölgenin kendisi: çukur ya da dar yarık/çatlak gölgesi, karşı yüzü ışıklı bir cisim yok |
+| `rock` | 3 | Düz, çakıllı zeminde sırttan bağımsız, sıkışık koyu kütle (#98, #99, #120) |
+| `rock` (küçük, ≤ 2,6 m) | 706 | Tek tek bakılmadı; varsayılan. Kör örneklem (§3b) 30 adayın 23'ünün kaya olduğunu gösterdi |
+
+**Önemli sınırlar.** (1) Elimizde yalnız 1 m/piksellik ortofoto (`layers/ortho_1m.png`) var; 25 cm'lik kaynak bu makinede yok. Bir tespit
+3–10 piksel ediyor, bu yüzden sınıf kararı yüz değeriyle: "sırta bağlı mı, yoksa tek başına mı" sorusunun cevabı. Sınırdaki tespitler
+(özellikle 3 `rock` ve 10 `shadow`) tek gözün yargısı, ikinci bir kişi bakmadı. (2) En büyük 60 tespitin hiçbiri tek kaya değil (sırt duvarı ya da gölge); 8 m ve üstü 11 tespitin 11'i `outcrop`.
+(3) Büyük tespitler küçük kayalardan sayıca az ama alanca baskın: daire alanı toplamının **%78'i** `outcrop`/`shadow`'dan geliyor.
+Yani kaya kaplama oranı (`rock_cfa`) koridorda büyük ölçüde sırt gölgesinden besleniyor; bu, §3b'deki "rota çevresinde ~%13–23 şişme" bulgusuyla
+aynı yönde, ama daha büyük olabilir. `rock_cfa` katmanını yeniden üretmek için 25 cm kaynak gerekiyor, bu turda değiştirilmedi.
+
+**Sunum cümlesi.**
+- EN: "The orbital detector found 829 rock candidates along the route corridor. We checked all 123 larger than 2.6 m by eye: 120 are ridge outcrops or shadows, only 3 look like single boulders, so we label them and do not count them as rocks. The 706 small ones were not checked one by one (a blind sample of 30 gave 23 rocks, false alarms 13–23%)."
+- TR: "Yörünge tespiti rota koridorunda 829 kaya adayı buldu. 2,6 m'den büyük 123'ünün hepsini elle kontrol ettik: 120'si sırt yüzleği ya da gölge, yalnız 3'ü tek kaya gibi; bunları etiketledik ve kaya saymıyoruz. 706 küçük tespite tek tek bakılmadı (30'luk kör örneklemde 23 kaya, yanlış alarm %13–23)."
+
+## 7. Kum noktaları × modelin `p_sand` katmanı (15 Kasım 2026)
+
+Bora'nın 16 noktası (`layers/sand_hint.json`) ile Emre'nin `layers/p_sand.npy` katmanı, noktanın merkez hücresinde (`ml/orbital/sand_vs_model.py`):
+
+| Nokta | yarıçap (m) | p_sand (nokta) | entropy | en yakın durak (m) | o durağın kum payı |
+|---|---|---|---|---|---|
+| sand_1 | 30 | 0.189 | 1.00 (kanıt yok) | 942 | 0.005 |
+| sand_2 | 10 | 0.001 | 0.28 | 38 | 0.001 |
+| sand_3 | 25 | 0.281 | 1.00 (kanıt yok) | 930 | 0.372 |
+| sand_4 | 15 | 0.080 | 0.44 | 446 | 0.005 |
+| sand_5 | 30 | 0.048 | 0.46 | 346 | 0.003 |
+| sand_6 | 19 | 0.188 | 1.00 (kanıt yok) | 904 | 0.010 |
+| sand_7 | 30 | 0.030 | 0.39 | 294 | 0.017 |
+| sand_8 | 15 | 0.025 | 0.15 | 267 | 0.005 |
+| sand_9 | 12 | 0.111 | 0.59 | 545 | 0.005 |
+| sand_10 | 16 | 0.004 | 0.25 | 136 | 0.010 |
+| sand_11 | 20 | 0.021 | 0.08 | 8 | 0.002 |
+| sand_12 | 15 | 0.021 | 0.08 | 45 | 0.002 |
+| sand_13 | 19 | 0.028 | 0.21 | 47 | 0.028 |
+| sand_14 | 16 | 0.010 | 0.27 | 14 | 0.010 |
+| sand_15 | 8 | 0.062 | 0.33 | 42 | 0.062 |
+| sand_16 | 9 | 0.001 | 0.13 | 47 | 0.001 |
+
+Kanıtlı nokta: 13/16; bunlarda p_sand en çok 0.111, >= 0,2 olan: 0
+
+Entropy 1,00 olan üç nokta en yakın Navcam durağından ~900 m uzakta; orada `p_sand` "kanıt yok" varsayılanı, model tespiti değil.
+Okuma ve Emre'nin analizine girdi: `ml/rover_terrain/SAND_ANALYSIS.md`.
