@@ -4,7 +4,10 @@ import { readFile } from 'node:fs/promises';
 import { sampleField, footReading, segmentWhy, fogRGBA, loadTerrainField, createWalkLog, walkSummaryText } from '../app/insight.js';
 import { summarize, pathPx } from '../app/compare.js';
 const texts = JSON.parse(await readFile(new URL('../data/texts.json', import.meta.url)));
-const T = texts.insight, C = texts.compare;
+// insight-ui.js:15 ile aynı çözümleme: {tr,en} alanlı anahtarlardan dili seç (testte tr).
+const pick = (v) => (v && typeof v === 'object' && 'tr' in v ? v.tr : v);
+const group = (o) => Object.fromEntries(Object.entries(o ?? {}).map(([k, v]) => [k, pick(v)]));
+const T = group(texts.insight), C = group(texts.compare);
 // 2×1 ızgara: [toprak .1, ana kaya .1, kum .72, büyük kaya .08, güven .61] ve düşük güvenli hücre
 const q = (a) => a.map((v) => Math.round(v * 255));
 const field = { w: 2, h: 1, provisional: false, data: new Uint8Array([...q([.1, .1, .72, .08, .61]), ...q([.3, .3, .2, .2, .2])]) };
