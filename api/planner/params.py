@@ -10,13 +10,13 @@ G_MARS = 3.71  # m/s²
 G_RATIO = G_MARS / G_EARTH
 
 # Kütleler (kg)
-BODY_KG = 80.0  # VARSAYIM: astronot
-SUIT_KG = 120.0  # VARSAYIM: skafandr + yaşam destek ünitesi (xEMU mertebesi, doğrulanacak)
-TOOLS_KG = 10.0  # VARSAYIM: taşınan bilim ekipmanı
+BODY_KG = 82.0  # NASA-STD-3001 Vol. 2 Rev E: 50. persentil erkek 82 kg (Ogilvie vd. 2026, NASA JSC, Tablo 5) · docs/eva_parameters.md (Elif Nisa, #22); uygulama #147
+SUIT_KG = 104.0  # Mars skafandrı + PLSS üst sınırı 230 lbm ≈ 104 kg (Ogilvie vd. 2026). Tasarım hedefi; var olan skafandr değil (xEMU 177 kg)
+TOOLS_KG = 23.0  # Mars için ilk taşıma kütlesi tahmini 50 lbm ≈ 23 kg (Ogilvie vd. 2026); temkinli üst değer
 DEFAULT_LOAD_KG = 0.0  # VARSAYIM: taşınan ek görev/numune yükü varsayılanı (kg)
 
 # Yürüme hızı
-BASE_SPEED_MS = 0.8  # VARSAYIM: düz, sıkı zeminde skafandrlı yürüyüş (Apollo mertebesi, doğrulanacak)
+BASE_SPEED_MS = 0.75  # 2,7 km/sa: 1 saatten uzun eve dönüş yürüyüşü (Jones, ALSJ 'Lunar Gaits'; Ogilvie vd. 2026 içinde). Ay verisi
 
 # Metabolik kalibrasyon: Pandolf göreli yapıyı verir, mutlak düzey düz ana kayada
 # bu değere eşitlenir. Apollo ay EVA'larının ortalaması ~234 kcal/saat ≈ 272 W
@@ -43,20 +43,20 @@ SLOPE_NOGO_DEG = 20.0  # NASA EVA-EXP-0075 (2020, slayt 6): Artemis Ay xEVA sist
 SNAP_RADIUS_M = 10.0
 
 # EVA bütçesi
-EVA_MAX_H = 6.0  # VARSAYIM: toplam yürüyüş + durak süresi
-SCIENCE_STOP_MIN = 30.0  # VARSAYIM: hedefte bilim çalışması
-RESERVE_MIN = 30.0  # VARSAYIM: eve dönüş için yedek pay
+EVA_MAX_H = 7.0  # Apollo 15–17 genişletilmiş PLSS: 7 saat (Waligora & Horrigan 1975, NASA SP-368 s. 115). Ay sırt çantası kapasitesi
+SCIENCE_STOP_MIN = 30.0  # VARSAYIM: görev planı girdisi; sabit standart yok (faaliyet başına süre, Johnson vd. 2010)
+RESERVE_MIN = 30.0  # Apollo OPS acil O₂ sisteminin asgari süresi (SP-368). Mars için genel bir pay kaynağı yok
 
 # Radyasyon: Curiosity RAD yüzey dozu ~180–225 µGy/gün (Hassler et al. 2014)
 SURFACE_DOSE_MGY_PER_DAY = 0.21  # Hassler et al. 2014, doi:10.1126/science.1244797
 DOSE_UGY_PER_H = SURFACE_DOSE_MGY_PER_DAY * 1000 / 24.0
-EVA_MAX_KCAL = 2000.0  # VARSAYIM: görev bütçesi, tıbbi sınır değil
-EVA_MAX_O2_L = 420.0  # VARSAYIM
-EVA_MAX_DOSE_UGY = 60.0  # VARSAYIM: EVA planlama bütçesi
+EVA_MAX_KCAL = 1800.0  # Aynı PLSS'nin toplam ısı atma kapasitesi 7530 kJ ≈ 1800 kcal (SP-368). Görev bütçesi, tıbbi sınır değil
+EVA_MAX_DOSE_UGY = EVA_MAX_H * DOSE_UGY_PER_H  # 7 sa × Gale yüzey doz hızı (RAD) ≈ 61 µGy: tam EVA'nın BEKLENEN dozu, sağlık limiti DEĞİL (EVA başına NASA limiti yok)
 STOP_METABOLIC_W = FLAT_REFERENCE_W  # VARSAYIM: durak/yedek metabolizması
 
 # Oksijen: 1 L O₂ ≈ 4.8 kcal (dolaylı kalorimetri kalorik eşdeğeri); 1 L O₂ ≈ 1.429 g (STP)
 KCAL_PER_L_O2 = 4.8
+EVA_MAX_O2_L = round(EVA_MAX_KCAL / KCAL_PER_L_O2, 1)  # 1800 / 4,8 = 375 L (docs/eva_parameters.md: 4,86 ile ≈370 L; %1 fark)
 O2_G_PER_L = 1.429  # Standart koşullarda (0°C, 1 atm) O₂ yoğunluğu (g/L)
 
 # Rota ön ayarları: hücre maliyeti = t·süre + k·kcal + r·risk (hepsi metre başına)
@@ -143,15 +143,15 @@ MARS_VALIDATION_NOTE = "Pandolf Dünya modeli, Mars için g-ölçekli; doğrulan
 def assumptions(provisional_terrain: bool = False):
     """Arayüzde gösterilecek varsayım tablosu."""
     items = [
-        {"name": "Astronot kütlesi", "value": BODY_KG, "unit": "kg", "source": "VARSAYIM"},
-        {"name": "Skafandr + yaşam destek", "value": SUIT_KG, "unit": "kg", "source": "VARSAYIM (doğrulanacak)"},
-        {"name": "Ekipman", "value": TOOLS_KG, "unit": "kg", "source": "VARSAYIM"},
+        {"name": "Astronot kütlesi", "value": BODY_KG, "unit": "kg", "source": "NASA-STD-3001 Vol. 2 Rev E, 50. persentil erkek (Ogilvie vd. 2026)"},
+        {"name": "Skafandr + yaşam destek", "value": SUIT_KG, "unit": "kg", "source": "Mars skafandrı üst sınırı 230 lbm (Ogilvie vd. 2026); tasarım hedefi"},
+        {"name": "Ekipman", "value": TOOLS_KG, "unit": "kg", "source": "Mars ilk taşıma kütlesi 50 lbm (Ogilvie vd. 2026); temkinli üst değer"},
         {"name": "Varsayılan ek yük (load_kg)", "value": DEFAULT_LOAD_KG, "unit": "kg", "source": "VARSAYIM: Pandolf L = SUIT_KG + TOOLS_KG + load_kg terimine eklenir"},
-        {"name": "Temel yürüme hızı", "value": BASE_SPEED_MS, "unit": "m/s", "source": "VARSAYIM (doğrulanacak)"},
+        {"name": "Temel yürüme hızı", "value": BASE_SPEED_MS, "unit": "m/s", "source": "2,7 km/sa (Jones, ALSJ Lunar Gaits; Ogilvie vd. 2026); Ay verisi"},
         {"name": "Düz zemin metabolik düzeyi", "value": FLAT_REFERENCE_W, "unit": "W", "source": "Apollo EVA ortalaması, Waligora & Horrigan 1975 (doğrulanacak)", "mars_validated": False},
         {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": TERRAIN_SOURCE},
         {"name": "Hücre maliyet katmanı eğim özeti", "value": "|slope| ile çıkış (yönsüz hücre özeti); yönlü yol hesabı /step ucunda", "unit": "-", "source": "VARSAYIM: tek hücrede yürüyüş yönü bilinmediğinden |G| = tan(slope)·100 kullanılır"},
-        {"name": "Bilim durağı süresi", "value": SCIENCE_STOP_MIN, "unit": "dk", "source": "VARSAYIM: hedefte bilim çalışması; GO kararındaki committed toplamına girer"},
+        {"name": "Bilim durağı süresi", "value": SCIENCE_STOP_MIN, "unit": "dk", "source": "VARSAYIM: görev planı girdisi, sabit standart yok; GO kararındaki committed toplamına girer"},
         {"name": "Durak metabolik düzeyi", "value": STOP_METABOLIC_W, "unit": "W", "source": "VARSAYIM: durak/yedek metabolizması (şimdilik düz zemin düzeyine eşit)"},
         {"name": "Oksijen dönüşümü", "value": {"kcal_per_L_o2": KCAL_PER_L_O2, "g_per_L_o2": O2_G_PER_L}, "unit": "kcal/L, g/L", "source": "Dolaylı kalorimetri (4.8 kcal/L O₂) ve STP yoğunluğu (1.429 g/L)"},
         {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "Ay güney kutbu rota planlaması (Peña-Asensio vd., Acta Astronautica 214, 2024; https://doi.org/10.1016/j.actaastro.2023.10.010): 15° üstü yasak değil, yüksek cezalı; ihtiyatlı maliyet tercihi. Mars için doğrulanmış insan sınırı değildir", "mars_validated": False},
@@ -160,7 +160,11 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Geçilmez hücreden bağlanma yarıçapı", "value": SNAP_RADIUS_M, "unit": "m", "source": "VARSAYIM: 2 m DEM sırt kenarında eğimi abartıyor (rover tilt karşılaştırması)"},
         {"name": "Segment uzunluk ve yumuşatma sınırları", "value": {"min_m": SEG_MIN_M, "max_m": SEG_MAX_M, "max_count": SEG_MAX_COUNT, "smooth_m": SEG_SMOOTH_M, "hysteresis_deg": SEG_HYSTERESIS_DEG}, "unit": "m / °", "source": "VARSAYIM: DEM hücre gürültüsünde 8–25 okunabilir segment hedefi"},
         {"name": "Rota ön ayar ağırlıkları (t, k, r)", "value": {k: {x: v[x] for x in ("t", "k", "r")} for k, v in REAL_PRESETS.items()}, "unit": "-", "source": "VARSAYIM: gerçek veride süre/enerji/risk ödünleşimi kalibrasyonu"},
-        {"name": "Maksimum EVA süresi", "value": EVA_MAX_H, "unit": "saat", "source": "VARSAYIM"},
+        {"name": "Maksimum EVA süresi", "value": EVA_MAX_H, "unit": "saat", "source": "Apollo 15–17 PLSS 7 sa (NASA SP-368, Waligora & Horrigan 1975); Ay sırt çantası"},
+        {"name": "EVA enerji bütçesi", "value": EVA_MAX_KCAL, "unit": "kcal", "source": "Apollo 15–17 PLSS ısı kapasitesi 7530 kJ (SP-368); görev bütçesi, tıbbi sınır değil"},
+        {"name": "EVA O₂ bütçesi", "value": EVA_MAX_O2_L, "unit": "L", "source": "Türetilmiş: enerji bütçesi / 4,8 kcal/L O₂"},
+        {"name": "EVA doz bütçesi", "value": round(EVA_MAX_DOSE_UGY, 1), "unit": "µGy", "source": "Türetilmiş: EVA süresi × RAD yüzey doz hızı (Hassler vd. 2014). Tam EVA'nın beklenen dozu; sağlık limiti değil"},
+        {"name": "Yedek süre", "value": RESERVE_MIN, "unit": "dk", "source": "Apollo OPS acil O₂ sisteminin asgari süresi (SP-368); Mars için genel pay kaynağı yok"},
         {"name": "Yüzey doz hızı", "value": round(DOSE_UGY_PER_H, 2), "unit": "µGy/saat", "source": "Curiosity RAD, Hassler et al. 2014"},
         {"name": "Mars yerçekimi ölçeği", "value": round(G_RATIO, 3), "unit": "-", "source": "VARSAYIM: yük ve eğim terimleri g oranıyla ölçeklenir",
          "mars_validated": False},

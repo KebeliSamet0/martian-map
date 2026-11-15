@@ -25,10 +25,10 @@ test('hız: kumda yavaş, ana kayada hızlı; yokuş yukarı yavaş', () => {
 });
 
 test('metabolik: düz ana kayada 272 W, kum ve yokuş daha fazla', () => {
-  const flat = W.metabolicW(0.8, 0, 1.0);
+  const flat = W.metabolicW(W.PARAMS.BASE_SPEED_MS, 0, 1.0);
   assert.ok(Math.abs(flat - 272) < 1e-6);
-  assert.ok(W.metabolicW(0.8, 0, 2.1) > flat);
-  assert.ok(W.metabolicW(0.8, 20, 1.0) > flat);
+  assert.ok(W.metabolicW(W.PARAMS.BASE_SPEED_MS, 0, 2.1) > flat);
+  assert.ok(W.metabolicW(W.PARAMS.BASE_SPEED_MS, 20, 1.0) > flat);
   assert.equal(W.metabolicW(0.5, -20, 1.2), W.metabolicW(0.5, 20, 1.2));   // cost.py: |G|
 });
 

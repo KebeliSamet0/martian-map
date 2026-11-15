@@ -38,7 +38,7 @@ test('nearestPassable: en yakın geçilebilir hücre ve metre', () => {
 
 test('buildCustomMission: S1 biçimi, bütçe, 80 L, çok yakın A-B reddedilir', () => {
   const m = buildCustomMission({ a: [433, 525], b: [491, 774] });
-  assert.equal(m.id, 'CUSTOM'); assert.deepEqual(m.start_px, [433, 525]); assert.equal(m.limits.o2_L, 420); assert.equal(m.goal.grid_px[1], 774);
+  assert.equal(m.id, 'CUSTOM'); assert.deepEqual(m.start_px, [433, 525]); assert.equal(m.limits.o2_L, 375); assert.equal(m.goal.grid_px[1], 774);
   assert.equal(buildCustomMission({ a: [1, 1], b: [200, 200], o2: 80 }).limits.o2_L, 80);
   assert.throws(() => buildCustomMission({ a: [1, 1], b: [2, 2] }), /yakın/);
   assert.throws(() => buildCustomMission({ a: [1, 1], b: [2000, 2] }), /ızgara/);

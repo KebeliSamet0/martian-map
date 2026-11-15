@@ -16,10 +16,10 @@
    "start_stop": "sci_1_sol4617",
    "goal_stop": "sci_4_sol4869",
    "limits": {
-    "time_min": 360.0,
-    "o2_L": 420.0,
-    "kcal": 2000.0,
-    "dose_uGy": 60.0
+    "time_min": 420.0,
+    "o2_L": 375.0,
+    "kcal": 1800.0,
+    "dose_uGy": 61.25
    },
    "sand": {
     "px": [
@@ -63,10 +63,10 @@
    "start_stop": "sci_3_sol4668",
    "goal_stop": "sci_4_sol4869",
    "limits": {
-    "time_min": 360.0,
-    "o2_L": 420.0,
-    "kcal": 2000.0,
-    "dose_uGy": 60.0
+    "time_min": 420.0,
+    "o2_L": 375.0,
+    "kcal": 1800.0,
+    "dose_uGy": 61.25
    },
    "sand": {
     "px": [
@@ -110,10 +110,10 @@
    "start_stop": "sci_2_sol4635",
    "goal_stop": "sci_4_sol4869",
    "limits": {
-    "time_min": 360.0,
+    "time_min": 420.0,
     "o2_L": 80,
-    "kcal": 2000.0,
-    "dose_uGy": 60.0
+    "kcal": 1800.0,
+    "dose_uGy": 61.25
    },
    "sand": {
     "px": [

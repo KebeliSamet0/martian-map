@@ -8,8 +8,8 @@
 // ---- params.py kopyası (test ile doğrulanır) ----
 export const PARAMS = {
   G_MARS: 3.71, G_EARTH: 9.81,                                 // params.py G_MARS, G_EARTH
-  BODY_KG: 80.0, SUIT_KG: 120.0, TOOLS_KG: 10.0,               // params.py (VARSAYIM kütleler)
-  BASE_SPEED_MS: 0.8,                                          // params.py BASE_SPEED_MS (VARSAYIM)
+  BODY_KG: 82.0, SUIT_KG: 104.0, TOOLS_KG: 23.0,               // params.py (kaynaklı kütleler, #147)
+  BASE_SPEED_MS: 0.75,                                         // params.py BASE_SPEED_MS (Jones ALSJ, #147)
   FLAT_REFERENCE_W: 272.0,                                     // params.py FLAT_REFERENCE_W
   TERRAIN_ETA: { bedrock: 1.0, soil: 1.2, sand: 2.1, bigrock: 1.5 },        // Pandolf 1977 η
   TERRAIN_SPEED: { bedrock: 1.0, soil: 0.95, sand: 0.6, bigrock: 0.5 },     // VARSAYIM hız çarpanı
