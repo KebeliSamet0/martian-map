@@ -53,12 +53,12 @@
    "id": "S2",
    "title": "Kumlu kestirme",
    "start_px": [
-    470,
-    589
+    487,
+    542
    ],
    "goal_px": [
-    491,
-    774
+    487,
+    802
    ],
    "start_stop": "sci_3_sol4668",
    "goal_stop": "sci_4_sol4869",
@@ -79,8 +79,8 @@
    "difficulty": "orta",
    "goal": {
     "grid_px": [
-     491,
-     774
+     487,
+     802
     ],
     "radius_m": 5.0
    },

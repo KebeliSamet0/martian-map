@@ -7,8 +7,8 @@
     },
     "S2": {
       "title": "Kumlu kestirme",
-      "brief": "Son boxwork durağından Atacama sondaj alanına yaklaşık 0,4 km yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir. Taramada kumu görürsen rota yeniden planlanacak.",
-      "objective": "Kumu dolaşarak Atacama sondaj alanına ulaş ve numune al."
+      "brief": "Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemden, Atacama sondaj durağının yaklaşık 56 m güneyindeki hedef noktasına yaklaşık 0,55 km yürüyeceksin. En kısa yol, ortofotoda kum adayı olarak işaretlenmiş bir alandan geçiyor; gevşek kum enerji ve süre bütçeni hızla tüketir. Zemin modeli bu kumu göremiyor, yani sürpriz olabilir; yola çıkarsa rota yeniden planlanır.",
+      "objective": "Kum adayını dolaşarak hedef noktaya, Atacama sondaj durağının güneyine ulaş ve numune al."
     },
     "S3": {
       "title": "Yarım O₂ tüpü",
@@ -168,16 +168,16 @@
       "en": "The sandy shortcut"
     },
     "mission.S2.brief": {
-      "tr": "Son boxwork durağından Atacama sondaj alanına yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir.",
-      "en": "You'll walk from the last boxwork stop to the Atacama drill site. The shortest path cuts across sand, and sand burns through your energy and time fast."
+      "tr": "Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemden, Atacama sondaj durağının yaklaşık 56 m güneyindeki hedef noktasına yürüyeceksin (~0,55 km). En kısa yol, ortofotoda kum adayı olarak işaretlenmiş bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir. Zemin modeli bu kumu göremiyor, yani sürpriz olabilir.",
+      "en": "You'll walk about 0.55 km from the flat ground roughly 100 m north of the last boxwork stop to a target point roughly 56 m south of the Atacama drill stop. The shortest path crosses a spot flagged as a sand candidate in the orthophoto, and loose sand burns through your energy and time. The terrain model cannot see this sand, so it may come as a surprise."
     },
     "mission.S2.objective": {
-      "tr": "Kumu dolaşarak Atacama sondaj alanına ulaş ve numune al.",
-      "en": "Go around the sand, reach the Atacama drill site and collect a sample."
+      "tr": "Kum adayını dolaşarak hedef noktaya, Atacama sondaj durağının güneyine ulaş ve numune al.",
+      "en": "Go around the sand candidate, reach the target point south of the Atacama drill stop and collect a sample."
     },
     "mission.S2.science": {
-      "tr": "Gevşek kum, rover ve astronot için en büyük kayma ve batma riskidir. Zemin sınıfı modeli bu yüzden rotayı kumdan uzak tutmaya çalışır.",
-      "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. That is why the terrain-class model tries to keep the route off it."
+      "tr": "Gevşek kum, rover ve astronot için en büyük kayma ve batma riskidir. Buradaki kum noktası ortofotodan çıkarılmış bir adaydır (kanıt: kesin değil). Zemin modeli bu bölgede kumu neredeyse hiç tahmin etmiyor (bu rotalarda p_kum en çok 0,14); rotayı bu yüzden kayalık/yüzlek zeminden uzak tutar, kumdan değil. Kumu tarayıcı ya da sürpriz olayı ortaya çıkarır.",
+      "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. The sand spot here is a candidate read from orthophotos (not confirmed). The terrain model almost never predicts sand in this area (p_sand at most 0.14 on these routes), so it steers the route away from rocky/outcrop ground, not from sand. The scanner or the surprise event reveals the sand."
     },
     "mission.S3.title": {
       "tr": "Yarım O₂ tüpü",
@@ -587,6 +587,116 @@
       "tr": "Yeniden planlama başarısız ({why}) — mevcut rota sürüyor.",
       "en": "Replanning failed ({why}) — continuing on the current route."
     }
+  },
+  "helmetcam": {
+      "hint": {
+          "tr": "C · kask kamerası: Curiosity burada sol {sol}'de durdu",
+          "en": "C · helmet camera: Curiosity stopped here on sol {sol}"
+      },
+      "title": {
+          "tr": "Kask kamerası",
+          "en": "Helmet camera"
+      },
+      "source_img": {
+          "tr": "Gerçek görüntü: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}",
+          "en": "Real image: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}"
+      },
+      "source_model": {
+          "tr": "Model: AI4Mars ile eğitilmiş DeepLabv3+ (tahmin)",
+          "en": "Model: DeepLabv3+ trained on AI4Mars (prediction)"
+      },
+      "comment": {
+          "tr": "Önünde {list}; {sand}.",
+          "en": "Ahead of you: {list}; {sand}."
+      },
+      "part": {
+          "tr": "%{pct} {cls}",
+          "en": "{pct}% {cls}"
+      },
+      "class_bedrock": {
+          "tr": "ana kaya",
+          "en": "bedrock"
+      },
+      "class_soil": {
+          "tr": "toprak",
+          "en": "soil"
+      },
+      "class_sand": {
+          "tr": "kum",
+          "en": "sand"
+      },
+      "class_bigrock": {
+          "tr": "büyük kaya",
+          "en": "big rock"
+      },
+      "class_none": {
+          "tr": "belirgin bir sınıf yok",
+          "en": "no dominant class"
+      },
+      "sand_none": {
+          "tr": "kum yok denecek kadar az",
+          "en": "almost no sand"
+      },
+      "sand_some": {
+          "tr": "kum %{pct}",
+          "en": "sand {pct}%"
+      },
+      "certain_high": {
+          "tr": "Model bu durakta emin.",
+          "en": "The model is confident at this stop."
+      },
+      "certain_low": {
+          "tr": "Model emin değil; kanıt az.",
+          "en": "The model is not sure; there is little evidence."
+      },
+      "certainty_line": {
+          "tr": "Model kesinliği %{c} (1 − entropi). Düşük kesinlik 'kanıt az' demektir, 'yanlış' değil.",
+          "en": "Model certainty {c}% (1 − entropy). Low certainty means little evidence, not 'wrong'."
+      },
+      "warn": {
+          "tr": "Uyarı: bu durakta {what}; ileride benzer zemin olabilir.",
+          "en": "Warning: at this stop {what}; similar ground may lie ahead."
+      },
+      "warn_part": {
+          "tr": "{cls} %{pct}",
+          "en": "{cls} {pct}%"
+      },
+      "ahead_hit": {
+          "tr": "Rotan {m} m ileride benzer zeminden ({cls}) geçiyor.",
+          "en": "Your route crosses similar ground ({cls}) {m} m ahead."
+      },
+      "ahead_none": {
+          "tr": "Rotanın önündeki {m} m içinde benzer zemin görünmüyor (model tahmini).",
+          "en": "No similar ground on your route within the next {m} m (model estimate)."
+      },
+      "sand_note": {
+          "tr": "Not: model ince, koyu kumu eksik tahmin edebilir; kum yok demek kum yok anlamına gelmez.",
+          "en": "Note: the model can under-predict thin dark sand, so 'no sand' is not proof of none."
+      },
+      "nophoto": {
+          "tr": "Burada Curiosity fotoğrafı yok. Haritadaki zemin, en yakın durakların model sonucundan yayılmış bir tahmin.",
+          "en": "There is no Curiosity photo here. The ground on the map is an estimate spread from the model results at the nearest stops."
+      },
+      "nophoto_meta": {
+          "tr": "Model kesinliği %{c}; en yakın durak {d} m uzakta.",
+          "en": "Model certainty {c}%; the nearest stop is {d} m away."
+      },
+      "nophoto_near": {
+          "tr": "Bu durağın görüntüsü yüklenemedi (arşivde yok ya da indirilmedi).",
+          "en": "The image for this stop could not be loaded (not in the archive or not downloaded)."
+      },
+      "frame": {
+          "tr": "Kare {i}/{n} · ◀ ▶",
+          "en": "Frame {i}/{n} · ◀ ▶"
+      },
+      "close": {
+          "tr": "Kapat (C)",
+          "en": "Close (C)"
+      },
+      "mask_label": {
+          "tr": "Model maskesi (tahmin, yarı saydam)",
+          "en": "Model mask (prediction, semi-transparent)"
+      }
   },
   "insight": {
     "foot_label": { "tr": "ZEMİN", "en": "GROUND" },
