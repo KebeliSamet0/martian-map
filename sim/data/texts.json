@@ -1193,8 +1193,8 @@
       "en": "New route after sand: {km} km · {min} min."
     },
     "hud.dyn.on": {
-      "tr": "Dinamik plan · kalan plan {status} · {s} sn önce yeniden hesaplandı ({why}) · {n} hesap · planlayıcı",
-      "en": "Dynamic plan · remaining plan {status} · recomputed {s} s ago ({why}) · {n} runs · planner"
+      "tr": "Dinamik plan: kalan {status} · {s} sn önce hesaplandı ({why}) · {n}× · planlayıcı",
+      "en": "Dynamic plan: remaining {status} · recomputed {s} s ago ({why}) · {n}× · planner"
     },
     "hud.dyn.wait": {
       "tr": "Dinamik plan · ilk yeniden hesap bekleniyor (≈{m} m ya da {s} sn)",
