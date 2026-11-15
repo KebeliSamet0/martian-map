@@ -19,13 +19,13 @@ test('manifest: 128 durak, her karenin NASA adresi ve model alanları var', () =
 
 test('model yorumu: şablon örneği, kum yok → uyarı yok, kesinlik yüksek', () => {
   const r = modelReading(S({ soil: 0.36, bedrock: 0.61, sand: 0.0, bigrock: 0.03 }, 0.28), T);
-  assert.equal(r.text, 'Önünde %61 ana kaya, %36 toprak; kum yok denecek kadar az. Model bu durakta emin.');
+  assert.equal(r.text, 'Önünde %61 ana kaya, %36 toprak; kum yok denecek kadar az. Model bu durakta emin (emin olması doğru olduğu anlamına gelmez).');
   assert.equal(r.warn, false); assert.equal(r.low, false); assert.ok(r.sandNote);
 });
 
-test('düşük kesinlik: "Model emin değil; kanıt az." ve uyarı eşikleri (kum > %15, büyük kaya > %10)', () => {
+test('düşük kesinlik: "Model bu durakta kararsız." ve uyarı eşikleri (kum > %15, büyük kaya > %10)', () => {
   const lo = modelReading(S({ soil: 0.5, bedrock: 0.3, sand: 0.1, bigrock: 0.1 }, 0.7), T);
-  assert.match(lo.text, /Model emin değil; kanıt az\.$/); assert.equal(lo.low, true); assert.equal(lo.warn, false);   // tam eşikte (0,10) uyarı yok
+  assert.match(lo.text, /Model bu durakta kararsız\.$/); assert.equal(lo.low, true); assert.equal(lo.warn, false);   // tam eşikte (0,10) uyarı yok
   const w = modelReading(S({ soil: 0.4, bedrock: 0.3, sand: 0.18, bigrock: 0.12 }, 0.3), T);
   assert.deepEqual(w.kinds, ['sand', 'bigrock']); assert.equal(w.warn, true); assert.match(w.warnText, /kum %18, büyük kaya %12/); assert.equal(w.sandNote, null);
 });
