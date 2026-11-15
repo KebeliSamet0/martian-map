@@ -700,6 +700,10 @@
       "tr": "Mevcut rotada devam et (risk)",
       "en": "Stay on the current route (risk)"
     },
+    "report.total": {
+      "tr": "Gidiş + dönüş toplamı: {min} dk · {kcal} kcal · {o2} L O₂. Yukarıdaki tablo yalnız gidişi plana karşı ölçer.",
+      "en": "Outbound + return total: {min} min · {kcal} kcal · {o2} L O₂. The table above compares the outbound leg against the plan only."
+    },
     "report.badges": {
       "tr": "BAŞARIMLAR",
       "en": "ACHIEVEMENTS"

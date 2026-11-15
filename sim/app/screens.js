@@ -297,7 +297,7 @@ export function showReport(container, opts = {}) {
 }
 export const reportOpen = () => !!activeReport;
 
-function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission, decisions = [], objectives = {} } = {}) {
+function buildReport(container, { planned = {}, actual = {}, total = null, completed = true, title, route, mission, decisions = [], objectives = {} } = {}) {
   return new Promise((resolve) => {
     const m = modal(container, title ?? t('report.title'), mission?.id);
     m.card.classList.add('mm-card-wide', 'mm-card-report');
@@ -361,6 +361,13 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     starWrap.append(el('p', 'mm-fine', !prev ? t('report.best.none')
       : isNew ? t('report.best.new') : t('report.best', { stars: prev.stars, grade: prev.grade ?? '—' })));
 
+    // #125 A.1: tablo tek yön; gidiş + dönüşün toplamı ayrı satırda yazılır ki karışmasın.
+    let totalLine = null;
+    if (total) {
+      const tt = readSnapshot(total);
+      totalLine = el('p', 'mm-fine mm-total', t('report.total', { min: n(tt.elapsed, 0), kcal: n(tt.kcal, 0), o2: n(tt.o2, 0) }));
+    }
+
     // #125 B.6: başarımlar — hepsi bu koşuda gerçekten olan bir şeyden
     const earned = [];
     const award = (id, cond) => { if (cond && awardBadge(id)) earned.push(id); };
@@ -412,7 +419,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     retry.onclick = () => { m.close(); resolve('retry'); };
     other.onclick = () => { m.close(); resolve('other'); };
     acts.append(retry, other);
-    m.card.append(head, starWrap, tbl, dec, badges, insight, acts);
+    m.card.append(head, starWrap, tbl, ...(totalLine ? [totalLine] : []), dec, badges, insight, acts);
     other.focus();
   });
 }
