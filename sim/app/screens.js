@@ -3,7 +3,7 @@
 import { ensureUiCss, readSnapshot } from './hud.js';
 import { t, loadTexts, TEXTS } from './i18n.js';
 import { fillSlot } from './slots.js';
-import { missionScore, readBest, writeBest } from './score.js';
+import { missionScore, readBest, writeBest, readBadges, awardBadge, BADGES } from './score.js';
 
 export { t, loadTexts, TEXTS };
 loadTexts();
@@ -361,6 +361,30 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     starWrap.append(el('p', 'mm-fine', !prev ? t('report.best.none')
       : isNew ? t('report.best.new') : t('report.best', { stars: prev.stars, grade: prev.grade ?? '—' })));
 
+    // #125 B.6: başarımlar — hepsi bu koşuda gerçekten olan bir şeyden
+    const earned = [];
+    const award = (id, cond) => { if (cond && awardBadge(id)) earned.push(id); };
+    if (completed) {
+      award('scanner', !!objectives.scan);
+      award('camera', !!objectives.camera);
+      award('reserve', !!objectives.return);
+      award('stars3', sc.stars === 3);
+      award('hard', !!mission?.hard);
+    }
+    const have = readBadges();
+    const badges = el('div', 'mm-badges');
+    badges.append(section(t('report.badges')));
+    const brow = el('div', 'mm-badge-row');
+    for (const id of BADGES) {
+      const b = el('span', 'mm-badge', t(`badge.${id}`));
+      b.title = t(`badge.${id}.how`);
+      if (have[id]) b.dataset.on = '1';
+      if (earned.includes(id)) b.dataset.new = '1';
+      brow.append(b);
+    }
+    badges.append(brow);
+    if (earned.length) badges.append(el('p', 'mm-fine', t('report.badges.new', { n: earned.length })));
+
     // #125 A.2: görev boyunca verilen rota kararları
     const dec = el('div', 'mm-decisions');
     dec.append(section(t('report.decisions')));
@@ -388,7 +412,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     retry.onclick = () => { m.close(); resolve('retry'); };
     other.onclick = () => { m.close(); resolve('other'); };
     acts.append(retry, other);
-    m.card.append(head, starWrap, tbl, dec, insight, acts);
+    m.card.append(head, starWrap, tbl, dec, badges, insight, acts);
     other.focus();
   });
 }

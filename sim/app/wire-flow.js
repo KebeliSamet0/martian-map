@@ -5,6 +5,7 @@ import { el, button } from './screens.js';
 import { t, getLang, setLang, onLang, loadTexts, missionText } from './i18n.js';
 import { slotItems } from './slots.js';
 import { bearingRel, missionSummary, fmtDist } from './flow-logic.js';
+import { awardBadge, readBadges, BADGES } from './score.js';
 import { openMapPicker, loadPickerLayers } from './mappicker.js';   // batu:custom
 import { parseAB, buildCustomMission } from './custommission.js';   // batu:custom
 import { API_BASE, API_OFF } from './api.js';   // batu:custom
@@ -45,6 +46,14 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     go.classList.add('mm-btn-lg'); go.dataset.testid = 'intro-start';
     go.onclick = () => showSelect();
     box.append(go);
+    // #125 B.6: kazanılmış rozetler açılışta küçük bir satır
+    const have = readBadges(), got = BADGES.filter((id) => have[id]);
+    if (got.length) {
+      const row = el('div', 'mm-badge-row mm-intro-badges');
+      row.append(el('span', 'mm-kicker', t('intro.badges')));
+      for (const id of got) { const b = el('span', 'mm-badge', t(`badge.${id}`)); b.dataset.on = '1'; b.title = t(`badge.${id}.how`); row.append(b); }
+      box.append(row);
+    }
     const foot = el('footer', 'mm-intro-foot');
     foot.append(el('div', null, t('intro.sources')), el('div', 'mm-intro-syn', t('intro.synthetic')));
     layer.append(box, foot, langButton());
@@ -186,7 +195,13 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     return true;
   }
   const objectiveState = () => Object.fromEntries(checkState);
-  addEventListener('mm:camera-insight', () => tickObjective('camera'));
+  // #125 B.6: üç farklı Navcam durağı incelendiyse rozet
+  const camStops = new Set();
+  addEventListener('mm:camera-insight', (e) => {
+    tickObjective('camera');
+    const id = e.detail?.stopId; if (id) camStops.add(id);
+    if (camStops.size >= 3) awardBadge('camera3');
+  });
   addEventListener('mm:scan', () => tickObjective('scan'));
 
   // ---------- Hesaplanıyor ekranı (#103 A.1) ----------
@@ -323,6 +338,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
       if (m) c.append(el('p', 'mm-text', missionText(m.id, 'brief')), el('p', 'mm-text mm-objective', missionText(m.id, 'objective')));
       backRow(c);
     } else if (view === 'layers') {
+      awardBadge('layers');   // #125 B.6: veri katmanları paneli açıldı
       const panels = slotItems('pause-panel');
       if (!panels.length) c.append(el('p', 'mm-text', t('pause.layers.empty')));
       for (const p of panels) {

@@ -54,6 +54,26 @@ export function missionScore({ actual = {}, limits = {}, decisions = [], hazardM
   return { stars, points, base, bonusUsed, criteria, counted: counted.map((c) => c.key), reserves: r, decisions: q };
 }
 
+// Başarımlar (#125 B.6). Hepsi gerçek bir olaydan kazanılır; ilerleme localStorage'da.
+export const BADGES = ['scanner', 'camera', 'camera3', 'layers', 'reserve', 'stars3', 'hard'];
+const BKEY = 'mm.badges.v1';
+
+export function readBadges(storage = globalThis.localStorage) {
+  try { return safeParse(storage?.getItem(BKEY)); } catch { return {}; }
+}
+
+/** Yeni kazanıldıysa true. Zaten varsa ya da depolama kapalıysa false. */
+export function awardBadge(id, storage = globalThis.localStorage) {
+  if (!BADGES.includes(id)) return false;
+  try {
+    const all = readBadges(storage);
+    if (all[id]) return false;
+    all[id] = true;
+    storage?.setItem(BKEY, JSON.stringify(all));
+    return true;
+  } catch { return false; }
+}
+
 const KEY = 'mm.best.v1';
 const safeParse = (s) => { try { return JSON.parse(s) || {}; } catch { return {}; } };
 

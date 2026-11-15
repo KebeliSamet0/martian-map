@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { missionScore, reserves, decisionQuality, readBest, writeBest } from '../app/score.js';
+import { missionScore, reserves, decisionQuality, readBest, writeBest, readBadges, awardBadge } from '../app/score.js';
 
 const limits = { o2_L: 420, reserve_min: 30 };
 
@@ -68,6 +68,16 @@ test('kişisel en iyi: daha çok yıldız, eşitlikte daha çok kalan O₂', () 
   assert.equal(readBest('S1', storage).o2Left, 200);
   writeBest('S1', { stars: 3, o2Left: 10 }, storage);
   assert.equal(readBest('S1', storage).stars, 3);
+});
+
+test('başarım: bir kez kazanılır, bilinmeyen kimlik verilmez', () => {
+  const mem = new Map();
+  const storage = { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v) };
+  assert.deepEqual(readBadges(storage), {});
+  assert.equal(awardBadge('scanner', storage), true);
+  assert.equal(awardBadge('scanner', storage), false);   // ikinci kez "yeni" değil
+  assert.equal(awardBadge('uydurma', storage), false);
+  assert.deepEqual(readBadges(storage), { scanner: true });
 });
 
 test('depolama kapalıysa oyun etkilenmez', () => {

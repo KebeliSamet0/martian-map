@@ -700,6 +700,74 @@
       "tr": "Mevcut rotada devam et (risk)",
       "en": "Stay on the current route (risk)"
     },
+    "report.badges": {
+      "tr": "BAŞARIMLAR",
+      "en": "ACHIEVEMENTS"
+    },
+    "report.badges.new": {
+      "tr": "Bu görevde {n} yeni başarım.",
+      "en": "{n} new achievement(s) on this mission."
+    },
+    "intro.badges": {
+      "tr": "BAŞARIMLAR",
+      "en": "ACHIEVEMENTS"
+    },
+    "badge.scanner": {
+      "tr": "Tarayıcı",
+      "en": "Scanner"
+    },
+    "badge.scanner.how": {
+      "tr": "Bir görevde zemin tarayıcısını kullan (L).",
+      "en": "Use the terrain scanner (L) on a mission."
+    },
+    "badge.camera": {
+      "tr": "Kask kamerası",
+      "en": "Helmet camera"
+    },
+    "badge.camera.how": {
+      "tr": "Bir Curiosity durağını kask kamerasıyla incele (C).",
+      "en": "Study a Curiosity stop with the helmet camera (C)."
+    },
+    "badge.camera3": {
+      "tr": "Curiosity'nin izinde",
+      "en": "In Curiosity's tracks"
+    },
+    "badge.camera3.how": {
+      "tr": "Üç farklı Curiosity durağını kask kamerasıyla incele.",
+      "en": "Study three different Curiosity stops with the helmet camera."
+    },
+    "badge.layers": {
+      "tr": "Veri okuru",
+      "en": "Data reader"
+    },
+    "badge.layers.how": {
+      "tr": "Duraklat menüsünden veri katmanları panelini aç.",
+      "en": "Open the data-layers panel from the pause menu."
+    },
+    "badge.reserve": {
+      "tr": "Rezervle dönen",
+      "en": "Home with reserve"
+    },
+    "badge.reserve.how": {
+      "tr": "Numuneyi al ve dönüş payı tükenmeden üsse dön.",
+      "en": "Collect the sample and get back to base before the return margin runs out."
+    },
+    "badge.stars3": {
+      "tr": "Üç yıldız",
+      "en": "Three stars"
+    },
+    "badge.stars3.how": {
+      "tr": "Bir görevi üç yıldızla bitir.",
+      "en": "Finish a mission with three stars."
+    },
+    "badge.hard": {
+      "tr": "Zor mod",
+      "en": "Hard mode"
+    },
+    "badge.hard.how": {
+      "tr": "Zor modda bir görevi tamamla.",
+      "en": "Complete a mission on hard."
+    },
     "briefing.difficulty": {
       "tr": "ZORLUK",
       "en": "DIFFICULTY"
