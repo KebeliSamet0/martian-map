@@ -128,10 +128,29 @@ export function showRoutePicker(container, routes = [], ctx = {}) {
         stat(t('route.energy'), n(tt.kcal), 'kcal'),
         stat(t('route.o2rt'), n(tt.o2_L), 'L'),
       );
+      // #52-4: kart "O₂ 37 L" derken rozet NO-GO diyordu. Kararı veren sayı yürüyüş değil,
+      // bütçeye işlenen toplam (bilim durağı + yedek dahil). Planlayıcıdan geldiği kadarıyla gösterilir.
+      const used = tt.budget?.used, lims = tt.budget?.limits;
+      let box = null;
+      if (used && lims) {
+        const over = new Set(Array.isArray(tt.budget.exceeded) ? tt.budget.exceeded : []);
+        const rows = [['o2_L', 'route.c.o2', 1, 'L'], ['time_min', 'route.c.time', 0, t('unit.min')], ['kcal', 'route.c.kcal', 0, 'kcal'], ['dose_uGy', 'route.c.dose', 1, 'µGy']]
+          .filter(([k]) => Number.isFinite(used[k]) && Number.isFinite(lims[k]) && (k === 'o2_L' || over.has(k) || used[k] > lims[k]));
+        if (rows.length) {
+          box = el('div', 'mm-committed');
+          box.append(el('div', 'mm-g-label', t('route.committed')));
+          for (const [k, key, d, unit] of rows) {
+            const line = stat(t(key), `${n(used[k], d)} / ${n(lims[k], d)}`, unit);
+            if (over.has(k) || used[k] > lims[k]) line.dataset.level = 'over';
+            box.append(line);
+          }
+          box.append(el('p', 'mm-fine', t('route.committed.note')));
+        }
+      }
       const pick = button(t('route.pick'), 'ghost');
       pick.dataset.testid = 'route-pick';
       pick.onclick = () => { m.close(); resolve(r); };
-      c.append(top, s, pick);
+      c.append(top, s, ...(box ? [box] : []), pick);
       row.append(c);
     });
     m.card.append(row);
@@ -297,7 +316,7 @@ export function showReport(container, opts = {}) {
 }
 export const reportOpen = () => !!activeReport;
 
-function buildReport(container, { planned = {}, actual = {}, total = null, completed = true, title, route, mission, decisions = [], objectives = {} } = {}) {
+function buildReport(container, { planned = {}, actual = {}, total = null, replanned = false, completed = true, title, route, mission, decisions = [], objectives = {} } = {}) {
   return new Promise((resolve) => {
     const m = modal(container, title ?? t('report.title'), mission?.id);
     m.card.classList.add('mm-card-wide', 'mm-card-report');
@@ -361,6 +380,9 @@ function buildReport(container, { planned = {}, actual = {}, total = null, compl
     starWrap.append(el('p', 'mm-fine', !prev ? t('report.best.none')
       : isNew ? t('report.best.new') : t('report.best', { stars: prev.stars, grade: prev.grade ?? '—' })));
 
+    // #52-3: rota görev sırasında değiştiyse planın da değiştiği yazılsın.
+    const replanLine = replanned ? el('p', 'mm-fine mm-replan', t('report.replanned')) : null;
+
     // #125 A.1: tablo tek yön; gidiş + dönüşün toplamı ayrı satırda yazılır ki karışmasın.
     let totalLine = null;
     if (total) {
@@ -419,7 +441,7 @@ function buildReport(container, { planned = {}, actual = {}, total = null, compl
     retry.onclick = () => { m.close(); resolve('retry'); };
     other.onclick = () => { m.close(); resolve('other'); };
     acts.append(retry, other);
-    m.card.append(head, starWrap, tbl, ...(totalLine ? [totalLine] : []), dec, badges, insight, acts);
+    m.card.append(head, starWrap, tbl, ...(replanLine ? [replanLine] : []), ...(totalLine ? [totalLine] : []), dec, badges, insight, acts);
     other.focus();
   });
 }

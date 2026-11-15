@@ -223,6 +223,14 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #52-4: rota kartında bütçeye işlenen toplam (GO/NO-GO kararını veren sayı) */
+.mm-committed { border-top: 1px solid var(--mm-line); padding-top: 8px; }
+.mm-committed .mm-g-label { display: block; margin-bottom: 4px; font-size: 12px; letter-spacing: .1em; }
+.mm-committed .mm-stat { border-bottom: none; padding: 1px 0; }
+.mm-committed .mm-stat[data-level="over"] .mm-num { color: var(--mm-nogo); }
+.mm-committed .mm-fine { margin-top: 6px; }
+.mm-replan { color: var(--mm-amber); }
+
 /* #125 B.6: başarım rozetleri */
 .mm-badges { margin-bottom: 14px; }
 .mm-badge-row { display: flex; flex-wrap: wrap; gap: 6px; }
