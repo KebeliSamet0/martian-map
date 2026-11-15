@@ -1033,12 +1033,12 @@
       "en": "The time is a rough estimate from straight-line distance divided by a 0.67 m/s reference speed (NASA APACHE, single subject); it is not the planner route's duration."
     },
     "custom.warn.steep": {
-      "tr": "Bu harita hücresinde hesaplanan eğim {slope}°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta {m} m uzakta; bu insan yürüyüş sınırı değildir.",
-      "en": "The estimated slope in this map cell is {slope}°; it exceeds the project's 25° planning threshold. The nearest point below it is {m} m away; this is not a human walking limit."
+      "tr": "Bu harita hücresinde hesaplanan eğim {slope}°; projenin 20° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta {m} m uzakta; bu insan yürüyüş sınırı değildir.",
+      "en": "The estimated slope in this map cell is {slope}°; it exceeds the project's 20° planning threshold. The nearest point below it is {m} m away; this is not a human walking limit."
     },
     "custom.warn.steep.none": {
-      "tr": "Bu harita hücresinde hesaplanan eğim {slope}°; projenin 25° planlama eşiği aşılmış ve yakında eşiğin altında nokta bulunamadı.",
-      "en": "The estimated slope in this map cell is {slope}°; it exceeds the project's 25° planning threshold and no point below it was found nearby."
+      "tr": "Bu harita hücresinde hesaplanan eğim {slope}°; projenin 20° planlama eşiği aşılmış ve yakında eşiğin altında nokta bulunamadı.",
+      "en": "The estimated slope in this map cell is {slope}°; it exceeds the project's 20° planning threshold and no point below it was found nearby."
     },
     "custom.warn.short": {
       "tr": "A ve B en az 15 m uzakta olmalı (arayüz giriş kuralı).",
