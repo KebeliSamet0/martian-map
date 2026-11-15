@@ -67,7 +67,7 @@ export function buildCustomMission({ a, b, o2 = null, title = 'Özel görev' }) 
 
 /**
  * Rota (dünya koordinatı noktaları [[x,z]...]) bir kum adayının radius_m+40 m yakınından geçiyorsa o adayı döndürür:
- * {id, px, radius_m, min_dist_m, threshold_m}; yoksa null (UYDURMA OLAY YOK).
+ * {id, px (TAM SAYI hücre: /replan Pixel tam sayı ister), radius_m, min_dist_m, threshold_m}; yoksa null (UYDURMA OLAY YOK).
  * zones: sand_zones.json; toWorld: px → dünya [x,z] (coords.pxToWorld).
  */
 export function sandForRoute(dense, zones, toWorld) {
@@ -82,7 +82,7 @@ export function sandForRoute(dense, zones, toWorld) {
       const t = d2 ? Math.max(0, Math.min(1, ((w[0] - p[0]) * dx + (w[1] - p[1]) * dz) / d2)) : 0;
       min = Math.min(min, Math.hypot(w[0] - p[0] - t * dx, w[1] - p[1] - t * dz));
     }
-    if (min <= thr && (!best || min - thr < best.min_dist_m - best.threshold_m)) best = { id: z.id, px: z.px, radius_m: z.radius_m, min_dist_m: Math.round(min), threshold_m: thr };
+    if (min <= thr && (!best || min - thr < best.min_dist_m - best.threshold_m)) best = { id: z.id, px: z.px.map(Math.floor), radius_m: z.radius_m, min_dist_m: Math.round(min), threshold_m: thr };
   }
   return best;
 }
