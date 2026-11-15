@@ -205,3 +205,11 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 .mm-layer-panel { margin-bottom: 10px; }
 @media (max-width: 760px) { .mm-brief-cols { grid-template-columns: 1fr; } .mm-mhud { max-width: 240px; } .mm-missions { top: 120px; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .mm-flow, .mm-modal, .mm-mcard, .mm-arrow, body.mm-event::after { transition: none; animation: none; } .mm-mcard { opacity: 1; transform: none; } }
+
+/* entegre yuvalar: rota ekranı küçük ekranda taşmasın, karşılaştırma sekmeleri konsol diline uysun */
+.mm-card-wide { max-height: calc(100vh - 24px); }
+.mm-route-extra button { font: inherit; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mm-text); background: transparent; border: 1px solid var(--mm-line); border-radius: 2px; padding: 5px 10px; cursor: pointer; }
+.mm-route-extra button:hover { border-color: var(--mm-amber); }
+.mm-pausemenu .mm-card-menu { max-height: calc(100vh - 32px); overflow: auto; }
+.mm-card-layers { width: min(760px,100%); }
+.mm-card-layers a, .mm-layer-panel a { overflow-wrap: anywhere; word-break: break-all; color: var(--mm-amber); }

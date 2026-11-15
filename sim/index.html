@@ -58,7 +58,7 @@
   /* tur4:akis: geliştirici panelleri yalnız ?dev=1 (body.dev); oyunda görünmez */
   body:not(.dev) #panel, body:not(.dev) #coord, body:not(.dev) #status, body:not(.dev) #ctl, body:not(.dev) #hint,
   body:not(.dev) #hud, body:not(.dev) #vitals-source, body:not(.dev) #mapwrap { display:none !important; }
-  body:not(.dev) #toast { bottom:80px; }
+  body:not(.dev) #toast { bottom:auto; top:178px; }   /* uyarı bandının altı; alttaki zemin/ipucu satırlarıyla çakışmasın */
   #warn { top:96px; background:rgba(60,12,8,.92); font-size:12px; letter-spacing:.06em; border-radius:2px; }
   #mini { opacity:.9; border-radius:2px; }
 </style>

@@ -78,6 +78,7 @@ export function showBriefing(container, mission = {}) {
     const acts = el('div', 'mm-alert-acts mm-acts-end');
     const back = button(t('briefing.back'), 'ghost'), go = button(t('briefing.start'));
     back.onclick = () => { m.close(); resolve(false); };
+    go.dataset.testid = 'briefing-start';
     go.onclick = () => { m.close(); resolve(true); };
     acts.append(back, go);
     m.card.append(acts);
@@ -95,6 +96,7 @@ export function showRoutePicker(container, routes = [], ctx = {}) {
     routes.forEach((r) => {
       const tt = r.total ?? {};
       const c = el('article', `mm-route mm-route-${r.kind}`);
+      c.dataset.testid = 'route-card';
       const top = el('div', 'mm-route-top');
       top.append(el('span', 'mm-route-name', r.label ?? r.kind), badge(tt.status ?? (tt.go ? 'GO' : 'NO-GO')));
       const s = el('div', 'mm-stats mm-stats-col');
@@ -105,6 +107,7 @@ export function showRoutePicker(container, routes = [], ctx = {}) {
         stat(t('route.o2rt'), n(tt.o2_L), 'L'),
       );
       const pick = button(t('route.pick'), 'ghost');
+      pick.dataset.testid = 'route-pick';
       pick.onclick = () => { m.close(); resolve(r); };
       c.append(top, s, pick);
       row.append(c);
@@ -131,7 +134,7 @@ export function showAlert(container, kind, { what = '', timeoutMs = 0, actions =
   return new Promise((resolve) => {
     container.querySelector(`.mm-alert[data-kind="${kind}"]`)?.remove();
     const a = el('div', 'mm-ui mm-alert');
-    a.dataset.kind = kind;
+    a.dataset.kind = kind; a.dataset.testid = 'event-alert';
     a.setAttribute('role', 'alert');
     const txt = el('div', 'mm-alert-text');
     txt.append(el('strong', null, t(`alert.${kind}.title`)), el('span', null, kind === 'limit' ? what : t(`alert.${kind}.body`, { what })));
@@ -191,9 +194,9 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
 
     const head = el('div', 'mm-grade');
     head.append(el('span', 'mm-grade-letter', g.grade), el('span', 'mm-text', g.note));
-    head.dataset.grade = g.grade;
+    head.dataset.grade = g.grade; head.firstChild.dataset.testid = 'debrief-grade';
 
-    const tbl = el('table', 'mm-table');
+    const tbl = el('table', 'mm-table'); tbl.dataset.testid = 'debrief';
     const thead = el('tr');
     ['', t('report.planned'), t('report.actual'), t('report.diff')].forEach((h) => thead.append(el('th', null, h)));
     tbl.append(thead);

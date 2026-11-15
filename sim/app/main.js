@@ -54,7 +54,7 @@ $('status').textContent = `HiRISE DTM ${man.W}×${man.H} @ ${man.res_p.toFixed(3
 
 let mapView, wire, flow = null;
 const flowHooks = {};   // tur4:akis: wire.js ← akış kancaları (dev'de boş)
-let tourC = null;
+let tourC = null, tourDir = null;
 let paused = false;
 function onRouteChange(r) {
   $('btn-routes').disabled = !r; $('btn-walk').disabled = !r; $('btn-json').disabled = !r;
@@ -298,11 +298,22 @@ async function fireReplan(S) {
 function stepPlayer(dt, t) {
   let moving = false;
   if (state === 'tour') {
-    const c = tourC ?? [geo.sizeX / 2, geo.sizeZ / 2], a = t * 0.045, R = 190;
-    const x = c[0] + Math.cos(a) * R, z = c[1] + Math.sin(a) * R, cgy = groundY(c[0], c[1]) ?? 0, gx = groundY(x, z) ?? cgy;
-    P.x = x; P.z = z; P.y = Math.max(gx, cgy) + 70 + Math.sin(a * 2.3) * 12; P.yaw = Math.atan2(c[0] - x, -(c[1] - z));
-    T.camera.position.set(P.x, P.y, P.z); T.camera.lookAt(c[0], cgy + 6, c[1]); T.astro.group.visible = false;
-    return cgy;
+    // Alçak, yavaş kamera süpürmesi: yükselen yamaca (Mount Sharp tarafı) bakar. Yüksek kamera gorsel'in yükseklik sisini kalınlaştırıp araziyi bulanıklaştırır.
+    const c = tourC ?? [geo.sizeX / 2, geo.sizeZ / 2];
+    if (tourDir == null) {
+      let best = -Infinity; tourDir = 0;
+      for (let k = 0; k < 24; k++) {
+        const ang = (k / 24) * Math.PI * 2; let sum = 0, cnt = 0;
+        for (const d of [250, 500, 900]) { const h = nav.heightAt(c[0] + Math.sin(ang) * d, c[1] - Math.cos(ang) * d); if (!Number.isNaN(h)) { sum += h; cnt++; } }
+        if (cnt === 3 && sum / 3 > best) { best = sum / 3; tourDir = ang; }
+      }
+    }
+    const yaw = tourDir + Math.sin(t * 0.07) * 0.45, drift = Math.sin(t * 0.035) * 70;
+    const x = c[0] - Math.sin(tourDir) * 40 + Math.sin(tourDir) * drift, z = c[1] + Math.cos(tourDir) * 40 - Math.cos(tourDir) * drift;
+    const gx = groundY(x, z) ?? groundY(c[0], c[1]) ?? 0, fx = x + Math.sin(yaw) * 420, fz = z - Math.cos(yaw) * 420, gf = groundY(fx, fz) ?? gx;
+    P.x = x; P.z = z; P.y = gx + 24 + Math.sin(t * 0.11) * 4; P.yaw = yaw;
+    T.camera.position.set(P.x, P.y, P.z); T.camera.lookAt(fx, Math.max(gf, gx + 6), fz); T.astro.group.visible = false;
+    return gx;
   }
   T.wf?.sense(P, dt, state !== 'fly');   // tur4:his
   if (state === 'auto' && routeRun) {
