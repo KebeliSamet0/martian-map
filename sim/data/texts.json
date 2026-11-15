@@ -1143,6 +1143,14 @@
     "custom.zoom.hint": {
       "tr": "Fare tekerleği ile yakınlaştır, sürükleyerek kaydır; yakınlaşınca HiRISE doku karoları yüklenir.",
       "en": "Scroll to zoom, drag to pan; HiRISE texture tiles load when zoomed in."
+    },
+    "custom.warn.island": {
+      "tr": "Bu hücrenin eğimi {slope}° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; buradan hedefe yol bulunamaz. Ana bölgedeki en yakın nokta {m} m uzakta.",
+      "en": "The slope of this cell is {slope}° (below the threshold) but it sits on a small island cut off from the main passable region, so no route can reach it. The nearest point in the main region is {m} m away."
+    },
+    "custom.warn.island.none": {
+      "tr": "Bu hücrenin eğimi {slope}° (eşiğin altında) ama ana geçilebilir bölgeden kopuk küçük bir adada; yakında ana bölgeden nokta bulunamadı.",
+      "en": "The slope of this cell is {slope}° (below the threshold) but it sits on a small island cut off from the main passable region; no point of the main region was found nearby."
     }
   },
   "helmetcam": {
