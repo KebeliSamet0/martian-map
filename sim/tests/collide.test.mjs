@@ -61,3 +61,45 @@ test('nearest: yakın kaya ve yüzey uzaklığı', () => {
   const n = c.nearest(15, 0); assert.ok(Math.abs(n.dist - 3) < 1e-9);
   assert.equal(c.nearest(100, 100), null);
 });
+
+// ---- batu:tas — görünen büyük sentetik taşlar engel (dinamik) ----
+import { blockersFromInstances, BLOCK_MIN_R } from '../app/collide.js';
+
+const inst = (list) => { const a = new Float32Array(list.length * 16); list.forEach(([x, z, sx, sz], i) => { const o = i * 16; a[o] = sx; a[o + 5] = 1; a[o + 10] = sz; a[o + 12] = x; a[o + 14] = z; a[o + 15] = 1; }); return a; };
+
+test('blockersFromInstances: yalnız yarıçapı >= BLOCK_MIN_R olanlar, ölçek × 0,95', () => {
+  const a = inst([[10, 20, 1.0, 0.8], [30, 40, 0.1, 0.1], [50, 60, 0.3, 0.2]]);
+  const b = blockersFromInstances(a, 3);
+  assert.equal(b.length, 2);
+  assert.deepEqual([b[0].x, b[0].z], [10, 20]); assert.ok(Math.abs(b[0].r - 0.95) < 1e-6);
+  assert.ok(Math.abs(b[1].r - 0.285) < 1e-6);
+  assert.ok(0.3 * 0.95 >= BLOCK_MIN_R);
+});
+
+test('setDynamic: sentetik taş içinden geçilmez, çevresinden kayılır; gerçek kaya ile birlikte çalışır', () => {
+  const c = createCollider([{ id: 1, x: 100, z: 100, d_m: 2, kind: 'rock' }]);
+  c.setDynamic([{ x: 0, z: 0, r: 1.0 }]);
+  // merkezden geçecek doğrultuda yürü: (−5,0) → (5,0)
+  let p = { x: -5, z: 0 };
+  for (let i = 0; i < 100; i++) { const r = c.resolve(p, { x: p.x + 0.1, z: p.z }); p = { x: r.x, z: r.z }; }
+  assert.ok(Math.hypot(p.x, p.z) >= 1.0 + PLAYER_R - 1e-6, 'taşın içine girdi: ' + JSON.stringify(p));
+  // dik açıyla ortadan: kayarak ilerlemeli ama içeri girmemeli
+  const r2 = c.resolve({ x: -1.5, z: 0.05 }, { x: 1.5, z: 0.05 });
+  assert.ok(Math.hypot(r2.x, r2.z) >= 1.0 + PLAYER_R - 1e-6);
+  // gerçek kayalar yine engel
+  const r3 = c.resolve({ x: 95, z: 100 }, { x: 105, z: 100 }); assert.ok(Math.hypot(r3.x - 100, r3.z - 100) >= 1 + PLAYER_R - 1e-6);
+  // gerçek tarama/yakınlık etiketi sentetik taşı görmez
+  assert.equal(c.nearest(0, 0, 5), null); assert.equal(c.inside(0, 0), null); assert.equal(c.dynamicCount, 1);
+});
+
+test('setDynamic([]) / null: engeller kalkar (taşlar gizliyken engel yok)', () => {
+  const c = createCollider([]); c.setDynamic([{ x: 0, z: 0, r: 1 }]);
+  c.setDynamic([]); const r = c.resolve({ x: -2, z: 0 }, { x: 2, z: 0 }); assert.ok(Math.abs(r.x - 2) < 1e-9);
+  c.setDynamic([{ x: 0, z: 0, r: 1 }]); c.setDynamic(null); assert.equal(c.dynamicCount, 0);
+});
+
+test('setDynamic: 1 m/adım hızlı hareket bile ince taşın içinden tünel açmaz (substep)', () => {
+  const c = createCollider([]); c.setDynamic([{ x: 0, z: 0, r: 0.3 }]);
+  const r = c.resolve({ x: -3, z: 0 }, { x: 3, z: 0 });
+  assert.ok(Math.hypot(r.x, r.z) >= 0.3 + PLAYER_R - 1e-6);
+});

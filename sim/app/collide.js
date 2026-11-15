@@ -1,6 +1,8 @@
 // collide.js — gerçek (HiRISE tespitli) kayalar fiziksel engel (tur4:fizik).
 // Veri: sim/data/rocks.json (kind: rock | outcrop | shadow). Yalnız rock ve outcrop engeldir; shadow gölge yöntemi artığıdır, engel değildir.
-// Sentetik çakıl (rocks_rich.js) ve sentetik taşlar (rocks.js) engel DEĞİLDİR: yalnız görsel.
+// Sentetik serpinti taşları (rocks_rich.js / rocks.js) NASA verisi değildir, ama ekranda görünen büyük olanlar (yarıçap >= BLOCK_MIN_R)
+// fiziksel olarak da engeldir: karakter görünen bir taşın içinden geçmez (setDynamic; her yeniden üretimde güncellenir). Küçük çakıl (< BLOCK_MIN_R)
+// engel değildir, üstünden adım atılır. Sentetik engeller etiketlenmez/taranmaz (nearest/inside yalnız gerçek HiRISE kayaları).
 // Yarıçap hazards.js'in çizdiğiyle uyumlu (okundu, değiştirilmedi):
 //   rock:    çizim ölçeği d/2 × (0,85–1,25), köşe sapması ort. ~0,93 → ortalama çizilen yarıçap ≈ d/2
 //   outcrop: yayvan elips, yarı eksenler d/2 ve d/2 × (0,55–0,90) → ortalama ≈ 0,86 · d/2 (daire ile yaklaşık)
@@ -13,6 +15,22 @@ const OUTCROP_K = 0.86;                // yüzlek ortalama yarıçap çarpanı (
 const SUBSTEP = 0.2;                   // tek adımda bu kadardan uzun hareket parçalanır (kayanın içinden "tünel" olmasın)
 const CONTACT_COOLDOWN_MS = 2000;
 export const BLOCKING = new Set(['rock', 'outcrop']);
+export const BLOCK_MIN_R = 0.25;       // sentetik taşın engel olması için asgari görsel yarıçap (m): diz altı çakıl engel değil
+const SYN_SHRINK = 0.95;               // taş geometrisi köşe sapmasıyla birim kürenin ort. ~%97'si: engel yarıçapı = ölçek × 0,95
+
+/**
+ * InstancedMesh.instanceMatrix.array (sütun-öncelikli 4×4, her örnek 16 sayı) → engel listesi [{x, z, r}].
+ * r = yatay ölçek (sütun normu) maksimumu × SYN_SHRINK; yalnız r >= minR olanlar. Dünya koordinatı (x = e[12], z = e[14]).
+ */
+export function blockersFromInstances(arr, count, { minR = BLOCK_MIN_R, out = [] } = {}) {
+  for (let i = 0; i < count; i++) {
+    const o = i * 16;
+    const sx = Math.hypot(arr[o], arr[o + 1], arr[o + 2]), sz = Math.hypot(arr[o + 8], arr[o + 9], arr[o + 10]);
+    const r = Math.max(sx, sz) * SYN_SHRINK;
+    if (r >= minR) out.push({ x: arr[o + 12], z: arr[o + 14], r });
+  }
+  return out;
+}
 
 /** Çizilen yarıçap (m). `kind` yoksa rock sayılır (hazards.js ile aynı). */
 export function drawnRadius(rk) { return (rk.d_m / 2) * (rk.kind === 'outcrop' ? OUTCROP_K : 1); }
@@ -33,11 +51,25 @@ export function createCollider(items, { now = () => (typeof performance !== 'und
   }
   const near = (x, z) => grid.get(key(Math.floor(x / CELL), Math.floor(z / CELL))) ?? [];
 
+  // Dinamik (sentetik, görünen) engeller: kamera yeniden ürettikçe tümden değiştirilir.
+  let dynGrid = new Map(), dynCount = 0;
+  const dynNear = (x, z) => dynGrid.get(key(Math.floor(x / CELL), Math.floor(z / CELL))) ?? [];
+  /** items: [{x, z, r}] (dünya). Boş dizi ya da null: sentetik engeller kalkar (taşlar gizliyken engel olmaz). */
+  function setDynamic(items) {
+    dynGrid = new Map(); dynCount = 0;
+    for (const it of items ?? []) {
+      const rk = { id: null, x: it.x, z: it.z, r: it.r, d_m: it.r * 2, kind: 'sentetik', synthetic: true, last: -1e9 };
+      dynCount++;
+      const i0 = Math.floor((rk.x - rk.r - 1) / CELL), i1 = Math.floor((rk.x + rk.r + 1) / CELL), j0 = Math.floor((rk.z - rk.r - 1) / CELL), j1 = Math.floor((rk.z + rk.r + 1) / CELL);
+      for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) { const k = key(i, j); (dynGrid.get(k) ?? dynGrid.set(k, []).get(k)).push(rk); }
+    }
+  }
+
   /** (x,z) noktasını yarıçap `radius` olan astronot için kayalardan dışarı iter; temas edilen kayaları döndürür. */
   function push(p, radius, hits) {
     for (let iter = 0; iter < 3; iter++) {
       let moved = false;
-      for (const rk of near(p.x, p.z)) {
+      for (const list of [near(p.x, p.z), dynNear(p.x, p.z)]) for (const rk of list) {
         const dx = p.x - rk.x, dz = p.z - rk.z, min = rk.r + radius, d2 = dx * dx + dz * dz;
         if (d2 >= min * min) continue;
         const d = Math.sqrt(d2);
@@ -86,7 +118,7 @@ export function createCollider(items, { now = () => (typeof performance !== 'und
     return best ? { rock: best, dist: bd } : null;
   }
 
-  return { count: list.length, rocks: list, resolve, step, inside, nearest };
+  return { count: list.length, rocks: list, resolve, step, inside, nearest, setDynamic, get dynamicCount() { return dynCount; } };
 }
 
 /** rocks.json (px) → dünya öğeleri. pxToWorld: api.js'ten. */

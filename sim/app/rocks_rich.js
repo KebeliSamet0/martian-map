@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { fetchLayerFloat32 } from './detail.js';
 import { GRID, worldToPx } from './api.js';
+import { blockersFromInstances } from './collide.js';   // batu:tas
 
 function hash(a, b, s) {
   let h = (a * 374761393 + b * 668265263 + s * 2147483647) | 0;
@@ -66,8 +67,9 @@ export class RocksRich {
       scene.add(mesh); return { ...c, cap, mesh };
     });
     this.last = new THREE.Vector3(1e9, 0, 1e9); this.lastVersion = -1; this.lastBuild = 0;
+    this.blockers = []; this.blockersRev = 0;   // batu:tas: görünen büyük taşlar (slab/boulder/iri cobble) fiziksel engel
   }
-  setEnabled(on) { if (on === this.enabled) return; this.enabled = on; for (const l of this.layers) l.mesh.visible = on; if (on) this.last.set(1e9, 0, 1e9); }
+  setEnabled(on) { if (on === this.enabled) return; this.enabled = on; for (const l of this.layers) l.mesh.visible = on; if (!on && this.blockers.length) { this.blockers = []; this.blockersRev++; } if (on) this.last.set(1e9, 0, 1e9); }
   update(cam, version = 0) {
     if (!this.enabled) return;
     const dx = cam.x - this.last.x, dz = cam.z - this.last.z, now = performance.now();
@@ -75,6 +77,7 @@ export class RocksRich {
     if (!moved && !terrainChanged) return;
     this.lastVersion = version; this.lastBuild = now; this.last.copy(cam);
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), s = new THREE.Vector3(), pos = new THREE.Vector3(), col = new THREE.Color();
+    const blockers = [];   // batu:tas
     for (let L = 0; L < this.layers.length; L++) {
       const { cell, radius: r0, lo, hi, base, cap, yScale, mesh } = this.layers[L], radius = r0 * this.Qf.rad, seed = 100 + L * 17, r2 = radius * radius;
       const i0 = Math.floor((cam.x - radius) / cell), i1 = Math.floor((cam.x + radius) / cell), j0 = Math.floor((cam.z - radius) / cell), j1 = Math.floor((cam.z + radius) / cell);
@@ -106,6 +109,8 @@ export class RocksRich {
         n++;
       }
       mesh.count = n; mesh.instanceMatrix.needsUpdate = true; if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+      blockersFromInstances(mesh.instanceMatrix.array, n, { out: blockers });   // batu:tas
     }
+    this.blockers = blockers; this.blockersRev++;   // batu:tas
   }
 }
