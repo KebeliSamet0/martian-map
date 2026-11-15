@@ -107,3 +107,13 @@ export function fanPoints(x, z, azDeg, fovDeg, radius, steps = 24) {
 export function alignView(d) {
   return { yaw: (d.az_deg * Math.PI) / 180, pitch: (d.el_deg * Math.PI) / 180, fov: d.fov_deg };
 }
+
+/** Kartın gösterdiği durak için yön: { az_deg, el_deg, fov_deg, source, exact } (el/fov yoksa null; uydurma yok). */
+export function dirFor(stop, dirs) {
+  const frame = stop.photo_source ? stop.photo_source.split('/').pop().replace(/\.[^.]+$/, '') + '.jpg' : null, d = frame ? dirs[frame] : null;
+  if (hasDir(d)) return { az_deg: d.az_deg, el_deg: d.el_deg, fov_deg: d.fov_deg, source: 'navcam_dirs', exact: true, diff: angDiff(d.az_deg, stop.photo_world_az_deg) };
+  if (typeof stop.photo_world_az_deg === 'number') return { az_deg: stop.photo_world_az_deg, el_deg: null, fov_deg: null, source: 'curiosity.json', exact: false, diff: null };
+  return null;
+}
+export const angDiff = (a, b) => (typeof a === 'number' && typeof b === 'number' ? ((a - b + 540) % 360) - 180 : null);
+

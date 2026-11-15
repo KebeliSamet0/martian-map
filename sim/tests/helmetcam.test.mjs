@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadManifest, loadDirs, hasDir, cardinal, fanPoints, alignView } from '../app/helmetcam-core.js';
+import { nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadManifest, loadDirs, hasDir, cardinal, fanPoints, alignView, dirFor, angDiff } from '../app/helmetcam-core.js';
 
 const texts = JSON.parse(await readFile(new URL('../data/texts.json', import.meta.url)));
 const tr = (g) => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, v.tr]));
@@ -69,7 +69,7 @@ const dirs = JSON.parse(await readFile(new URL('../data/navcam_dirs.json', impor
 
 test('yönler: her kare için az/el/fov; az kuzeyden saat yönü, fov Navcam ~45°, null uydurulmaz', () => {
   const names = man.stops.flatMap((s) => s.files.map((f) => f.name));
-  assert.equal(Object.keys(dirs).length, names.length);
+  assert.ok(names.every((n) => n in dirs));
   for (const n of names) {
     const d = dirs[n]; assert.ok(d, n);
     if (d.az_deg === null) { assert.equal(d.el_deg, null); assert.equal(d.fov_deg, null); assert.equal(d.kaynak, null); continue; }
@@ -99,4 +99,13 @@ test('koni, pusula adı ve hizalama', () => {
 test('loadDirs', async () => {
   const f = async () => ({ ok: true, json: async () => ({ frames: { a: { az_deg: 1 } } }) });
   assert.deepEqual(await loadDirs('u', f), { a: { az_deg: 1 } });
+});
+
+test('G kartı yönü: photo_source kare adıyla navcam_dirs eşlenir; curiosity.json photo_world_az_deg ile tutarlı (medyan <3°, maks <8°)', async () => {
+  const cur = JSON.parse(await readFile(new URL('../data/curiosity.json', import.meta.url))).stops;
+  assert.equal(cur.length, 23);
+  const diffs = cur.map((s) => { const d = dirFor(s, dirs); assert.ok(d && d.exact, s.id); return Math.abs(d.diff); }).sort((a, b) => a - b);
+  assert.ok(diffs[Math.floor(diffs.length / 2)] < 3, 'medyan ' + diffs[11]); assert.ok(diffs.at(-1) < 8, 'maks ' + diffs.at(-1));
+  assert.deepEqual(dirFor({ photo_world_az_deg: 100, photo_source: 'x/yok.JPG' }, dirs), { az_deg: 100, el_deg: null, fov_deg: null, source: 'curiosity.json', exact: false, diff: null });
+  assert.equal(dirFor({}, dirs), null); assert.ok(Math.abs(angDiff(350, 10) + 20) < 1e-9);
 });

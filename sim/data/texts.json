@@ -748,6 +748,10 @@
       "align_note": {
           "tr": "Yakın alan DTM çözünürlüğü (1 m) ve sentetik kayalar yüzünden farklı görünür; ufuk ve büyük yer şekillerini karşılaştır. ▲▼ kare, ◀ ▶ sürgü.",
           "en": "Near ground differs (1 m DTM, synthetic rocks); compare the skyline and large landforms. ▲▼ frame, ◀ ▶ slider."
+      },
+      "dir_label_short": {
+          "tr": "Fotoğraf yönü: {az}° ({card})",
+          "en": "Photo direction: {az}° ({card})"
       }
   },
   "insight": {

@@ -9,6 +9,7 @@ import { loadTexts } from './screens.js';
 import { API_BASE, API_OFF, GRID, worldToPx, pxToWorld } from './api.js';
 import { sampleField, sharedField } from './insight.js';
 import { showCone, clearCone } from './helmetcam-3d.js';
+import './stopcard-dir.js';   // tur4:veri: G (Navcam durak) kartına yön; helmetcam'in hizalama koduna bağlanır
 import { loadManifest, nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadDirs, hasDir, cardinal, alignView } from './helmetcam-core.js';
 
 const lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'tr';
@@ -67,23 +68,34 @@ function showDirCone(st, d) {
   const w = stopWorld(st); showCone({ scene: m.T.scene, heightAt: (x, z) => m.nav.heightAt(x, z), x: w[0], z: w[1], azDeg: d.az_deg, fovDeg: d.fov_deg });
 }
 function enterAlign() {
-  const o = S.open, m = mm(); if (!o || !m?.T?.camera) return; const c = o.cands[o.i], d = S.dirs[c.name]; if (!hasDir(d)) return;
-  const cam = m.T.camera, w = stopWorld(o.stop), v = alignView(d), saved = S.align?.savedFov ?? cam.fov;
-  const W = innerWidth, H = innerHeight, side = Math.min(W, H), vf = (2 * Math.atan(Math.tan((v.fov * Math.PI) / 360) * (H / side)) * 180) / Math.PI;
-  S.align = { savedFov: saved, wipe: S.align?.wipe ?? 0.5 };
-  window.__viewLock = (P) => { P.x = w[0]; P.z = w[1]; P.yaw = v.yaw; P.pitch = v.pitch; if (Math.abs(cam.fov - vf) > 1e-6) { cam.fov = vf; cam.updateProjectionMatrix(); } };
-  S.card.hidden = true; renderAlign(c, side);
-  emit('mm:helmetcam-view', { on: true, stopId: o.stop.stop_id, az: d.az_deg, el: d.el_deg, fov: d.fov_deg });
+  const o = S.open; if (!o) return; const c = o.cands[o.i];
+  beginAlign({ world: stopWorld(o.stop), dir: S.dirs[c.name], url: c.url, sol: c.sol, stopId: o.stop.stop_id, frames: { i: o.i, n: o.cands.length } });
 }
+/** Hizalama hedefi: { world:[x,z], dir:{az_deg,el_deg,fov_deg}, url, sol, stopId, frames?:{i,n}, onExit? }. Kask kamerası ve G (Navcam durak) kartı aynı kodu kullanır. */
+function beginAlign(t) {
+  const m = mm(); if (!m?.T?.camera || !hasDir(t.dir)) return;
+  const cam = m.T.camera, v = alignView(t.dir), saved = S.align?.savedFov ?? cam.fov, w = t.world;
+  const W = innerWidth, H = innerHeight, side = Math.min(W, H), vf = (2 * Math.atan(Math.tan((v.fov * Math.PI) / 360) * (H / side)) * 180) / Math.PI;
+  S.align = { savedFov: saved, wipe: S.align?.wipe ?? 0.5, target: t };
+  window.__viewLock = (P) => { P.x = w[0]; P.z = w[1]; P.yaw = v.yaw; P.pitch = v.pitch; if (Math.abs(cam.fov - vf) > 1e-6) { cam.fov = vf; cam.updateProjectionMatrix(); } };
+  clearCone();   // karşılaştırmada koni görüntüyü örtmesin
+  if (S.card) S.card.hidden = true; renderAlign(t, side);
+  emit('mm:helmetcam-view', { on: true, stopId: t.stopId, az: t.dir.az_deg, el: t.dir.el_deg, fov: t.dir.fov_deg });
+}
+export async function alignTo(t) { await ready(); S.T && beginAlign(t); }
+export const isAligned = () => !!S.align;
+export const isOpen = () => !!S.open;
+export { exitAlign };
 function exitAlign() {
-  if (!S.align) return; const cam = mm()?.T?.camera;
+  if (!S.align) return; const cam = mm()?.T?.camera, t = S.align.target;
   window.__viewLock = null; if (cam) { cam.fov = S.align.savedFov; cam.updateProjectionMatrix(); }
-  S.alignEl?.remove(); S.alignEl = null; const id = S.open?.stop.stop_id; S.align = null;
-  if (S.card && S.open) S.card.hidden = false;
+  S.alignEl?.remove(); S.alignEl = null; const id = t?.stopId; S.align = null;
+  if (S.card && S.open) { S.card.hidden = false; const c = S.open.cands[S.open.i]; showDirCone(S.open.stop, S.dirs[c?.name]); }
+  t?.onExit?.();
   emit('mm:helmetcam-view', { on: false, stopId: id });
 }
 function renderAlign(c, side = Math.min(innerWidth, innerHeight)) {
-  const T = S.T, A = S.align, o = S.open; S.alignEl?.remove();
+  const T = S.T, A = S.align, o = S.open; S.alignEl?.remove(); const fr = c.frames && o ? c.frames : null;
   const root = document.createElement('div'); Object.assign(root.style, { position: 'fixed', inset: '0', zIndex: 28, pointerEvents: 'none' });
   const left = (innerWidth - side) / 2, wx = left + side * A.wipe;
   root.innerHTML =
@@ -94,7 +106,7 @@ function renderAlign(c, side = Math.min(innerWidth, innerHeight)) {
     `<div style="position:absolute;left:${left + 10}px;top:${(innerHeight - side) / 2 + 8}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#f3e3d3;font:12px system-ui">${esc(T.lbl_real)} · ${esc(fmt(T.source_img, { sol: c.sol }))}</div>` +
     `<div style="position:absolute;right:${left + 10}px;top:${(innerHeight - side) / 2 + 8}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#f3e3d3;font:12px system-ui">${esc(T.lbl_sim)}</div>` +
     `<div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;background:rgba(14,10,8,.88);color:#f3e3d3;font:12px system-ui;pointer-events:auto;max-width:94vw;flex-wrap:wrap;justify-content:center">` +
-    (o.cands.length > 1 ? `<button class="mm-hc-prev">▲</button><span>${esc(fmt(T.frame, { i: o.i + 1, n: o.cands.length }))}</span><button class="mm-hc-next">▼</button>` : '') +
+    (fr && fr.n > 1 ? `<button class="mm-hc-prev">▲</button><span>${esc(fmt(T.frame, { i: fr.i + 1, n: fr.n }))}</span><button class="mm-hc-next">▼</button>` : '') +
     `<button class="mm-hc-back">${esc(T.btn_back)}</button><span style="opacity:.7;max-width:46ch">${esc(T.align_note)}</span></div>`;
   document.body.append(root); S.alignEl = root;
   const setWipe = (f) => { A.wipe = Math.max(0, Math.min(1, f)); const x = left + side * A.wipe; root.querySelector('.mm-hc-photo').style.clipPath = `inset(0 ${(1 - A.wipe) * 100}% 0 0)`; root.querySelector('.mm-hc-bar').style.left = `${x - 1}px`; root.querySelector('.mm-hc-knob').style.left = `${x - 16}px`; };
@@ -185,7 +197,7 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyC') { e.stopImmediatePropagation(); if (S.open || (S.card && !S.card.hidden)) { close(); if (S.card) S.card.hidden = true; } else void openCamera(); }
   else if (S.open && e.code === 'KeyV') { e.stopImmediatePropagation(); e.preventDefault(); if (S.align) exitAlign(); else enterAlign(); }
   else if (S.align && (e.code === 'ArrowLeft' || e.code === 'ArrowRight')) { e.stopImmediatePropagation(); e.preventDefault(); S.align.setWipe(S.align.wipe + (e.code === 'ArrowRight' ? 0.04 : -0.04)); }
-  else if (S.align && (e.code === 'ArrowUp' || e.code === 'ArrowDown') && S.open.cands.length > 1) { e.stopImmediatePropagation(); e.preventDefault(); stepFrame(e.code === 'ArrowDown' ? 1 : -1); }
+  else if (S.align && S.open && (e.code === 'ArrowUp' || e.code === 'ArrowDown') && S.open.cands.length > 1) { e.stopImmediatePropagation(); e.preventDefault(); stepFrame(e.code === 'ArrowDown' ? 1 : -1); }
   else if (S.open && (e.code === 'ArrowLeft' || e.code === 'ArrowRight') && S.open.cands.length > 1) {
     e.stopImmediatePropagation(); e.preventDefault();
     S.open.i = (S.open.i + (e.code === 'ArrowRight' ? 1 : S.open.cands.length - 1)) % S.open.cands.length; renderStop();

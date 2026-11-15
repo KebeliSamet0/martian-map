@@ -89,14 +89,23 @@ def direction_of(item):
 def fetch_dirs(doc):
     """Manifestteki her kare için yön; API'de bulunmayan karede alanlar null (uydurma yok)."""
     wanted = {f["name"][:-4]: f for s in doc["stops"] for f in s["files"]}   # imageid -> dosya
+    # G kartındaki durak fotoğrafları (sim/data/curiosity.json stops[].photo_source) da: farklı kareler olabilir
+    cur = ROOT / "sim" / "data" / "curiosity.json"
+    if cur.exists():
+        for st in json.loads(cur.read_text(encoding="utf-8")).get("stops", []):
+            src = st.get("photo_source")
+            if src:
+                stem = Path(src).stem
+                sol = int(src.split("/sol/")[1].split("/")[0])
+                wanted.setdefault(stem, {"name": stem + ".jpg", "sol": sol})
     by_sol = {}
     for iid, f in wanted.items():
-        by_sol.setdefault(f["sol"], set()).add(iid)
+        by_sol.setdefault((f["sol"], "NAV_RIGHT_B" if iid.startswith("NRB") else "NAV_LEFT_B"), set()).add(iid)
     found = {}
-    for sol, ids in sorted(by_sol.items()):
+    for (sol, instr), ids in sorted(by_sol.items()):
         page = 0
         while ids - set(found):
-            q = {"order": "sol desc", "per_page": 200, "page": page, "condition_1": "msl:mission", "condition_2": f"{sol}:sol:in", "condition_3": "NAV_LEFT_B:instrument:in"}
+            q = {"order": "sol desc", "per_page": 200, "page": page, "condition_1": "msl:mission", "condition_2": f"{sol}:sol:in", "condition_3": f"{instr}:instrument:in"}
             url = API + "?" + urllib.parse.urlencode(q)
             r = subprocess.run(["curl", "-s", "--retry", "5", "--retry-delay", "2", "-m", "60", "-f", url], capture_output=True)
             if r.returncode != 0:
