@@ -181,8 +181,8 @@
       "en": "Go around the sand candidate, reach the target point south of the Atacama drill stop and collect a sample."
     },
     "mission.S2.science": {
-      "tr": "Gevşek kum, rover ve astronot için en büyük kayma ve batma riskidir. Buradaki kum noktası ortofotodan çıkarılmış bir adaydır (kanıt: kesin değil). Zemin modeli bu bölgede kumu neredeyse hiç tahmin etmiyor (bu rotalarda p_kum en çok 0,14); rotayı bu yüzden kayalık/yüzlek zeminden uzak tutar, kumdan değil. Kumu tarayıcı ya da sürpriz olayı ortaya çıkarır.",
-      "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. The sand spot here is a candidate read from orthophotos (not confirmed). The terrain model almost never predicts sand in this area (p_sand at most 0.14 on these routes), so it steers the route away from rocky/outcrop ground, not from sand. The scanner or the surprise event reveals the sand."
+      "tr": "Gevşek kum, rover ve astronot için en büyük kayma ve batma riskidir. Buradaki kum noktası ortofotodan çıkarılmış bir adaydır (kanıt: kesin değil). Zemin modeli bu bölgede kumu neredeyse hiç tahmin etmiyor (bu rotalarda p_kum en çok 0,19); rotayı bu yüzden kayalık/yüzlek zeminden uzak tutar, kumdan değil. Kumu tarayıcı ya da sürpriz olayı ortaya çıkarır.",
+      "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. The sand spot here is a candidate read from orthophotos (not confirmed). The terrain model almost never predicts sand in this area (p_sand at most 0.19 on these routes), so it steers the route away from rocky/outcrop ground, not from sand. The scanner or the surprise event reveals the sand."
     },
     "mission.S3.title": {
       "tr": "Yarım O₂ tüpü",
@@ -907,16 +907,16 @@
       "en": "sand {pct}%"
     },
     "certain_high": {
-      "tr": "Model bu durakta emin.",
-      "en": "The model is confident at this stop."
+      "tr": "Model bu durakta emin (emin olması doğru olduğu anlamına gelmez).",
+      "en": "The model is confident at this stop (confident does not mean correct)."
     },
     "certain_low": {
-      "tr": "Model emin değil; kanıt az.",
-      "en": "The model is not sure; there is little evidence."
+      "tr": "Model bu durakta kararsız.",
+      "en": "The model is undecided at this stop."
     },
     "certainty_line": {
-      "tr": "Model kesinliği %{c} (1 − entropi). Düşük kesinlik 'kanıt az' demektir, 'yanlış' değil.",
-      "en": "Model certainty {c}% (1 − entropy). Low certainty means little evidence, not 'wrong'."
+      "tr": "Model kesinliği %{c} (1 − entropi). Düşük kesinlik modelin kararsız olduğunu gösterir; entropi doğru ve yanlış tahmini ayırt etmez.",
+      "en": "Model certainty {c}% (1 − entropy). Low certainty means the model is undecided; entropy does not separate right from wrong calls."
     },
     "warn": {
       "tr": "Uyarı: bu durakta {what}; ileride benzer zemin olabilir.",
@@ -1013,8 +1013,8 @@
       "en": "GROUND"
     },
     "foot_line": {
-      "tr": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği (kalibre) {conf} %",
-      "en": "sand {sand} % · bedrock {bedrock} % · soil {soil} % · big rock {bigrock} % · model certainty (calibrated) {conf} %"
+      "tr": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği {conf} %",
+      "en": "sand {sand} % · bedrock {bedrock} % · soil {soil} % · big rock {bigrock} % · model certainty {conf} %"
     },
     "foot_dominant": {
       "tr": "{cls} ağırlıklı",
@@ -1171,20 +1171,20 @@
       "en": "no difference"
     },
     "hazard_note": {
-      "tr": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu bu rotalarda görmüyor (p_sand ≤ 0,25).",
-      "en": "Red: rocky/outcrop segment (mean rock density ≥ 0.10; the naive route crosses it). Rock density may be inflated: 78% of the large detections in the corridor are outcrop or shadow. The model sees no sand on these routes (p_sand ≤ 0.25)."
+      "tr": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu S1–S3 rotalarında görmüyor (p_sand ≤ 0,19).",
+      "en": "Red: rocky/outcrop segment (mean rock density ≥ 0.10; the naive route crosses it). Rock density may be inflated: 78% of the large detections in the corridor are outcrop or shadow. The model sees no sand on the S1–S3 routes (p_sand ≤ 0.19)."
     },
     "sentence_full": {
       "tr": "Model bu görevde {kcal} kcal ve {o2} L O₂ kazandırdı, {sand} m kumdan kaçındı.",
       "en": "On this mission the model saved {kcal} kcal and {o2} L O₂, and avoided {sand} m of sand."
     },
     "sentence_risk": {
-      "tr": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kayalık/yüzlek zeminden kaçındı, risk % {risk_pct} düştü.",
-      "en": "The model paid off in safety, not energy: it avoided {hazard} m of rocky/outcrop ground and cut risk by {risk_pct} %."
+      "tr": "Zemin ve kaya katmanları enerjiden değil güvenlikten kazandırdı: {hazard} m kayalık/yüzlek zeminden kaçınıldı, risk % {risk_pct} düştü.",
+      "en": "The terrain and rock layers paid off in safety, not energy: {hazard} m of rocky/outcrop ground avoided, risk cut by {risk_pct} %."
     },
     "sentence_risk_sand": {
-      "tr": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
-      "en": "The model paid off in safety, not energy: it avoided {hazard} m of sandy/rocky ground and cut risk by {risk_pct} %."
+      "tr": "Zemin ve kaya katmanları enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçınıldı, risk % {risk_pct} düştü.",
+      "en": "The terrain and rock layers paid off in safety, not energy: {hazard} m of sandy/rocky ground avoided, risk cut by {risk_pct} %."
     },
     "sentence_same": {
       "tr": "Bu görevde iki planlayıcı aynı yolu seçti; zemin modeli rotayı değiştirmedi.",
@@ -1207,8 +1207,8 @@
       "en": "The terrain layer is provisional (not model output); the comparison reflects that."
     },
     "sentence_risk_nohaz": {
-      "tr": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
-      "en": "The model paid off in safety, not energy: risk dropped by {risk_pct} %."
+      "tr": "Zemin ve kaya katmanları enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
+      "en": "The terrain and rock layers paid off in safety, not energy: risk dropped by {risk_pct} %."
     },
     "sentence_cost": {
       "tr": " Bedeli {cost} kcal ek enerji.",

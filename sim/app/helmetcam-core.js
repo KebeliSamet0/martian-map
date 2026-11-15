@@ -4,7 +4,7 @@
 export const OPEN_RADIUS_M = 30;     // oyuncu bir durağa bu kadar yakınken kask kamerası açılır
 export const WARN_SAND = 0.15;       // durakta kum bunun üstündeyse ileri uyarı
 export const WARN_BIGROCK = 0.10;    // durakta büyük kaya bunun üstündeyse ileri uyarı
-export const LOW_CERTAINTY = 0.4;    // kesinlik (1 − entropi) bunun altında: "model emin değil; kanıt az" (insight.js UNCERTAIN_BELOW ile aynı)
+export const LOW_CERTAINTY = 0.4;    // kesinlik (1 − entropi) bunun altında: "model bu durakta kararsız" (insight.js UNCERTAIN_BELOW ile aynı)
 const SHOW_MIN = 0.05;               // yorumda adı geçen en küçük sınıf payı
 const CLASS_KEYS = ['bedrock', 'soil', 'sand', 'bigrock'];
 
