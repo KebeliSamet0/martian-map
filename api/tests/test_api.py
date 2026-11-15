@@ -195,7 +195,7 @@ def test_contract_is_actual_output(layers):
 
 # #52 madde 2: base_px verilirse dönüş ayağı hedeften üsse; verilmezse eski davranış.
 def test_base_px_return_leg(client, layers, routes):
-    mid = [130, 130]  # replan'ın yeni başlangıcı; üs ise asıl başlangıç
+    mid = [125, 100]  # replan'ın yeni başlangıcı; üs ise asıl başlangıç
     no_base = client.post("/replan", json={"start": mid, "goal": GOAL, "observations": []}).json()["routes"]
     with_base = client.post("/replan", json={"start": mid, "goal": GOAL, "observations": [], "base_px": START}).json()["routes"]
     for a, b in zip(no_base, with_base):
