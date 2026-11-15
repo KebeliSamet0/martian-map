@@ -4,7 +4,7 @@
 import { loadTexts } from './screens.js';
 import { pxToWorld } from './api.js';
 import { loadDirs, cardinal, dirFor } from './helmetcam-core.js';
-import { showCone, clearCone } from './helmetcam-3d.js';
+import { showCone, groundFn, clearCone } from './helmetcam-3d.js';
 import { alignTo, exitAlign, isAligned, isOpen } from './helmetcam.js';
 
 const lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'tr';
@@ -52,7 +52,7 @@ async function refresh() {
   ui.querySelector('.mm-sd-label').textContent = fmt(T.dir_label_short, { az: Math.round(d.az_deg), card: cardinal(d.az_deg, lang === 'en') });
   const btn = ui.querySelector('.mm-sd-btn'); btn.hidden = !d.exact; btn.textContent = T.btn_align;
   const m = mm(), w = pxToWorld(m.geo, stop.px[0], stop.px[1]);
-  if (!isOpen() && m?.T?.scene && m.nav) showCone({ scene: m.T.scene, heightAt: (x, z) => m.nav.heightAt(x, z), x: w[0], z: w[1], azDeg: d.az_deg, fovDeg: d.fov_deg ?? NAVCAM_FOV });
+  if (!isOpen() && m?.T?.scene && m.nav) showCone({ scene: m.T.scene, heightAt: groundFn(m), x: w[0], z: w[1], azDeg: d.az_deg, fovDeg: d.fov_deg ?? NAVCAM_FOV });
 }
 
 async function toggleAlign() {

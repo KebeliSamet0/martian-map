@@ -21,9 +21,10 @@ const kindsOf = (s) => ['shortest', 'balanced', 'safest'].includes(s) ? s : 'bal
 
 // ---- ortak: /compare önbelleği ----
 const cache = new Map();
-async function compareFor(start, goal, call) {
+async function compareFor(start, goal) {   // tur4:veri: 20 sn zaman aşımı (fetchCompare); ortak call yerine doğrudan
+
   const key = `${start}|${goal}`;
-  if (!cache.has(key)) cache.set(key, (call ? call('/compare', { start, goal }) : fetchCompare(API_BASE, start, goal)).catch((e) => { cache.delete(key); throw e; }));
+  if (!cache.has(key)) cache.set(key, fetchCompare(API_BASE, start, goal, { timeoutMs: 20000 }).catch((e) => { cache.delete(key); throw e; }));
   return cache.get(key);
 }
 function toLatLng(geo) {
@@ -45,8 +46,10 @@ registerSlot('route-extra', async ({ routes, call, geo }) => {
   const r0 = routes?.find((r) => r.startPx && r.goalPx); if (!r0) return null;
   const { compare: C } = await texts();
   const host = document.createElement('div');
-  try {
-    const data = await compareFor(r0.startPx, r0.goalPx, call);
+  host.className = 'tiny'; host.setAttribute('role', 'status'); host.textContent = C.loading;   // tur4:veri: beklerken "hesaplanıyor…"
+  void (async () => { try {
+    const data = await compareFor(r0.startPx, r0.goalPx);
+    host.textContent = ''; host.className = '';
     let kind = 'balanced';   // ana karşılaştırma dengeli rota; sekmelerle diğer türler
     const tabs = document.createElement('div'); tabs.style.cssText = 'display:flex;gap:6px;margin:8px 0 0';
     const panel = renderCompare(host, data, C, { kind });
@@ -63,7 +66,7 @@ registerSlot('route-extra', async ({ routes, call, geo }) => {
       b.onclick = () => show(c.kind); tabs.append(b);
     }
     show(kind);
-  } catch (e) { host.textContent = C.error.replace('{why}', e.message); host.className = 'tiny'; }
+  } catch (e) { host.textContent = C.error.replace('{why}', e.message); host.className = 'tiny'; } })();
   return host;
 });
 

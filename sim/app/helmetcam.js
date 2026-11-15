@@ -8,7 +8,7 @@
 import { loadTexts } from './screens.js';
 import { API_BASE, API_OFF, GRID, worldToPx, pxToWorld } from './api.js';
 import { sampleField, sharedField } from './insight.js';
-import { showCone, clearCone } from './helmetcam-3d.js';
+import { showCone, groundFn, clearCone } from './helmetcam-3d.js';
 import './stopcard-dir.js';   // tur4:veri: G (Navcam durak) kartına yön; helmetcam'in hizalama koduna bağlanır
 import { loadManifest, nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadDirs, hasDir, cardinal, alignView } from './helmetcam-core.js';
 
@@ -65,7 +65,7 @@ function drawCompass(cv, d) {
 }
 function showDirCone(st, d) {
   clearCone(); const m = mm(); if (!hasDir(d) || !m?.T?.scene || !m.nav) return;
-  const w = stopWorld(st); showCone({ scene: m.T.scene, heightAt: (x, z) => m.nav.heightAt(x, z), x: w[0], z: w[1], azDeg: d.az_deg, fovDeg: d.fov_deg });
+  const w = stopWorld(st); showCone({ scene: m.T.scene, heightAt: groundFn(m), x: w[0], z: w[1], azDeg: d.az_deg, fovDeg: d.fov_deg });
 }
 function enterAlign() {
   const o = S.open; if (!o) return; const c = o.cands[o.i];
