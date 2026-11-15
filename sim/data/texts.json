@@ -467,6 +467,22 @@
       "tr": "Gerçekleşen",
       "en": "Actual"
     },
+    "report.col.note": {
+      "tr": "DEĞERLENDİRME",
+      "en": "ASSESSMENT"
+    },
+    "report.lvl.ok": {
+      "tr": "plana yakın",
+      "en": "close to plan"
+    },
+    "report.lvl.warn": {
+      "tr": "küçük sapma",
+      "en": "small deviation"
+    },
+    "report.lvl.over": {
+      "tr": "belirgin sapma",
+      "en": "notable deviation"
+    },
     "report.diff": {
       "tr": "Fark",
       "en": "Diff"
