@@ -73,3 +73,11 @@ def test_terrain_u8_layout(client, layers):
     assert abs(arr[y, x, 2] / 255 - layers.probs["sand"][y, x]) < 0.003
     assert abs(arr[y, x, 4] / 255 - (1 - layers.entropy[y, x])) < 0.003
     assert r.headers["x-channels"].endswith("confidence")
+
+
+def test_hazard_split_sums_to_naive_hazard(layers):
+    for kind in insight.KINDS:
+        c = insight.compare(layers, START, GOAL, kind)
+        sp = c["naive_hazard_split_m"]
+        assert set(sp) == {"sand", "rock"}
+        assert abs(sp["sand"] + sp["rock"] - c["naive_hazard_m"]) <= 1.0   # yuvarlama

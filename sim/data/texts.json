@@ -590,7 +590,7 @@
   },
   "insight": {
     "foot_label": "ZEMİN",
-    "foot_line": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model güveni {conf} %",
+    "foot_line": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği (kalibre) {conf} %",
     "foot_dominant": "{cls} ağırlıklı",
     "foot_uncertain": "belirsiz",
     "foot_provisional": "geçici zemin katmanı (model çıktısı değil)",
@@ -602,11 +602,16 @@
     "seg_line": "Segment {id}: {cls} (p={p}) → zemin katsayısı ×{eta} → {extra} kcal",
     "seg_line_flat": "Segment {id}: {cls}, zemin etkisi küçük (katsayı ×{eta}, {extra} kcal)",
     "seg_alt": "alternatif: {alt}",
-    "seg_conf_low": "model güveni düşük ({conf} %)",
-    "fog_button": "Model güveni katmanı",
-    "fog_hint": "Soluk alan = model emin değil (güven = 1 − normalize entropi). Model tahmini, ölçüm değil.",
+    "seg_conf_low": "model kesinliği düşük ({conf} %): kanıt az, tahmin yanlış demek değil",
+    "fog_button": "Model kesinliği katmanı",
+    "fog_hint": "Soluk alan = kanıt az (kesinlik = 1 − normalize entropi). Yanlış demek değil: entropi yanlış tahminleri ayırt etmiyor. Model tahmini, ölçüm değil.",
     "seg_title": "Segment açıklamaları (model rotası)",
-    "hazard_button": "Yalnız eğim rotasının tehlikeli zemini (3B)"
+    "hazard_button": "Yalnız eğim rotasının kayalık/yüzlek zemini (3B)",
+    "walk_title": "Yürüdüğün zemin",
+    "walk_total": "Katettiğin {m} m boyunca model tahmini:",
+    "walk_class": "{cls} {pct} % ({m} m)",
+    "walk_conf": "Ortalama model kesinliği {conf} %; yolun {low} % kadarında ({lowm} m) kanıt azdı (bu, tahminin yanlış olduğu anlamına gelmez).",
+    "walk_note": "Zemin sınıfı ve kesinlik model tahminidir (AI4Mars tabanlı), ölçüm değil; metre rota ilerlemesinden gelir."
   },
   "compare": {
     "title": "Zemin modeli ne kazandırıyor?",
@@ -626,9 +631,10 @@
     "delta_better": "model {v} {u} az",
     "delta_worse": "model {v} {u} fazla",
     "delta_same": "fark yok",
-    "hazard_note": "Kırmızı: kum ya da kayalık zemin segmenti (naif rota bu zeminden geçiyor)",
+    "hazard_note": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu bu rotalarda görmüyor (p_sand ≤ 0,25).",
     "sentence_full": "Model bu görevde {kcal} kcal ve {o2} L O₂ kazandırdı, {sand} m kumdan kaçındı.",
-    "sentence_risk": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
+    "sentence_risk": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kayalık/yüzlek zeminden kaçındı, risk % {risk_pct} düştü.",
+    "sentence_risk_sand": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
     "sentence_same": "Bu görevde iki planlayıcı aynı yolu seçti; zemin modeli rotayı değiştirmedi.",
     "scope": "Tek yön, {kind} rota. Maliyet gerçek zemin katmanında ölçülür; zemin katmanı model tahminidir.",
     "loading": "Karşılaştırma hesaplanıyor…",
@@ -637,7 +643,7 @@
     "sentence_risk_nohaz": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
     "sentence_cost": " Bedeli {cost} kcal ek enerji.",
     "sentence_other": "Model rotayı değiştirdi; bu görevde risk ve enerji farkı küçük.",
-    "hazard3d_legend": "Kırmızı iz: yalnız eğim rotasının geçeceği kum/kayalık zemin"
+    "hazard3d_legend": "Kırmızı iz: yalnız eğim rotasının geçeceği kayalık/yüzlek zemin"
   },
   "bilim": {
     "badge_crism": "Spektral: CRISM",

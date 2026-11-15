@@ -9,7 +9,7 @@ import { loadTexts } from './screens.js';
 import { API_BASE, API_OFF, GRID, pxToWorld, worldToPx } from './api.js';
 import { fetchCompare, renderCompare, drawCompareOnMap, summarize } from './compare.js';
 import { layers3d } from './insight-3d.js';
-import { createFootReader, fogCanvas, loadTerrainField, segmentWhy, segmentAt } from './insight.js';
+import { createFootReader, createWalkLog, walkSummaryText, fogCanvas, loadTerrainField, segmentWhy, segmentAt } from './insight.js';
 
 const lang = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'tr';
 const pick = (v) => (v && typeof v === 'object' && 'tr' in v ? (v[lang] ?? v.tr) : v);   // {tr,en} alanlı anahtarlar da çalışır
@@ -73,17 +73,20 @@ registerSlot('report-insight', async ({ route, completed }) => {
   const { compare: C, insight: T } = await texts();
   const data = await compareFor(route.startPx, route.goalPx).catch(() => null); if (!data) return null;
   const c = data.comparisons.find((x) => x.kind === kindsOf(route.kind)) ?? data.comparisons[1], s = summarize(c, C);
+  const wsum = W.log?.summary(), walk = walkSummaryText(wsum, T);
   const el = document.createElement('section'); el.className = 'mm-insight-report';
   const top = c.model.segments.slice().sort((a, b) => (b.insight?.extra_kcal ?? 0) - (a.insight?.extra_kcal ?? 0)).slice(0, 3).filter((g) => (g.insight?.extra_kcal ?? 0) >= 0.5);
   el.innerHTML = `<h4 style="margin:12px 0 4px">${C.title}</h4><p style="margin:0 0 6px;font-weight:600">${s.sentence}</p>` +
     s.rows.slice(1, 4).map((r) => `<div class="tiny">${r.label}: ${r.naive.toFixed(r.unit === C.unit_l || r.unit === C.unit_risk ? 1 : 0)} → <b>${r.model.toFixed(r.unit === C.unit_l || r.unit === C.unit_risk ? 1 : 0)} ${r.unit}</b> · ${r.text}</div>`).join('') +
     top.map((g) => `<div class="tiny" style="margin-top:3px">${segmentWhy(g, T)}</div>`).join('') +
+    (walk ? `<h4 style="margin:12px 0 4px">${T.walk_title}</h4><div class="tiny">${walk.total}</div><div class="tiny"><b>${walk.mix}</b></div><div class="tiny">${walk.conf}</div><div class="tiny" style="opacity:.6">${T.walk_note}</div>` : '') +
     `<div class="tiny" style="opacity:.6;margin-top:4px">${C.scope.replace('{kind}', c.label)}${completed === false ? '' : ''}</div>`;
   return el;
 });
 
 // ---- yürüyüş ekranı: ayak altı satırı + segment açıklaması ----
-const W = { foot: null, tried: false, timer: 0, seg: null, segEl: null, hideT: 0, on: false };
+const W = { foot: null, tried: false, timer: 0, seg: null, segEl: null, hideT: 0, on: false, log: null, lastS: new WeakMap() };
+const walkLog = () => (W.foot?.field ? (W.log ??= createWalkLog(W.foot.field)) : null);
 function segEl() {
   if (W.segEl) return W.segEl;
   const el = document.createElement('div'); el.hidden = true; el.setAttribute('role', 'status');
@@ -91,12 +94,20 @@ function segEl() {
     background: 'rgba(14,10,8,.72)', color: '#f3e3d3', font: '12px/1.35 system-ui', pointerEvents: 'none', zIndex: 20, textAlign: 'center' });
   document.body.append(el); return (W.segEl = el);
 }
+// gerçek yürüyüş: rota ilerlemesinin (s) son çağrıdan beri katettiği aralık → zemin sınıfı + güven
+function logWalk(m, R) {
+  const wl = walkLog(); if (!wl || !R) return;
+  const s0 = W.lastS.get(R) ?? 0;
+  if (R.s > s0) wl.advance(R.r.dense, R.cum, s0, R.s, (w) => worldToPx(m.geo, w[0], w[1]));
+  W.lastS.set(R, Math.max(s0, R.s));
+}
 async function tick() {
   const m = mm(); if (!m?.geo || !W.on) return;
   const { insight: T } = await texts();
   if (!W.foot && !W.tried) { W.tried = true; try { W.foot = await createFootReader({ apiBase: API_BASE, texts: T, grid: { w: GRID.w, h: GRID.h } }); } catch (e) { console.warn('[insight foot]', e); } }
   W.foot?.update(worldToPx(m.geo, m.P.x, m.P.z));
   const R = m.routeRun; if (!R) return;
+  logWalk(m, R);
   if (!layers3d.state.hasComparison && R.r.startPx) { const d = await compareFor(R.r.startPx, R.r.goalPx).catch(() => null); const cur = d?.comparisons.find((x) => x.kind === R.r.kind); if (cur) layers3d.configure({ geo: m.geo, comparison: cur, hazard: true }); legend3d(true); }
   let i = R.cum.findIndex((c) => c >= R.s); if (i < 0) i = R.cum.length - 1;
   const seg = segmentAt(R.r, i); if (!seg || seg.id === W.seg) return;
@@ -117,6 +128,7 @@ async function legend3d(show) {
   legendEl.hidden = !(show && layers3d.state.hazard && layers3d.state.hasComparison);
 }
 function walking(on) {
+  if (!on && W.on) logWalk(mm(), mm()?.routeRun);   // son tick'ten kalan kısmı kapat
   W.on = on; clearInterval(W.timer);
   if (on) { W.seg = null; W.timer = setInterval(() => void tick(), 250); void tick(); }
   else { W.foot?.setVisible(false); if (W.segEl) W.segEl.hidden = true; }
@@ -125,7 +137,7 @@ addEventListener('mm:screen', (e) => {
   const d = e.detail, screen = typeof d === 'string' ? d : d?.screen;
   if (screen === 'walk' || screen === 'yürüyüş') walking(true);
   else if (screen === 'resume') walking(true);
-  else if (['pause', 'report', 'intro', 'select', 'briefing'].includes(screen)) { walking(false); if (screen !== 'select') clearDraw(); }
+  else if (['pause', 'report', 'intro', 'select', 'briefing'].includes(screen)) { if (['intro', 'select', 'briefing'].includes(screen)) { W.log?.reset(); W.lastS = new WeakMap(); } walking(false); if (screen !== 'select') clearDraw(); }
   if (['walk', 'report', 'select', 'briefing', 'intro'].includes(screen)) clearDraw();
   if (['select', 'briefing', 'intro'].includes(screen)) layers3d.configure({ comparison: null });
   legend3d(screen === 'walk' || screen === 'resume');
