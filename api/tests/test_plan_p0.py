@@ -22,14 +22,14 @@ def route(L, start, goal, kind="shortest", **kw):
 
 # ---- F04 ----
 def test_f04_user_limit_applies_to_endpoints():
-    s = np.zeros((5, 20)); s[2, 19] = 20          # hedef hücre 20°
+    s = np.zeros((5, 20)); s[2, 19] = 18          # hedef hücre 18° (geçilmez sınırın 20° altında)
     L = grid(5, 20, slope=s)
     r = route(L, [0, 2], [19, 2], max_slope_deg=10)
     t = r["total"]
     assert t["go"] is False and t["status"] in ("GO", "NO-GO")
-    assert t["slope_limit_violations"] == [{"point": "goal", "px": [19, 2], "slope_deg": 20.0, "limit_deg": 10.0}]
+    assert t["slope_limit_violations"] == [{"point": "goal", "px": [19, 2], "slope_deg": 18.0, "limit_deg": 10.0}]
     assert any("eğim sınırını aşıyor" in w for w in t["warnings"])
-    # sınır yokken (25° altında) aynı yol GO
+    # sınır yokken (20° altında) aynı yol GO
     assert route(L, [0, 2], [19, 2])["total"]["go"] is True
 
 

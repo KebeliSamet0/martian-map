@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def _make_partial_or_provisional_pkg(tmp_path: Path, include_terrain: list[str]):
     w, h = 12, 12
     elev = np.linspace(-3800, -3750, w * h, dtype=np.float32).reshape(h, w)
-    slope = np.linspace(2.0, 20.0, w * h, dtype=np.float32).reshape(h, w)
+    slope = np.linspace(2.0, 19.5, w * h, dtype=np.float32).reshape(h, w)
     rock = np.linspace(0.0, 0.3, w * h, dtype=np.float32).reshape(h, w)
     np.save(tmp_path / "elevation.npy", elev)
     np.save(tmp_path / "slope.npy", slope)

@@ -396,7 +396,7 @@ async function startReturnLeg() {
     nr.startPx = cur; nr.goalPx = homePx; nr.source = 'api';
   } catch (e) {
     why = e.message;
-    const local = nav.route(P.x, P.z, home[0], home[1], { mode: 'balanced', maxSlope: 25 });
+    const local = nav.route(P.x, P.z, home[0], home[1], { mode: 'balanced', maxSlope: 20 });
     if (local.error) { toast(t('return.local', { why: local.error }), true); return null; }
     nr = { ...local, kind: 'local', label: t('route.fallback'), source: 'local', fallbackWhy: why, startPx: cur, goalPx: homePx };
   }

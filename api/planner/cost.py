@@ -103,7 +103,7 @@ def cost_surface(L: Layers, w: dict, load_kg: float = 0.0, max_slope_deg: float 
     r = risk_per_m(L)
     c = w["t"] * t + w["k"] * k + w["r"] * r
     c = np.where(L.slope >= P.SLOPE_NOGO_DEG, np.inf, c)
-    # DENEME (Emre, 2026-11-15): kullanıcının azami eğimi. 25° güvenlik sınırı her zaman geçerli; yalnız daha sıkı yapılabilir.
+    # DENEME (Emre, 2026-11-15): kullanıcının azami eğimi. SLOPE_NOGO_DEG (20°) güvenlik sınırı her zaman geçerli; yalnız daha sıkı yapılabilir.
     if max_slope_deg is not None and max_slope_deg < P.SLOPE_NOGO_DEG:
         c = np.where(L.slope >= max_slope_deg, np.inf, c)
     rb = rock_block_mask(L)

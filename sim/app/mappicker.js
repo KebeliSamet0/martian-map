@@ -1,5 +1,5 @@
 // "Kendi rotanı planla" harita ekranı (#120): HiRISE ortofoto üstünde A ve B seçimi.
-// Katmanlar: geçilmez alan (eğim ≥ 25°, /layers/slope.bin), Curiosity durakları (128), bilim durakları (4), model belirsizliği (entropy).
+// Katmanlar: geçilmez alan (eğim ≥ 20°, /layers/slope.bin), Curiosity durakları (128), bilim durakları (4), model belirsizliği (entropy).
 // Hiçbir şey uydurulmaz: eğim ve belirsizlik planlayıcı katmanlarından; durak bilgisi /grid yanıtından. API yoksa seçim yapılabilir, uyarı verilmez.
 import { el, button } from './screens.js';
 import { t } from './i18n.js';

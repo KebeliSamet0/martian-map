@@ -33,8 +33,8 @@ TERRAIN_ETA = {"bedrock": 1.0, "soil": 1.2, "sand": 2.1, "bigrock": 1.5}
 TERRAIN_SPEED = {"bedrock": 1.0, "soil": 0.95, "sand": 0.6, "bigrock": 0.5}  # VARSAYIM
 
 # Eğim sınırları (derece)
-SLOPE_RISKY_DEG = 15.0  # VARSAYIM (rakip projelerle aynı eşik; kaynak aranacak)
-SLOPE_NOGO_DEG = 25.0  # VARSAYIM
+SLOPE_RISKY_DEG = 15.0  # Artemis güney kutbu yürüyüş planlaması 15° sınır (Acta Astronautica 2023, ScienceDirect S0094576523005179)
+SLOPE_NOGO_DEG = 20.0  # NASA EVA lunar surface ConOps (EVA-EXP-0075): skafandrlı astronot ≤20° yokuş; Mars g (0,38) Ay'ın ~2,3 katı, 25° iyimser (Emre, #52)
 # Başlangıç/hedef NOGO hücresindeyse bu yarıçaptaki en yakın geçilebilir hücreye bağlanır.
 # VARSAYIM: 2 m DEM boxwork sırt kenarında eğimi tek hücrede abartıyor; rover tilt ≤17,5°,
 # DEM'in ≥25° gösterdiği 4 waypoint'in hepsinde 10 m içinde <25° hücre var (issue #19).
@@ -150,8 +150,8 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Arazi katsayısı η", "value": TERRAIN_ETA, "unit": "-", "source": TERRAIN_SOURCE},
         {"name": "Hücre maliyet katmanı eğim özeti", "value": "|slope| ile çıkış (yönsüz hücre özeti); yönlü yol hesabı /step ucunda", "unit": "-", "source": "VARSAYIM: tek hücrede yürüyüş yönü bilinmediğinden |G| = tan(slope)·100 kullanılır"},
         {"name": "Oksijen dönüşümü", "value": {"kcal_per_L_o2": KCAL_PER_L_O2, "g_per_L_o2": O2_G_PER_L}, "unit": "kcal/L, g/L", "source": "Dolaylı kalorimetri (4.8 kcal/L O₂) ve STP yoğunluğu (1.429 g/L)"},
-        {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "VARSAYIM"},
-        {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "VARSAYIM"},
+        {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "Artemis güney kutbu EVA yürüyüş planlaması 15° sınırı (Acta Astronautica 2023, https://www.sciencedirect.com/science/article/pii/S0094576523005179)"},
+        {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "NASA EVA Lunar Surface Concept of Operations (EVA-EXP-0075): skafandrlı astronot 20°'ye kadar yokuş; Ay için tanımlı, Mars'ta (0,38 g) daha temkinli olmak için doğrudan alındı. https://www.nasa.gov/wp-content/uploads/2020/01/topic_1-_eva_lunar_surface_concept_of_operations.pdf"},
         {"name": "Tarayıcı sınıfı (scan_class) kuralı", "value": SCAN_RULE, "unit": "sınıf (0..3)", "source": "VARSAYIM: öncelik sırasıyla 2 geçilmez -> 3 bilinmiyor -> 1 dikkat -> 0 güvenli"},
         {"name": "Geçilmez hücreden bağlanma yarıçapı", "value": SNAP_RADIUS_M, "unit": "m", "source": "VARSAYIM: 2 m DEM sırt kenarında eğimi abartıyor (rover tilt karşılaştırması)"},
         {"name": "Segment uzunluk ve yumuşatma sınırları", "value": {"min_m": SEG_MIN_M, "max_m": SEG_MAX_M, "max_count": SEG_MAX_COUNT, "smooth_m": SEG_SMOOTH_M, "hysteresis_deg": SEG_HYSTERESIS_DEG}, "unit": "m / °", "source": "VARSAYIM: DEM hücre gürültüsünde 8–25 okunabilir segment hedefi"},

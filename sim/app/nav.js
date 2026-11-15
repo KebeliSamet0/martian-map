@@ -50,7 +50,7 @@ export class Nav {
 
   /** Kullanıcının eğim sınırı yol boyunca ~6 m tabanda ölçülen eğime uygulanır: A*, 4 m ızgara kenarlarında daha gevşek
    *  ölçtüğü için sonuç sınırı aşarsa, A* sınırı aşım kadar kısılarak (en çok 4 kez) yeniden çözülür. */
-  route(sx, sz, gx, gz, { mode = 'shortest', maxSlope = 25 } = {}) {
+  route(sx, sz, gx, gz, { mode = 'shortest', maxSlope = 20 } = {}) {
     let lim = maxSlope, best = null;
     for (let it = 0; it < 4; it++) {
       const r = this._route(sx, sz, gx, gz, { mode, maxSlope: lim });
