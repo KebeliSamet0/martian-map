@@ -72,12 +72,22 @@ function enterAlign() {
   beginAlign({ world: stopWorld(o.stop), dir: S.dirs[c.name], url: c.url, sol: c.sol, stopId: o.stop.stop_id, frames: { i: o.i, n: o.cands.length } });
 }
 /** Hizalama hedefi: { world:[x,z], dir:{az_deg,el_deg,fov_deg}, url, sol, stopId, frames?:{i,n}, onExit? }. Kask kamerası ve G (Navcam durak) kartı aynı kodu kullanır. */
+const NAVCAM_MAST_H = 1.97;   // m: Curiosity Navcam direği yerden ~1,9–2,0 m (astronot göz yüksekliği EYE=1,75 değil)
 function beginAlign(t) {
   const m = mm(); if (!m?.T?.camera || !hasDir(t.dir)) return;
   const cam = m.T.camera, v = alignView(t.dir), saved = S.align?.savedFov ?? cam.fov, w = t.world;
   const W = innerWidth, H = innerHeight, side = Math.min(W, H), vf = (2 * Math.atan(Math.tan((v.fov * Math.PI) / 360) * (H / side)) * 180) / Math.PI;
+  clearInterval(S.align?.loadTimer);
   S.align = { savedFov: saved, wipe: S.align?.wipe ?? 0.5, target: t };
-  window.__viewLock = (P) => { P.x = w[0]; P.z = w[1]; P.yaw = v.yaw; P.pitch = v.pitch; if (Math.abs(cam.fov - vf) > 1e-6) { cam.fov = vf; cam.updateProjectionMatrix(); } };
+  // Kamera = Navcam direği yüksekliği (astronot göz hizası değil); zemin = sahnedeki arazi (tiles_fixed), yoksa nav DEM'i. Yakın zemin kamerayı keserse yukarı itilir.
+  const gnd = (x, z) => { const y = m.T.terrain?.heightAt(x, z); if (y != null) return y; const n = m.nav?.heightAt(x, z); return Number.isFinite(n) ? n : null; };
+  window.__viewLock = (P) => {
+    P.x = w[0]; P.z = w[1]; P.yaw = v.yaw; P.pitch = v.pitch; if (Math.abs(cam.fov - vf) > 1e-6) { cam.fov = vf; cam.updateProjectionMatrix(); }
+    const g = gnd(w[0], w[1]); if (g == null) return; let top = g;
+    for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const h = gnd(w[0] + dx, w[1] + dz); if (h != null && h > top) top = h; }
+    P.y = Math.max(g + NAVCAM_MAST_H, top + 0.6);
+  };
+  S.align.loadTimer = setInterval(() => { const L = S.alignEl?.querySelector('.mm-hc-load'), st = m.T.terrain?.stats; if (L) L.hidden = !(st && st.loading > 0); }, 250);
   clearCone();   // karşılaştırmada koni görüntüyü örtmesin
   if (S.card) S.card.hidden = true; renderAlign(t, side);
   emit('mm:helmetcam-view', { on: true, stopId: t.stopId, az: t.dir.az_deg, el: t.dir.el_deg, fov: t.dir.fov_deg });
@@ -88,7 +98,7 @@ export const isOpen = () => !!S.open;
 export { exitAlign };
 function exitAlign() {
   if (!S.align) return; const cam = mm()?.T?.camera, t = S.align.target;
-  window.__viewLock = null; if (cam) { cam.fov = S.align.savedFov; cam.updateProjectionMatrix(); }
+  clearInterval(S.align.loadTimer); window.__viewLock = null; if (cam) { cam.fov = S.align.savedFov; cam.updateProjectionMatrix(); }
   S.alignEl?.remove(); S.alignEl = null; const id = t?.stopId; S.align = null;
   if (S.card && S.open) { S.card.hidden = false; const c = S.open.cands[S.open.i]; showDirCone(S.open.stop, S.dirs[c?.name]); }
   t?.onExit?.();
@@ -105,6 +115,7 @@ function renderAlign(c, side = Math.min(innerWidth, innerHeight)) {
     `<div class="mm-hc-knob" title="${esc(T.wipe_hint)}" style="position:absolute;left:${wx - 16}px;top:${innerHeight / 2 - 16}px;width:32px;height:32px;border-radius:50%;background:rgba(14,10,8,.85);border:2px solid #ffd9b8;color:#ffd9b8;font:14px/28px system-ui;text-align:center;cursor:ew-resize;pointer-events:auto;touch-action:none">↔</div>` +
     `<div style="position:absolute;left:${left + 10}px;top:${(innerHeight - side) / 2 + 8}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#f3e3d3;font:12px system-ui">${esc(T.lbl_real)} · ${esc(fmt(T.source_img, { sol: c.sol }))}</div>` +
     `<div style="position:absolute;right:${left + 10}px;top:${(innerHeight - side) / 2 + 8}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#f3e3d3;font:12px system-ui">${esc(T.lbl_sim)}</div>` +
+    `<div class="mm-hc-load" hidden style="position:absolute;right:${left + 10}px;top:${(innerHeight - side) / 2 + 36}px;padding:2px 8px;border-radius:5px;background:rgba(14,10,8,.75);color:#ffd9b8;font:12px system-ui">${esc(T.align_loading)}</div>` +
     `<div style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;padding:6px 10px;border-radius:8px;background:rgba(14,10,8,.88);color:#f3e3d3;font:12px system-ui;pointer-events:auto;max-width:94vw;flex-wrap:wrap;justify-content:center">` +
     (fr && fr.n > 1 ? `<button class="mm-hc-prev">▲</button><span>${esc(fmt(T.frame, { i: fr.i + 1, n: fr.n }))}</span><button class="mm-hc-next">▼</button>` : '') +
     `<button class="mm-hc-back">${esc(T.btn_back)}</button><span style="opacity:.7;max-width:46ch">${esc(T.align_note)}</span></div>`;
