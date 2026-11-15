@@ -32,10 +32,11 @@ Each number carries its source in `[brackets]`.
 - **Image:** flow diagram (DTM → slope · HiRISE → rocks · Navcam → terrain class → cost map → 3 routes → simulator) plus `docs/figures/sim_03_routes_compare.png` (three routes + "What does the terrain model buy you?": slope-only vs terrain model + rock). Support: `docs/figures/rover_terrain_examples.png`.
 
 ## 5. One mission, start to finish
-**Title:** Briefing, route, walk, scan, surprise, debrief
+**Title:** Briefing, route, walk, decide, sample, return, debrief
 - S1: boxwork ridges to the Atacama drill site, about 0.55 km; shortest / balanced / safest take 18.4 / 18.7 / 19.4 min and 87 / 88 / 91 kcal in the planner. [`ml/rover_terrain/LAYERS.md`, after column]
-- A sand patch defined in the scenario triggers a re-plan from the planner; S3 cuts the oxygen budget to 80 L, and the astronaut has to weigh turning back. [`sim/data/missions.json`]
-- The debrief compares plan with actual and gives a grade.
+- A sand patch defined in the scenario raises a decision card: accept the planner's new route or continue; S3 cuts the oxygen budget to 80 L, and the astronaut has to weigh turning back. [`sim/data/missions.json`]
+- At the target the astronaut holds E to collect the sample (+8 kg), then walks back to base with the heavier load.
+- The debrief compares plan with actual, lists the decisions and gives a grade.
 - **Image:** `docs/figures/sim_02_missions.png` (mission cards with map preview), `docs/figures/sim_05_helmetcam.png` (helmet camera: real Navcam frame + model mask, a prediction), `docs/figures/sim_07_sand_warning.png` (sand warning, replan choice). Live demo or video is the backup.
 
 ## 6. Validation

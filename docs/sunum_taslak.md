@@ -57,20 +57,22 @@ Söylenmeyecekler (denetimde YASAK): "NASA onayladı", "güvenli rota garantisi"
 
 ### Slayt 5: Demo (görev akışı)
 - **Başlık:** One mission, start to finish
-- **Ana mesaj:** From the boxwork ridges to the Atacama campaign stop (~0.55 km): planned, walked, re-planned and graded.
+- **Ana mesaj:** From the boxwork ridges to the Atacama campaign stop (~0.55 km) and back: planned, walked, decided, sampled and graded.
 - **Maddeler (demo sırası):**
   1. **Briefing:** mission S1 and its objective (reach Atacama, collect a sample).
   2. **Plan:** choose one of three routes; compare their time, energy, oxygen and dose budgets.
   3. **Walk:** oxygen, energy, time and dose estimates update as you walk; status GO / CAUTION / NO-GO.
   4. **Scan:** the helmet scanner marks caution and no-go ground and shows where the model has little evidence.
-  5. **Sand event:** a sand patch defined in the scenario triggers a re-plan from the planner.
-  6. **Debrief:** planned vs actual, and a grade.
+  5. **Decision:** a sand patch defined in the scenario raises a card: accept the planner's new route or continue.
+  6. **Sample and return:** at the target, hold E to collect the sample (+8 kg), then walk back to base with the heavier load.
+  7. **Debrief:** planned vs actual, the decisions taken, and a grade.
 - **Three missions, three lessons** (`sim/data/missions.json`):
   - S1, easy: comfortable budget, all three routes GO.
   - S2, medium, "Sandy shortcut": a sand candidate sits on the shortest route; the re-plan goes around it.
   - S3, hard, "Limited O₂ budget": oxygen cut to 80 L; the routes start as NO-GO and the astronaut has to weigh turning back.
 - **Görsel:** Canlı demo. Yedek: ekran kaydı (demo bilgisayarında, gerçek GPU ile).
 - **Konuşmacı notu:** Kum olayı senaryoda önceden tanımlı; canlı sensör algılaması yok. S3'te yazılım dönüşü zorunlu kılmıyor; ders, kararın astronotta olması.
+- **Demo uyarısı (15 Kasım denetimi, #125):** Karne şu an dönüşlü yürüyüşü yalnız gidiş planıyla karşılaştırıyor (S1'de C çıkıyor) ve S3'te uyarı dönüş yolunda geliyor. Düzelmezse demoda karne derecesine değil tabloya ve karar satırlarına odaklan; S3'ü planlama ekranındaki NO-GO kararıyla anlat.
 
 ### Slayt 6: Doğrulama
 Slayt metni (İngilizce, başlık ve dipnot dahil 40 kelime; 40 sınırı):
