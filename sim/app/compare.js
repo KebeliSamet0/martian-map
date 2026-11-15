@@ -22,15 +22,19 @@ export function summarize(c, t) {
   let key = 'sentence_same', vars = {};
   if (!c.same_path) {
     if (energyMeaningful && s.sand_m > 0) { key = 'sentence_full'; vars = { kcal: num(s.kcal), o2: num(s.o2_L, 1), sand: num(s.sand_m) }; }
-    else { key = 'sentence_risk'; vars = { risk_pct: num(Math.max(0, riskPct)), hazard: num(hazard), kcal: `${s.kcal >= 0 ? '+' : '−'}${num(Math.abs(s.kcal), 1)}` }; }
+    else if (riskPct >= 3 || hazard > 0) {
+      key = hazard > 0 ? 'sentence_risk' : 'sentence_risk_nohaz'; vars = { risk_pct: num(Math.max(0, riskPct)), hazard: num(hazard) };
+    } else key = 'sentence_other';
   }
+  let sentence = fmt(t[key], vars);
+  if (key.startsWith('sentence_risk') && s.kcal <= -0.5) sentence += fmt(t.sentence_cost, { cost: `+${num(Math.abs(s.kcal), 1)}` });
   const row = (label, unit, a, b, d = 0, lowerIsBetter = true) => {
     const diff = a - b;   // naif − model; >0 model azalttı
     const text = Math.abs(diff) < Math.pow(10, -d) / 2 ? t.delta_same : fmt(diff > 0 ? t.delta_better : t.delta_worse, { v: num(Math.abs(diff), d), u: unit });
     return { label, unit, naive: a, model: b, diff, text, good: lowerIsBetter ? diff > 0 : diff < 0, same: text === t.delta_same };
   };
   return {
-    kind: c.kind, label: c.label, samePath: c.same_path, sentence: fmt(t[key], vars), sentenceKey: key,
+    kind: c.kind, label: c.label, samePath: c.same_path, sentence, sentenceKey: key,
     rows: [row(t.row_dist, t.unit_m, n.m, m.m), row(t.row_kcal, t.unit_kcal, n.kcal, m.kcal), row(t.row_o2, t.unit_l, n.o2_L, m.o2_L, 1),
       row(t.row_risk, t.unit_risk, n.risk, m.risk, 1), row(t.row_hazard, t.unit_m, c.naive_hazard_m, c.model_hazard_m)],
     savedKcal: s.kcal, savedO2: s.o2_L, sandAvoidedM: s.sand_m, hazardAvoidedM: hazard, riskPct,

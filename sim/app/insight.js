@@ -89,7 +89,7 @@ export async function createFootReader({ apiBase, texts, parent = document.body,
   const el = document.createElement('div');
   el.className = 'mm-foot'; el.hidden = true; el.setAttribute('role', 'status');
   el.title = texts.foot_source;
-  Object.assign(el.style, { position: 'fixed', left: '50%', bottom: '14px', transform: 'translateX(-50%)', padding: '6px 12px', borderRadius: '8px',
+  Object.assign(el.style, { position: 'fixed', left: '50%', bottom: '46px', transform: 'translateX(-50%)', padding: '6px 12px', borderRadius: '8px',
     background: 'rgba(14,10,8,.72)', color: '#f3e3d3', font: '12px/1.3 system-ui', letterSpacing: '.02em', pointerEvents: 'none', zIndex: 20,
     border: '1px solid rgba(255,178,122,.25)', transition: 'box-shadow .25s, border-color .25s' });
   parent.append(el);

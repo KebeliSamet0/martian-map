@@ -51,7 +51,7 @@ test('özet cümlesi: enerji kazancı varsa tam cümle, yoksa dürüst risk cüm
   assert.equal(full.sentenceKey, 'sentence_full'); assert.match(full.sentence, /20 kcal ve 4,1 L O₂ kazandırdı, 120 m kumdan kaçındı/);
   const nm2 = { m: 560, kcal: 88, o2_L: 18.3, risk: 49, sand_m: 0 }, mm2 = { m: 570, kcal: 88, o2_L: 18.3, risk: 42, sand_m: 0 };
   const risk = summarize(mk(nm2, mm2, { kcal: 0, o2_L: 0, sand_m: 0, risk: 7 }, 71, 0), C);
-  assert.equal(risk.sentenceKey, 'sentence_risk'); assert.match(risk.sentence, /riski 14 % azalttı ve 71 m/);
+  assert.equal(risk.sentenceKey, 'sentence_risk'); assert.match(risk.sentence, /^Model enerjiden değil güvenlikten kazandırdı: 71 m kumlu\/kayalık zeminden kaçındı, risk % 14 düştü\./);
   assert.equal(summarize(mk(nm2, nm2, { kcal: 0, o2_L: 0, sand_m: 0, risk: 0 }, 0, 0, true), C).sentenceKey, 'sentence_same');
   assert.equal(full.rows.find((r) => r.label === C.row_kcal).good, true);
 });
