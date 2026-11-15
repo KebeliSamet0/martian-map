@@ -1,0 +1,13 @@
+# 20° eşiğinde picker kabul / API 422 çelişkisi — 2026-11-15 14:24, API 127.0.0.1:8000 (nogo_slope_deg=20)
+## AB01
+{"detail":"Başlangıç ile hedef aynı geçilebilir bölgede ama köşe kesmeden (iki yan hücre geçilebilir) bağlanamıyor"}
+HTTP 422
+## AB10
+{"detail":"Başlangıç ile hedef aynı geçilebilir bölgede ama köşe kesmeden (iki yan hücre geçilebilir) bağlanamıyor"}
+HTTP 422
+## AB12
+{"detail":"Başlangıç ile hedef arasında geçilebilir yol yok: başlangıç [217, 702] bileşen #1 (532486 hücre, %53.25), hedef [173, 358] bileşen #2 (70408 hücre, %7.04) içinde kaldı"}
+HTTP 422
+## AB13
+{"grid":{"region":"Gale / Mount Sharp boxwork bolgesi (Curiosity sol ~4459-4983)","width":1000,"height":1000,"res_m":2.0,"synthetic":false,"px_note":"Koordinatlar [x, y] = [sütun, satır]; (0,0) sol üst köşe"},"routes":[{"kind":"shortest","label":"En kısa
+HTTP 200

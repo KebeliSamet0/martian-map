@@ -1,0 +1,32 @@
+{
+ "cizelge": {
+  "slope_ge15_pct": 43.73,
+  "slope_ge20_pct": 29.03,
+  "slope_ge25_pct": 18.75
+ },
+ "kontroller": [
+  "−",
+  "+",
+  "Tüm harita",
+  "Geçilmez alan (20°, NASA EVA skafandr sı",
+  "checkbox",
+  "Curiosity durakları",
+  "checkbox",
+  "Bilim durakları",
+  "checkbox",
+  "Model belirsizliği",
+  "checkbox",
+  "Kısıtlı O₂ bütçesi (80 L)",
+  "checkbox",
+  "Rotaları hesapla",
+  "Bağlantıyı kopyala",
+  "Geri"
+ ],
+ "onay_kutulari": 5,
+ "secilen": "Geçilmez alan (20°, NASA EVA skafandr sınırı)",
+ "kirmizi_oran": {
+  "baslangic": 28.98,
+  "acik": 28.98,
+  "kapali": 0.02
+ }
+}

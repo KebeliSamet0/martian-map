@@ -1,0 +1,62 @@
+{
+ "ornekleme": 102400,
+ "eg20": 30104,
+ "snapIcinde_le10m": {
+  "n": 400,
+  "ornek": [
+   {
+    "px": [
+     41,
+     20
+    ],
+    "slope": 21,
+    "nearestM": 2
+   },
+   {
+    "px": [
+     116,
+     20
+    ],
+    "slope": 27,
+    "nearestM": 4
+   },
+   {
+    "px": [
+     161,
+     20
+    ],
+    "slope": 23,
+    "nearestM": 2
+   }
+  ]
+ },
+ "snapDisinda_gt10m": {
+  "n": 400,
+  "ornek": [
+   {
+    "px": [
+     200,
+     47
+    ],
+    "slope": 43,
+    "nearestM": 24
+   },
+   {
+    "px": [
+     203,
+     47
+    ],
+    "slope": 47,
+    "nearestM": 24
+   },
+   {
+    "px": [
+     200,
+     50
+    ],
+    "slope": 42,
+    "nearestM": 24
+   }
+  ]
+ }
+}
