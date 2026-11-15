@@ -1,0 +1,485 @@
+{
+ "zaman": "2026-11-15T06:50:38.479Z",
+ "sure_sn": 857,
+ "base": "http://127.0.0.1:8010/sim/",
+ "api": "http://127.0.0.1:8011",
+ "api_ok": true,
+ "genel": "PASS",
+ "ozet": [
+  {
+   "id": "ON",
+   "baslik": "Ön koşul: API + sim sunucusu",
+   "durum": "PASS",
+   "gecen": 4,
+   "toplam": 4
+  },
+  {
+   "id": "T1",
+   "baslik": "S1/S2/S3 tam akış",
+   "durum": "PASS",
+   "gecen": 30,
+   "toplam": 30
+  },
+  {
+   "id": "T2",
+   "baslik": "L taraması: lejant Dikkat + Geçilmez",
+   "durum": "PASS",
+   "gecen": 3,
+   "toplam": 3
+  },
+  {
+   "id": "T3",
+   "baslik": "Kum olayı radius_m+40 m",
+   "durum": "PASS",
+   "gecen": 9,
+   "toplam": 9
+  },
+  {
+   "id": "T4",
+   "baslik": "'mission:arrived' window olayı",
+   "durum": "PASS",
+   "gecen": 3,
+   "toplam": 3
+  },
+  {
+   "id": "T5",
+   "baslik": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "durum": "PASS",
+   "gecen": 2,
+   "toplam": 2
+  },
+  {
+   "id": "T6",
+   "baslik": "Konsolda hata yok",
+   "durum": "PASS",
+   "gecen": 1,
+   "toplam": 1
+  },
+  {
+   "id": "T7",
+   "baslik": "?perf=1 probu",
+   "durum": "PASS",
+   "gecen": 4,
+   "toplam": 4
+  }
+ ],
+ "ortam": {
+  "platform": "win32",
+  "node": "v22.22.2",
+  "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "real_gpu": false,
+  "repo": "C:/Users/Batu/Desktop/mm-pr/main-wt",
+  "headless": true,
+  "senaryolar": [
+   "S1",
+   "S2",
+   "S3"
+  ]
+ },
+ "perf": {
+  "mod": "swiftshader (yazılım GL; FPS değerleri GPU performansı DEĞİLDİR)",
+  "fps_ort": 0.82,
+  "fps_p50": 0.83,
+  "fps_min": 0.47,
+  "kare_ms_ort": 1224.36,
+  "kare_ms_p95": 1979,
+  "kare_ms_p99": 2139.4,
+  "cizim_cagrisi_ort": 136,
+  "ucgen_ort": 597140,
+  "kare_sayisi": 26,
+  "kriter": {
+   "p95TargetMs": 22,
+   "p95ActualMs": 1979,
+   "p95Passed": false,
+   "avgFpsTarget": 45,
+   "avgFpsActual": 0.82,
+   "avgFpsPassed": false,
+   "overallPassed": false
+  },
+  "donanim": {
+   "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+   "cozunurluk": "1000x600",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+  }
+ },
+ "ekran_goruntuleri": {
+  "T1": [
+   "shots/S1_1_brifing.png",
+   "shots/S1_2_rotalar.png",
+   "shots/S1_3_yuruyus.png",
+   "shots/S2_1_brifing.png",
+   "shots/S2_2_rotalar.png",
+   "shots/S2_3_yuruyus.png",
+   "shots/S3_1_brifing.png",
+   "shots/S3_2_rotalar.png",
+   "shots/S3_3_yuruyus.png"
+  ],
+  "T2": [
+   "shots/scan_lines.png"
+  ],
+  "T3": [
+   "shots/S1_4_kum_replan.png",
+   "shots/S2_4_kum_replan.png",
+   "shots/S3_4_kum_replan.png",
+   "shots/T3_kum_olayi_S1.png",
+   "shots/T3_kum_olayi_S2.png",
+   "shots/T3_kum_olayi_S3.png"
+  ],
+  "T4": [
+   "shots/S1_5_karne.png",
+   "shots/S2_5_karne.png",
+   "shots/S3_5_karne.png"
+  ],
+  "T5": [
+   "shots/hud.png"
+  ],
+  "T6": [
+   "shots/T6_konsol.png"
+  ],
+  "T7": [
+   "shots/perf.png"
+  ]
+ },
+ "testler": [
+  {
+   "id": "ON",
+   "title": "Ön koşul: API + sim sunucusu",
+   "checks": [
+    {
+     "n": "API http://127.0.0.1:8011/assumptions çalışıyor",
+     "ok": true,
+     "d": "HTTP 200"
+    },
+    {
+     "n": "API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)",
+     "ok": true,
+     "d": "synthetic=false 1000x1000 @ 2 m — \"Gale / Mount Sharp boxwork bolgesi (Curi\""
+    },
+    {
+     "n": "API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)",
+     "ok": true,
+     "d": "HTTP 422"
+    },
+    {
+     "n": "sim sunucusu http://127.0.0.1:8010/sim/",
+     "ok": true,
+     "d": "betik başlattı / yeniden kullandı"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T1",
+   "title": "S1/S2/S3 tam akış",
+   "checks": [
+    {
+     "n": "S1: brifing açılır",
+     "ok": true,
+     "d": "S1 GÖREV BRİFİNGİ Boxwork'ten Atacama sondajına  Curiosity'nin incelediği boxwork sırtları"
+    },
+    {
+     "n": "S1: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa GO Mesafe 0.55 km Süre\",\"Dengeli GO Mesafe 0.57 km Süre\",\"En güvenli GO Mesafe 0.61 km S\"]"
+    },
+    {
+     "n": "S1: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S1: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S1: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":610,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S1: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"s\":225,\"tot\":610}"
+    },
+    {
+     "n": "S1: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Yeni rota (1073 ms): 0.38 km · 12.4 dk · GO — kum bölgesi kaçınıldı."
+    },
+    {
+     "n": "S1: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S1: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S1: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    },
+    {
+     "n": "S2: brifing açılır",
+     "ok": true,
+     "d": "S2 GÖREV BRİFİNGİ Kumlu kestirme  Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemd"
+    },
+    {
+     "n": "S2: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa GO Mesafe 0.55 km Süre\",\"Dengeli GO Mesafe 0.58 km Süre\",\"En güvenli GO Mesafe 0.64 km S\"]"
+    },
+    {
+     "n": "S2: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S2: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S2: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":635,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S2: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"s\":252,\"tot\":635}"
+    },
+    {
+     "n": "S2: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Yeni rota (2198 ms): 0.38 km · 12.3 dk · GO — kum bölgesi kaçınıldı."
+    },
+    {
+     "n": "S2: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S2: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S2: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    },
+    {
+     "n": "S3: brifing açılır",
+     "ok": true,
+     "d": "S3 GÖREV BRİFİNGİ Yarım O₂ tüpü  Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin "
+    },
+    {
+     "n": "S3: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa NO-GO Mesafe 0.53 km S\",\"Dengeli NO-GO Mesafe 0.55 km S\",\"En güvenli NO-GO Mesafe 0.58 k\"]"
+    },
+    {
+     "n": "S3: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S3: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S3: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":576,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S3: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"s\":192,\"tot\":576}"
+    },
+    {
+     "n": "S3: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Yeni rota (1837 ms): 0.38 km · 12.4 dk · GO — kum bölgesi kaçınıldı."
+    },
+    {
+     "n": "S3: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S3: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S3: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T2",
+   "title": "L taraması: lejant Dikkat + Geçilmez",
+   "checks": [
+    {
+     "n": "lejant görünür (#scanleg)",
+     "ok": true,
+     "d": "hidden=false"
+    },
+    {
+     "n": "lejantta 'Dikkat' etiketi",
+     "ok": true,
+     "d": "═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim)"
+    },
+    {
+     "n": "lejantta 'Geçilmez' etiketi",
+     "ok": true,
+     "d": "═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim)"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T3",
+   "title": "Kum olayı radius_m+40 m",
+   "checks": [
+    {
+     "n": "S1: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S1-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921845995,\"pz\":4729.554513534807}"
+    },
+    {
+     "n": "S1: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=19.4 trigger_m=59.4 beklenen=59.4"
+    },
+    {
+     "n": "S1: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=58.9 m, eşik=59.4 m"
+    },
+    {
+     "n": "S2: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S2-sand\",\"type\":\"sand\",\"radius_m\":20,\"trigger_m\":60,\"world\":[3239.7952005489965,4844.496536437015],\"px\":3223.8513695870774,\"pz\":4786.754638695123}"
+    },
+    {
+     "n": "S2: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=20 trigger_m=60 beklenen=60"
+    },
+    {
+     "n": "S2: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=59.9 m, eşik=60 m"
+    },
+    {
+     "n": "S3: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S3-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921845995,\"pz\":4730.703897796121}"
+    },
+    {
+     "n": "S3: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=19.4 trigger_m=59.4 beklenen=59.4"
+    },
+    {
+     "n": "S3: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=57.9 m, eşik=59.4 m"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T4",
+   "title": "'mission:arrived' window olayı",
+   "checks": [
+    {
+     "n": "S1: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    },
+    {
+     "n": "S2: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    },
+    {
+     "n": "S3: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T5",
+   "title": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "checks": [
+    {
+     "n": "HUD'da 'Zemin (model)' satırı",
+     "ok": true,
+     "d": "Zemin (model)\neğim 3° · kum 0.03 · iri taş 0.02 · belirsizlik 0.21"
+    },
+    {
+     "n": "HUD'da 'Gale ortam (REMS)' satırı",
+     "ok": true,
+     "d": "Gale ortam (REMS)\nhava -88…-3.9 °C · zemin -121…7.5 °C · 716–961 Pa"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T6",
+   "title": "Konsolda hata yok",
+   "checks": [
+    {
+     "n": "konsolda beklenmeyen hata yok (0 hata, 0 tanesi bilinen/hariç)",
+     "ok": true,
+     "d": ""
+    }
+   ],
+   "status": "PASS",
+   "ignored": {},
+   "keep": []
+  },
+  {
+   "id": "T7",
+   "title": "?perf=1 probu",
+   "checks": [
+    {
+     "n": "prob açıldı (konsolda \"[PerfProbe] ... başlatılıyor\" + canlı HUD)",
+     "ok": true,
+     "d": "%c[PerfProbe] Martian Map Performans Probu başlatılıyor... color: #00e5ff; font-weight: bold;"
+    },
+    {
+     "n": "prob 30 sn senaryoyu bitirip rapor açar (#perf-probe-overlay)",
+     "ok": true,
+     "d": "rapor açıldı"
+    },
+    {
+     "n": "'[PerfProbe HATA]' yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "perf raporu okundu (ort FPS, p95 ms)",
+     "ok": true,
+     "d": "ort 0.82 FPS, p95 1979 ms (swiftshader (yazılım GL; FPS değerleri GPU performansı DEĞİLDİR))"
+    }
+   ],
+   "status": "PASS"
+  }
+ ],
+ "konsol_hariclenen": [],
+ "konsol_kalan_hatalar": []
+}
