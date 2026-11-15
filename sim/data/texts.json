@@ -589,61 +589,130 @@
     }
   },
   "insight": {
-    "foot_label": "ZEMİN",
-    "foot_line": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği (kalibre) {conf} %",
-    "foot_dominant": "{cls} ağırlıklı",
-    "foot_uncertain": "belirsiz",
-    "foot_provisional": "geçici zemin katmanı (model çıktısı değil)",
-    "foot_source": "Model tahmini (AI4Mars tabanlı), ölçüm değil",
-    "class_sand": "kum",
-    "class_bedrock": "ana kaya",
-    "class_soil": "toprak",
-    "class_bigrock": "büyük kaya",
-    "seg_line": "Segment {id}: {cls} (p={p}) → zemin katsayısı ×{eta} → {extra} kcal",
-    "seg_line_flat": "Segment {id}: {cls}, zemin etkisi küçük (katsayı ×{eta}, {extra} kcal)",
-    "seg_alt": "alternatif: {alt}",
-    "seg_conf_low": "model kesinliği düşük ({conf} %): kanıt az, tahmin yanlış demek değil",
-    "fog_button": "Model kesinliği katmanı",
-    "fog_hint": "Soluk alan = kanıt az (kesinlik = 1 − normalize entropi). Yanlış demek değil: entropi yanlış tahminleri ayırt etmiyor. Model tahmini, ölçüm değil.",
-    "seg_title": "Segment açıklamaları (model rotası)",
-    "hazard_button": "Yalnız eğim rotasının kayalık/yüzlek zemini (3B)",
-    "walk_title": "Yürüdüğün zemin",
-    "walk_total": "Katettiğin {m} m boyunca model tahmini:",
-    "walk_class": "{cls} {pct} % ({m} m)",
-    "walk_conf": "Ortalama model kesinliği {conf} %; yolun {low} % kadarında ({lowm} m) kanıt azdı (bu, tahminin yanlış olduğu anlamına gelmez).",
-    "walk_note": "Zemin sınıfı ve kesinlik model tahminidir (AI4Mars tabanlı), ölçüm değil; metre rota ilerlemesinden gelir."
+    "foot_label": { "tr": "ZEMİN", "en": "GROUND" },
+    "foot_line": {
+      "tr": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği (kalibre) {conf} %",
+      "en": "sand {sand} % · bedrock {bedrock} % · soil {soil} % · big rock {bigrock} % · model certainty (calibrated) {conf} %"
+    },
+    "foot_dominant": { "tr": "{cls} ağırlıklı", "en": "mostly {cls}" },
+    "foot_uncertain": { "tr": "belirsiz", "en": "uncertain" },
+    "foot_provisional": {
+      "tr": "geçici zemin katmanı (model çıktısı değil)",
+      "en": "provisional terrain layer (not model output)"
+    },
+    "foot_source": {
+      "tr": "Model tahmini (AI4Mars tabanlı), ölçüm değil",
+      "en": "Model prediction (AI4Mars-based), not a measurement"
+    },
+    "class_sand": { "tr": "kum", "en": "sand" },
+    "class_bedrock": { "tr": "ana kaya", "en": "bedrock" },
+    "class_soil": { "tr": "toprak", "en": "soil" },
+    "class_bigrock": { "tr": "büyük kaya", "en": "big rock" },
+    "seg_line": {
+      "tr": "Segment {id}: {cls} (p={p}) → zemin katsayısı ×{eta} → {extra} kcal",
+      "en": "Segment {id}: {cls} (p={p}) → terrain factor ×{eta} → {extra} kcal"
+    },
+    "seg_line_flat": {
+      "tr": "Segment {id}: {cls}, zemin etkisi küçük (katsayı ×{eta}, {extra} kcal)",
+      "en": "Segment {id}: {cls}, little terrain effect (factor ×{eta}, {extra} kcal)"
+    },
+    "seg_alt": { "tr": "alternatif: {alt}", "en": "alternative: {alt}" },
+    "seg_conf_low": {
+      "tr": "model kesinliği düşük ({conf} %): kanıt az, tahmin yanlış demek değil",
+      "en": "low model certainty ({conf} %): little evidence, not necessarily a wrong call"
+    },
+    "fog_button": { "tr": "Model kesinliği katmanı", "en": "Model certainty layer" },
+    "fog_hint": {
+      "tr": "Soluk alan = kanıt az (kesinlik = 1 − normalize entropi). Yanlış demek değil: entropi yanlış tahminleri ayırt etmiyor. Model tahmini, ölçüm değil.",
+      "en": "Faded area = little evidence (certainty = 1 − normalized entropy). It does not mean wrong: entropy cannot tell wrong predictions apart. Model prediction, not a measurement."
+    },
+    "seg_title": { "tr": "Segment açıklamaları (model rotası)", "en": "Segment notes (model route)" },
+    "hazard_button": {
+      "tr": "Yalnız eğim rotasının kayalık/yüzlek zemini (3B)",
+      "en": "Rocky/outcrop ground on the slope-only route (3D)"
+    },
+    "walk_title": { "tr": "Yürüdüğün zemin", "en": "The ground you walked" },
+    "walk_total": {
+      "tr": "Katettiğin {m} m boyunca model tahmini:",
+      "en": "Model prediction over the {m} m you covered:"
+    },
+    "walk_class": { "tr": "{cls} {pct} % ({m} m)", "en": "{cls} {pct} % ({m} m)" },
+    "walk_conf": {
+      "tr": "Ortalama model kesinliği {conf} %; yolun {low} % kadarında ({lowm} m) kanıt azdı (bu, tahminin yanlış olduğu anlamına gelmez).",
+      "en": "Average model certainty {conf} %; evidence was thin over {low} % of the path ({lowm} m) — which does not mean the prediction is wrong."
+    },
+    "walk_note": {
+      "tr": "Zemin sınıfı ve kesinlik model tahminidir (AI4Mars tabanlı), ölçüm değil; metre rota ilerlemesinden gelir.",
+      "en": "Terrain class and certainty are model predictions (AI4Mars-based), not measurements; meters come from route progress."
+    }
   },
   "compare": {
-    "title": "Zemin modeli ne kazandırıyor?",
-    "naive": "Yalnız eğim",
-    "model": "Zemin modeli + kaya",
-    "naive_sub": "DTM eğimi var; zemin ve kaya bilinmiyor",
-    "model_sub": "AI4Mars zemin sınıfı + kaya yoğunluğu",
-    "row_dist": "Mesafe",
-    "row_kcal": "Enerji",
-    "row_o2": "O₂",
-    "row_risk": "Risk",
-    "row_hazard": "Tehlikeli zemin",
-    "unit_m": "m",
-    "unit_kcal": "kcal",
-    "unit_l": "L",
-    "unit_risk": "puan",
-    "delta_better": "model {v} {u} az",
-    "delta_worse": "model {v} {u} fazla",
-    "delta_same": "fark yok",
-    "hazard_note": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu bu rotalarda görmüyor (p_sand ≤ 0,25).",
-    "sentence_full": "Model bu görevde {kcal} kcal ve {o2} L O₂ kazandırdı, {sand} m kumdan kaçındı.",
-    "sentence_risk": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kayalık/yüzlek zeminden kaçındı, risk % {risk_pct} düştü.",
-    "sentence_risk_sand": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
-    "sentence_same": "Bu görevde iki planlayıcı aynı yolu seçti; zemin modeli rotayı değiştirmedi.",
-    "scope": "Tek yön, {kind} rota. Maliyet gerçek zemin katmanında ölçülür; zemin katmanı model tahminidir.",
-    "loading": "Karşılaştırma hesaplanıyor…",
-    "error": "Karşılaştırma alınamadı ({why}).",
-    "provisional": "Zemin katmanı geçici (model çıktısı değil); karşılaştırma bunu yansıtır.",
-    "sentence_risk_nohaz": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
-    "sentence_cost": " Bedeli {cost} kcal ek enerji.",
-    "sentence_other": "Model rotayı değiştirdi; bu görevde risk ve enerji farkı küçük.",
-    "hazard3d_legend": "Kırmızı iz: yalnız eğim rotasının geçeceği kayalık/yüzlek zemin"
+    "title": { "tr": "Zemin modeli ne kazandırıyor?", "en": "What does the terrain model buy you?" },
+    "naive": { "tr": "Yalnız eğim", "en": "Slope only" },
+    "model": { "tr": "Zemin modeli + kaya", "en": "Terrain model + rock" },
+    "naive_sub": {
+      "tr": "DTM eğimi var; zemin ve kaya bilinmiyor",
+      "en": "DTM slope only; ground and rock unknown"
+    },
+    "model_sub": {
+      "tr": "AI4Mars zemin sınıfı + kaya yoğunluğu",
+      "en": "AI4Mars terrain class + rock density"
+    },
+    "row_dist": { "tr": "Mesafe", "en": "Distance" },
+    "row_kcal": { "tr": "Enerji", "en": "Energy" },
+    "row_o2": { "tr": "O₂", "en": "O₂" },
+    "row_risk": { "tr": "Risk", "en": "Risk" },
+    "row_hazard": { "tr": "Tehlikeli zemin", "en": "Hazardous ground" },
+    "unit_m": { "tr": "m", "en": "m" },
+    "unit_kcal": { "tr": "kcal", "en": "kcal" },
+    "unit_l": { "tr": "L", "en": "L" },
+    "unit_risk": { "tr": "puan", "en": "pts" },
+    "delta_better": { "tr": "model {v} {u} az", "en": "model {v} {u} less" },
+    "delta_worse": { "tr": "model {v} {u} fazla", "en": "model {v} {u} more" },
+    "delta_same": { "tr": "fark yok", "en": "no difference" },
+    "hazard_note": {
+      "tr": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu bu rotalarda görmüyor (p_sand ≤ 0,25).",
+      "en": "Red: rocky/outcrop segment (mean rock density ≥ 0.10; the naive route crosses it). Rock density may be inflated: 78% of the large detections in the corridor are outcrop or shadow. The model sees no sand on these routes (p_sand ≤ 0.25)."
+    },
+    "sentence_full": {
+      "tr": "Model bu görevde {kcal} kcal ve {o2} L O₂ kazandırdı, {sand} m kumdan kaçındı.",
+      "en": "On this mission the model saved {kcal} kcal and {o2} L O₂, and avoided {sand} m of sand."
+    },
+    "sentence_risk": {
+      "tr": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kayalık/yüzlek zeminden kaçındı, risk % {risk_pct} düştü.",
+      "en": "The model paid off in safety, not energy: it avoided {hazard} m of rocky/outcrop ground and cut risk by {risk_pct} %."
+    },
+    "sentence_risk_sand": {
+      "tr": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
+      "en": "The model paid off in safety, not energy: it avoided {hazard} m of sandy/rocky ground and cut risk by {risk_pct} %."
+    },
+    "sentence_same": {
+      "tr": "Bu görevde iki planlayıcı aynı yolu seçti; zemin modeli rotayı değiştirmedi.",
+      "en": "Both planners picked the same path here; the terrain model did not change the route."
+    },
+    "scope": {
+      "tr": "Tek yön, {kind} rota. Maliyet gerçek zemin katmanında ölçülür; zemin katmanı model tahminidir.",
+      "en": "One way, {kind} route. Cost is measured on the real terrain layer; that layer is a model prediction."
+    },
+    "loading": { "tr": "Karşılaştırma hesaplanıyor…", "en": "Computing the comparison…" },
+    "error": { "tr": "Karşılaştırma alınamadı ({why}).", "en": "Could not fetch the comparison ({why})." },
+    "provisional": {
+      "tr": "Zemin katmanı geçici (model çıktısı değil); karşılaştırma bunu yansıtır.",
+      "en": "The terrain layer is provisional (not model output); the comparison reflects that."
+    },
+    "sentence_risk_nohaz": {
+      "tr": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
+      "en": "The model paid off in safety, not energy: risk dropped by {risk_pct} %."
+    },
+    "sentence_cost": { "tr": " Bedeli {cost} kcal ek enerji.", "en": " It costs {cost} kcal of extra energy." },
+    "sentence_other": {
+      "tr": "Model rotayı değiştirdi; bu görevde risk ve enerji farkı küçük.",
+      "en": "The model changed the route; on this mission the risk and energy difference is small."
+    },
+    "hazard3d_legend": {
+      "tr": "Kırmızı iz: yalnız eğim rotasının geçeceği kayalık/yüzlek zemin",
+      "en": "Red trail: rocky/outcrop ground the slope-only route would cross"
+    }
   },
   "bilim": {
     "badge_crism": "Spektral: CRISM",
