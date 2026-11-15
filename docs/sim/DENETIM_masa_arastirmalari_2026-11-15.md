@@ -61,3 +61,14 @@ Sim'e alınan: **yalnız** `hud.ground_model_hint` anahtarı varsa "Zemin (model
 `docs/data/ekip/rems_gercek_veri.md`: NASA PDS4 `msl_rems_bundle` kalibre RMD ürünleri, sol 53 (Ls~180°), 191 (Ls~267°), 533 (Ls~85°). **Bağımsız yeniden hesapladım** (ham TAB'dan, -999 örnekler ayıklanarak): basınç 716–807 / 863–961 / 838–895 Pa, 1.5 m hava −69.8…−4.7 °C (sol 53), zemin −107.5…+10.8 °C (sol 53) rapordaki değerlerle birebir.
 Sınırlar: (1) kayıtlar yerel gün boyunca (00:00→23:06) ama REMS görev çevrimlerinde örnekliyor; 7.3–21 bin kayıt sürekli 24 sa 1 Hz değil, uçlar (en sıcak/soğuk an) kaçmış olabilir. (2) Sol 533 zemin tabanı −174 °C tek tek aykırı örneklere dayanıyor (rapor kendisi p05 = −106.9 °C veriyor); HUD'da min yerine p05 kullanılmalı. (3) Üç sol mevsimin tamamını temsil etmez. HUD'a eklenecekse "ölçülen örnek sol: ..." etiketiyle, Ls'e bağlı tipik aralık olarak, tahmin değil.
 Ham TAB dosyaları (18 MB) repoya girmedi (CONTRIBUTING); manifest + özet JSON girdi.
+
+## 10. Duyarlılık analizi (çalışan 2, kısmi) (2026-11-15)
+`docs/data/ekip/duyarlilik_analizi.md`: **yalnız S1 / balanced**, commit 42f60aa (güncel main değil; rapor bunu açıkça yazıyor), parametreler yalnız temp kopyada geçersiz kılındı.
+
+| Set | dk | kcal | O₂ L | doz µGy | Durum |
+|---|---:|---:|---:|---:|---|
+| A (mevcut kod) | 18.7 | 88.0 | 37.0 | 9.8 | GO |
+| B (araştırma önerileri: 82/104/23 kg, 0.75 m/s, 7 sa, 1800 kcal, 370 L) | 19.9 (+6.4 %) | 94.0 (+6.8 %) | 39.0 (+5.4 %) | 10.2 (+4.1 %) | GO |
+| C (B + 352 W düz zemin referansı) | 19.9 (+6.4 %) | 122.0 (**+38.6 %**) | 51.0 (**+37.8 %**) | 10.2 | GO (farklı hücrelerden geçen yol) |
+
+Yorum: önerilen kütle/hız/süre değerlerini uygulamak S1 sonucunu **~%5–7** değiştiriyor ve GO'yu bozmuyor; asıl duyarlılık **metabolik referans gücünde** (352 W → enerji ve O₂ ~%38 artıyor). 420→370 L kararı bu senaryoda hiçbir durumu değiştirmiyor (taahhüt O₂ ≤99 L). Sınırlar: tek senaryo/ön ayar, eski commit, S2/S3 ve zemin katsayısı ±%20 (set D) koşulmadı. Sunumda "enerji tahmini alt sınır, 352 W ile ~%38 daha yüksek" denmeli (NASA tasarım ortalaması, Ogilvie 2026).
