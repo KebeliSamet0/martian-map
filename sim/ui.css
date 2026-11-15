@@ -338,3 +338,19 @@ body.mm-low-o2::before {
 .mm-progress-fill { height: 100%; width: 34%; background: var(--mm-amber); animation: mm-slide 1.25s var(--mm-ease) infinite; }
 @keyframes mm-slide { from { transform: translateX(-110%); } to { transform: translateX(320%); } }
 @media (prefers-reduced-motion: reduce) { .mm-progress-fill { animation: none; width: 100%; opacity: .55; } }
+
+/* tur5:secim — seçim ekranı: gömülü harita ana öğe, altta Hızlı başlangıç şeridi */
+.mm-select-main { position: absolute; left: clamp(24px,4vw,64px); right: clamp(24px,4vw,64px); top: 84px; bottom: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.mm-select-map { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.mm-select-map .mm-picker.mp-embed { flex: 1; height: auto; min-height: 0; }
+.mm-quick { flex: none; display: flex; flex-direction: column; gap: 6px; }
+.mm-quick-head { display: flex; align-items: baseline; gap: 14px; }
+.mm-quick-title { margin: 0; font-size: 13px; letter-spacing: .25em; text-transform: uppercase; color: var(--mm-amber); }
+.mm-quick-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.mm-mcard-sm { padding: 10px 14px; gap: 6px; display: grid; grid-template-columns: auto 1fr auto; grid-template-areas: "top title go" "facts facts facts"; align-items: center; column-gap: 12px; }
+.mm-mcard-sm .mm-mcard-top { grid-area: top; gap: 10px; flex-direction: column; align-items: flex-start; }
+.mm-mcard-sm .mm-mcard-id { font-size: 22px; }
+.mm-mcard-sm .mm-mcard-title { grid-area: title; font-size: 14px; }
+.mm-mcard-sm .mm-mcard-facts { grid-area: facts; padding: 4px 0 0; grid-template-columns: repeat(2,1fr); }
+.mm-mcard-sm > button { grid-area: go; }
+@media (max-width: 900px) { .mm-select-main { overflow: auto; } .mm-select-map .mm-picker.mp-embed { min-height: 520px; } }

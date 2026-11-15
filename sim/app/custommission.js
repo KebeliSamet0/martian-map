@@ -92,6 +92,19 @@ export function nearestPassable(slope, [c, r], maxCells = 150, mask = null) {
   return best ? { px: best.px, m: Math.round(best.d * RES_M) } : null;
 }
 
+// tur5:secim — A–B düz hattı boyunca eğim ≥ eşik olan hücrelerin oranı (0..1) ve hücre sırası; yalnız katman verisi.
+export function lineImpassable(slope, a, b) {
+  if (!slope) return null;
+  const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1])));
+  const hit = new Uint8Array(n + 1); let bad = 0;
+  for (let i = 0; i <= n; i++) {
+    const c = Math.round(a[0] + ((b[0] - a[0]) * i) / n), r = Math.round(a[1] + ((b[1] - a[1]) * i) / n);
+    const s = inGrid([c, r]) ? slope[r * GRID_W + c] : NaN;
+    if (!(s < IMPASSABLE_DEG)) { hit[i] = 1; bad++; }
+  }
+  return { fraction: bad / (n + 1), hit, samples: n + 1 };
+}
+
 /** Görev nesnesi (S1'in biçimi). sand başta yok: rota seçilince sandForRoute ile belirlenir. */
 export function buildCustomMission({ a, b, o2 = null, title = 'Özel görev' }) {
   if (!inGrid(a) || !inGrid(b)) throw new RangeError('A/B ızgara dışında');

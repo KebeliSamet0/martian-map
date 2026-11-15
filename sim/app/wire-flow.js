@@ -22,7 +22,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
   root.append(hudLayer);
   let screen = null, paused = false, current = null, tipTimer = 0;
   const setScreen = (name, extra) => { screen = name; layer.dataset.screen = name ?? ''; emit(name ?? 'none', extra); };
-  const clearLayer = () => layer.replaceChildren();
+  const clearLayer = () => { closeEmbedded(); layer.replaceChildren(); };   // tur5:secim
 
   function langButton() {
     const b = button(t('lang.switch'), 'ghost');
@@ -111,51 +111,56 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     const back = button(t('select.back'), 'ghost');
     back.onclick = () => showIntro();
     head.append(back);
-    const row = el('div', 'mm-missions');
+    // tur5:secim — ana öğe: seçim ekranına gömülü harita (kendi rotanı planla); altta "Hızlı başlangıç" şeridi (S1/S2/S3, tek tık brifing)
+    closeEmbedded();
+    const main = el('div', 'mm-select-main');
+    const mapHost = el('div', 'mm-select-map'); mapHost.dataset.testid = 'select-map';
+    const strip = el('section', 'mm-quick'); strip.dataset.testid = 'quick-start';
+    const stripHead = el('div', 'mm-quick-head');
+    stripHead.append(el('h3', 'mm-quick-title', t('custom.quick.title')), el('span', 'mm-fine', t('custom.quick.hint')));
+    const row = el('div', 'mm-quick-row');
     const list = wire.catalog.missions.filter((m) => m.start_px && m.goal_px);
     if (!list.length) row.append(el('p', 'mm-text', t('select.loading')));
     list.forEach((m, i) => {
       const s = missionSummary(m, wire.coords);
-      const card = el('article', 'mm-mcard');
+      const card = el('article', 'mm-mcard mm-mcard-sm');
       card.dataset.difficulty = s.difficulty ?? ''; card.dataset.testid = `mission-${m.id}`; card.dataset.mission = m.id;
       card.style.setProperty('--i', i);
       const top = el('div', 'mm-mcard-top');
       top.append(el('span', 'mm-mcard-id mm-num', m.id), el('span', 'mm-diff', t(`diff.${s.difficulty}`) || '—'));
       const facts = el('div', 'mm-mcard-facts');
-      for (const [k, v] of [['select.distance', fmtDist(s.straightM)], ['select.time', s.timeMin == null ? '—' : `${s.timeMin} ${t('unit.min')}`], ['select.o2', s.o2L == null ? '—' : `${s.o2L} L`]]) {
+      for (const [k, v] of [['select.distance', fmtDist(s.straightM)], ['select.o2', s.o2L == null ? '—' : `${s.o2L} L`]]) {
         const f = el('div'); f.append(el('span', 'mm-g-label', t(k)), el('b', 'mm-num', v)); facts.append(f);
       }
       const go = button(t('select.go'), 'ghost'); go.dataset.testid = `mission-go-${m.id}`;
-      go.onclick = () => { clearLayer(); layer.classList.remove('mm-in'); void wire.selectMission(m); };
-      card.append(top, el('h3', 'mm-mcard-title', wire.missionTitle(m)));
-      const map = missionPreview(m);
-      if (map) card.append(map);
-      card.append(el('p', 'mm-mcard-story', missionText(m.id, 'brief')), facts, go);
+      go.onclick = () => { closeEmbedded(); clearLayer(); layer.classList.remove('mm-in'); void wire.selectMission(m); };
+      card.append(top, el('h3', 'mm-mcard-title', wire.missionTitle(m)), facts, go);
       row.append(card);
     });
-    row.append(customCard());   // batu:custom
-    layer.append(head, row, langButton());
+    strip.append(stripHead, row);
+    main.append(mapHost, strip);
+    layer.append(head, main, langButton());
     layer.classList.add('mm-in');
-    row.querySelector('button')?.focus();
+    void mountEmbedded(mapHost);
   }
 
-  // ---------- Özel görev: 'Kendi rotanı planla' (#120, batu:custom) ----------
-  let pickerLayers = null;
-  function customCard() {
-    const card = el('article', 'mm-mcard'); card.dataset.testid = 'mission-custom'; card.dataset.mission = 'CUSTOM';
-    const top = el('div', 'mm-mcard-top'); top.append(el('span', 'mm-mcard-id mm-num', '+'), el('span', 'mm-diff', t('custom.badge')));
-    const go = button(t('custom.card.go'), 'ghost'); go.dataset.testid = 'mission-go-custom';
-    go.onclick = () => void openCustom();
-    card.append(top, el('h3', 'mm-mcard-title', t('custom.card.title')), el('p', 'mm-mcard-story', t('custom.card.text')), go);
-    if (API_OFF) { go.disabled = true; card.append(el('p', 'mm-fine', t('custom.err.api'))); }
-    return card;
+  // ---------- Özel görev: 'Kendi rotanı planla' (#120, batu:custom; tur5:secim: seçim ekranına gömülü) ----------
+  let pickerLayers = null, embeddedPicker = null;
+  function closeEmbedded() { embeddedPicker?.close(); embeddedPicker = null; }
+  async function mountEmbedded(host, initial) {
+    if (API_OFF) { host.append(el('p', 'mm-text', t('custom.err.api'))); return; }
+    host.append(el('p', 'mm-fine', t('select.loading')));
+    if (!pickerLayers) pickerLayers = await loadPickerLayers(API_BASE);
+    if (screen !== 'select' || !host.isConnected) return;   // bu arada başka ekrana geçildi
+    host.replaceChildren(); closeEmbedded();
+    embeddedPicker = openMapPicker({ root: host, embedded: true, geo, coords: wire.coords, overviewUrl, grid: wire.grid, layers: pickerLayers ?? {}, initial,
+      onCompute: (m) => { embeddedPicker = null; layer.classList.remove('mm-in'); void wire.selectMission(m); } });
   }
-  async function openCustom(initial) {
-    clearLayer(); hudLayer.hidden = true; setScreen('picker');
-    if (!pickerLayers && !API_OFF) pickerLayers = await loadPickerLayers(API_BASE);
-    openMapPicker({ root: document.body, geo, coords: wire.coords, overviewUrl, grid: wire.grid, layers: pickerLayers ?? {}, initial,
-      onCompute: (m) => { layer.classList.remove('mm-in'); void wire.selectMission(m); }, onBack: () => showSelect() });
+  async function openCustom(initial) {   // ?a=&b= paylaşım bağlantısı / testler: seçim ekranını aç, noktaları yerleştir
+    showSelect();
+    const host = layer.querySelector('.mm-select-map'); if (host) await mountEmbedded(host, initial);
   }
+
   // ?a=col,row&b=col,row ile açılış: aynı özel görev doğrudan brifinge gelir.
   function openCustomFromUrl() {
     const ab = parseAB(location.search); if (!ab) return false;
