@@ -29,7 +29,7 @@ test('yüzey boyunca kayar (teğet bileşen korunur)', () => {
 
 test('büyük adımda tünelleme yok', () => {
   const c = mk([{ x: 10, z: 0, d_m: 3 }]);
-  const r = c.resolve([0, 0.1], [20, 0.1]);
+  const r = c.resolve([0, 0], [20, 0]);
   assert.ok(r.x < 10, `kayanın ötesine geçti: ${r.x}`);
 });
 
