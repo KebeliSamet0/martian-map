@@ -198,7 +198,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
 
     const tbl = el('table', 'mm-table'); tbl.dataset.testid = 'debrief';
     const thead = el('tr');
-    ['', t('report.planned'), t('report.actual'), t('report.diff')].forEach((h) => thead.append(el('th', null, h)));
+    ['', t('report.planned'), t('report.actual'), t('report.diff'), t('report.col.note')].forEach((h) => thead.append(el('th', null, h)));
     tbl.append(thead);
     const rows = [
       [t('report.row.time'), planned.eva_min ?? planned.min, a.elapsed, 0],
@@ -210,8 +210,12 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
       const tr = el('tr');
       const diff = p != null && x != null ? x - p : null;
       const td = el('td', 'mm-num', diff == null ? '—' : `${diff > 0 ? '+' : ''}${n(diff, d)}`);
-      if (diff != null && p > 0) td.dataset.level = Math.abs(diff) / p > 0.25 ? 'over' : Math.abs(diff) / p > 0.1 ? 'warn' : 'ok';
-      tr.append(el('td', null, label), el('td', 'mm-num', n(p, d)), el('td', 'mm-num', n(x, d)), td);
+      // Derecenin nedeni satır satır okunsun (#103 B.10): sapma eşiği hem renk hem kısa metin olarak
+      const lvl = diff != null && p > 0 ? (Math.abs(diff) / p > 0.25 ? 'over' : Math.abs(diff) / p > 0.1 ? 'warn' : 'ok') : null;
+      if (lvl) td.dataset.level = lvl;
+      const note = el('td', 'mm-why', lvl ? t(`report.lvl.${lvl}`) : '—');
+      if (lvl) note.dataset.level = lvl;
+      tr.append(el('td', null, label), el('td', 'mm-num', n(p, d)), el('td', 'mm-num', n(x, d)), td, note);
       tbl.append(tr);
     });
 
@@ -222,7 +226,8 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     insight.append(section(t('report.insight')), body);
     void fillSlot('report-insight', { planned, actual, route, mission, completed, container: body }, body).then(() => { insight.hidden = !body.childNodes.length; });
 
-    const acts = el('div', 'mm-alert-acts mm-acts-end');
+    // Düğmeler kartın altında kalıp kıvrımın altına düşüyordu; yapışkan çubuk hep görünür (#103 B.10)
+    const acts = el('div', 'mm-alert-acts mm-acts-end mm-report-acts');
     const retry = button(t('report.retry'), 'ghost');
     const other = button(t('report.other'));
     retry.onclick = () => { m.close(); resolve('retry'); };
