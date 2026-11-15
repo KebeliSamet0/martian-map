@@ -32,11 +32,12 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   let observations = [];
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false, hold = null;
   let decisions = [], pendingDecision = null, dynHandlesSand = false;   // #125 A.2
+  let outboundActual = null;   // gidiş sonu anlık görüntüsü (karne karşılaştırması tek yön)
   const sourceLabel = document.getElementById('vitals-source');
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
-  function clearRun() { generation++; running = false; clearFeedback(); hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  function clearRun() { generation++; running = false; outboundActual = null; clearFeedback(); hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
 
   // #125 A.3: eşikler aşılınca görsel/işitsel geri bildirim. Eşikler bütçeden, değerler vitals'tan.
   let lowO2 = false, lowReturn = false;
@@ -184,13 +185,18 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     const ok = await hold; hold = null;
     if (!ok || id !== generation || !running) return;
     machine.collectSample();
+    // Karne tek yön planıyla karşılaştırır: gidiş biterkenki tüketim burada dondurulur (#125 A.1 regresyonu).
+    outboundActual = hudSnapshot(vitals.snapshot(), limits);
     flow.tickObjective?.('sample');
     audio?.alert?.('arrive');
     toast(t('sample.done', { kg }), true);
     const back = await returnToBase();
     if (id !== generation || !running) return;
     if (!back) return void finish(id);   // dönüş rotası alınamadı: görevi burada bitir
-    machine.beginReturn({ world: back.home, radius_m: 10 });
+    // Hedef, rotanın gerçekten bittiği nokta olmalı: planlayıcı üs hücresinin merkezinde bitiriyor,
+    // başlangıç işaretiyle arası 10 m yarıçapı aşabiliyordu ve varış hiç tetiklenmiyordu.
+    const end = back.route?.dense?.at(-1);
+    machine.beginReturn({ world: Array.isArray(end) ? end : back.home, radius_m: 12 });
     flow.setObjective?.(t('objective.return'));
   }
   async function finish(id) {
@@ -207,7 +213,8 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (machine.snapshot().leg === 'return' && snapNow.returnPossible !== false) flow.tickObjective?.('return');
     const objectives = flow.objectiveState?.() ?? {};
     flow.onScreen?.('report', selected);
-    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected, decisions: [...decisions], objectives });
+    const action = await showReport(root, { planned: walkPlan(planned), actual: outboundActual ?? actual, total: outboundActual ? actual : null,
+      route: map.route, mission: selected, decisions: [...decisions], objectives });
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }
