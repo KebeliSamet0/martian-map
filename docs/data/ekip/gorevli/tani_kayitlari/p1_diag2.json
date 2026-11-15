@@ -1,0 +1,586 @@
+{
+ "zaman": "2026-11-15T08:37:26.687Z",
+ "sure_sn": 136,
+ "base": "http://127.0.0.1:8010/sim/",
+ "api": "http://127.0.0.1:8000",
+ "api_ok": true,
+ "genel": "FAIL",
+ "ozet": [
+  {
+   "id": "ON",
+   "baslik": "Ön koşul: API + sim sunucusu",
+   "durum": "PASS",
+   "gecen": 4,
+   "toplam": 4
+  },
+  {
+   "id": "T1",
+   "baslik": "S1/S2/S3 tam akış",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T2",
+   "baslik": "L taraması: lejant Dikkat + Geçilmez",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T3",
+   "baslik": "Kum olayı radius_m+40 m",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T4",
+   "baslik": "'mission:arrived' window olayı",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T5",
+   "baslik": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T6",
+   "baslik": "Konsolda hata yok",
+   "durum": "PASS",
+   "gecen": 1,
+   "toplam": 1
+  },
+  {
+   "id": "T7",
+   "baslik": "?perf=1 probu",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T8",
+   "baslik": "Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T9",
+   "baslik": "Gerçek klavye: WASD R L H T ? M",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T10",
+   "baslik": "TR/EN: boş anahtar / yer tutucu yok",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T11",
+   "baslik": "Yerleşim 1280x720 + 1920x1080: taşma / örtüşme",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  },
+  {
+   "id": "T12",
+   "baslik": "Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L",
+   "durum": "FAIL",
+   "gecen": 48,
+   "toplam": 50
+  },
+  {
+   "id": "T13",
+   "baslik": "Dinamik rota (#122): sapma önerisi, soğuma, kabul",
+   "durum": "ATLANDI",
+   "gecen": 0,
+   "toplam": 0
+  }
+ ],
+ "ortam": {
+  "repo_head": "46318c6188aa78aa18192fcb079e86983fe87f08 (batu/custom-mission)",
+  "platform": "win32",
+  "node": "v22.22.2",
+  "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "real_gpu": true,
+  "repo": "C:/Users/Batu/Desktop/mm-pr/main-wt",
+  "headless": true,
+  "senaryolar": [
+   "S1",
+   "S2",
+   "S3"
+  ]
+ },
+ "perf": null,
+ "ekran_goruntuleri": {
+  "T1": [
+   "shots/S1_1_brifing.png",
+   "shots/S1_2_rotalar.png",
+   "shots/S1_3_yuruyus.png",
+   "shots/S2_1_brifing.png",
+   "shots/S2_2_rotalar.png",
+   "shots/S2_3_yuruyus.png",
+   "shots/S3_1_brifing.png",
+   "shots/S3_2_rotalar.png",
+   "shots/S3_3_yuruyus.png"
+  ],
+  "T2": [
+   "shots/scan_lines.png"
+  ],
+  "T3": [
+   "shots/S1_4_kum_replan.png",
+   "shots/S2_4_kum_replan.png",
+   "shots/S3_4_kum_replan.png",
+   "shots/T3_kum_olayi_S1.png",
+   "shots/T3_kum_olayi_S2.png",
+   "shots/T3_kum_olayi_S3.png"
+  ],
+  "T4": [
+   "shots/S1_5_karne.png",
+   "shots/S2_5_karne.png",
+   "shots/S3_5_karne.png"
+  ],
+  "T5": [
+   "shots/hud.png"
+  ],
+  "T6": [
+   "shots/T6_konsol.png"
+  ],
+  "T7": [
+   "shots/perf.png"
+  ],
+  "T8": [
+   "shots/T11_1280x720_1_intro.png",
+   "shots/T11_1280x720_2_gorev_secimi.png",
+   "shots/T11_1280x720_3_brifing.png",
+   "shots/T11_1280x720_4_rotalar.png",
+   "shots/T11_1280x720_5_yuruyus.png",
+   "shots/T11_1280x720_6_karne.png",
+   "shots/T11_1920x1080_1_intro.png",
+   "shots/T11_1920x1080_2_gorev_secimi.png",
+   "shots/T11_1920x1080_3_brifing.png",
+   "shots/T11_1920x1080_4_rotalar.png",
+   "shots/T11_1920x1080_5_yuruyus.png",
+   "shots/T11_1920x1080_6_karne.png",
+   "shots/T8_baska_gorev.png",
+   "shots/T8_tekrar_oyna.png"
+  ],
+  "T9": [
+   "shots/T9_m_dev.png",
+   "shots/T9_yurume.png"
+  ],
+  "T10": [
+   "shots/T10_en_gorev_secimi.png"
+  ],
+  "T11": [
+   "shots/T11_1280x720_1_intro.png",
+   "shots/T11_1280x720_2_gorev_secimi.png",
+   "shots/T11_1280x720_3_brifing.png",
+   "shots/T11_1280x720_4_rotalar.png",
+   "shots/T11_1280x720_5b_yuruyus_tarama.png",
+   "shots/T11_1280x720_5_yuruyus.png",
+   "shots/T11_1280x720_6_karne.png",
+   "shots/T11_1280x720_7_duraklat.png",
+   "shots/T11_1920x1080_1_intro.png",
+   "shots/T11_1920x1080_2_gorev_secimi.png",
+   "shots/T11_1920x1080_3_brifing.png",
+   "shots/T11_1920x1080_4_rotalar.png",
+   "shots/T11_1920x1080_5_yuruyus.png",
+   "shots/T11_1920x1080_6_karne.png"
+  ],
+  "T12": [
+   "shots/T12_harita.png",
+   "shots/T12_istisna_P1.png",
+   "shots/T12_istisna_P2.png",
+   "shots/T12_karne.png",
+   "shots/T12_o2_brifing.png",
+   "shots/T12_o2_rotalar.png",
+   "shots/T12_secim_eta.png",
+   "shots/T12_url_brifing.png",
+   "shots/T12_uyari.png"
+  ],
+  "T13": [
+   "shots/T13_gozlem.png",
+   "shots/T13_ikinci_oneri.png",
+   "shots/T13_kabul.png",
+   "shots/T13_oneri_bant.png"
+  ]
+ },
+ "gozlemler": [],
+ "testler": [
+  {
+   "id": "ON",
+   "title": "Ön koşul: API + sim sunucusu",
+   "checks": [
+    {
+     "n": "API http://127.0.0.1:8000/assumptions çalışıyor",
+     "ok": true,
+     "d": "HTTP 200"
+    },
+    {
+     "n": "API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)",
+     "ok": true,
+     "d": "synthetic=false 1000x1000 @ 2 m — \"Gale / Mount Sharp boxwork bolgesi (Curi\""
+    },
+    {
+     "n": "API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)",
+     "ok": true,
+     "d": "HTTP 422"
+    },
+    {
+     "n": "sim sunucusu http://127.0.0.1:8010/sim/",
+     "ok": true,
+     "d": "betik başlattı / yeniden kullandı"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T1",
+   "title": "S1/S2/S3 tam akış",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T2",
+   "title": "L taraması: lejant Dikkat + Geçilmez",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T3",
+   "title": "Kum olayı radius_m+40 m",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T4",
+   "title": "'mission:arrived' window olayı",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T5",
+   "title": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T6",
+   "title": "Konsolda hata yok",
+   "checks": [
+    {
+     "n": "konsolda beklenmeyen hata yok (0 hata, 0 tanesi bilinen/hariç)",
+     "ok": true,
+     "d": ""
+    }
+   ],
+   "status": "PASS",
+   "ignored": {},
+   "keep": []
+  },
+  {
+   "id": "T7",
+   "title": "?perf=1 probu",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T8",
+   "title": "Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T9",
+   "title": "Gerçek klavye: WASD R L H T ? M",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T10",
+   "title": "TR/EN: boş anahtar / yer tutucu yok",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T11",
+   "title": "Yerleşim 1280x720 + 1920x1080: taşma / örtüşme",
+   "checks": [],
+   "status": "ATLANDI"
+  },
+  {
+   "id": "T12",
+   "title": "Kendi rotanı planla (#120): 5 A–B, uyarı, kum, URL, 80 L",
+   "checks": [
+    {
+     "n": "A–B çiftleri hazır: 9 çift (4 kumlu, 5 kumsuz), 6 geçilmez nokta",
+     "ok": true,
+     "d": "ab_ciftleri_gorevli.json; 7 /route denemesi"
+    },
+    {
+     "n": "seçim ekranında özel görev kartı (mission-custom) ve düğmesi (mission-go-custom) var",
+     "ok": true,
+     "d": "{\"card\":true,\"go\":true}"
+    },
+    {
+     "n": "\"Haritayı aç\" → harita ekranı (mappicker)",
+     "ok": true,
+     "d": "screen=picker"
+    },
+    {
+     "n": "test kancası window.__mm.picker { setA, setB, compute, state, shareUrl } var",
+     "ok": true,
+     "d": "ok"
+    },
+    {
+     "n": "harita ekranı öğeleri (mp-warn, mp-eta, mp-info, mp-compute, mp-share, mp-o2, mp-back) var",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "T12b: geçilmez A=653,501 (44°): uyarı metni \"3 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Burası 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…\" | görülen \"A: Burası 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 3 m uzakta; bu insan yürüy\""
+    },
+    {
+     "n": "T12b: geçilmez A=653,501: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Burası 44°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 3 m uzakta; bu i"
+    },
+    {
+     "n": "T12b: geçilmez A=852,725 (46°): uyarı metni \"4 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Burası 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…\" | görülen \"A: Burası 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 4 m uzakta; bu insan yürüy\""
+    },
+    {
+     "n": "T12b: geçilmez A=852,725: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Burası 46°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 4 m uzakta; bu i"
+    },
+    {
+     "n": "T12b: geçilmez A=386,565 (33°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Burası 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…\" | görülen \"A: Burası 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu insan yürüy\""
+    },
+    {
+     "n": "T12b: geçilmez A=386,565: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Burası 33°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i"
+    },
+    {
+     "n": "T12b: geçilmez A=409,724 (25°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Burası 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…\" | görülen \"A: Burası 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu insan yürüy\""
+    },
+    {
+     "n": "T12b: geçilmez A=409,724: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Burası 25°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i"
+    },
+    {
+     "n": "T12b: geçilmez A=393,704 (31°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Burası 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…\" | görülen \"A: Burası 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu insan yürüy\""
+    },
+    {
+     "n": "T12b: geçilmez A=393,704: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Burası 31°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i"
+    },
+    {
+     "n": "T12b: geçilmez A=437,702 (26°): uyarı metni \"2 m\" ve eğim doğru",
+     "ok": true,
+     "d": "beklenen \"A: Burası 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en y…\" | görülen \"A: Burası 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu insan yürüy\""
+    },
+    {
+     "n": "T12b: geçilmez A=437,702: hesapla düğmesi kapalı, canCompute=false",
+     "ok": true,
+     "d": "{\"dis\":true,\"can\":false}"
+    },
+    {
+     "n": "T12b: geçilmez nokta B olarak seçilince uyarı \"B:\" ile başlar",
+     "ok": true,
+     "d": "B: Burası 26°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta 2 m uzakta; bu i"
+    },
+    {
+     "n": "T12b: geçilebilir çiftte uyarı boş, hesaplanabilir",
+     "ok": true,
+     "d": "{\"warn\":\"\",\"can\":true}"
+    },
+    {
+     "n": "T12b: A–B 15 m'den yakınsa \"çok kısa\" uyarısı",
+     "ok": true,
+     "d": "A ile B arası çok kısa: en az 15 m uzaklıkta farklı noktalar seç."
+    },
+    {
+     "n": "T12a: gerçek harita tıklamasıyla A ve B seçilir (±2 px)",
+     "ok": true,
+     "d": "A=540,594 B=304,579 beklenen 540,595→304,580 (tıklama sırası A/B ya da B/A: sıra durumuna bağlı)"
+    },
+    {
+     "n": "T12a: canlı mesafe/süre (mp-eta) kuş uçuşu ve 0,67056 m/s referansıyla tutarlı",
+     "ok": true,
+     "d": "beklenen \"Kuş uçuşu 473 m · tahmini süre ≈ 12 dk\" | görülen \"Kuş uçuşu 473 m · tahmini süre ≈ 12 dk\""
+    },
+    {
+     "n": "bilgi: mp-info (hedefe yakın durak notu)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "T12d: shareUrl() aynı A/B'yi taşır (virgül kodu çözülünce ?a=c,r&b=c,r)",
+     "ok": true,
+     "d": "beklenen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 | görülen http://127.0.0.1:8010/sim/?a=540,595&b=304,580"
+    },
+    {
+     "n": "T12d (kozmetik): bağlantı okunaklı biçimde: virgül %2C ile kodlanmamış",
+     "ok": true,
+     "d": "beklenen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 | görülen http://127.0.0.1:8010/sim/?a=540,595&b=304,580 (URLSearchParams virgülü %2C yapıyor; işlev etkilenmez, ?a=540%2C595 de açılır)"
+    },
+    {
+     "n": "T12d: paylaşım düğmesi (mp-share) aynı URL'yi üretir (panoya ya da prompt'a)",
+     "ok": true,
+     "d": "pano=http://127.0.0.1:8010/sim/?a=540,595&b=304,580 prompt=null"
+    },
+    {
+     "n": "T12e: \"Kısıtlı O₂ bütçesi (80 L)\" işaretlenince state.o2 = 80",
+     "ok": true,
+     "d": "o2=80"
+    },
+    {
+     "n": "T12e: paylaşım URL'si &o2=80 içerir",
+     "ok": true,
+     "d": "http://127.0.0.1:8010/sim/?a=540,595&b=304,580&o2=80"
+    },
+    {
+     "n": "T12e: hesapla → brifing",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12e: görev limitleri O₂ = 80 L ve brifingde 80 görünür",
+     "ok": true,
+     "d": "{\"id\":\"CUSTOM\",\"o2\":80,\"txt\":\"CUSTOM GÖREV BRİFİNGİ Özel görev  Kendi seçtiğin iki nokta arasında yürüyeceksin. Rota planlayıcıdan gelir; kum uyarısı yalnız rota ortofotoda kum adayı işaretli bir alana yaklaşırsa çıkar. "
+    },
+    {
+     "n": "T12e: 3 rota kartı geldi (80 L bütçede durum rozetleri kaydedildi; NO-GO beklenebilir)",
+     "ok": true,
+     "d": "[{\"k\":\"shortest\",\"why\":null},{\"k\":\"balanced\",\"why\":null},{\"k\":\"safest\",\"why\":null}]"
+    },
+    {
+     "n": "bilgi: P1 API /route ön ısıtma süresi",
+     "ok": true,
+     "d": "3386 ms (sim zaman aşımı 8000 ms; sunucu önceki isteklerle meşgulse aşılabilir)"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): seçim kabul edildi (uyarı yok, hesaplanabilir)",
+     "ok": true,
+     "d": "{\"can\":true,\"warn\":\"\"}"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): hesapla → brifing (görev CUSTOM, A/B doğru, O₂ 420)",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): 3 rota kartı, kaynak api",
+     "ok": true,
+     "d": "{\"n\":3,\"src\":\"api,api,api\",\"why\":null}"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): yürüyüş başlar (walk, durum=auto)",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tanımlı (rota kum adayının radius_m+40 m yakınından geçiyor)",
+     "ok": true,
+     "d": "beklenen {\"id\":\"sand_14\",\"minDistM\":18,\"thresholdM\":56.2} | görülen {\"id\":\"sand_14\",\"min\":17,\"thr\":56.2}"
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): kum olayı tetiklendi ve rota yeniden planlandı (routeRun.replanned=true)",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"fired\":true,\"replanned\":true,\"rep\":false,\"toast\":\"Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı.\",\"diag\":{\"paused\":false,\"state\":\"auto\",\"machine\":\"walking\",\"s\":765,\"total\":765,\"P\":[3309,4695],\"goal\":[2875,4660],\"screen\":\"walk\"},\"samples\":[{\"s\":761,\"tot\":765,\"P\":[3"
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): replan BAŞARILI: toast'ta \"başarısız\"/\"failed\" yok",
+     "ok": true,
+     "d": "toast=\"Yeni rota (0 ms): 0.77 km · 31.4 dk · GO — kum bölgesi kaçınıldı.\""
+    },
+    {
+     "n": "T12c P1 540,595→304,580 (473 m, kum VAR): bu çiftte /replan, /step vb. 422 yok",
+     "ok": true,
+     "d": "yok"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): hedefte karne açılır",
+     "ok": false,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12a P1 540,595→304,580 (473 m, kum VAR): \"Başka görev\" → seçime döner (özel kart yine var)",
+     "ok": false,
+     "d": "screen=walk"
+    },
+    {
+     "n": "T12d: ?a=&b= doğrudan brifinge açar (aynı A/B, O₂ 420 L)",
+     "ok": true,
+     "d": "{\"id\":\"CUSTOM\",\"a\":[540,595],\"b\":[304,580],\"o2\":420,\"intro\":false,\"brief\":true}"
+    },
+    {
+     "n": "T12d: ?a=&b=&o2=80 doğrudan brifinge açar (aynı A/B, O₂ 80 L)",
+     "ok": true,
+     "d": "{\"id\":\"CUSTOM\",\"a\":[540,595],\"b\":[304,580],\"o2\":80,\"intro\":false,\"brief\":true}"
+    },
+    {
+     "n": "T12d: geçersiz ?a=5000,5&b=3,3 → özel görev açılmaz, normal intro",
+     "ok": true,
+     "d": "{\"screen\":\"intro\",\"sel\":null}"
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T13",
+   "title": "Dinamik rota (#122): sapma önerisi, soğuma, kabul",
+   "checks": [],
+   "status": "ATLANDI"
+  }
+ ],
+ "konsol_hariclenen": [],
+ "konsol_kalan_hatalar": []
+}

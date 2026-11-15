@@ -1,0 +1,1131 @@
+{
+ "dosya": "test_sonucu_kosu2.json",
+ "zaman": "2026-11-15T06:50:38.479Z",
+ "sure_sn": 857,
+ "base": "http://127.0.0.1:8010/sim/",
+ "api": "http://127.0.0.1:8011",
+ "api_ok": true,
+ "genel": "FAIL (T8, T10: gerçek uygulama bulguları; bkz. bulgular.md)",
+ "ozet": [
+  {
+   "id": "ON",
+   "baslik": "Ön koşul: API + sim sunucusu",
+   "durum": "PASS",
+   "gecen": 4,
+   "toplam": 4
+  },
+  {
+   "id": "T1",
+   "baslik": "S1/S2/S3 tam akış",
+   "durum": "PASS",
+   "gecen": 30,
+   "toplam": 30
+  },
+  {
+   "id": "T2",
+   "baslik": "L taraması: lejant Dikkat + Geçilmez",
+   "durum": "PASS",
+   "gecen": 3,
+   "toplam": 3
+  },
+  {
+   "id": "T3",
+   "baslik": "Kum olayı radius_m+40 m",
+   "durum": "PASS",
+   "gecen": 9,
+   "toplam": 9
+  },
+  {
+   "id": "T4",
+   "baslik": "'mission:arrived' window olayı",
+   "durum": "PASS",
+   "gecen": 3,
+   "toplam": 3
+  },
+  {
+   "id": "T5",
+   "baslik": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "durum": "PASS",
+   "gecen": 2,
+   "toplam": 2
+  },
+  {
+   "id": "T6",
+   "baslik": "Konsolda hata yok",
+   "durum": "PASS",
+   "gecen": 1,
+   "toplam": 1
+  },
+  {
+   "id": "T7",
+   "baslik": "?perf=1 probu",
+   "durum": "PASS",
+   "gecen": 4,
+   "toplam": 4
+  },
+  {
+   "id": "T8",
+   "baslik": "Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev",
+   "durum": "FAIL",
+   "gecen": 39,
+   "toplam": 40
+  },
+  {
+   "id": "T9",
+   "baslik": "Gerçek klavye: WASD R L H T ? M",
+   "durum": "PASS",
+   "gecen": 14,
+   "toplam": 14
+  },
+  {
+   "id": "T10",
+   "baslik": "TR/EN: boş anahtar / yer tutucu yok",
+   "durum": "FAIL",
+   "gecen": 16,
+   "toplam": 19
+  },
+  {
+   "id": "T11",
+   "baslik": "Yerleşim 1280x720 + 1920x1080: taşma / örtüşme",
+   "durum": "PASS",
+   "gecen": 14,
+   "toplam": 14
+  }
+ ],
+ "ortam": {
+  "platform": "win32",
+  "node": "v22.22.2",
+  "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "real_gpu": false,
+  "repo": "C:/Users/Batu/Desktop/mm-pr/main-wt",
+  "headless": true,
+  "senaryolar": [
+   "S1",
+   "S2",
+   "S3"
+  ]
+ },
+ "perf": {
+  "mod": "swiftshader (yazılım GL; FPS değerleri GPU performansı DEĞİLDİR)",
+  "fps_ort": 0.82,
+  "fps_p50": 0.83,
+  "fps_min": 0.47,
+  "kare_ms_ort": 1224.36,
+  "kare_ms_p95": 1979,
+  "kare_ms_p99": 2139.4,
+  "cizim_cagrisi_ort": 136,
+  "ucgen_ort": 597140,
+  "kare_sayisi": 26,
+  "kriter": {
+   "p95TargetMs": 22,
+   "p95ActualMs": 1979,
+   "p95Passed": false,
+   "avgFpsTarget": 45,
+   "avgFpsActual": 0.82,
+   "avgFpsPassed": false,
+   "overallPassed": false
+  },
+  "donanim": {
+   "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+   "cozunurluk": "1000x600",
+   "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+  }
+ },
+ "ekran_goruntuleri": {
+  "T1": [
+   "shots/S1_1_brifing.png",
+   "shots/S1_2_rotalar.png",
+   "shots/S1_3_yuruyus.png",
+   "shots/S2_1_brifing.png",
+   "shots/S2_2_rotalar.png",
+   "shots/S2_3_yuruyus.png",
+   "shots/S3_1_brifing.png",
+   "shots/S3_2_rotalar.png",
+   "shots/S3_3_yuruyus.png"
+  ],
+  "T2": [
+   "shots/scan_lines.png"
+  ],
+  "T3": [
+   "shots/S1_4_kum_replan.png",
+   "shots/S2_4_kum_replan.png",
+   "shots/S3_4_kum_replan.png",
+   "shots/T3_kum_olayi_S1.png",
+   "shots/T3_kum_olayi_S2.png",
+   "shots/T3_kum_olayi_S3.png"
+  ],
+  "T4": [
+   "shots/S1_5_karne.png",
+   "shots/S2_5_karne.png",
+   "shots/S3_5_karne.png"
+  ],
+  "T5": [
+   "shots/hud.png"
+  ],
+  "T6": [
+   "shots/T6_konsol.png"
+  ],
+  "T7": [
+   "shots/perf.png"
+  ],
+  "T8": [
+   "shots/T11_1280x720_1_intro.png",
+   "shots/T11_1280x720_2_gorev_secimi.png",
+   "shots/T11_1280x720_3_brifing.png",
+   "shots/T11_1280x720_4_rotalar.png",
+   "shots/T11_1280x720_5_yuruyus.png",
+   "shots/T11_1280x720_6_karne.png",
+   "shots/T11_1920x1080_1_intro.png",
+   "shots/T11_1920x1080_2_gorev_secimi.png",
+   "shots/T11_1920x1080_3_brifing.png",
+   "shots/T11_1920x1080_4_rotalar.png",
+   "shots/T11_1920x1080_5_yuruyus.png",
+   "shots/T11_1920x1080_6_karne.png",
+   "shots/T8_baska_gorev.png",
+   "shots/T8_tekrar_oyna.png"
+  ],
+  "T9": [
+   "shots/T9_m_dev.png",
+   "shots/T9_yurume.png"
+  ],
+  "T10": [
+   "shots/T10_en_gorev_secimi.png"
+  ],
+  "T11": [
+   "shots/T11_1280x720_1_intro.png",
+   "shots/T11_1280x720_2_gorev_secimi.png",
+   "shots/T11_1280x720_3_brifing.png",
+   "shots/T11_1280x720_4_rotalar.png",
+   "shots/T11_1280x720_5b_yuruyus_tarama.png",
+   "shots/T11_1280x720_5_yuruyus.png",
+   "shots/T11_1280x720_6_karne.png",
+   "shots/T11_1280x720_7_duraklat.png",
+   "shots/T11_1920x1080_1_intro.png",
+   "shots/T11_1920x1080_2_gorev_secimi.png",
+   "shots/T11_1920x1080_3_brifing.png",
+   "shots/T11_1920x1080_4_rotalar.png",
+   "shots/T11_1920x1080_5_yuruyus.png",
+   "shots/T11_1920x1080_6_karne.png"
+  ]
+ },
+ "testler": [
+  {
+   "id": "ON",
+   "title": "Ön koşul: API + sim sunucusu",
+   "checks": [
+    {
+     "n": "API http://127.0.0.1:8011/assumptions çalışıyor",
+     "ok": true,
+     "d": "HTTP 200"
+    },
+    {
+     "n": "API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)",
+     "ok": true,
+     "d": "synthetic=false 1000x1000 @ 2 m — \"Gale / Mount Sharp boxwork bolgesi (Curi\""
+    },
+    {
+     "n": "API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)",
+     "ok": true,
+     "d": "HTTP 422"
+    },
+    {
+     "n": "sim sunucusu http://127.0.0.1:8010/sim/",
+     "ok": true,
+     "d": "betik başlattı / yeniden kullandı"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T1",
+   "title": "S1/S2/S3 tam akış",
+   "checks": [
+    {
+     "n": "S1: brifing açılır",
+     "ok": true,
+     "d": "S1 GÖREV BRİFİNGİ Boxwork'ten Atacama sondajına  Curiosity'nin incelediği boxwork sırtları"
+    },
+    {
+     "n": "S1: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa GO Mesafe 0.55 km Süre\",\"Dengeli GO Mesafe 0.57 km Süre\",\"En güvenli GO Mesafe 0.61 km S\"]"
+    },
+    {
+     "n": "S1: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S1: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S1: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":610,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S1: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"s\":225,\"tot\":610}"
+    },
+    {
+     "n": "S1: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Yeni rota (1073 ms): 0.38 km · 12.4 dk · GO — kum bölgesi kaçınıldı."
+    },
+    {
+     "n": "S1: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S1: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S1: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    },
+    {
+     "n": "S2: brifing açılır",
+     "ok": true,
+     "d": "S2 GÖREV BRİFİNGİ Kumlu kestirme  Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemd"
+    },
+    {
+     "n": "S2: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa GO Mesafe 0.55 km Süre\",\"Dengeli GO Mesafe 0.58 km Süre\",\"En güvenli GO Mesafe 0.64 km S\"]"
+    },
+    {
+     "n": "S2: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S2: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S2: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":635,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S2: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"s\":252,\"tot\":635}"
+    },
+    {
+     "n": "S2: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Yeni rota (2198 ms): 0.38 km · 12.3 dk · GO — kum bölgesi kaçınıldı."
+    },
+    {
+     "n": "S2: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S2: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S2: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    },
+    {
+     "n": "S3: brifing açılır",
+     "ok": true,
+     "d": "S3 GÖREV BRİFİNGİ Yarım O₂ tüpü  Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin "
+    },
+    {
+     "n": "S3: 3 rota kartı",
+     "ok": true,
+     "d": "[\"En kısa NO-GO Mesafe 0.53 km S\",\"Dengeli NO-GO Mesafe 0.55 km S\",\"En güvenli NO-GO Mesafe 0.58 k\"]"
+    },
+    {
+     "n": "S3: 3 rota API'den (source=api*)",
+     "ok": true,
+     "d": "shortest:api,balanced:api,safest:api"
+    },
+    {
+     "n": "S3: en güvenli seçilir (kind=safest)",
+     "ok": true,
+     "d": "kind=safest"
+    },
+    {
+     "n": "S3: 3B yürüyüş başlar (total>0, durum=walking)",
+     "ok": true,
+     "d": "{\"total\":576,\"ms\":\"walking\",\"sand\":true}"
+    },
+    {
+     "n": "S3: kum olayı tetiklenir",
+     "ok": true,
+     "d": "{\"s\":192,\"tot\":576}"
+    },
+    {
+     "n": "S3: rota yeniden planlanır (replan)",
+     "ok": true,
+     "d": "Yeni rota (1837 ms): 0.38 km · 12.4 dk · GO — kum bölgesi kaçınıldı."
+    },
+    {
+     "n": "S3: hedefte durur (paused=true)",
+     "ok": true,
+     "d": "paused=true"
+    },
+    {
+     "n": "S3: karne açılır (.mm-grade-letter)",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "S3: karne içeriği boş değil",
+     "ok": true,
+     "d": "C Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli."
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T2",
+   "title": "L taraması: lejant Dikkat + Geçilmez",
+   "checks": [
+    {
+     "n": "lejant görünür (#scanleg)",
+     "ok": true,
+     "d": "hidden=false"
+    },
+    {
+     "n": "lejantta 'Dikkat' etiketi",
+     "ok": true,
+     "d": "═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim)"
+    },
+    {
+     "n": "lejantta 'Geçilmez' etiketi",
+     "ok": true,
+     "d": "═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim)"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T3",
+   "title": "Kum olayı radius_m+40 m",
+   "checks": [
+    {
+     "n": "S1: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S1-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921845995,\"pz\":4729.554513534807}"
+    },
+    {
+     "n": "S1: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=19.4 trigger_m=59.4 beklenen=59.4"
+    },
+    {
+     "n": "S1: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=58.9 m, eşik=59.4 m"
+    },
+    {
+     "n": "S2: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S2-sand\",\"type\":\"sand\",\"radius_m\":20,\"trigger_m\":60,\"world\":[3239.7952005489965,4844.496536437015],\"px\":3223.8513695870774,\"pz\":4786.754638695123}"
+    },
+    {
+     "n": "S2: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=20 trigger_m=60 beklenen=60"
+    },
+    {
+     "n": "S2: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=59.9 m, eşik=60 m"
+    },
+    {
+     "n": "S3: kum olayı machine'den gelir",
+     "ok": true,
+     "d": "{\"id\":\"S3-sand\",\"type\":\"sand\",\"radius_m\":19.4,\"trigger_m\":59.4,\"world\":[3209.900517497138,4782.496536437015],\"px\":3183.9917921845995,\"pz\":4730.703897796121}"
+    },
+    {
+     "n": "S3: trigger_m = radius_m + 40",
+     "ok": true,
+     "d": "radius_m=19.4 trigger_m=59.4 beklenen=59.4"
+    },
+    {
+     "n": "S3: oyuncu radius_m+40 m'de (−8…+2 m) tetiklendi, kum dairesine girmeden",
+     "ok": true,
+     "d": "mesafe=57.9 m, eşik=59.4 m"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T4",
+   "title": "'mission:arrived' window olayı",
+   "checks": [
+    {
+     "n": "S1: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    },
+    {
+     "n": "S2: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    },
+    {
+     "n": "S3: 'mission:arrived' window olayı geldi",
+     "ok": true,
+     "d": "olay sayısı=1 detail.state=\"debrief\""
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T5",
+   "title": "HUD: Zemin (model) + Gale ortam (REMS)",
+   "checks": [
+    {
+     "n": "HUD'da 'Zemin (model)' satırı",
+     "ok": true,
+     "d": "Zemin (model)\neğim 3° · kum 0.03 · iri taş 0.02 · belirsizlik 0.21"
+    },
+    {
+     "n": "HUD'da 'Gale ortam (REMS)' satırı",
+     "ok": true,
+     "d": "Gale ortam (REMS)\nhava -88…-3.9 °C · zemin -121…7.5 °C · 716–961 Pa"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T6",
+   "title": "Konsolda hata yok",
+   "checks": [
+    {
+     "n": "konsolda beklenmeyen hata yok (0 hata, 0 tanesi bilinen/hariç)",
+     "ok": true,
+     "d": ""
+    }
+   ],
+   "status": "PASS",
+   "ignored": {},
+   "keep": []
+  },
+  {
+   "id": "T7",
+   "title": "?perf=1 probu",
+   "checks": [
+    {
+     "n": "prob açıldı (konsolda \"[PerfProbe] ... başlatılıyor\" + canlı HUD)",
+     "ok": true,
+     "d": "%c[PerfProbe] Martian Map Performans Probu başlatılıyor... color: #00e5ff; font-weight: bold;"
+    },
+    {
+     "n": "prob 30 sn senaryoyu bitirip rapor açar (#perf-probe-overlay)",
+     "ok": true,
+     "d": "rapor açıldı"
+    },
+    {
+     "n": "'[PerfProbe HATA]' yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "perf raporu okundu (ort FPS, p95 ms)",
+     "ok": true,
+     "d": "ort 0.82 FPS, p95 1979 ms (swiftshader (yazılım GL; FPS değerleri GPU performansı DEĞİLDİR))"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T8",
+   "title": "Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev",
+   "checks": [
+    {
+     "n": "[1280×720 TR] açılış ekranı (intro), body.dev yok",
+     "ok": true,
+     "d": "{\"screen\":\"intro\",\"dev\":false}"
+    },
+    {
+     "n": "[1280×720 TR] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)",
+     "ok": true,
+     "d": "[[\"panel\",\"none\"],[\"mapwrap\",\"none\"],[\"hud\",\"none\"],[\"ctl\",\"none\"]]"
+    },
+    {
+     "n": "[1280×720 TR] intro: başlık, altyazı ve başlat düğmesi dolu",
+     "ok": true,
+     "d": "{\"title\":\"MARTIAN MAP\",\"sub\":\"EVA PROVASI\",\"btn\":\"GÖREV SEÇ\"}"
+    },
+    {
+     "n": "[1280×720 TR] \"Görev seç\" → görev seçimi ekranı",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "[1280×720 TR] 3 görev kartı (S1,S2,S3)",
+     "ok": true,
+     "d": "S1,S2,S3"
+    },
+    {
+     "n": "[1280×720 TR] dil anahtarı: TR → EN (görev kartı düğmesi + <html lang> güncellenir)",
+     "ok": true,
+     "d": "{\"lang\":\"en\",\"go\":\"Open briefing\",\"btn\":\"Open briefing\",\"htmlLang\":\"en\"}"
+    },
+    {
+     "n": "[1280×720 TR] dil anahtarı geri döner",
+     "ok": true,
+     "d": "{\"lang\":\"tr\",\"go\":\"Brifinge geç\",\"btn\":\"Brifinge geç\"}"
+    },
+    {
+     "n": "[1280×720 TR] \"Geri\" → intro",
+     "ok": true,
+     "d": "screen=intro"
+    },
+    {
+     "n": "[1280×720 TR] S1 → brifing",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1280×720 TR] rota seçimi: 3 kart",
+     "ok": true,
+     "d": "kart=3"
+    },
+    {
+     "n": "[1280×720 TR] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "[1280×720 TR] rotalar canlı API'den (çevrimdışı yedek rozeti yok)",
+     "ok": true,
+     "d": "{\"alt\":\"api,api,api\",\"offline\":false}"
+    },
+    {
+     "n": "[1280×720 TR] yürüyüş: durum=auto, rota uzunluğu > 0",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":610,\"hud\":true,\"dist\":\"610 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1280×720 TR] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":610,\"hud\":true,\"dist\":\"610 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1280×720 TR] kum olayı → rota yeniden planlanır",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"fired\":true,\"replanned\":true,\"rep\":true}"
+    },
+    {
+     "n": "[1280×720 TR] hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "[1280×720 TR] karne: harf + 4 satırlık tablo + iki düğme (\"Tekrar oyna\", \"Başka görev\")",
+     "ok": true,
+     "d": "{\"grade\":\"C\",\"rows\":5,\"btns\":[\"Tekrar oyna\",\"Başka görev\"]}"
+    },
+    {
+     "n": "[1280×720 TR] karne: \"Tekrar oyna\"/\"Başka görev\" düğmeleri kaydırmadan görünür",
+     "ok": false,
+     "d": "{\"vh\":720,\"bottoms\":[840,840],\"kartYuksek\":696,\"kaydirilabilir\":true}"
+    },
+    {
+     "n": "[1280×720 TR] \"Tekrar oyna\": yürüyüş yeniden başlar (walk, rota başında, karne kapanır, makine=walking)",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"s\":0,\"tot\":610,\"ms\":\"walking\",\"report\":false,\"paused\":false}"
+    },
+    {
+     "n": "[1280×720 TR] Esc → duraklat menüsü açılır (oyun durur, 6 düğme)",
+     "ok": true,
+     "d": "{\"menu\":true,\"paused\":true,\"btns\":[\"Devam\",\"Görev bilgisi\",\"Veri katmanları\",\"Ses: Açık\",\"Dil: TR\",\"Görevden çık\"]}"
+    },
+    {
+     "n": "[1280×720 TR] \"Devam\" → menü kapanır, oyun sürer",
+     "ok": true,
+     "d": "{\"menu\":false,\"paused\":false}"
+    },
+    {
+     "n": "[1280×720 TR] ikinci tur: varış + karne",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"fired\":true,\"replanned\":true,\"rep\":true}"
+    },
+    {
+     "n": "[1280×720 TR] \"Başka görev\": görev seçimine döner (tur, yürüyüş HUD gizli, makine temiz, 3 kart)",
+     "ok": true,
+     "d": "{\"st\":\"tour\",\"walkhud\":\"none\",\"vit\":false,\"machine\":false,\"report\":false,\"cards\":3}"
+    },
+    {
+     "n": "[1280×720 TR] karne sonrası ikinci görev (S2) brifingi açılır",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1280×720 TR] brifingde \"Görevlere dön\" → seçime döner",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "[1920×1080 EN] açılış ekranı (intro), body.dev yok",
+     "ok": true,
+     "d": "{\"screen\":\"intro\",\"dev\":false}"
+    },
+    {
+     "n": "[1920×1080 EN] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)",
+     "ok": true,
+     "d": "[[\"panel\",\"none\"],[\"mapwrap\",\"none\"],[\"hud\",\"none\"],[\"ctl\",\"none\"]]"
+    },
+    {
+     "n": "[1920×1080 EN] intro: başlık, altyazı ve başlat düğmesi dolu",
+     "ok": true,
+     "d": "{\"title\":\"MARTIAN MAP\",\"sub\":\"EVA REHEARSAL\",\"btn\":\"SELECT MISSION\"}"
+    },
+    {
+     "n": "[1920×1080 EN] \"Görev seç\" → görev seçimi ekranı",
+     "ok": true,
+     "d": "screen=select"
+    },
+    {
+     "n": "[1920×1080 EN] 3 görev kartı (S1,S2,S3)",
+     "ok": true,
+     "d": "S1,S2,S3"
+    },
+    {
+     "n": "[1920×1080 EN] S1 → brifing",
+     "ok": true,
+     "d": "screen=briefing"
+    },
+    {
+     "n": "[1920×1080 EN] rota seçimi: 3 kart",
+     "ok": true,
+     "d": "kart=3"
+    },
+    {
+     "n": "[1920×1080 EN] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır",
+     "ok": true,
+     "d": "screen=walk"
+    },
+    {
+     "n": "[1920×1080 EN] rotalar canlı API'den (çevrimdışı yedek rozeti yok)",
+     "ok": true,
+     "d": "{\"alt\":\"api,api,api\",\"offline\":false}"
+    },
+    {
+     "n": "[1920×1080 EN] yürüyüş: durum=auto, rota uzunluğu > 0",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":610,\"hud\":true,\"dist\":\"610 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1920×1080 EN] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"tot\":610,\"hud\":true,\"dist\":\"610 m\",\"vit\":true}"
+    },
+    {
+     "n": "[1920×1080 EN] kum olayı → rota yeniden planlanır",
+     "ok": true,
+     "d": "{\"hasSand\":true,\"fired\":true,\"replanned\":true,\"rep\":true}"
+    },
+    {
+     "n": "[1920×1080 EN] hedefte karne açılır",
+     "ok": true,
+     "d": "screen=report"
+    },
+    {
+     "n": "[1920×1080 EN] karne: harf + 4 satırlık tablo + iki düğme (\"Tekrar oyna\", \"Başka görev\")",
+     "ok": true,
+     "d": "{\"grade\":\"C\",\"rows\":5,\"btns\":[\"Play again\",\"Other mission\"]}"
+    },
+    {
+     "n": "[1920×1080 EN] karne: \"Tekrar oyna\"/\"Başka görev\" düğmeleri kaydırmadan görünür",
+     "ok": true,
+     "d": "{\"vh\":1080,\"bottoms\":[945,945],\"kartYuksek\":847,\"kaydirilabilir\":false}"
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T9",
+   "title": "Gerçek klavye: WASD R L H T ? M",
+   "checks": [
+    {
+     "n": "yürüyüş (auto) başladı",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "W: otomatik yürüyüşten devralır (durum=walk) ve ileri gider",
+     "ok": true,
+     "d": "durum auto→walk, {\"fwd\":0.31,\"right\":0,\"dist\":0.31}"
+    },
+    {
+     "n": "S: geri gider (ileri bileşen < 0)",
+     "ok": true,
+     "d": "{\"fwd\":-0.2,\"right\":0,\"dist\":0.2}"
+    },
+    {
+     "n": "D: sağa kayar (sağ bileşen > 0)",
+     "ok": true,
+     "d": "{\"fwd\":0,\"right\":0.21,\"dist\":0.21}"
+    },
+    {
+     "n": "A: sola kayar (sağ bileşen < 0)",
+     "ok": true,
+     "d": "{\"fwd\":0,\"right\":-0.15,\"dist\":0.15}"
+    },
+    {
+     "n": "Shift+W: koşar (ileri gider)",
+     "ok": true,
+     "d": "{\"fwd\":0.7,\"right\":0,\"dist\":0.7}"
+    },
+    {
+     "n": "R: rotaya dönülür (durum=auto)",
+     "ok": true,
+     "d": "{\"st\":\"auto\",\"routeRun\":true}"
+    },
+    {
+     "n": "T: astronot görünürlüğü 3. şahıs ↔ 1. şahıs değişir",
+     "ok": true,
+     "d": "önce=true, T sonrası=false, 2. T sonrası=true"
+    },
+    {
+     "n": "H: vitals HUD gizlenir ve geri gelir",
+     "ok": true,
+     "d": "önce=true, H=false, H=true"
+    },
+    {
+     "n": "L: tarayıcı lejantı görünür (Dikkat + Geçilmez)",
+     "ok": true,
+     "d": "{\"hidden\":false,\"text\":\"═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim)\"}"
+    },
+    {
+     "n": "?: yardım penceresi açılır ve tuşları listeler",
+     "ok": true,
+     "d": "[\"W A S D\",\"Shift\",\"Fare (tıkla)\",\"R\",\"L / Shift+L\",\"T\",\"[ ]\",\"G\",\"N\",\"H\",\"Esc\",\"?\"]"
+    },
+    {
+     "n": "yardımda vaat edilen tuşlar listede",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "M (normal oyun): harita açılmaz — tasarım gereği yalnız ?dev=1 (yardım listesinde M yok)",
+     "ok": true,
+     "d": "önce=auto, sonra={\"st\":\"auto\",\"map\":\"none\"}"
+    },
+    {
+     "n": "M (?dev=1): 3B → haritaya döner",
+     "ok": true,
+     "d": "{\"st\":\"map\",\"map\":\"block\",\"gl\":true}"
+    }
+   ],
+   "status": "PASS"
+  },
+  {
+   "id": "T10",
+   "title": "TR/EN: boş anahtar / yer tutucu yok",
+   "checks": [
+    {
+     "n": "[1280×720 TR] 1_intro: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 2_gorev_secimi: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] EN'e geçince görev seçimi: boş anahtar yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 3_brifing: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 4_rotalar: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5_yuruyus: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5b_yuruyus_tarama: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 6_karne: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 7_duraklat: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 1_intro: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 2_gorev_secimi: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 3_brifing: boş anahtar/yer tutucu yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 4_rotalar: boş anahtar/yer tutucu yok",
+     "ok": false,
+     "d": "EN modda Türkçe: \"En kısa\" | EN modda Türkçe: \"En güvenli\" | EN modda Türkçe: \"EN GÜVENLI\""
+    },
+    {
+     "n": "[1920×1080 EN] 5_yuruyus: boş anahtar/yer tutucu yok",
+     "ok": false,
+     "d": "EN modda Türkçe: \"Sol 4625 · Navcam · büyüt: G\" | EN modda Türkçe: \"Y: ayrıntı\""
+    },
+    {
+     "n": "[1920×1080 EN] 6_karne: boş anahtar/yer tutucu yok",
+     "ok": false,
+     "d": "EN modda Türkçe: \"One way, En güvenli route. Cost is measured on the real terr\" | EN modda Türkçe: \"Rotaların radyasyon farkı Radyasyon: RAD\" | EN modda Türkçe: \"En kısa\" | EN modda Türkçe: \"En güvenli\" | EN modda Türkçe: \"Tek yön yürüyüş süresi × yüzey doz hızı. Uzun rota daha çok \""
+    },
+    {
+     "n": "texts.json ui: 180 anahtarın hepsinde dolu tr + en",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "bilgi: tr == en olan uzun metinler (çevrilmemiş olabilir)",
+     "ok": true,
+     "d": "yok"
+    },
+    {
+     "n": "kodda t('...') ile çağrılan 130 anahtarın hepsi texts.json'da var",
+     "ok": true,
+     "d": "eksik: "
+    },
+    {
+     "n": "görev zorluk etiketleri (diff.<zorluk>) tanımlı",
+     "ok": true,
+     "d": "eksik: "
+    }
+   ],
+   "status": "FAIL"
+  },
+  {
+   "id": "T11",
+   "title": "Yerleşim 1280x720 + 1920x1080: taşma / örtüşme",
+   "checks": [
+    {
+     "n": "[1280×720 TR] 1_intro: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 2_gorev_secimi: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 3_brifing: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 4_rotalar: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5_yuruyus: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 5b_yuruyus_tarama: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 6_karne: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1280×720 TR] 7_duraklat: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 1_intro: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 2_gorev_secimi: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 3_brifing: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 4_rotalar: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 5_yuruyus: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    },
+    {
+     "n": "[1920×1080 EN] 6_karne: taşma/örtüşme yok",
+     "ok": true,
+     "d": ""
+    }
+   ],
+   "status": "PASS"
+  }
+ ],
+ "konsol_hariclenen": [],
+ "konsol_kalan_hatalar": [],
+ "kararlilik": {
+  "kosu_sayisi": 2,
+  "kararli": true,
+  "genel_durumlar": [
+   "PASS",
+   "PASS"
+  ],
+  "test_basina": [
+   {
+    "id": "ON",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T1",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T2",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T3",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T4",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T5",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T6",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   },
+   {
+    "id": "T7",
+    "durumlar": [
+     "PASS",
+     "PASS"
+    ]
+   }
+  ],
+  "sureler_sn": [
+   870,
+   857
+  ],
+  "dosyalar": [
+   "test_sonucu_kosu1.json",
+   "test_sonucu_kosu2.json"
+  ]
+ },
+ "birlestirme": "T1-T7 ve ON: MM_RUNS=2 yazilim GL koşusu (test_sonucu_kosu1/2.json, 2026-11-15 ~09:55); T8-T11: MM_ONLY=T8,T9,T10,T11 yazilim GL tek koşu (tur2_deneme.json, 2026-11-15 ~10:55, 1549 sn). Tek komutla 11 grubun tam koşusu yapilmadi (sure); T6 (konsol) tur-2 koşusunda da ayrica 0 hata ile PASS.",
+ "gozlemler": [
+  {
+   "tur": "yerlesim",
+   "yer": "1280×720 TR karne",
+   "d": "Karne düğmeleri ilk ekranda görünmüyor, kaydırma gerekir: {\"vh\":720,\"bottoms\":[840,840],\"kartYuksek\":696,\"kaydirilabilir\":true}"
+  },
+  {
+   "tur": "i18n",
+   "yer": "1920×1080 EN 4_rotalar",
+   "d": "EN modda Türkçe: \"En kısa\" | EN modda Türkçe: \"En güvenli\" | EN modda Türkçe: \"EN GÜVENLI\""
+  },
+  {
+   "tur": "i18n",
+   "yer": "1920×1080 EN 5_yuruyus",
+   "d": "EN modda Türkçe: \"Sol 4625 · Navcam · büyüt: G\" | EN modda Türkçe: \"Y: ayrıntı\""
+  },
+  {
+   "tur": "i18n",
+   "yer": "1920×1080 EN 6_karne",
+   "d": "EN modda Türkçe: \"One way, En güvenli route. Cost is measured on the real terr\" | EN modda Türkçe: \"Rotaların radyasyon farkı Radyasyon: RAD\" | EN modda Türkçe: \"En kısa\" | EN modda Türkçe: \"En güvenli\" | EN modda Türkçe: \"Tek yön yürüyüş süresi × yüzey doz hızı. Uzun rota daha çok \""
+  },
+  {
+   "tur": "klavye",
+   "yer": "H tuşu",
+   "d": "H yalnız vitals HUD'unu gizliyor; görev paneli (.mm-mhud) görünür kalıyor (display=block)"
+  }
+ ],
+ "ortam_tur2": {
+  "platform": "win32",
+  "node": "v22.22.2",
+  "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "real_gpu": false,
+  "repo": "C:/Users/Batu/Desktop/mm-pr/main-wt",
+  "headless": true,
+  "senaryolar": [
+   "S1",
+   "S2",
+   "S3"
+  ]
+ }
+}

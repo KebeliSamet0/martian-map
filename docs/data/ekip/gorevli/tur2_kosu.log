@@ -1,0 +1,114 @@
+  PASS  [ON] API http://127.0.0.1:8000/assumptions çalışıyor  — HTTP 200
+  PASS  [ON] API gerçek Gale ızgarası sunuyor (/grid: synthetic=false, 1000x1000, 2 m)  — synthetic=false 1000x1000 @ 2 m — "Gale / Mount Sharp boxwork bolgesi (Curi"
+  PASS  [ON] API güncel: POST /compare mevcut (404 değil; boş gövde 422 beklenir)  — HTTP 422
+  PASS  [ON] sim sunucusu http://127.0.0.1:8010/sim/  — betik başlattı / yeniden kullandı
+
+== oyun akışı 1280x720 TR (tam)
+  PASS  [T8] [1280×720 TR] açılış ekranı (intro), body.dev yok  — {"screen":"intro","dev":false}
+  PASS  [T8] [1280×720 TR] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)  — [["panel","none"],["mapwrap","none"],["hud","none"],["ctl","none"]]
+  PASS  [T8] [1280×720 TR] intro: başlık, altyazı ve başlat düğmesi dolu  — {"title":"MARTIAN MAP","sub":"EVA PROVASI","btn":"GÖREV SEÇ"}
+  PASS  [T10] [1280×720 TR] 1_intro: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 1_intro: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] "Görev seç" → görev seçimi ekranı  — screen=select
+  PASS  [T8] [1280×720 TR] 3 görev kartı (S1,S2,S3)  — S1,S2,S3
+  PASS  [T10] [1280×720 TR] 2_gorev_secimi: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 2_gorev_secimi: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] dil anahtarı: TR → EN (görev kartı düğmesi + <html lang> güncellenir)  — {"lang":"en","go":"Open briefing","btn":"Open briefing","htmlLang":"en"}
+  PASS  [T10] [1280×720 TR] EN'e geçince görev seçimi: boş anahtar yok
+  PASS  [T8] [1280×720 TR] dil anahtarı geri döner  — {"lang":"tr","go":"Brifinge geç","btn":"Brifinge geç"}
+  PASS  [T8] [1280×720 TR] "Geri" → intro  — screen=intro
+  PASS  [T8] [1280×720 TR] S1 → brifing  — screen=briefing
+  PASS  [T10] [1280×720 TR] 3_brifing: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 3_brifing: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] rota seçimi: 3 kart  — kart=3
+  PASS  [T10] [1280×720 TR] 4_rotalar: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 4_rotalar: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır  — screen=walk
+  PASS  [T8] [1280×720 TR] rotalar canlı API'den (çevrimdışı yedek rozeti yok)  — {"alt":"api,api,api","offline":false}
+  PASS  [T8] [1280×720 TR] yürüyüş: durum=auto, rota uzunluğu > 0  — {"st":"auto","tot":610,"hud":true,"dist":"610 m","vit":true}
+  PASS  [T8] [1280×720 TR] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür  — {"st":"auto","tot":610,"hud":true,"dist":"610 m","vit":true}
+  PASS  [T10] [1280×720 TR] 5_yuruyus: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 5_yuruyus: taşma/örtüşme yok
+  PASS  [T10] [1280×720 TR] 5b_yuruyus_tarama: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 5b_yuruyus_tarama: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] kum olayı → rota yeniden planlanır  — {"hasSand":true,"fired":true,"replanned":true,"rep":true}
+  PASS  [T8] [1280×720 TR] hedefte karne açılır  — screen=report
+  PASS  [T10] [1280×720 TR] 6_karne: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 6_karne: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] karne: harf + 4 satırlık tablo + iki düğme ("Tekrar oyna", "Başka görev")  — {"grade":"C","rows":5,"btns":["Tekrar oyna","Başka görev"]}
+  FAIL  [T8] [1280×720 TR] karne: "Tekrar oyna"/"Başka görev" düğmeleri kaydırmadan görünür  — {"vh":720,"bottoms":[840,840],"kartYuksek":696,"kaydirilabilir":true}
+  PASS  [T8] [1280×720 TR] "Tekrar oyna": yürüyüş yeniden başlar (walk, rota başında, karne kapanır, makine=walking)  — {"st":"auto","s":0,"tot":610,"ms":"walking","report":false,"paused":false}
+  PASS  [T8] [1280×720 TR] Esc → duraklat menüsü açılır (oyun durur, 6 düğme)  — {"menu":true,"paused":true,"btns":["Devam","Görev bilgisi","Veri katmanları","Ses: Açık","Dil: TR","Görevden çık"]}
+  PASS  [T10] [1280×720 TR] 7_duraklat: boş anahtar/yer tutucu yok
+  PASS  [T11] [1280×720 TR] 7_duraklat: taşma/örtüşme yok
+  PASS  [T8] [1280×720 TR] "Devam" → menü kapanır, oyun sürer  — {"menu":false,"paused":false}
+  PASS  [T8] [1280×720 TR] ikinci tur: varış + karne  — {"hasSand":true,"fired":true,"replanned":true,"rep":true}
+  PASS  [T8] [1280×720 TR] "Başka görev": görev seçimine döner (tur, yürüyüş HUD gizli, makine temiz, 3 kart)  — {"st":"tour","walkhud":"none","vit":false,"machine":false,"report":false,"cards":3}
+  PASS  [T8] [1280×720 TR] karne sonrası ikinci görev (S2) brifingi açılır  — screen=briefing
+  PASS  [T8] [1280×720 TR] brifingde "Görevlere dön" → seçime döner  — screen=select
+
+== oyun akışı 1920x1080 EN
+  PASS  [T8] [1920×1080 EN] açılış ekranı (intro), body.dev yok  — {"screen":"intro","dev":false}
+  PASS  [T8] [1920×1080 EN] geliştirici panelleri görünmez (#panel #mapwrap #hud #ctl)  — [["panel","none"],["mapwrap","none"],["hud","none"],["ctl","none"]]
+  PASS  [T8] [1920×1080 EN] intro: başlık, altyazı ve başlat düğmesi dolu  — {"title":"MARTIAN MAP","sub":"EVA REHEARSAL","btn":"SELECT MISSION"}
+  PASS  [T10] [1920×1080 EN] 1_intro: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 1_intro: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] "Görev seç" → görev seçimi ekranı  — screen=select
+  PASS  [T8] [1920×1080 EN] 3 görev kartı (S1,S2,S3)  — S1,S2,S3
+  PASS  [T10] [1920×1080 EN] 2_gorev_secimi: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 2_gorev_secimi: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] S1 → brifing  — screen=briefing
+  PASS  [T10] [1920×1080 EN] 3_brifing: boş anahtar/yer tutucu yok
+  PASS  [T11] [1920×1080 EN] 3_brifing: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] rota seçimi: 3 kart  — kart=3
+  FAIL  [T10] [1920×1080 EN] 4_rotalar: boş anahtar/yer tutucu yok  — EN modda Türkçe: "En kısa" | EN modda Türkçe: "En güvenli" | EN modda Türkçe: "EN GÜVENLI"
+  PASS  [T11] [1920×1080 EN] 4_rotalar: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] rota seçilince yürüyüş ekranı (walk) kendiliğinden açılır  — screen=walk
+  PASS  [T8] [1920×1080 EN] rotalar canlı API'den (çevrimdışı yedek rozeti yok)  — {"alt":"api,api,api","offline":false}
+  PASS  [T8] [1920×1080 EN] yürüyüş: durum=auto, rota uzunluğu > 0  — {"st":"auto","tot":610,"hud":true,"dist":"610 m","vit":true}
+  PASS  [T8] [1920×1080 EN] yürüyüş HUD: görev paneli + hedef mesafesi dolu + vitals HUD görünür  — {"st":"auto","tot":610,"hud":true,"dist":"610 m","vit":true}
+  FAIL  [T10] [1920×1080 EN] 5_yuruyus: boş anahtar/yer tutucu yok  — EN modda Türkçe: "Sol 4625 · Navcam · büyüt: G" | EN modda Türkçe: "Y: ayrıntı"
+  PASS  [T11] [1920×1080 EN] 5_yuruyus: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] kum olayı → rota yeniden planlanır  — {"hasSand":true,"fired":true,"replanned":true,"rep":true}
+  PASS  [T8] [1920×1080 EN] hedefte karne açılır  — screen=report
+  FAIL  [T10] [1920×1080 EN] 6_karne: boş anahtar/yer tutucu yok  — EN modda Türkçe: "One way, En güvenli route. Cost is measured on the real terr" | EN modda Türkçe: "Rotaların radyasyon farkı Radyasyon: RAD" | EN modda Türkçe:
+  PASS  [T11] [1920×1080 EN] 6_karne: taşma/örtüşme yok
+  PASS  [T8] [1920×1080 EN] karne: harf + 4 satırlık tablo + iki düğme ("Tekrar oyna", "Başka görev")  — {"grade":"C","rows":5,"btns":["Play again","Other mission"]}
+  PASS  [T8] [1920×1080 EN] karne: "Tekrar oyna"/"Başka görev" düğmeleri kaydırmadan görünür  — {"vh":1080,"bottoms":[945,945],"kartYuksek":847,"kaydirilabilir":false}
+
+== klavye
+  PASS  [T9] yürüyüş (auto) başladı
+  PASS  [T9] W: otomatik yürüyüşten devralır (durum=walk) ve ileri gider  — durum auto→walk, {"fwd":0.31,"right":0,"dist":0.31}
+  PASS  [T9] S: geri gider (ileri bileşen < 0)  — {"fwd":-0.2,"right":0,"dist":0.2}
+  PASS  [T9] D: sağa kayar (sağ bileşen > 0)  — {"fwd":0,"right":0.21,"dist":0.21}
+  PASS  [T9] A: sola kayar (sağ bileşen < 0)  — {"fwd":0,"right":-0.15,"dist":0.15}
+  PASS  [T9] Shift+W: koşar (ileri gider)  — {"fwd":0.7,"right":0,"dist":0.7}
+  PASS  [T9] R: rotaya dönülür (durum=auto)  — {"st":"auto","routeRun":true}
+  PASS  [T9] T: astronot görünürlüğü 3. şahıs ↔ 1. şahıs değişir  — önce=true, T sonrası=false, 2. T sonrası=true
+  PASS  [T9] H: vitals HUD gizlenir ve geri gelir  — önce=true, H=false, H=true
+  PASS  [T9] L: tarayıcı lejantı görünür (Dikkat + Geçilmez)  — {"hidden":false,"text":"═ Dikkat: kum ya da dik eğim ≡ Geçilmez · API scan_class (alan dışında eğim)"}
+  PASS  [T9] ?: yardım penceresi açılır ve tuşları listeler  — ["W A S D","Shift","Fare (tıkla)","R","L / Shift+L","T","[ ]","G","N","H","Esc","?"]
+  PASS  [T9] yardımda vaat edilen tuşlar listede  — eksik: 
+  PASS  [T9] M (normal oyun): harita açılmaz — tasarım gereği yalnız ?dev=1 (yardım listesinde M yok)  — önce=auto, sonra={"st":"auto","map":"none"}
+  PASS  [T9] M (?dev=1): 3B → haritaya döner  — {"st":"map","map":"block","gl":true}
+  PASS  [T10] texts.json ui: 180 anahtarın hepsinde dolu tr + en  — eksik: 
+  PASS  [T10] kodda t('...') ile çağrılan 130 anahtarın hepsi texts.json'da var  — eksik: 
+  PASS  [T10] görev zorluk etiketleri (diff.<zorluk>) tanımlı  — eksik: 
+  PASS  [T6] konsolda beklenmeyen hata yok (0 hata, 0 tanesi bilinen/hariç)
+
+┌──────┬────────────────────────────────────────────┬─────────┬───────┐
+│ ON   │ Ön koşul: API + sim sunucusu               │ PASS    │   4/4 │
+│ T1   │ S1/S2/S3 tam akış                          │ ATLANDI │   0/0 │
+│ T2   │ L taraması: lejant Dikkat + Geçilmez       │ ATLANDI │   0/0 │
+│ T3   │ Kum olayı radius_m+40 m                    │ ATLANDI │   0/0 │
+│ T4   │ 'mission:arrived' window olayı             │ ATLANDI │   0/0 │
+│ T5   │ HUD: Zemin (model) + Gale ortam (REMS)     │ ATLANDI │   0/0 │
+│ T6   │ Konsolda hata yok                          │ PASS    │   1/1 │
+│ T7   │ ?perf=1 probu                              │ ATLANDI │   0/0 │
+│ T8   │ Normal oyun girişi (dev yok): akış, karne, Tekrar oyna / Başka görev │ FAIL    │ 39/40 │
+│ T9   │ Gerçek klavye: WASD R L H T ? M            │ PASS    │ 14/14 │
+│ T10  │ TR/EN: boş anahtar / yer tutucu yok        │ FAIL    │ 16/19 │
+│ T11  │ Yerleşim 1280x720 + 1920x1080: taşma / örtüşme │ PASS    │ 14/14 │
+└──────┴────────────────────────────────────────────┴─────────┴───────┘
+GENEL: FAIL  (1549 sn)  → C:\Users\Batu\Desktop\martian-map-main\martian-map-main\docs\data\ekip\gorevli\tur2_deneme.json
+EXIT 1
