@@ -11,7 +11,7 @@ import { SYNTH } from './detail.js';
 
 const SEAT_LIFT = 0.12;      // kaya merkezi: çevre zeminin en alçağından, dikey yarıçapın bu oranı kadar yukarı (gömülü/havada kalmasın)
 const SAND_LIFT = 0.12;      // kum diski zeminden bu kadar (m) yukarıda: z-çakışması olmasın
-const OUTCROP_H = 0.13;      // outcrop (sırt yüzleği) yüksekliği ≈ çapın bu oranı: alçak, yayvan, zemine gömülü (veri: rocks.json kind)
+const OUTCROP_H = 0.13;      // TEMSİLİ sanatçı geometrisi: kaynaklı bir Mars ölçümü değil (Gale'de evrensel yükseklik/çap oranı bulunamadı; Point Lake ≈ 0,25, boxwork sırtı 1–2 m: docs/data/ekip/yuzlek_gorunum_arastirmasi.md). Yüzlek konumu HiRISE gölge TESPİTİdir, ölçüm değil.
 const RESEAT_MS = 1000;      // daha ince arazi döşemesi geldiyse en çok bu sıklıkta yeniden otur
 
 function hash(a, s) {   // 0..1, deterministik
