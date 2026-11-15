@@ -435,7 +435,7 @@ const groundRow = () => {
   const [c, r] = worldToPx(geo, P.x, P.z).map(Math.floor);
   if (!(c >= 0 && r >= 0 && c < GRID.w && r < GRID.h)) return '<div class="r"><span>Zemin (model)</span><b>ızgara dışı</b></div>';
   const i = r * GRID.w + c, f = (v) => v.toFixed(2);
-  return `<div class="r"><span title="Planlayıcı katmanları (2 m hücre). Model tahmini: Navcam durak çıkarımının uzaklığa göre yayılması; ölçüm değildir. Belirsizlik yüksekse tahmine güvenme.">Zemin (model)</span><b>eğim ${ground.slope[i].toFixed(0)}° · kum ${f(ground.p_sand[i])} · iri taş ${f(ground.p_bigrock[i])} · belirsizlik ${f(ground.entropy[i])}</b></div>`;
+  return `<div class="r"><span title="${(wire.texts.hud?.ground_model_hint ?? 'Planlayıcı katmanları (2 m hücre). Model tahmini: Navcam durak çıkarımının uzaklığa göre yayılması; ölçüm değildir. Belirsizlik yüksekse tahmine güvenme.').replace(/"/g, '&quot;')}">Zemin (model)</span><b>eğim ${ground.slope[i].toFixed(0)}° · kum ${f(ground.p_sand[i])} · iri taş ${f(ground.p_bigrock[i])} · belirsizlik ${f(ground.entropy[i])}</b></div>`;
 };
 
 wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: value => { paused = value; keys.clear(); }, replan: fireReplan, toast });
