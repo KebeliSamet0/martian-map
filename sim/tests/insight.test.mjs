@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { sampleField, footReading, segmentWhy, fogRGBA, loadTerrainField } from '../app/insight.js';
+import { sampleField, footReading, segmentWhy, fogRGBA, loadTerrainField, createWalkLog, walkSummaryText } from '../app/insight.js';
 import { summarize, pathPx } from '../app/compare.js';
 const texts = JSON.parse(await readFile(new URL('../data/texts.json', import.meta.url)));
 const T = texts.insight, C = texts.compare;
@@ -58,4 +58,27 @@ test('özet cümlesi: enerji kazancı varsa tam cümle, yoksa dürüst risk cüm
 
 test('pathPx tekrar eden uç noktaları atar', () => {
   assert.deepEqual(pathPx({ segments: [{ path_px: [[0, 0], [1, 1]] }, { path_px: [[1, 1], [2, 2]] }] }), [[0, 0], [1, 1], [2, 2]]);
+});
+
+test('yürüyüş günlüğü: yalnız katedilen aralık sayılır, sınıf ve güven metreyle ağırlıklanır', () => {
+  // dünya = px; rota x=0→2 (kum, güven .61), sonra x=2→... ızgara dışı sayılmaz
+  const dense = [[0, 0.5], [1, 0.5], [2, 0.5]], cum = [0, 1, 2], id = (w) => w;
+  const log = createWalkLog(field, { step: 0.25 });
+  log.advance(dense, cum, 0, 0.5, id); log.advance(dense, cum, 0.5, 1.5, id);   // iki tick = tek ardışık aralık
+  const s = log.summary();
+  assert.ok(Math.abs(s.total_m - 1.5) < 1e-9);
+  assert.ok(Math.abs(s.by_class_m.sand - 1) < 1e-9);
+  assert.ok(Math.abs(s.by_class_m.soil + s.by_class_m.bedrock - 0.5) < 1e-9);   // x∈[1,1.5): ikinci hücre, baskın sınıf toprak/ana kaya eşit → biri
+  assert.ok(s.low_conf_m > 0.49 && s.low_conf_m < 0.51);
+  assert.ok(s.mean_conf > 0.2 && s.mean_conf < 0.61);
+  log.advance(dense, cum, 1.5, 1.0, id);   // geri/aynı aralık sayılmaz
+  assert.ok(Math.abs(log.summary().total_m - 1.5) < 1e-9);
+  log.reset(); assert.equal(log.summary().total_m, 0);
+});
+
+test('karne metni: sınıf karışımı büyükten küçüğe, uydurma yok', () => {
+  assert.equal(walkSummaryText({ total_m: 2 }, T), null);
+  const r = walkSummaryText({ total_m: 100, by_class_m: { soil: 20, bedrock: 70, sand: 0, bigrock: 10 }, mean_conf: .55, low_conf_m: 30, low_conf_frac: .3 }, T);
+  assert.match(r.mix, /^ana kaya 70 % \(70 m\) · toprak 20 % \(20 m\) · büyük kaya 10 % \(10 m\)$/);
+  assert.match(r.conf, /%55.*%30|55 %.*30 %/);
 });

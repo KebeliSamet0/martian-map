@@ -606,7 +606,12 @@
     "fog_button": "Model güveni katmanı",
     "fog_hint": "Soluk alan = model emin değil (güven = 1 − normalize entropi). Model tahmini, ölçüm değil.",
     "seg_title": "Segment açıklamaları (model rotası)",
-    "hazard_button": "Yalnız eğim rotasının tehlikeli zemini (3B)"
+    "hazard_button": "Yalnız eğim rotasının tehlikeli zemini (3B)",
+    "walk_title": "Yürüdüğün zemin",
+    "walk_total": "Katettiğin {m} m boyunca model tahmini:",
+    "walk_class": "{cls} {pct} % ({m} m)",
+    "walk_conf": "Ortalama model güveni {conf} %; yolun {low} % kadarında ({lowm} m) model emin değildi.",
+    "walk_note": "Zemin sınıfı ve güven model tahminidir (AI4Mars tabanlı), ölçüm değil; metre rota ilerlemesinden gelir."
   },
   "compare": {
     "title": "Zemin modeli ne kazandırıyor?",

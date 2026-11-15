@@ -113,3 +113,48 @@ export async function createFootReader({ apiBase, texts, parent = document.body,
     destroy() { clearTimeout(flashT); el.remove(); },
   };
 }
+
+/**
+ * Gerçek yürüyüş günlüğü: oyuncunun rotada fiilen katettiği aralıklar (s0→s1, m) boyunca zemin sınıfı ve model güveni.
+ * Sınıf ve güven model TAHMİNİDİR; metre ise rota ilerlemesinden gelir (örnekleme ≈ hücre boyu).
+ *   const log = createWalkLog(field);  log.advance(dense, cum, s0, s1, toPx);  log.summary();
+ * dense: [[x,z]...] dünya, cum: kümülatif uzunluk (m), toPx: ([x,z]) → ızgara px.
+ */
+export function createWalkLog(field, { step = 2 } = {}) {
+  const byClass = Object.fromEntries(CLASSES.map((c) => [c, 0]));
+  let total = 0, outside = 0, confSum = 0, lowConf = 0, sandP = 0;
+  const addPoint = (px, len) => {
+    const s = sampleField(field, px);
+    if (!s) { outside += len; return; }
+    byClass[s.dominant] += len; total += len; confSum += s.conf * len; sandP += s.p.sand * len;
+    if (s.uncertain) lowConf += len;
+  };
+  return {
+    advance(dense, cum, s0, s1, toPx) {
+      if (!(s1 > s0) || !dense?.length) return;
+      for (let i = 1; i < dense.length; i++) {
+        const a = Math.max(s0, cum[i - 1]), b = Math.min(s1, cum[i]);
+        if (!(b > a)) continue;
+        const span = (cum[i] - cum[i - 1]) || 1, n = Math.max(1, Math.round((b - a) / step)), len = (b - a) / n;
+        for (let k = 0; k < n; k++) {
+          const u = ((a + (k + 0.5) * len) - cum[i - 1]) / span;
+          addPoint(toPx([dense[i - 1][0] + (dense[i][0] - dense[i - 1][0]) * u, dense[i - 1][1] + (dense[i][1] - dense[i - 1][1]) * u]), len);
+        }
+      }
+    },
+    summary() {
+      return { total_m: total, outside_m: outside, by_class_m: { ...byClass }, mean_conf: total ? confSum / total : null,
+        low_conf_m: lowConf, low_conf_frac: total ? lowConf / total : 0, mean_p_sand: total ? sandP / total : null };
+    },
+    reset() { CLASSES.forEach((c) => { byClass[c] = 0; }); total = outside = confSum = lowConf = sandP = 0; },
+  };
+}
+
+/** Günlük özetini karne satırlarına çevirir. t: texts.json "insight" nesnesi (walk_* anahtarları). */
+export function walkSummaryText(sum, t) {
+  if (!sum || sum.total_m < 5) return null;
+  const parts = CLASSES.map((c) => ({ c, m: sum.by_class_m[c], f: sum.by_class_m[c] / sum.total_m })).filter((x) => x.f >= 0.005).sort((a, b) => b.m - a.m);
+  const mix = parts.map((x) => fmt(t.walk_class, { cls: t[`class_${x.c}`] ?? x.c, pct: pct(x.f), m: Math.round(x.m) })).join(' · ');
+  return { mix, parts, conf: fmt(t.walk_conf, { conf: pct(sum.mean_conf), low: pct(sum.low_conf_frac), lowm: Math.round(sum.low_conf_m) }),
+    total: fmt(t.walk_total, { m: Math.round(sum.total_m) }) };
+}
