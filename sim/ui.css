@@ -312,16 +312,14 @@ body.mm-low-o2::before {
 .mm-hold[data-held="1"] { border-color: var(--mm-amber); }
 .mm-hold[data-held="1"] .mm-key { background: var(--mm-amber); color: #1a1205; }
 
-/* #103 B.9: ayak altı satırı yaşam destek + radyasyon şeridiyle tek sağ alt kümede, hizalı.
-   insight.js konumu satır içi veriyor (left:50%, bottom:46px), bu yüzden !important gerekiyor;
-   #103 "veri/bilim modüllerinin görünümünü gerekirse CSS ile değiştir" diyor.
-   Yığın aşağıdan yukarı: yaşam destek (16) → radyasyon (~230) → ayak altı (274). */
-@media (min-width: 1000px) {
-  .mm-foot {
-    left: auto !important; right: 18px !important; bottom: 274px !important;
-    transform: none !important; width: 214px !important; max-width: 214px !important;
-    border-radius: 0 !important; text-align: left; line-height: 1.35 !important;
-  }
+/* tur5:ux — ayak altı satırı (insight.js satır içi konum veriyor, bu yüzden !important).
+   Eski çözüm sağ alt kümeye alıyordu ama radyasyon şeridinin (yüksekliği HUD'a göre değişir) üstüne biniyordu.
+   Şimdi alt ortada: solda kask kamerası, sağda yaşam destek kümesi arasında kalan boşlukta, ipucu satırının üstünde. */
+.mm-foot {
+  left: 50% !important; right: auto !important; bottom: 48px !important; transform: translateX(-50%) !important;
+  width: max-content !important; max-width: clamp(260px, calc(100vw - 600px), 680px) !important;
+  text-align: center; line-height: 1.35 !important; overflow-wrap: anywhere;
+}
 @media (prefers-reduced-motion: reduce) { .mm-flow, .mm-modal, .mm-mcard, .mm-arrow, body.mm-event::after { transition: none; animation: none; } .mm-mcard { opacity: 1; transform: none; } }
 
 /* entegre yuvalar: rota ekranı küçük ekranda taşmasın, karşılaştırma sekmeleri konsol diline uysun */
@@ -354,3 +352,53 @@ body.mm-low-o2::before {
 .mm-mcard-sm .mm-mcard-facts { grid-area: facts; padding: 4px 0 0; grid-template-columns: repeat(2,1fr); }
 .mm-mcard-sm > button { grid-area: go; }
 @media (max-width: 900px) { .mm-select-main { overflow: auto; } .mm-select-map .mm-picker.mp-embed { min-height: 520px; } }
+
+/* tur5:ux — dizüstü/projektör düzeltmeleri */
+.mm-select-head { padding-right: 76px; gap: 12px; }
+.mm-select-head > * { min-width: 0; }
+.mm-committed .mm-stat { grid-template-columns: 1fr auto auto; }
+.mm-committed .mm-stat .mm-num, .mm-stat .mm-num { white-space: nowrap; }
+.mm-stat > span:first-child { overflow-wrap: anywhere; min-width: 0; }
+.mm-table .mm-why { white-space: normal; overflow-wrap: anywhere; }
+.mm-mcard-title, .mm-mcard-story, .mm-mhud-obj, .mm-alert-text, .mm-check-txt, .mm-hold-txt { overflow-wrap: anywhere; }
+.mm-tip { overflow-wrap: anywhere; }
+.mm-badge { white-space: normal; }
+.mm-card { overscroll-behavior: contain; }
+.mm-mhud { max-width: min(360px, calc(100vw - 36px - 330px)); }
+@media (max-height: 800px) {
+  .mm-select-head { top: 22px; }
+  .mm-select-main { top: 64px; bottom: 12px; gap: 8px; }
+  .mm-select-map .mm-picker.mp-embed { min-height: 0; }
+  .mm-picker.mp-embed .mm-picker-side { padding: 8px 12px; gap: 5px; font-size: 12.5px; }
+  .mm-picker.mp-embed .mm-picker-side h2 { font-size: 15px; }
+  .mm-picker.mp-embed .mp-fine { font-size: 11px; line-height: 1.3; }
+  .mm-quick { gap: 4px; }
+  .mm-mcard-sm { padding: 6px 12px; row-gap: 2px; }
+  .mm-mcard-sm .mm-mcard-top { flex-direction: row; align-items: baseline; }
+  .mm-mcard-sm .mm-mcard-id { font-size: 18px; }
+  .mm-mcard-sm .mm-mcard-facts { padding-top: 2px; }
+  .mm-card { padding: 12px 16px; }
+  .mm-card-wide { max-height: calc(100vh - 16px); }
+  .mm-modal { padding: 8px; }
+  .mm-route { padding: 8px 10px; gap: 6px; }
+  .mm-stat { padding: 1px 0; }
+  .mm-committed .mm-fine, .mm-route .mm-fine { font-size: 11px; margin-top: 3px; line-height: 1.35; }
+  .mm-checklist { top: 166px; padding: 6px 10px; }
+  .mm-hud { padding: 8px 10px 6px; }
+  .mm-pos-br .mm-g { margin-bottom: 3px; }
+  .mm-pos-br { bottom: 10px; }
+  .mm-hold { bottom: 96px; }
+}
+@media (max-width: 1100px) { .mm-foot { max-width: clamp(200px, calc(100vw - 560px), 680px) !important; } }
+@media (max-width: 760px) {
+  .mm-select-main { top: 70px; }
+  .mm-pos-br { width: min(214px, 52vw); }
+  .mm-foot { max-width: calc(100vw - 24px) !important; bottom: 232px !important; }
+  .mm-quick-row { grid-template-columns: 1fr; }
+  .mm-intro-title { letter-spacing: .03em; }
+  .mm-intro-sub { letter-spacing: .25em; }
+  .mm-intro-foot { right: 16px; }
+}
+/* tur5:ux — 900 px altı: harita sabit yükseklikte, hızlı başlangıç şeridi üstüne binmesin; ipucu satırı sarınca ayak altı satırı yukarı kalksın */
+@media (max-width: 900px) { .mm-select-map { flex: none; min-height: 520px; } .mm-quick { flex: none; } }
+@media (max-width: 1100px) and (min-width: 761px) { .mm-foot { bottom: 86px !important; } }
