@@ -624,6 +624,270 @@
       "tr": "Tekrar dene",
       "en": "Try again"
     },
+    "decision.title": {
+      "tr": "ROTA KARARI",
+      "en": "ROUTE DECISION"
+    },
+    "decision.reason.deviation": {
+      "tr": "ROTADAN SAPMA",
+      "en": "OFF ROUTE"
+    },
+    "decision.reason.reserve": {
+      "tr": "KAYNAK REZERVİ",
+      "en": "RESOURCE RESERVE"
+    },
+    "decision.reason.load": {
+      "tr": "YÜK DEĞİŞTİ",
+      "en": "LOAD CHANGED"
+    },
+    "decision.reason.observation": {
+      "tr": "YENİ GÖZLEM",
+      "en": "NEW OBSERVATION"
+    },
+    "decision.reason.sand": {
+      "tr": "KUM ALGILANDI",
+      "en": "SAND DETECTED"
+    },
+    "decision.body.deviation": {
+      "tr": "Planlanan rotadan uzaktasın. Planlayıcı bulunduğun yerden yeni bir rota hesapladı.",
+      "en": "You are off the planned route. The planner has worked out a new route from where you stand."
+    },
+    "decision.body.reserve": {
+      "tr": "Rezerv azalıyor. Planlayıcı kalan bütçeye göre daha güvenli bir rota öneriyor.",
+      "en": "Your reserve is running down. The planner suggests a safer route for the budget you have left."
+    },
+    "decision.body.load": {
+      "tr": "Numune yükü arttı. Kalan yolun maliyeti yeni yükle yeniden hesaplandı.",
+      "en": "The sample load went up. The cost of the rest of the walk was recomputed with it."
+    },
+    "decision.body.observation": {
+      "tr": "Yeni bir gözlem geldi. Planlayıcı bu bilgiyle rotayı güncelledi.",
+      "en": "A new observation came in. The planner updated the route with it."
+    },
+    "decision.body.sand": {
+      "tr": "Önündeki zemin planlanandan yumuşak. Planlayıcı kumu dolaşan bir rota hesapladı.",
+      "en": "The ground ahead is softer than planned. The planner worked out a route around the sand."
+    },
+    "decision.delta": {
+      "tr": "YENİ ROTANIN FARKI",
+      "en": "WHAT THE NEW ROUTE COSTS"
+    },
+    "decision.d.m": {
+      "tr": "Mesafe (m)",
+      "en": "Distance (m)"
+    },
+    "decision.d.kcal": {
+      "tr": "Enerji (kcal)",
+      "en": "Energy (kcal)"
+    },
+    "decision.d.o2": {
+      "tr": "Oksijen (L)",
+      "en": "Oxygen (L)"
+    },
+    "decision.d.risk": {
+      "tr": "Risk (puan)",
+      "en": "Risk (pts)"
+    },
+    "decision.nodata": {
+      "tr": "Fark sayıları planlayıcıdan gelmedi; karşılaştırma gösterilemiyor.",
+      "en": "The planner did not return the differences; no comparison to show."
+    },
+    "decision.accept": {
+      "tr": "Yeni rotayı kabul et",
+      "en": "Accept the new route"
+    },
+    "decision.keep": {
+      "tr": "Mevcut rotada devam et (risk)",
+      "en": "Stay on the current route (risk)"
+    },
+    "report.badges": {
+      "tr": "BAŞARIMLAR",
+      "en": "ACHIEVEMENTS"
+    },
+    "report.badges.new": {
+      "tr": "Bu görevde {n} yeni başarım.",
+      "en": "{n} new achievement(s) on this mission."
+    },
+    "intro.badges": {
+      "tr": "BAŞARIMLAR",
+      "en": "ACHIEVEMENTS"
+    },
+    "badge.scanner": {
+      "tr": "Tarayıcı",
+      "en": "Scanner"
+    },
+    "badge.scanner.how": {
+      "tr": "Bir görevde zemin tarayıcısını kullan (L).",
+      "en": "Use the terrain scanner (L) on a mission."
+    },
+    "badge.camera": {
+      "tr": "Kask kamerası",
+      "en": "Helmet camera"
+    },
+    "badge.camera.how": {
+      "tr": "Bir Curiosity durağını kask kamerasıyla incele (C).",
+      "en": "Study a Curiosity stop with the helmet camera (C)."
+    },
+    "badge.camera3": {
+      "tr": "Curiosity'nin izinde",
+      "en": "In Curiosity's tracks"
+    },
+    "badge.camera3.how": {
+      "tr": "Üç farklı Curiosity durağını kask kamerasıyla incele.",
+      "en": "Study three different Curiosity stops with the helmet camera."
+    },
+    "badge.layers": {
+      "tr": "Veri okuru",
+      "en": "Data reader"
+    },
+    "badge.layers.how": {
+      "tr": "Duraklat menüsünden veri katmanları panelini aç.",
+      "en": "Open the data-layers panel from the pause menu."
+    },
+    "badge.reserve": {
+      "tr": "Rezervle dönen",
+      "en": "Home with reserve"
+    },
+    "badge.reserve.how": {
+      "tr": "Numuneyi al ve dönüş payı tükenmeden üsse dön.",
+      "en": "Collect the sample and get back to base before the return margin runs out."
+    },
+    "badge.stars3": {
+      "tr": "Üç yıldız",
+      "en": "Three stars"
+    },
+    "badge.stars3.how": {
+      "tr": "Bir görevi üç yıldızla bitir.",
+      "en": "Finish a mission with three stars."
+    },
+    "badge.hard": {
+      "tr": "Zor mod",
+      "en": "Hard mode"
+    },
+    "badge.hard.how": {
+      "tr": "Zor modda bir görevi tamamla.",
+      "en": "Complete a mission on hard."
+    },
+    "briefing.difficulty": {
+      "tr": "ZORLUK",
+      "en": "DIFFICULTY"
+    },
+    "diff.normal": {
+      "tr": "Normal",
+      "en": "Normal"
+    },
+    "diff.hard": {
+      "tr": "Zor",
+      "en": "Hard"
+    },
+    "diff.normal.what": {
+      "tr": "Görev dosyasındaki bütçeyle oynarsın.",
+      "en": "You play with the budget from the mission file."
+    },
+    "diff.hard.what": {
+      "tr": "Oksijen bütçesi yarıya iner ve ilk tarama ancak 30 saniye sonra açılır.",
+      "en": "The oxygen budget is halved and the first scan only unlocks after 30 seconds."
+    },
+    "diff.source": {
+      "tr": "Zorluk bir senaryo ayarıdır, ölçüm değildir; planlayıcının sayıları değişmez, yalnız bütçe ve tarayıcı kısıtlanır.",
+      "en": "Difficulty is a scenario setting, not a measurement; the planner's numbers do not change, only the budget and the scanner are constrained."
+    },
+    "hard.scanlock": {
+      "tr": "Zor mod: tarayıcı {s} saniye sonra açılacak.",
+      "en": "Hard mode: the scanner unlocks in {s} s."
+    },
+    "check.title": {
+      "tr": "GÖREV LİSTESİ",
+      "en": "CHECKLIST"
+    },
+    "check.scan": {
+      "tr": "Tarayıcıyı kullan (L)",
+      "en": "Use the scanner (L)"
+    },
+    "check.camera": {
+      "tr": "Kask kamerasıyla bir durak incele (C)",
+      "en": "Study a stop with the helmet camera (C)"
+    },
+    "check.sample": {
+      "tr": "Numuneyi al (E)",
+      "en": "Collect the sample (E)"
+    },
+    "check.return": {
+      "tr": "Rezervle üsse dön",
+      "en": "Return to base with reserve"
+    },
+    "report.bonus": {
+      "tr": "Mini hedef bonusu: +1 yıldız",
+      "en": "Checklist bonus: +1 star"
+    },
+    "report.stars": {
+      "tr": "YILDIZ",
+      "en": "STARS"
+    },
+    "report.star.reserve.ok": {
+      "tr": "Rezervle döndün: O₂ bütçenin dörtte birinden fazlası ve yedek süre duruyordu.",
+      "en": "You came back with reserve: over a quarter of the oxygen budget and the spare time intact."
+    },
+    "report.star.reserve.no": {
+      "tr": "Rezerv ince kaldı: O₂ ya da dönüş payı sınıra yaklaştı.",
+      "en": "Thin reserve: oxygen or return margin came close to the limit."
+    },
+    "report.star.reserve.none": {
+      "tr": "Rezerv ölçülemedi (bütçe ya da tüketim verisi eksik).",
+      "en": "Reserve could not be measured (budget or consumption data missing)."
+    },
+    "report.star.hazard.ok": {
+      "tr": "Riskli zeminde az kaldın.",
+      "en": "Little time on risky ground."
+    },
+    "report.star.hazard.no": {
+      "tr": "Riskli zeminde çok yol yaptın.",
+      "en": "A lot of distance on risky ground."
+    },
+    "report.star.hazard.none": {
+      "tr": "Riskli zemin metresi bu koşuda ölçülmedi.",
+      "en": "Risky-ground distance was not measured on this run."
+    },
+    "report.star.decision.ok": {
+      "tr": "Karar kalitesi iyi: güvenli öneriyi reddetmedin.",
+      "en": "Good calls: you did not turn down a safer suggestion."
+    },
+    "report.star.decision.no": {
+      "tr": "Riski düşüren bir öneriyi reddettin.",
+      "en": "You turned down a suggestion that lowered risk."
+    },
+    "report.star.decision.none": {
+      "tr": "Bu görevde ölçülebilir rota kararı çıkmadı.",
+      "en": "No measurable route decision came up."
+    },
+    "report.best": {
+      "tr": "Kişisel en iyi: {stars} yıldız · {grade}",
+      "en": "Personal best: {stars} stars · {grade}"
+    },
+    "report.best.new": {
+      "tr": "Yeni kişisel en iyi!",
+      "en": "New personal best!"
+    },
+    "report.best.none": {
+      "tr": "Bu görevdeki ilk koşun.",
+      "en": "Your first run on this mission."
+    },
+    "report.decisions": {
+      "tr": "KARARLAR",
+      "en": "DECISIONS"
+    },
+    "report.decision.accept": {
+      "tr": "{reason}: yeni rota kabul edildi",
+      "en": "{reason}: new route accepted"
+    },
+    "report.decision.keep": {
+      "tr": "{reason}: mevcut rotada devam edildi",
+      "en": "{reason}: stayed on the current route"
+    },
+    "report.decision.none": {
+      "tr": "Bu görevde rota kararı çıkmadı.",
+      "en": "No route decisions came up on this mission."
+    },
     "sample.hold.title": {
       "tr": "NUMUNE AL",
       "en": "COLLECT SAMPLE"

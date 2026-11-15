@@ -4,7 +4,7 @@ import { createGridGeo } from './gridgeo.js';
 import { createVitals } from './vitals.js';
 import { createMission, loadMissions } from './mission.js';
 import { initHud } from './hud.js';
-import { showBriefing, showRoutePicker, showAlert, showReport, showHold } from './screens.js';
+import { showBriefing, showRoutePicker, showAlert, showReport, showHold, showDecision } from './screens.js';
 import { loadTexts, t, has, missionText } from './i18n.js';
 import { hudSnapshot, missionDefinition, walkPlan, uiTexts } from './wire-adapters.js';
 import { sandForRoute } from './custommission.js';   // batu:custom
@@ -31,11 +31,49 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const sandZones = await fetch(new URL('../data/sand_zones.json', import.meta.url)).then(r => (r.ok ? r.json() : [])).catch(() => []);   // batu:custom: özel görevde kum olayı yalnız gerçek aday yakınında
   let observations = [];
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false, hold = null;
+  let decisions = [], pendingDecision = null, dynHandlesSand = false;   // #125 A.2
   const sourceLabel = document.getElementById('vitals-source');
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
-  function clearRun() { generation++; running = false; hold?.cancel?.(); hold = null; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  function clearRun() { generation++; running = false; clearFeedback(); hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+
+  // #125 A.3: eşikler aşılınca görsel/işitsel geri bildirim. Eşikler bütçeden, değerler vitals'tan.
+  let lowO2 = false, lowReturn = false;
+  function feedback(s) {
+    const lim = limits.o2_L;
+    const left = lim > 0 && Number.isFinite(s?.o2UsedL) ? 1 - s.o2UsedL / lim : null;
+    const low = left != null && left < 0.30;
+    if (low !== lowO2) {
+      lowO2 = low;
+      document.body.classList.toggle('mm-low-o2', low);
+      if (low) audio?.alert?.('limit');
+    }
+    const margin = s?.returnMargin?.time_min, reserve = Number.isFinite(limits.reserve_min) ? limits.reserve_min : 30;
+    const tight = Number.isFinite(margin) && margin < reserve * 1.5;
+    if (tight !== lowReturn) { lowReturn = tight; hud?.el?.classList.toggle('mm-hud-alarm', tight); }
+  }
+  function clearFeedback() { lowO2 = false; lowReturn = false; document.body.classList.remove('mm-low-o2'); }
+
+  // #125 A.2: Batu'nun önerisi (#122 sözleşmesi) oyuncuya karar olarak sorulur, sonuç geri yollanır.
+  async function askDecision(detail = {}) {
+    const id = generation;
+    pause(true);
+    pendingDecision = showDecision(root, { reason: detail.reason ?? 'observation', delta: detail.delta, urgent: !!detail.urgent });
+    const accept = await pendingDecision;
+    pendingDecision = null;
+    if (id !== generation) return false;
+    decisions.push({ reason: detail.reason ?? 'observation', accept, urgent: !!detail.urgent, delta: detail.delta ?? null });
+    window.dispatchEvent(new CustomEvent('mm:route-decision', { detail: { accept, reason: detail.reason ?? 'observation' } }));
+    if (running) pause(false);
+    return accept;
+  }
+  addEventListener('mm:route-suggest', (e) => {
+    const d = e.detail ?? {};
+    if (d.reason === 'sand') dynHandlesSand = true;   // kum artık dynroute'ta: yerleşik akış devre dışı
+    if (!running || pendingDecision) return;
+    void askDecision(d);
+  });
   const missionTitle = m => missionText(m.id, 'title') || m.title;
   function briefingInfo(m) {
     const L = m.limits ?? {}, risks = [];
@@ -55,6 +93,11 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       flow.onScreen?.('briefing', m);
       const go = await showBriefing(root, briefingInfo(m));
       if (!go) { flow.onScreen?.('select'); flow.onBack?.(); return; }
+      // #125 B.7: zor modda O₂ bütçesi yarıya iner. Katalog bozulmaz, koşuya özel kopya.
+      if (go.hard && Number.isFinite(m.limits?.o2_L)) {
+        selected = { ...m, hard: true, limits: { ...m.limits, o2_L: m.limits.o2_L / 2 } };
+        map.mission = selected; map.setMission(selected, coords);
+      } else if (go.hard) selected = { ...m, hard: true };
       flow.onScreen?.('computing', m);
       await map.compute();
       if (!await pickRoute()) { flow.onScreen?.('select'); flow.onBack?.(); }
@@ -99,9 +142,12 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       void map.compute().then(() => { if (flow.autoWalk) return pickRoute(); toast(t('flow.return.prep')); });
     });
   }
-  let lastPosition;
+  let lastPosition, runStart = 0;
+  // #125 B.7: zor modda ilk tarama 30 sn kilitli. Kalan süreyi main.js sorar.
+  const SCAN_LOCK_MS = 30000;
+  function scanLocked() { return selected?.hard && runStart ? Math.max(0, SCAN_LOCK_MS - (performance.now() - runStart)) : 0; }
   function start(route, position) {
-    clearRun(); observations = []; running = true; const id = generation;
+    clearRun(); observations = []; running = true; runStart = performance.now(); const id = generation;
     planned = structuredClone(route?.raw?.total ?? route?.total ?? {}); limits = planned.budget?.limits ?? selected?.limits ?? {};
     vitals = createVitals({ assumptions, route, arrivalRadiusM: 10, api: available('/step') && route?.source === 'api' ? createStepAdapter({ call, coords, assumptions, observations: () => observations }) : undefined });
     if (route) {
@@ -111,14 +157,18 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       machine.on('event', async event => {
         pause(true);
         observations.push({ px: selected.sand.px, radius_m: event.radius_m, cls: 'sand' });
-        void showAlert(root, 'sand', { timeoutMs: 5000 });
-        try { await replan({ ...event, px: selected.sand.px }); }
-        finally { if (id === generation && running) { machine.resume(); pause(false); } }
+        try {
+          // #125 A.2: kum da bir karar anı. dynroute kumu devraldıysa (mm:route-suggest reason='sand') burası susar.
+          if (dynHandlesSand) return;
+          if (await askDecision({ reason: 'sand', urgent: true })) await replan({ ...event, px: selected.sand.px });
+        } finally { if (id === generation && running) { machine.resume(); pause(false); } }
       });
       machine.on('arrived', () => { void onArrived(id); });
     }
     vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? t('alerts.turn_back') : t('alerts.data_missing')); });
     vitals.on('limit', e => { if (id === generation && running) alertLimit(limitText(e.resource)); });
+    // #125 B.5: yalnız gerçekten izlenebilen mini hedefler listelenir
+    flow.setObjectives?.(selected && (selected.sample_kg ?? 0) > 0 ? ['scan', 'camera', 'sample', 'return'] : ['scan', 'camera']);
     hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) }, { position: 'br' });
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
@@ -134,6 +184,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     const ok = await hold; hold = null;
     if (!ok || id !== generation || !running) return;
     machine.collectSample();
+    flow.tickObjective?.('sample');
     audio?.alert?.('arrive');
     toast(t('sample.done', { kg }), true);
     const back = await returnToBase();
@@ -151,13 +202,17 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (id !== generation) return;
     sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Görev tamamlandı`;
     const actual = hudSnapshot(vitals.snapshot(), limits);
+    // #125 B.5: rezervle üsse dönüş de bir mini hedef
+    const snapNow = vitals.snapshot();
+    if (machine.snapshot().leg === 'return' && snapNow.returnPossible !== false) flow.tickObjective?.('return');
+    const objectives = flow.objectiveState?.() ?? {};
     flow.onScreen?.('report', selected);
-    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected });
+    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected, decisions: [...decisions], objectives });
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }
   }
-  return { coords, grid, call, available, texts, selectMission, pickRoute, catalog, missionTitle,
+  return { coords, grid, call, available, texts, selectMission, pickRoute, catalog, missionTitle, scanLocked,
     get vitals() { return vitals; }, get machine() { return machine; }, get selected() { return selected; },
     start, stop: clearRun,
     setRoute(route) { vitals?.setRoute(route); },
@@ -165,6 +220,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     update(dt, position) {
       if (!running || !vitals) return;
       vitals.update(dt, position, coords.worldToPx([position.x, position.z]));
+      feedback(vitals.snapshot());
       sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Efor: ${vitals.snapshot().metabolicW?.toFixed(0) ?? '—'} W`;
       lastPosition = [position.x, position.z]; machine?.update(position);
     },

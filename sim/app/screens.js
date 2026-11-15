@@ -3,6 +3,7 @@
 import { ensureUiCss, readSnapshot } from './hud.js';
 import { t, loadTexts, TEXTS } from './i18n.js';
 import { fillSlot } from './slots.js';
+import { missionScore, readBest, writeBest, readBadges, awardBadge, BADGES } from './score.js';
 
 export { t, loadTexts, TEXTS };
 loadTexts();
@@ -75,11 +76,32 @@ export function showBriefing(container, mission = {}) {
     cols.append(left, right);
     m.card.append(cols);
     if (mission.science) m.card.append(section(t('briefing.science')), el('p', 'mm-text mm-science', mission.science));
+
+    // #125 B.7: zorluk. Görev seçim ekranı Batu'da olduğu için seçim burada.
+    let hard = false;
+    const diffBox = el('div', 'mm-difficulty');
+    const normalBtn = button(t('diff.normal'), 'primary'), hardBtn = button(t('diff.hard'), 'ghost');
+    normalBtn.dataset.testid = 'diff-normal'; hardBtn.dataset.testid = 'diff-hard';
+    const setHard = (v) => {
+      hard = v;
+      normalBtn.className = `mm-btn mm-btn-${v ? 'ghost' : 'primary'}`;
+      hardBtn.className = `mm-btn mm-btn-${v ? 'primary' : 'ghost'}`;
+      normalBtn.setAttribute('aria-pressed', String(!v)); hardBtn.setAttribute('aria-pressed', String(v));
+      note.textContent = v ? t('diff.hard.what') : t('diff.normal.what');
+    };
+    const note = el('p', 'mm-fine');
+    normalBtn.onclick = () => setHard(false); hardBtn.onclick = () => setHard(true);
+    const row = el('div', 'mm-alert-acts');
+    row.append(normalBtn, hardBtn);
+    diffBox.append(section(t('briefing.difficulty')), row, note, el('p', 'mm-fine mm-diff-src', t('diff.source')));
+    setHard(false);
+    m.card.append(diffBox);
+
     const acts = el('div', 'mm-alert-acts mm-acts-end');
     const back = button(t('briefing.back'), 'ghost'), go = button(t('briefing.start'));
     back.onclick = () => { m.close(); resolve(false); };
     go.dataset.testid = 'briefing-start';
-    go.onclick = () => { m.close(); resolve(true); };
+    go.onclick = () => { m.close(); resolve({ hard }); };
     acts.append(back, go);
     m.card.append(acts);
     go.focus();
@@ -158,6 +180,57 @@ export function showAlert(container, kind, { what = '', timeoutMs = 0, actions =
   });
 }
 
+// --- Karar anı (#125 A.2): Batu'nun mm:route-suggest önerisi oyuncuya sorulur ---
+// Çözüm: true (yeni rotayı kabul et) | false (mevcut rotada devam et).
+// delta alanları yoksa satır hiç yazılmaz — sayı uydurulmaz.
+export function showDecision(container, { reason = 'observation', delta = {}, urgent = false, timeoutMs = 0 } = {}) {
+  ensureUiCss();
+  let close = () => {};
+  const p = new Promise((resolve) => {
+    container.querySelector('.mm-decision')?.remove();
+    const back = el('div', 'mm-ui mm-modal mm-overlay mm-decision');
+    back.style.cssText = 'position:fixed; inset:0; z-index:2200; pointer-events:auto; opacity:1';
+    const card = el('section', 'mm-card');
+    card.setAttribute('role', 'alertdialog');
+    card.dataset.testid = 'route-decision';
+    if (urgent) card.classList.add('mm-card-urgent');
+    card.append(
+      el('div', 'mm-kicker', t(`decision.reason.${reason}`)),
+      el('h2', 'mm-card-title', t('decision.title')),
+      el('p', 'mm-text', t(`decision.body.${reason}`)),
+    );
+    const rows = [['m', 'decision.d.m', 0], ['kcal', 'decision.d.kcal', 0], ['o2_L', 'decision.d.o2', 1], ['risk', 'decision.d.risk', 1]]
+      .filter(([k]) => Number.isFinite(delta?.[k]));
+    if (rows.length) {
+      const grid = el('div', 'mm-stats mm-stats-col');
+      for (const [k, key, d] of rows) {
+        const v = delta[k];
+        const s = stat(t(key), `${v > 0 ? '+' : ''}${n(v, d)}`, '');
+        s.dataset.level = v > 0 ? 'over' : v < 0 ? 'ok' : '';
+        grid.append(s);
+      }
+      card.append(section(t('decision.delta')), grid);
+    } else {
+      card.append(el('p', 'mm-fine', t('decision.nodata')));
+    }
+    let timer = 0;
+    const done = (v) => { clearTimeout(timer); back.remove(); document.body.classList.remove('mm-event'); resolve(v); };
+    close = () => done(false);
+    const acts = el('div', 'mm-alert-acts mm-acts-end');
+    const keep = button(t('decision.keep'), 'ghost'), take = button(t('decision.accept'));
+    keep.dataset.testid = 'decision-keep'; take.dataset.testid = 'decision-accept';
+    keep.onclick = () => done(false); take.onclick = () => done(true);
+    acts.append(keep, take);
+    card.append(acts);
+    back.append(card); container.append(back);
+    if (urgent) document.body.classList.add('mm-event');
+    take.focus();
+    if (timeoutMs > 0) timer = setTimeout(() => done(false), timeoutMs);
+  });
+  p.close = () => close();
+  return p;
+}
+
 // --- Basılı tut etkileşimi (#125 A.1): hedefte E ile numune alma ---
 // Dolunca true, dışarıdan iptal edilirse false döner. Bırakınca çubuk geri sayar.
 export function showHold(container, { title, hint, seconds = 6, code = 'KeyE', label = 'E' } = {}) {
@@ -224,7 +297,7 @@ export function showReport(container, opts = {}) {
 }
 export const reportOpen = () => !!activeReport;
 
-function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission } = {}) {
+function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission, decisions = [], objectives = {} } = {}) {
   return new Promise((resolve) => {
     const m = modal(container, title ?? t('report.title'), mission?.id);
     m.card.classList.add('mm-card-wide', 'mm-card-report');
@@ -260,6 +333,71 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
       tbl.append(tr);
     });
 
+    // #125 B.4: yıldız ve kişisel en iyi. Ölçütlerin hepsi gerçek tüketimden; verisi olmayan sayılmaz.
+    const sc = missionScore({
+      actual: { o2_L: actual.o2_L, return_margin_min: actual.return_margin_min },
+      limits: { o2_L: actual.o2_limit_L, reserve_min: actual.reserve_min },
+      decisions, hazardM: null, completed,
+      bonus: Object.values(objectives).filter(Boolean).length,
+    });
+    const stars = el('div', 'mm-stars');
+    stars.dataset.testid = 'debrief-stars';
+    stars.setAttribute('aria-label', `${t('report.stars')}: ${sc.stars}/3`);
+    for (let i = 1; i <= 3; i++) stars.append(el('span', `mm-star${i <= sc.stars ? ' mm-star-on' : ''}`, '★'));
+    const starWrap = el('div', 'mm-starwrap');
+    starWrap.append(el('div', 'mm-kicker', t('report.stars')), stars);
+    const why = el('ul', 'mm-risks mm-star-why');
+    for (const c of sc.criteria) {
+      const li = el('li', null, c.ok === null ? t(`report.star.${c.key}.none`) : t(`report.star.${c.key}.${c.ok ? 'ok' : 'no'}`));
+      li.dataset.level = c.ok === null ? '' : c.ok ? 'ok' : 'warn';
+      why.append(li);
+    }
+    if (sc.bonusUsed) { const b = el('li', null, t('report.bonus')); b.dataset.level = 'ok'; why.append(b); }
+    starWrap.append(why);
+    const prev = readBest(mission?.id);
+    const o2Left = Number.isFinite(actual.o2_limit_L) && Number.isFinite(actual.o2_L) ? actual.o2_limit_L - actual.o2_L : null;
+    const saved = completed ? writeBest(mission?.id, { stars: sc.stars, grade: g.grade, o2Left }) : null;
+    const isNew = saved && (!prev || saved.stars !== prev.stars || saved.o2Left !== prev.o2Left);
+    starWrap.append(el('p', 'mm-fine', !prev ? t('report.best.none')
+      : isNew ? t('report.best.new') : t('report.best', { stars: prev.stars, grade: prev.grade ?? '—' })));
+
+    // #125 B.6: başarımlar — hepsi bu koşuda gerçekten olan bir şeyden
+    const earned = [];
+    const award = (id, cond) => { if (cond && awardBadge(id)) earned.push(id); };
+    if (completed) {
+      award('scanner', !!objectives.scan);
+      award('camera', !!objectives.camera);
+      award('reserve', !!objectives.return);
+      award('stars3', sc.stars === 3);
+      award('hard', !!mission?.hard);
+    }
+    const have = readBadges();
+    const badges = el('div', 'mm-badges');
+    badges.append(section(t('report.badges')));
+    const brow = el('div', 'mm-badge-row');
+    for (const id of BADGES) {
+      const b = el('span', 'mm-badge', t(`badge.${id}`));
+      b.title = t(`badge.${id}.how`);
+      if (have[id]) b.dataset.on = '1';
+      if (earned.includes(id)) b.dataset.new = '1';
+      brow.append(b);
+    }
+    badges.append(brow);
+    if (earned.length) badges.append(el('p', 'mm-fine', t('report.badges.new', { n: earned.length })));
+
+    // #125 A.2: görev boyunca verilen rota kararları
+    const dec = el('div', 'mm-decisions');
+    dec.append(section(t('report.decisions')));
+    if (decisions.length) {
+      const ul = el('ul', 'mm-risks');
+      for (const d of decisions) {
+        const li = el('li', null, t(d.accept ? 'report.decision.accept' : 'report.decision.keep', { reason: t(`decision.reason.${d.reason}`) }));
+        li.dataset.level = d.accept ? 'ok' : 'warn';
+        ul.append(li);
+      }
+      dec.append(ul);
+    } else dec.append(el('p', 'mm-fine', t('report.decision.none')));
+
     // "Verinin etkisi": veri desk'inin yuvası. Boşsa bölüm hiç görünmez (uydurma içerik yok).
     const insight = el('div', 'mm-insight');
     insight.hidden = true;
@@ -274,7 +412,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     retry.onclick = () => { m.close(); resolve('retry'); };
     other.onclick = () => { m.close(); resolve('other'); };
     acts.append(retry, other);
-    m.card.append(head, tbl, insight, acts);
+    m.card.append(head, starWrap, tbl, dec, badges, insight, acts);
     other.focus();
   });
 }

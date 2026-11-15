@@ -118,13 +118,14 @@ export function initHud(container, vitals, { position = 'tl', hz = 5 } = {}) {
   head.append(title, status);
 
   const g = {
-    time: gauge(t('hud.time'), t('unit.hm')),
+    time: gauge(t('hud.time'), t('unit.hm')),   // #125 A.3: dönüş payı sıkışınca mm-g-return yanıp söner
     o2: gauge(t('hud.o2'), t('hud.o2.unit')),
     kcal: gauge(t('hud.energy'), 'kcal'),
     dose: gauge(t('hud.dose'), 'µGy'),
     load: gauge(t('hud.load'), 'kg'),
     ret: gauge(t('hud.return'), t('unit.min')),
   };
+  g.ret.row.classList.add('mm-g-return');
   root.append(head, ...Object.values(g).map((x) => x.row));
   if (src.fake) root.append(el('div', 'mm-note', 'Sahte veri'));
   container.append(root);
