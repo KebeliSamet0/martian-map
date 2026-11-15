@@ -36,7 +36,24 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
-  function clearRun() { generation++; running = false; hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  function clearRun() { generation++; running = false; clearFeedback(); hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+
+  // #125 A.3: eşikler aşılınca görsel/işitsel geri bildirim. Eşikler bütçeden, değerler vitals'tan.
+  let lowO2 = false, lowReturn = false;
+  function feedback(s) {
+    const lim = limits.o2_L;
+    const left = lim > 0 && Number.isFinite(s?.o2UsedL) ? 1 - s.o2UsedL / lim : null;
+    const low = left != null && left < 0.30;
+    if (low !== lowO2) {
+      lowO2 = low;
+      document.body.classList.toggle('mm-low-o2', low);
+      if (low) audio?.alert?.('limit');
+    }
+    const margin = s?.returnMargin?.time_min, reserve = Number.isFinite(limits.reserve_min) ? limits.reserve_min : 30;
+    const tight = Number.isFinite(margin) && margin < reserve * 1.5;
+    if (tight !== lowReturn) { lowReturn = tight; hud?.el?.classList.toggle('mm-hud-alarm', tight); }
+  }
+  function clearFeedback() { lowO2 = false; lowReturn = false; document.body.classList.remove('mm-low-o2'); }
 
   // #125 A.2: Batu'nun önerisi (#122 sözleşmesi) oyuncuya karar olarak sorulur, sonuç geri yollanır.
   async function askDecision(detail = {}) {
@@ -188,6 +205,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     update(dt, position) {
       if (!running || !vitals) return;
       vitals.update(dt, position, coords.worldToPx([position.x, position.z]));
+      feedback(vitals.snapshot());
       sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Efor: ${vitals.snapshot().metabolicW?.toFixed(0) ?? '—'} W`;
       lastPosition = [position.x, position.z]; machine?.update(position);
     },

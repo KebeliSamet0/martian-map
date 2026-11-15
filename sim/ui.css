@@ -220,6 +220,20 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #125 A.3: eşik geri bildirimi — O₂ %30 altında kırmızı vinyet, dönüş payı sıkışınca HUD satırı yanıp söner */
+body.mm-low-o2::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2040;
+  box-shadow: inset 0 0 170px rgba(255, 60, 48, .42); animation: mm-o2-pulse 2.6s ease-in-out infinite;
+}
+@keyframes mm-o2-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+.mm-hud-alarm .mm-g-return .mm-num { color: var(--mm-nogo); animation: mm-blink 1.1s steps(2, end) infinite; }
+.mm-hud-alarm .mm-g-return .mm-g-label { color: var(--mm-nogo); }
+@keyframes mm-blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) {
+  body.mm-low-o2::before { animation: none; opacity: .8; }
+  .mm-hud-alarm .mm-g-return .mm-num { animation: none; }
+}
+
 /* #125 A.2: karar anı kartı ve karnedeki karar listesi */
 .mm-card-urgent { border-top-color: var(--mm-nogo); }
 .mm-decisions .mm-risks li[data-level="ok"]::marker { color: var(--mm-go); }

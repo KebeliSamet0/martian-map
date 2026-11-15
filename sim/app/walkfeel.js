@@ -82,6 +82,7 @@ export function createWalkFeel({ scene, camera, terrain, geo, audio = null, apiB
     if (stumbleT > 0) return;
     stumbleT = STUMBLE_S; cooldown = STUMBLE_COOLDOWN_S; wf.stumbles++; stumbleSide = rng() < 0.5 ? -1 : 1;
     audio?.stumble?.();
+    window.dispatchEvent(new CustomEvent('mm:stumble', { detail: { strength } }));   // #125 A.3: kısa sarsıntı
     const y = hAt(lx ?? 0, lz ?? 0);
     if (y != null) dust.emit(16, lx, y, lz, TONE[wf.surface === 'sand' ? 'sand' : wf.surface === 'soil' ? 'soil' : 'rock'], 1.6, hx, hz);
     const now = performance.now() / 1000;

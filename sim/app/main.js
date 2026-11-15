@@ -340,6 +340,15 @@ async function fireReplan(S) {
   } catch (e) { toast(t('flow.replan.fail', { why: e.message }), true); }
 }
 
+// #125 A.3: tökezlemede kısa kamera sarsıntısı (walkfeel yayınlar)
+let shakeT = 0;
+addEventListener('mm:stumble', () => {
+  const c = $('gl'); if (!c || c.hidden) return;
+  clearTimeout(shakeT); c.classList.remove('mm-shake'); void c.offsetWidth;   // animasyonu yeniden tetikle
+  c.classList.add('mm-shake');
+  shakeT = setTimeout(() => c.classList.remove('mm-shake'), 320);
+});
+
 // #125 A.1: numune alındıktan sonra üsse dönüş ayağı — mevcut konumdan başlangıç noktasına yeni rota.
 // Planlayıcı yoksa yerel A* yedeği kullanılır ve bu açıkça etiketlenir (sayı uydurulmaz).
 async function startReturnLeg() {
