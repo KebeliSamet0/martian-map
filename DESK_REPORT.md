@@ -8,7 +8,7 @@
 5. Ek: oyuncunun hücresi planlayıcı için geçilemez köşeyse (422) başlangıç komşu hücreye kaydırılıp yeniden denenir (turda gerçekten görüldü).
 
 ## Test
-- `node --test sim/tests/`: 121 geçti, 0 kaldı (yeni: periyodik tetik mesafe/süre/debounce/sapma/NO-GO, budgetFor, kum kalan bütçe+base_px, çift UI olmaması, 422 yeniden deneme).
+- `node --test sim/tests/`: 122 geçti, 0 kaldı (yeni: periyodik tetik mesafe/süre/debounce/sapma/NO-GO, budgetFor, kum kalan bütçe+base_px, çift UI olmaması, 422 yeniden deneme).
 - `.venv/bin/python -m pytest -q`: 124 geçti.
 
 ## Başsız tur (qa-shared/tour_t5dyn.js; kareler qa-shared/out/)
