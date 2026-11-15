@@ -700,6 +700,58 @@
       "tr": "Mevcut rotada devam et (risk)",
       "en": "Stay on the current route (risk)"
     },
+    "report.stars": {
+      "tr": "YILDIZ",
+      "en": "STARS"
+    },
+    "report.star.reserve.ok": {
+      "tr": "Rezervle döndün: O₂ bütçenin dörtte birinden fazlası ve yedek süre duruyordu.",
+      "en": "You came back with reserve: over a quarter of the oxygen budget and the spare time intact."
+    },
+    "report.star.reserve.no": {
+      "tr": "Rezerv ince kaldı: O₂ ya da dönüş payı sınıra yaklaştı.",
+      "en": "Thin reserve: oxygen or return margin came close to the limit."
+    },
+    "report.star.reserve.none": {
+      "tr": "Rezerv ölçülemedi (bütçe ya da tüketim verisi eksik).",
+      "en": "Reserve could not be measured (budget or consumption data missing)."
+    },
+    "report.star.hazard.ok": {
+      "tr": "Riskli zeminde az kaldın.",
+      "en": "Little time on risky ground."
+    },
+    "report.star.hazard.no": {
+      "tr": "Riskli zeminde çok yol yaptın.",
+      "en": "A lot of distance on risky ground."
+    },
+    "report.star.hazard.none": {
+      "tr": "Riskli zemin metresi bu koşuda ölçülmedi.",
+      "en": "Risky-ground distance was not measured on this run."
+    },
+    "report.star.decision.ok": {
+      "tr": "Karar kalitesi iyi: güvenli öneriyi reddetmedin.",
+      "en": "Good calls: you did not turn down a safer suggestion."
+    },
+    "report.star.decision.no": {
+      "tr": "Riski düşüren bir öneriyi reddettin.",
+      "en": "You turned down a suggestion that lowered risk."
+    },
+    "report.star.decision.none": {
+      "tr": "Bu görevde ölçülebilir rota kararı çıkmadı.",
+      "en": "No measurable route decision came up."
+    },
+    "report.best": {
+      "tr": "Kişisel en iyi: {stars} yıldız · {grade}",
+      "en": "Personal best: {stars} stars · {grade}"
+    },
+    "report.best.new": {
+      "tr": "Yeni kişisel en iyi!",
+      "en": "New personal best!"
+    },
+    "report.best.none": {
+      "tr": "Bu görevdeki ilk koşun.",
+      "en": "Your first run on this mission."
+    },
     "report.decisions": {
       "tr": "KARARLAR",
       "en": "DECISIONS"

@@ -63,7 +63,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     const accept = await pendingDecision;
     pendingDecision = null;
     if (id !== generation) return false;
-    decisions.push({ reason: detail.reason ?? 'observation', accept, urgent: !!detail.urgent });
+    decisions.push({ reason: detail.reason ?? 'observation', accept, urgent: !!detail.urgent, delta: detail.delta ?? null });
     window.dispatchEvent(new CustomEvent('mm:route-decision', { detail: { accept, reason: detail.reason ?? 'observation' } }));
     if (running) pause(false);
     return accept;

@@ -220,6 +220,16 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #125 B.4: yıldız ve kişisel en iyi */
+.mm-starwrap { margin: 0 0 14px; }
+.mm-stars { display: flex; gap: 6px; font-size: 26px; line-height: 1; margin-bottom: 8px; }
+.mm-star { color: var(--mm-line); }
+.mm-star-on { color: var(--mm-amber); }
+.mm-star-why { margin: 0 0 6px; }
+.mm-star-why li[data-level="ok"]::marker { color: var(--mm-go); }
+.mm-star-why li[data-level="warn"]::marker { color: var(--mm-warn); }
+.mm-starwrap .mm-fine { margin-top: 2px; }
+
 /* #125 A.3: eşik geri bildirimi — O₂ %30 altında kırmızı vinyet, dönüş payı sıkışınca HUD satırı yanıp söner */
 body.mm-low-o2::before {
   content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2040;

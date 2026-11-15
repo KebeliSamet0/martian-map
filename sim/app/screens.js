@@ -3,6 +3,7 @@
 import { ensureUiCss, readSnapshot } from './hud.js';
 import { t, loadTexts, TEXTS } from './i18n.js';
 import { fillSlot } from './slots.js';
+import { missionScore, readBest, writeBest } from './score.js';
 
 export { t, loadTexts, TEXTS };
 loadTexts();
@@ -311,6 +312,32 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
       tbl.append(tr);
     });
 
+    // #125 B.4: yıldız ve kişisel en iyi. Ölçütlerin hepsi gerçek tüketimden; verisi olmayan sayılmaz.
+    const sc = missionScore({
+      actual: { o2_L: actual.o2_L, return_margin_min: actual.return_margin_min },
+      limits: { o2_L: actual.o2_limit_L, reserve_min: actual.reserve_min },
+      decisions, hazardM: null, completed,
+    });
+    const stars = el('div', 'mm-stars');
+    stars.dataset.testid = 'debrief-stars';
+    stars.setAttribute('aria-label', `${t('report.stars')}: ${sc.stars}/3`);
+    for (let i = 1; i <= 3; i++) stars.append(el('span', `mm-star${i <= sc.stars ? ' mm-star-on' : ''}`, '★'));
+    const starWrap = el('div', 'mm-starwrap');
+    starWrap.append(el('div', 'mm-kicker', t('report.stars')), stars);
+    const why = el('ul', 'mm-risks mm-star-why');
+    for (const c of sc.criteria) {
+      const li = el('li', null, c.ok === null ? t(`report.star.${c.key}.none`) : t(`report.star.${c.key}.${c.ok ? 'ok' : 'no'}`));
+      li.dataset.level = c.ok === null ? '' : c.ok ? 'ok' : 'warn';
+      why.append(li);
+    }
+    starWrap.append(why);
+    const prev = readBest(mission?.id);
+    const o2Left = Number.isFinite(actual.o2_limit_L) && Number.isFinite(actual.o2_L) ? actual.o2_limit_L - actual.o2_L : null;
+    const saved = completed ? writeBest(mission?.id, { stars: sc.stars, grade: g.grade, o2Left }) : null;
+    const isNew = saved && (!prev || saved.stars !== prev.stars || saved.o2Left !== prev.o2Left);
+    starWrap.append(el('p', 'mm-fine', !prev ? t('report.best.none')
+      : isNew ? t('report.best.new') : t('report.best', { stars: prev.stars, grade: prev.grade ?? '—' })));
+
     // #125 A.2: görev boyunca verilen rota kararları
     const dec = el('div', 'mm-decisions');
     dec.append(section(t('report.decisions')));
@@ -338,7 +365,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
     retry.onclick = () => { m.close(); resolve('retry'); };
     other.onclick = () => { m.close(); resolve('other'); };
     acts.append(retry, other);
-    m.card.append(head, tbl, dec, insight, acts);
+    m.card.append(head, starWrap, tbl, dec, insight, acts);
     other.focus();
   });
 }
