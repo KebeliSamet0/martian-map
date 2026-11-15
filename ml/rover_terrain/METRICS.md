@@ -62,3 +62,8 @@ min3 = üç uzmanın hemfikir olduğu pikseller (asıl ölçü); min1 = tek uzma
 - Büyük kaya: yanlış alarm (yukarıda). Ana kaya ↔ büyük kaya sınırı etiketçiler arasında da belirsiz.
 - **Yeni bölgede kum kaçıyor:** 18 durağın elle kontrolünde kum görülen 7 duraktan yalnız 2'sinde model kum payını ≥ 0,2 verdi (`LAYERS.md`).
 - Alan kayması: eğitim 2012–2019; 2025 boxwork bölgesi için uzman etiketi yok.
+
+## Güven (entropy) doğrulaması (2026-11-15)
+Piksel düzeyinde olasılıklar kalibre (test_min3 ECE 0,004). Ama **durak düzeyindeki entropy, elle kontrol edilen duraklarda tutan ve
+tutmayan tahmini ayırt etmiyor**: 18 durakta tutanların ort. entropy'si 0,21, tutmayanlarınki 0,18; kum kaçıran 5 durak kumu yakalayan
+2 duraktan daha emin (0,17 / 0,33). Ayrıntı: `SCAN_CHECK.md` son bölüm, betik `confidence_check.py`. Kum zayıflığının analizi: `SAND_ANALYSIS.md`.

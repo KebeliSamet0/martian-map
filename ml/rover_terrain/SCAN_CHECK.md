@@ -1,9 +1,23 @@
-# Tarayıcı kanıtı: 6 durak (2026-11-14)
+# Tarayıcı kanıtı: 6 durak (2026-11-15 düzeltildi)
 
-Issue #45. Kask tarayıcısının o duraktaki hücreye verdiği sınıf (API `scan_class`: güvenli / dikkat / geçilmez / bilinmiyor)
-ile o durağın Navcam karesinde gözle görülen zemin.
+Issue #45. Aynı 6 durak **iki ayrı soruyla** denetlendi. İkisinde de sonuç 3 tuttu / 1 kısmen / 2 tutmadı çıkıyor, ama
+ıskalanan duraklar farklı; bu bir çelişki değil, iki ayrı ölçü:
 
-## Sonuç tablosu (2026-11-14)
+| Soru | Bölüm | Ne ölçüyor | Kısmen | Tutmadı |
+|---|---|---|---|---|
+| **A. Tarayıcı** doğru mu? (sunumdaki "6 durakta 3 tuttu") | "Sonuç tablosu" | API `scan_class` ile Navcam'de görülen zemin | s118_d1608 | s120_d2366, s120_d3056 |
+| **B. Zemin modeli** doğru mu? | "Zemin modeli düzeyinde özet" | modelin baskın sınıfı/kum payı ile görülen zemin | s120_d2366 | s118_d1608, s120_d3056 |
+
+s120_d2366 şundan farklı çıkıyor: model kumu yakaladı (kum 0,37, B'de kısmen) ama tarayıcı eşiği 0,40 olduğu için "güvenli" dedi (A'da tutmadı).
+s118_d1608 ise tersi: tarayıcı güvenli dedi ve zemin kaya olduğu için kabul edildi (A'da kısmen), ama modelin büyük kaya yanlış alarmı
+ve kaçan kum yüzünden zemin modeli B'de tutmadı. Ortak ıskalama yalnız s120_d3056.
+Sunum metni A'ya dayanır (`docs/submission/PROJECT.md`). `LAYERS.md`'nin 18 durak tablosu durak ortalamasıyla puanlar
+(s118_d1608 "kısmen", s120_d2366 "tuttu"); bu belgenin B bölümü tek kareyle puanlar, o yüzden iki durakta farklı çıkar.
+
+**Doğrulama (2026-11-15):** A tablosundaki `scan_class` değerleri, `api.planner.params.classify_scan` ile `layers/*.npy`
+üzerinde yeniden hesaplandı; altı durağın altısı da aynı sınıfı veriyor (eğim, kum, entropy, rock_cfa tabloda yazan değerler).
+
+## A. Tarayıcı sınıfı (`scan_class`) ile Navcam (2026-11-14)
 | Durak | `scan_class` (neden) | Navcam'de görülen | Sonuç | Gerekçe |
 |---|---|---|---|---|
 | s118_d0726 | güvenli (eğim 6,5°, kum 0,00) | düz ana kaya, dağınık çakıl | **tuttu** | Düz, kayalık, kumsuz zemin; güvenli doğru. |
@@ -13,7 +27,7 @@ ile o durağın Navcam karesinde gözle görülen zemin.
 | s120_d2366 | güvenli (kum 0,37 < 0,40) | rover izinde kum + çakıl | **tutmadı** | Model kumu gördü (0,37) ama dikkat eşiğinin (0,40) hemen altında kaldı. |
 | s120_d3056 | güvenli (kum 0,21) | kaya plakaları arasında yoğun kum | **tutmadı** | Model kumu ana kaya sandı; tarayıcı kumlu yeri güvenli gösteriyor. |
 
-**Özet: 6 duraktan 3'ünde tuttu, 1'inde kısmen, 2'sinde tutmadı. Tutmayan ikisi de kumlu durak.**
+**Özet (A, tarayıcı): 6 duraktan 3'ünde tuttu, 1'inde kısmen (s118_d1608), 2'sinde tutmadı (s120_d2366, s120_d3056). Tutmayan ikisi de kumlu durak.**
 
 Notlar:
 - `scan_class` öncelik sırası: geçilmez → bilinmiyor → dikkat → güvenli (`api/planner/params.py`). Durak hücrelerinde
@@ -92,7 +106,7 @@ Model: 12 epoch, sınıf ağırlıklı (`METRICS.md`). Katmanlar: PR #80 (128 du
 - **Harita hücresi:** ana kaya.
 - **Sonuç:** Tuttu. Pürüzlü, açık tonlu yüzeyde belirsizlik geniş bir alanda orta düzeyde; "emin değilim" demesi yerinde.
 
-## Zemin modeli düzeyinde özet (görsellerdeki sınıf karşılaştırması)
+## B. Zemin modeli düzeyinde özet (görsellerdeki sınıf karşılaştırması, 2026-11-14)
 | Durak | Grup | Zemin sınıfı sonucu |
 |---|---|---|
 | s120_d2366 | kumlu | kısmen |
@@ -102,6 +116,8 @@ Model: 12 epoch, sınıf ağırlıklı (`METRICS.md`). Katmanlar: PR #80 (128 du
 | s118_d1608 | kararsız | **tutmadı** |
 | s120_d2690 | kararsız | tuttu |
 
+Özet (B, zemin modeli): 3 tuttu, 1 kısmen (s120_d2366), 2 tutmadı (s118_d1608, s120_d3056).
+
 **Model nerede yanılıyor:**
 1. **Kum, ana kaya ya da toprak sanılıyor.** Hem bu altı durakta hem 18 durağın elle kontrolünde (görülen 7 kumlu duraktan 2'si yakalandı; `LAYERS.md`).
 2. **Dokulu kaya çıkıntıları büyük kaya sanılıyor.** Bu, sınıf ağırlığının bedeli.
@@ -109,3 +125,20 @@ Model: 12 epoch, sınıf ağırlıklı (`METRICS.md`). Katmanlar: PR #80 (128 du
 Ana kayayı ise güvenilir biçimde tanıyor. Belirsizlik çoğunlukla gerçekten zor yerlerde yükseliyor. Tek istisna s120_d3056: orada model yanılırken de emin.
 
 **Harita notu:** Harita hücresi en yakın durağın değerini alıyor (Voronoi). Kırpmalardaki keskin çokgen sınırlar bu yöntemden geliyor, arazinin gerçek sınırları değil.
+
+## Güven (entropy) anlamlı mı? (2026-11-15)
+Soru: tutan tahminlerin entropy'si tutmayanlardan düşük mü? (`python ml/rover_terrain/confidence_check.py`)
+
+| Küme | Tutan (ort. entropy) | Tutmayan (ort. entropy) | P(tutmayanın entropy'si yüksek) |
+|---|---|---|---|
+| Bu 6 durak (B), tuttu vs kısmen+tutmadı | 0,24 (n=3) | 0,34 (n=3) | 0,67 |
+| 18 durak (`LAYERS.md`), tuttu vs kısmen+tutmadı | 0,21 (n=12) | 0,18 (n=6) | 0,40 |
+| 7 kumlu durak, kumu yakalayan vs kaçıran | 0,33 (n=2) | 0,17 (n=5) | 0,10 |
+
+**Sonuç: durak düzeyinde entropy, modelin nerede yanıldığını ayırt etmiyor.** 6 durakta yön beklenen yönde, ama n=3'e 3 ve 18 durakta
+yön tersine dönüyor (0,5 ayırt etmeme demek). Kum kaçıran duraklar kumu yakalayanlardan *daha emin* (0,17'ye 0,33): model kumu
+kaçırırken "emin değilim" demiyor; s120_d3056 bunun örneği (entropy 0,24). Ölçülü tek destek piksel düzeyinde: AI4Mars uzman test
+kümesinde ECE 0,004 (`METRICS.md`), yani piksel olasılıkları kalibre. Durak entropy'si ise bunun karelerdeki ortalaması ve hata ayıklamada işe yaramıyor.
+Haritada "model emin değil" (entropy ≥ 0,6) etiketi ise büyük ölçüde **kanıta uzaklığı** söylüyor: 128 durağın hiçbirinde entropy
+0,48'i geçmiyor, 0,6 üstü hücreler en yakın durağa 200 m'den uzak olduğu için eşit dağılıma kaymış hücreler (`LAYERS.md` yöntem 5).
+Sunumda "model güveni kalibre ve belirsizlik kanıtsız yerleri işaretliyor" denebilir; "güven yanlışları yakalıyor" denmemeli.
