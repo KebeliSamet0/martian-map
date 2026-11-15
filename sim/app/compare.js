@@ -23,7 +23,7 @@ export function summarize(c, t) {
   if (!c.same_path) {
     if (energyMeaningful && s.sand_m > 0) { key = 'sentence_full'; vars = { kcal: num(s.kcal), o2: num(s.o2_L, 1), sand: num(s.sand_m) }; }
     else if (riskPct >= 3 || hazard > 0) {
-      key = hazard > 0 ? 'sentence_risk' : 'sentence_risk_nohaz'; vars = { risk_pct: num(Math.max(0, riskPct)), hazard: num(hazard) };
+      key = hazard > 0 ? (c.naive_hazard_split_m?.sand > 0 ? 'sentence_risk_sand' : 'sentence_risk') : 'sentence_risk_nohaz'; vars = { risk_pct: num(Math.max(0, riskPct)), hazard: num(hazard) };
     } else key = 'sentence_other';
   }
   let sentence = fmt(t[key], vars);

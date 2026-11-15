@@ -121,6 +121,8 @@ def compare(L: Layers, start, goal, kind: str = "balanced", budget: dict | None 
         "saved": saved,
         "naive_hazard_m": round(float(sum(s["len_m"] for s in naive["segments"] if s["insight"]["hazard"])), 0),
         "model_hazard_m": round(float(sum(s["len_m"] for s in model["segments"] if s["insight"]["hazard"])), 0),
+        # kırılım: naif rotadaki tehlikeli metrenin kaçı kum (p_sand), kaçı kayalık (rock_cfa / büyük kaya). Kum iddiası yalnız sand_m > 0 ise yapılır.
+        "naive_hazard_split_m": {h: round(float(sum(s["len_m"] for s in naive["segments"] if s["insight"]["hazard"] == h)), 0) for h in ("sand", "rock")},
         "note": "Naif rota zemin sınıfını bilmeden planlanır, maliyeti gerçek katmanlarda ölçülür. Zemin katmanı model tahminidir (ölçüm değil).",
     }
     return out

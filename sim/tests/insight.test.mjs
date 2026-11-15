@@ -13,7 +13,7 @@ test('ayak altı: sınıf yüzdeleri, güven ve belirsiz etiketi', () => {
   const a = sampleField(field, [0.4, 0.9]);
   assert.equal(a.dominant, 'sand'); assert.equal(a.uncertain, false);
   const r = footReading(a, T);
-  assert.match(r.text, /^ZEMİN: kum 72 % · ana kaya 10 %/); assert.match(r.text, /model güveni 61 %/);
+  assert.match(r.text, /^ZEMİN: kum 72 % · ana kaya 10 %/); assert.match(r.text, /model kesinliği \(kalibre\) 61 %/);
   const b = footReading(sampleField(field, [1.5, 0]), T);
   assert.equal(b.uncertain, true); assert.match(b.text, /belirsiz$/);
   assert.equal(sampleField(field, [2, 0]), null); assert.equal(sampleField(field, [-1, 0]), null);
@@ -27,7 +27,7 @@ test('segment cümlesi: sınıf → katsayı → kcal; zayıf etkide sade biçim
   const seg = { id: 3, class: 'sand', rejected_alt: 'Dengeli rota burada ayrılıyor (60 m): daha yüksek risk.', insight: { p: { sand: 0.7 }, eta_mean: 1.4, extra_kcal: 38.2, confidence: 0.3 } };
   const s = segmentWhy(seg, T);
   assert.match(s, /^Segment 3: kum \(p=0\.7\) → zemin katsayısı ×1\.40 → \+38 kcal/);
-  assert.match(s, /model güveni düşük \(30 %\)/); assert.match(s, /alternatif: Dengeli rota/);
+  assert.match(s, /model kesinliği düşük \(30 %\): kanıt az/); assert.match(s, /alternatif: Dengeli rota/);
   const flat = segmentWhy({ id: 1, class: 'bedrock', insight: { p: { bedrock: 0.97 }, eta_mean: 1.01, extra_kcal: 0.1, confidence: 0.95 } }, T);
   assert.match(flat, /zemin etkisi küçük/);
   assert.equal(segmentWhy({ id: 2, reason: 'eski' }, T), 'eski');
@@ -51,7 +51,9 @@ test('özet cümlesi: enerji kazancı varsa tam cümle, yoksa dürüst risk cüm
   assert.equal(full.sentenceKey, 'sentence_full'); assert.match(full.sentence, /20 kcal ve 4,1 L O₂ kazandırdı, 120 m kumdan kaçındı/);
   const nm2 = { m: 560, kcal: 88, o2_L: 18.3, risk: 49, sand_m: 0 }, mm2 = { m: 570, kcal: 88, o2_L: 18.3, risk: 42, sand_m: 0 };
   const risk = summarize(mk(nm2, mm2, { kcal: 0, o2_L: 0, sand_m: 0, risk: 7 }, 71, 0), C);
-  assert.equal(risk.sentenceKey, 'sentence_risk'); assert.match(risk.sentence, /^Model enerjiden değil güvenlikten kazandırdı: 71 m kumlu\/kayalık zeminden kaçındı, risk % 14 düştü\./);
+  assert.equal(risk.sentenceKey, 'sentence_risk'); assert.match(risk.sentence, /^Model enerjiden değil güvenlikten kazandırdı: 71 m kayalık\/yüzlek zeminden kaçındı, risk % 14 düştü\./);
+  const sandy = summarize({ ...mk(nm2, mm2, { kcal: 0, o2_L: 0, sand_m: 0, risk: 7 }, 71, 0), naive_hazard_split_m: { sand: 30, rock: 41 } }, C);
+  assert.equal(sandy.sentenceKey, 'sentence_risk_sand'); assert.match(sandy.sentence, /kumlu\/kayalık/);
   assert.equal(summarize(mk(nm2, nm2, { kcal: 0, o2_L: 0, sand_m: 0, risk: 0 }, 0, 0, true), C).sentenceKey, 'sentence_same');
   assert.equal(full.rows.find((r) => r.label === C.row_kcal).good, true);
 });
