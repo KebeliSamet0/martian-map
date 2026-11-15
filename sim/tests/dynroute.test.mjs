@@ -108,3 +108,14 @@ test('gözlem: rotaya yakın kum gözlemi /replan (observations) ile; uzak gözl
   const rp = s.calls.find((x) => x.path === '/replan'); assert.ok(rp); assert.deepEqual(rp.body.observations, [{ px: [50, 5], radius_m: OBS_RADIUS_M, cls: 'sand' }]);
   assert.equal(s.proposals[0].reason, 'observation'); assert.equal(s.proposals[0].observation.cls, 'sand');
 });
+
+test('base_px: hedefe giden isteklerde üs gönderilir, hedef üssün kendisiyse gönderilmez (#52)', async () => {
+  const s = setup(); s.c.pos = [50, DEVIATION_M + 5]; await tick(s.dyn, 8);
+  const toGoal = s.calls.find((c) => c.body.goal.join() === '9,9');
+  assert.deepEqual(toGoal.body.base_px, [1, 1]);
+  const r = setup({ snap: { elapsedSec: 0, o2RemainingL: 100 }, limits: { time_min: 360, o2_L: 420 } }); await tick(r.dyn, 3);
+  const home = r.calls.find((c) => c.body.goal.join() === '1,1');
+  assert.ok(home); assert.equal(home.body.base_px, undefined);
+  const none = setup({ basePx: null }); none.c.pos = [50, DEVIATION_M + 5]; await tick(none.dyn, 8);
+  assert.ok(none.calls.every((c) => !('base_px' in c.body)));
+});

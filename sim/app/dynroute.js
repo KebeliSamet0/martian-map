@@ -53,7 +53,8 @@ const sum = (a, b) => ({ m: (a.m ?? 0) + (b.m ?? 0), kcal: (a.kcal ?? 0) + (b.kc
  *         propose(detail) → Promise<{accept}|null>, apply(route, reason), onNote?(text) }
  */
 export function createDynRoute(deps) {
-  const { call, ctx, propose, apply } = deps;
+  const { ctx, propose, apply } = deps;
+  const call = (path, body) => { const bp = ctx()?.basePx, g = body.goal; return deps.call(path, bp && g && !(g[0] === bp[0] && g[1] === bp[1]) ? { ...body, base_px: bp } : body); }; // tur4:mantik dönüş ayağı üsten (base_px)
   const st = { devT: 0, busy: false, cooldown: {}, reserveDone: false, lastTick: 0, noApiNoted: false, load0: null, loadSeen: null, obsSeen: new Set() };
   const budgetBody = (c) => { const r = remainingBudget(c.limits, c.snap); const b = {}; for (const k of ['time_min', 'o2_L', 'kcal', 'dose_uGy']) if (r[k] != null && r[k] > 0) b[k] = Math.round(r[k] * 100) / 100; return b; };
   const pick = (res, kind) => res?.routes?.find((x) => x.kind === kind) ?? res?.routes?.[0];
