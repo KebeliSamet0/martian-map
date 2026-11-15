@@ -9,6 +9,7 @@ import { loadTexts } from './screens.js';
 import { API_BASE, API_OFF, GRID, worldToPx, pxToWorld } from './api.js';
 import { sampleField, sharedField } from './insight.js';
 import { showCone, clearCone } from './helmetcam-3d.js';
+import { liveEnabled, runLive } from './livemodel.js';   // #127 B: ?live=1 ile kask kamerasında canlı model
 import './stopcard-dir.js';   // tur4:veri: G (Navcam durak) kartına yön; helmetcam'in hizalama koduna bağlanır
 import { loadManifest, nearestStop, stopAt, modelReading, aheadSimilar, cameraInsightDetail, imageCandidates, localFallback, certaintyOf, loadDirs, hasDir, cardinal, alignView } from './helmetcam-core.js';
 
@@ -153,11 +154,28 @@ function renderStop() {
   };
   img.src = c.url;
   if (c.mask) { mask.onload = () => { mask.hidden = false; const l = el.querySelector('.mm-hc-masklabel'); if (l) l.hidden = false; }; mask.onerror = () => { mask.hidden = true; }; mask.src = c.mask; }   // maske yoksa gizli
+  if (liveEnabled()) hookLive(o, c, img, mask, el);
   el.querySelector('.mm-hc-x').onclick = close;
   const ab = el.querySelector('.mm-hc-align'); if (ab) ab.onclick = enterAlign;
   drawCompass(el.querySelector('.mm-hc-compass'), S.dirs[c.name]);
   showDirCone(st, S.dirs[c.name]);
   el.hidden = false;
+}
+
+// #127 B (Emre): canlı çıkarım hazır maskenin yerine geçer; hata olursa hazır maske kalır. Kart değiştiyse sonuç atılır.
+function hookLive(o, c, img, mask, el) {
+  const label = el.querySelector('.mm-hc-masklabel');
+  const loaded = (im) => new Promise((res) => { if (im.complete && im.naturalWidth) res(true); else { im.addEventListener('load', () => res(true), { once: true }); im.addEventListener('error', () => res(false), { once: true }); } });
+  const say = (txt) => { if (label) { label.hidden = false; label.textContent = txt; } };
+  say('Model tarayıcıda yükleniyor…');
+  (async () => {
+    const okImg = await loaded(img); const okMask = c.mask ? await loaded(mask) : false;
+    if (!okImg) return;
+    const r = await runLive(img, okMask ? mask : null);
+    if (S.open !== o || o.cands[o.i] !== c) return;
+    mask.src = r.url; mask.hidden = false;
+    say(`Model şu an tarayıcında çalışıyor · ${Math.round(r.ms)} ms (${r.backend}, tek geçiş)` + (r.agree == null ? '' : ` · hazır maskeyle uyuşma %${Math.round(r.agree * 100)}`));
+  })().catch((e) => { console.warn('livemodel', e); if (S.open === o) say(`Canlı model çalışmadı (${e.message}); hazır maske gösteriliyor.`); });
 }
 
 function showNoPhoto(first, stop, closedId) {
