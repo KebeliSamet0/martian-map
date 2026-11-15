@@ -663,6 +663,118 @@
     "route.kind.safest": {
       "tr": "En güvenli",
       "en": "Safest"
+    },
+    "custom.badge": {
+      "tr": "Özel",
+      "en": "Custom"
+    },
+    "custom.card.title": {
+      "tr": "Kendi rotanı planla",
+      "en": "Plan your own route"
+    },
+    "custom.card.text": {
+      "tr": "Haritada başlangıç (A) ve hedef (B) seç; planlayıcı üç rota hesaplar, sonra yürüyerek prova edersin.",
+      "en": "Pick a start (A) and a goal (B) on the map; the planner computes three routes, then you rehearse the walk."
+    },
+    "custom.card.go": {
+      "tr": "Haritayı aç",
+      "en": "Open map"
+    },
+    "custom.err.api": {
+      "tr": "Planlayıcı API'si kapalı: özel rota hesaplanamaz.",
+      "en": "The planner API is off: a custom route cannot be computed."
+    },
+    "custom.title": {
+      "tr": "Kendi rotanı planla",
+      "en": "Plan your own route"
+    },
+    "custom.help": {
+      "tr": "Haritaya tıklayarak önce A, sonra B noktasını seç. Tekrar tıklarsan noktalar sırayla güncellenir.",
+      "en": "Click the map to set A, then B. Further clicks update the points in turn."
+    },
+    "custom.map.aria": {
+      "tr": "HiRISE ortofoto üzerinde başlangıç ve hedef seçimi",
+      "en": "Start and goal selection on the HiRISE orthophoto"
+    },
+    "custom.layer.impassable": {
+      "tr": "Geçilmez alan (eğim ≥ 25°)",
+      "en": "Impassable area (slope ≥ 25°)"
+    },
+    "custom.layer.rover": {
+      "tr": "Curiosity durakları (128)",
+      "en": "Curiosity stops (128)"
+    },
+    "custom.layer.science": {
+      "tr": "Bilim durakları (4)",
+      "en": "Science stops (4)"
+    },
+    "custom.layer.uncertainty": {
+      "tr": "Model belirsizliği",
+      "en": "Model uncertainty"
+    },
+    "custom.o2.limited": {
+      "tr": "Kısıtlı O₂ bütçesi (80 L)",
+      "en": "Limited O₂ budget (80 L)"
+    },
+    "custom.o2.hint": {
+      "tr": "Dönüş dahil oksijen ihtiyacı bütçeyi aşabilir; plan NO-GO görünebilir.",
+      "en": "The round-trip oxygen need may exceed the budget; the plan may show NO-GO."
+    },
+    "custom.compute": {
+      "tr": "Rotaları hesapla",
+      "en": "Compute routes"
+    },
+    "custom.share": {
+      "tr": "Bağlantıyı kopyala",
+      "en": "Copy link"
+    },
+    "custom.share.done": {
+      "tr": "Bağlantı kopyalandı",
+      "en": "Link copied"
+    },
+    "custom.back": {
+      "tr": "Geri",
+      "en": "Back"
+    },
+    "custom.eta": {
+      "tr": "Kuş uçuşu {m} m · tahmini süre ≈ {min} dk",
+      "en": "Straight line {m} m · estimated time ≈ {min} min"
+    },
+    "custom.eta.note": {
+      "tr": "Süre tahmini 0,67 m/s referans hızına dayanır (NASA APACHE, tek denek) ve planlayıcı rotası değildir.",
+      "en": "The time estimate uses a 0.67 m/s reference speed (NASA APACHE, single subject) and is not the planner route."
+    },
+    "custom.warn.steep": {
+      "tr": "Burası {slope}° eğimli (planlama eşiği 25°); en yakın geçilebilir nokta {m} m.",
+      "en": "This cell is {slope}° steep (planning threshold 25°); nearest passable point {m} m."
+    },
+    "custom.warn.steep.none": {
+      "tr": "Burası {slope}° eğimli (planlama eşiği 25°); yakında geçilebilir nokta bulunamadı.",
+      "en": "This cell is {slope}° steep (planning threshold 25°); no passable point nearby."
+    },
+    "custom.warn.short": {
+      "tr": "A ve B çok yakın: en az 15 m uzaklık gerekir.",
+      "en": "A and B are too close: at least 15 m apart."
+    },
+    "custom.stop.science": {
+      "tr": "Bilim durağı",
+      "en": "Science stop"
+    },
+    "custom.stop.rover": {
+      "tr": "Curiosity durağı",
+      "en": "Curiosity stop"
+    },
+    "mission.CUSTOM.title": {
+      "tr": "Özel görev",
+      "en": "Custom mission"
+    },
+    "mission.CUSTOM.brief": {
+      "tr": "Kendi seçtiğin iki nokta arasında yürüyeceksin. Rota planlayıcıdan gelir; kum uyarısı yalnız rota ortofotoda kum adayı işaretli bir alana yaklaşırsa çıkar.",
+      "en": "You will walk between two points you picked. The route comes from the planner; a sand alert appears only if the route nears an area flagged as a sand candidate in the orthophoto."
+    },
+    "mission.CUSTOM.objective": {
+      "tr": "B noktasına ulaş.",
+      "en": "Reach point B."
     }
   },
   "helmetcam": {

@@ -595,7 +595,7 @@ else if (!DEV || Q.get('intro') === '1') {   // tur4:akis: oyun akışı (açıl
   Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, autoWalk: true });
   const m0 = wire.catalog.missions.find((m) => m.start_px && m.goal_px);
   if (m0) { const a = wire.coords.cellToWorld(m0.start_px), b = wire.coords.cellToWorld(m0.goal_px); tourC = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; }
-  enterTour(); flow.showIntro();
+  enterTour(); if (!flow.openCustomFromUrl()) flow.showIntro();   // batu:custom: ?a=col,row&b=col,row
 }
 
 addEventListener('corridor:stop', () => audio?.alert('stop'));
