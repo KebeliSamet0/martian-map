@@ -21,20 +21,17 @@ if ! "$PYTHON" -c "import fastapi, uvicorn, numpy, scipy, skimage, PIL" >/dev/nu
   exit 1
 fi
 
+# Web (Vite) isteğe bağlı: ürün sim/ altındaki 3B simülatör. npm ya da web/node_modules yoksa web atlanır.
+WEB_ON=1
 if ! command -v npm >/dev/null 2>&1; then
-  echo "Hata: 'npm' komutu bulunamadı. Node.js (LTS) ve npm kurun." >&2
-  exit 1
+  echo "Uyarı: npm yok; web arayüzü atlanıyor (sim ve API çalışır)." >&2; WEB_ON=0
+elif [[ ! -d "$ROOT/web/node_modules" ]]; then
+  echo "Uyarı: web/node_modules yok; web arayüzü atlanıyor. İstersen: (cd web && npm install)" >&2; WEB_ON=0
 fi
 
-if [[ ! -d "$ROOT/web/node_modules" ]]; then
-  echo "Hata: web/node_modules bulunamadı." >&2
-  echo "Kurulum için: (cd web && npm install)" >&2
-  exit 1
-fi
-
-if [[ ! -d "$ROOT/sim/data/tiles" ]]; then
-  echo "Uyarı: sim/data/tiles bulunamadı (3D arazi karoları bu makinede üretilmemiş)." >&2
-  echo "       Sim sunucusu yine de başlatılıyor; karoları üretmek isterseniz: $PYTHON -I sim/tools/build_tiles.py" >&2
+if [[ ! -d "$ROOT/sim/data/tiles_fixed" && ! -d "$ROOT/sim/data/tiles" ]]; then
+  echo "Uyarı: sim/data/tiles_fixed (ve yedek tiles) bulunamadı (3D arazi karoları bu makinede üretilmemiş)." >&2
+  echo "       Sim sunucusu yine de başlatılıyor; karoları üretmek isterseniz: $PYTHON -I sim/tools/build_tiles.py --out sim/data/tiles_fixed --work <ayrı klasör> --dtm-dcol 30 --dtm-drow 33" >&2
 fi
 
 PIDS=()
@@ -53,8 +50,10 @@ trap cleanup INT TERM EXIT
 MARTIAN_LAYERS_DIR="$ROOT" "$PYTHON" -m uvicorn api.main:app --host 127.0.0.1 --port "$API_PORT" &
 PIDS+=("$!")
 
-(cd "$ROOT/web" && npm run dev -- --host 127.0.0.1 --port "$WEB_PORT") &
-PIDS+=("$!")
+if [[ "$WEB_ON" == 1 ]]; then
+  (cd "$ROOT/web" && npm run dev -- --host 127.0.0.1 --port "$WEB_PORT") &
+  PIDS+=("$!")
+fi
 
 "$PYTHON" "$ROOT/sim/tools/devserver.py" "$SIM_PORT" &
 PIDS+=("$!")

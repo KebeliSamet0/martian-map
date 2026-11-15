@@ -2,9 +2,11 @@
 // Izgara sözleşmesi contracts/grid.json: 1000×1000, 2 m, eqc R=3396190, px = [sütun, satır], hücre indeksi = floor, merkez = indeks + 0.5.
 // Bu sabitler contracts/grid.json'dan KOPYADIR (API /grid origin döndürmez); sözleşme değişirse burası güncellenmeli.
 export const GRID = { ox: 8142276.492786024, oy: -283815.075189438, res: 2.0, w: 1000, h: 1000, R: 3396190 };
+import './offline.js'; // tur4:deploy: API yanıt vermezse /route için önceden hesaplanmış yedek
 const D2R = Math.PI / 180;
 const Q = new URLSearchParams(location.search);
-export const API_BASE = (Q.get('api') ?? 'http://127.0.0.1:8000').replace(/\/$/, '');
+const LOCAL = !location.hostname || ['localhost', '127.0.0.1'].includes(location.hostname);
+export const API_BASE = (Q.get('api') ?? (LOCAL ? 'http://127.0.0.1:8000' : location.origin)).replace(/\/$/, '');   // tur4:deploy: yayında aynı origin
 export const API_OFF = Q.get('api') === 'off';
 
 /** ızgara px (sürekli: merkez = idx+0.5) → sim dünya [x,z] */

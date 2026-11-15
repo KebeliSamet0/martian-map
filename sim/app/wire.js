@@ -4,10 +4,11 @@ import { createGridGeo } from './gridgeo.js';
 import { createVitals } from './vitals.js';
 import { createMission, loadMissions } from './mission.js';
 import { initHud } from './hud.js';
-import { loadTexts, showBriefing, showRoutePicker, showAlert, showReport } from './screens.js';
+import { showBriefing, showRoutePicker, showAlert, showReport } from './screens.js';
+import { loadTexts, t, has, missionText } from './i18n.js';
 import { hudSnapshot, missionDefinition, walkPlan, uiTexts } from './wire-adapters.js';
 
-export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast }) {
+export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast, flow = {} }) {
   const root = document.getElementById('mission-ui'), buttons = document.getElementById('missions');
   const call = async (path, body) => {
     if (API_OFF) throw new Error('API kapalı');
@@ -33,32 +34,48 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
   function clearRun() { generation++; running = false; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  const missionTitle = m => missionText(m.id, 'title') || m.title;
+  function briefingInfo(m) {
+    const L = m.limits ?? {}, risks = [];
+    if (m.sand) risks.push(t('risk.sand', { r: Math.round(m.sand.radius_m) }));
+    if (L.o2_L != null && L.o2_L < 200) risks.push(t('risk.o2', { o2: L.o2_L }));
+    risks.push(t('risk.slope'));
+    if (L.dose_uGy != null) risks.push(t('risk.dose', { d: L.dose_uGy }));
+    if (m.sample_kg) risks.push(t('risk.sample', { kg: m.sample_kg }));
+    return { id: m.id, name: missionTitle(m), target: missionText(m.id, 'brief') || m.title, objective: missionText(m.id, 'objective'),
+      science: missionText(m.id, 'science'), limits: m.limits, risks };
+  }
   async function selectMission(m) {
     if (busy) return; busy = true;
     try {
       clearRun(); selected = m; map.mission = m; map.setMission(m, coords);
-      document.getElementById('mission-name').textContent = `${m.id} · ${texts.missions?.[m.id]?.title ?? m.title}`;
-      await showBriefing(root, { name: texts.missions?.[m.id]?.title ?? m.title,
-        target: [texts.missions?.[m.id]?.brief, texts.missions?.[m.id]?.objective].filter(Boolean).join(' ') || m.title, limits: m.limits });
+      document.getElementById('mission-name').textContent = `${m.id} · ${missionTitle(m)}`;
+      flow.onScreen?.('briefing', m);
+      const go = await showBriefing(root, briefingInfo(m));
+      if (!go) { flow.onScreen?.('select'); flow.onBack?.(); return; }
+      flow.onScreen?.('computing', m);
       await map.compute();
-      await pickRoute();
-    } catch (e) { toast(e.message); } finally { busy = false; }
+      if (!await pickRoute()) { flow.onScreen?.('select'); flow.onBack?.(); }
+    } catch (e) { toast(e.message); flow.onBack?.(); } finally { busy = false; }
   }
-  async function pickRoute() {
-    if (!map.alternatives?.length) return;
-    const options = map.alternatives.map(r => ({ ...r, label: r.raw?.label ?? r.label, total: { ...(r.raw?.total ?? r.total), status: r.source === 'api' ? r.total.status : 'DİKKAT' } }));
-    const choice = await showRoutePicker(root, options);
+  // Rota seçildi → true (oyun akışında yürüyüş kendiliğinden başlar); geri → false
+  async function pickRoute({ autoWalk = flow.autoWalk } = {}) {
+    if (!map.alternatives?.length) return false;
+    const options = map.alternatives.map(r => ({ ...r, label: r.raw?.label ?? r.label, total: { ...(r.raw?.total ?? r.total), status: r.source === 'api' ? r.total.status : t('route.caution') } }));
+    flow.onScreen?.('route', selected);
+    const choice = await showRoutePicker(root, options, { call, geo, mission: selected });
+    if (!choice) return false;
     map.select(map.alternatives[options.indexOf(choice)]);
+    if (autoWalk) enter3D('auto');
+    return true;
   }
   for (const m of catalog.missions.filter(m => m.start_px && m.goal_px)) {
-    const b = document.createElement('button'); b.textContent = `${m.id} · ${texts.missions?.[m.id]?.title ?? m.title}`;
+    const b = document.createElement('button'); b.textContent = `${m.id} · ${missionTitle(m)}`;
     b.dataset.mission = m.id; b.onclick = () => void selectMission(m); buttons.append(b);
   }
   document.getElementById('btn-routes').onclick = () => { if (!busy) void pickRoute(); };
-  // Uyarı bandında ham kaynak anahtarı ("o2_L") değil texts.json cümlesi görünsün.
-  const RESOURCE_TR = { time_min: 'Süre', kcal: 'Enerji', o2_L: 'Oksijen', dose_uGy: 'Doz' };
-  const limitText = r => (r === 'o2_L' ? texts.alerts?.limit_o2 : r === 'time_min' ? texts.alerts?.limit_time : null)
-    ?? `${RESOURCE_TR[r] ?? r} sınırına ulaşıldı. Üsse dönüşe başla.`;
+  // Uyarı bandında ham kaynak anahtarı ("o2_L") değil cümle görünsün (tr/en).
+  const limitText = r => t({ o2_L: 'alerts.limit_o2', time_min: 'alerts.limit_time', kcal: 'alerts.limit_kcal', dose_uGy: 'alerts.limit_dose' }[r] ?? 'alerts.limit_o2');
   function alertLimit(what) {
     const id = generation;
     void showAlert(root, 'limit', { what, timeoutMs: 8000 }).then(action => {
@@ -69,7 +86,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       if (!base || !pos) return;
       map.reset();
       for (const [name, p] of [['A', pos], ['B', base]]) { const [lng, lat] = geo.worldToLonlat(...p); map._set(name, { lng, lat }); }
-      void map.compute(); toast('Üsse dönüş rotası hazırlanıyor; rotayı seçip yürüyüşü başlat.');
+      void map.compute().then(() => { if (flow.autoWalk) return pickRoute(); toast(t('flow.return.prep')); });
     });
   }
   let lastPosition;
@@ -89,15 +106,15 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
       });
       machine.on('arrived', () => { void finish(id); });
     }
-    vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? texts.alerts?.turn_back : 'Kaynak verisi eksik veya limit yaklaşıyor.'); });
+    vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? t('alerts.turn_back') : t('alerts.data_missing')); });
     vitals.on('limit', e => { if (id === generation && running) alertLimit(limitText(e.resource)); });
-    hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) });
+    hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) }, { position: 'br' });
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
     machine?.update(position); lastPosition = [position.x, position.z];
   }
   async function finish(id) {
-    if (!running) return;
+    if (!running) return;   // tek giriş: varış olayı çift gelse de karne bir kez açılır
     running = false; pause(true); document.exitPointerLock?.();
     root.querySelectorAll('.mm-alert').forEach(e => e.remove());
     machine.collectSample(); await machine.finish();
@@ -105,17 +122,13 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (id !== generation) return;
     sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Görev tamamlandı`;
     const actual = hudSnapshot(vitals.snapshot(), limits);
-    const report = showReport(root, { planned: walkPlan(planned), actual });
-    // Eksik tüketim varsa ekranın varsayılan A derecesi gösterilmez.
-    if ([actual.kcal, actual.o2_L, actual.dose_uGy].some(v => v == null)) {
-      root.querySelector('.mm-grade-letter').textContent = '—';
-      root.querySelector('.mm-grade .mm-text').textContent = 'Kaynak verisi eksik · derece hesaplanamadı';
-    }
-    const action = await report;
+    flow.onScreen?.('report', selected);
+    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected });
     if (id !== generation) return;
-    if (action === 'retry') enter3D('auto'); else enterMap();
+    if (action === 'retry') enter3D('auto');
+    else { enterMap(); if (flow.onReport) flow.onReport(action); }
   }
-  return { coords, grid, call, available, texts, selectMission, pickRoute,
+  return { coords, grid, call, available, texts, selectMission, pickRoute, catalog, missionTitle,
     get vitals() { return vitals; }, get machine() { return machine; }, get selected() { return selected; },
     start, stop: clearRun,
     setRoute(route) { vitals?.setRoute(route); },

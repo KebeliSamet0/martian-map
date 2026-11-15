@@ -17,18 +17,26 @@ import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
 import { initAudio } from './audio.js';
+import { initFlow } from './wire-flow.js';   // tur4:akis
+import { t } from './i18n.js';   // tur4:akis
+import './insight-ui.js';   // tur4:veri
+import './helmetcam.js';   // tur4:veri
+import './bilim.js'; // tur4:bilim
+import { createWalkFeel } from './walkfeel.js';   // tur4:his
+import { pickTiles } from './tiles-base.js';   // tur4:dogrula
 
+const BASE = await pickTiles(new URLSearchParams(location.search).get('tiles'));   // tur4:dogrula: varsayılan tiles_fixed, yedek tiles, ?tiles= ile seçilir
 const Q = new URLSearchParams(location.search);
-// ?tiles=tiles_shifted: DEM kayması düzeltilmiş karolar (docs/sim/DEM_KAYMA.md); yalnız güvenli klasör adı kabul edilir.
-const BASE = `./data/${/^[A-Za-z0-9_-]+$/.test(Q.get('tiles') ?? '') ? Q.get('tiles') : 'tiles'}`;
 const quality = Q.get('q') || 'high';
-MICRO.value = Q.get('ground') === 'rich' && Q.get('micro') !== '0' ? 1 : 0;   // ?ground=rich: tas serpintisi + mikro rolyef
+const DEV = Q.get('dev') === '1';   // tur4:akis: geliştirici panelleri yalnız ?dev=1
+document.body.classList.toggle('dev', DEV);
+MICRO.value = Q.get('ground') !== 'plain' && quality !== 'low' && Q.get('micro') !== '0' ? 1 : 0; // tur4:gorsel (varsayılan zengin zemin; ?ground=plain eski)   // ?ground=rich: tas serpintisi + mikro rolyef
 const $ = (id) => document.getElementById(id);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const EYE = 1.75;   // skafandrlı astronot göz yüksekliği (varsayım)
 
 let toastTimer;
-function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 4200); }
+function toast(msg, force = false) { if (!DEV && !force) return; const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 4200); }
 
 const man = await (await fetch(`${BASE}/manifest.json`)).json();
 // Denetlenmiş gerçek parametreler (sim/data/params.json ← docs/data/real_params.json; bkz. tools/export_params.py). Yoksa varsayılanlara düşer ve etiketlenir.
@@ -46,7 +54,9 @@ const nav = await Nav.load(BASE, man, geo);
 nav.suitSpeed = SUIT_V;
 $('status').textContent = `HiRISE DTM ${man.W}×${man.H} @ ${man.res_p.toFixed(3)} m · ${(geo.sizeX / 1000).toFixed(1)}×${(geo.sizeZ / 1000).toFixed(1)} km · USGS/NASA`;
 
-let mapView, wire;
+let mapView, wire, flow = null;
+const flowHooks = {};   // tur4:akis: wire.js ← akış kancaları (dev'de boş)
+let tourC = null, tourDir = null;
 let paused = false;
 function onRouteChange(r) {
   $('btn-routes').disabled = !r; $('btn-walk').disabled = !r; $('btn-json').disabled = !r;
@@ -87,7 +97,7 @@ $('btn-map').onclick = () => enterMap();
 // ===================== 3B =====================
 let T = null;      // üç boyut durumu (ilk girişte kurulur)
 const P = { x: 0, y: 0, z: 0, yaw: 0, pitch: 0 };
-let state = 'map';  // map | auto | walk | fly
+let state = 'map';  // map | tour | auto | walk | fly
 const keys = new Set();
 let view = Q.get('view') === 'fps' ? 'fps' : 'tps';   // 3. şahıs (varsayılan) | fps; T tuşu değiştirir
 let aSpeed = 0, aLastX = null, aLastZ = null;
@@ -113,7 +123,7 @@ function scanUpdate(now) {
   if (T) T.line.mat.color.setScalar(1 + 0.9 * (e < e0 ? 1 : Math.max(0, 1 - (e - e0) / fade)));   // tarama sırasında planlanan rota parlar ('rotada kal' ipucu)
   if (e > e0 + fade) { scanner.t0 = -1; SCAN.value.w = 0; SCAN_E.value = 0; $('scanleg').hidden = true; if (T) T.line.mat.color.setScalar(1); }
 }
-let routeRun = null, lastLook = 0, hudHidden = false, bobOn = false;   // baş sallanması varsayılan KAPALI (görüntü kararlılığı)
+let routeRun = null, lastLook = 0, hudHidden = false, bobOn = Q.get('bob') !== '0';   // tur4:his: sakin baş sallanması varsayılan açık, ?bob=0 kapatır
 
 function initThree() {
   if (T) return T;
@@ -136,13 +146,15 @@ function initThree() {
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.35;
   scene.add(sun, sun.target);
   const terrain = new Terrain(scene, man, geo, { base: BASE, shadows: quality !== 'low', anisotropy: renderer.capabilities.getMaxAnisotropy(), splitFactor: quality === 'ultra' ? 1.0 : quality === 'low' ? 0.45 : 0.65, renderer });
-  const rocks = Q.get('ground') === 'rich' ? new RocksRich(scene, terrain, { shadows: quality !== 'low' }) : new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
+  const rocks = Q.get('ground') !== 'plain' ? new RocksRich(scene, terrain, { shadows: quality !== 'low', quality }) : // tur4:gorsel
+     new Rocks(scene, terrain, { shadows: quality !== 'low', max: quality === 'ultra' ? 4000 : 2200, radius: quality === 'ultra' ? 110 : 80 });
   rocks.userOff = pure || !$('rocks-on').checked;
   T = { renderer, scene, sky, camera, hemi, sun, terrain, rocks, sunEl: Number($('sun-el').value), sunAz: Number($('sun-az').value), shadowExtent: 0, shadowMap: smap,
     ratio: maxRatio, maxRatio, ft: 0, lastAdapt: 0, adaptive: !Q.get('fixedres'), budget: 1 / (Number(Q.get('fps')) || 60), cpuMax: 0 };
   const gY = (x, z) => groundY(x, z);
-  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 1.1 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
+  T.line = new RouteLine(scene, gY); T.oldLine = new RouteLine(scene, gY, { gray: true, opacity: 0.55, width: 0.7 }); T.beacon = new Beacon(scene, gY); T.hazard = new HazardDisc(scene, gY); T.warns = new WarnMarkers(scene, gY);
   T.astro = createAstronaut({ marsGravity: true, castShadow: quality !== 'low', receiveShadow: quality !== 'low' }); T.astro.group.visible = false; scene.add(T.astro.group);
+  T.wf = Q.get('wf') === 'off' ? null : createWalkFeel({ scene, camera, terrain, geo, audio, apiBase: API_BASE, apiOff: API_OFF, quality, toast, text: (k) => wire?.texts?.walk?.[k] }); T.wf?.load();   // tur4:his
   T.extrasReady = initExtras({ scene, terrain, geo, groundY: gY }).then(extras => { T.extras = extras; }).catch(e => toast(`Katman yüklenemedi: ${e.message}`));
   applySun();
   const ov = new Image(); ov.src = `${BASE}/${man.overview.file}`; T.overview = ov;
@@ -201,9 +213,18 @@ function enter3D(kind) {
   if (r) { T.line.set(r.dense, r.segments); T.beacon.set(...r.dense[r.dense.length - 1]); T.warns.set(r.dense, r.segments); } else { T.line.clear(); T.beacon.hide(); T.warns.clear(); }
   T.extras?.close(); wire?.start(r, P); wire?.setVisible(!hudHidden);
   const gy = groundY(P.x, P.z); P.y = (gy ?? 0) + EYE; T.snap = true;
+  flow?.showWalk(state);
   toast(state === 'auto' ? 'Rota yürüyüşü başladı. Fareyle etrafa bak, W/A/S/D ile rotadan çık (R: rotaya dön).' : 'Serbest yürüyüş: W/A/S/D, Shift koş, F uçuş, M harita.');
 }
+// Açılış/menü arka planı: Gale kraterinde yavaş kamera turu (oyuncu yok, rota yok)
+function enterTour() {
+  if (document.pointerLockElement) document.exitPointerLock();
+  initThree(); wire?.stop(); T.extras?.close(); paused = false; keys.clear(); routeRun = null;
+  state = 'tour'; $('mapwrap').hidden = true; $('gl').hidden = false; ['hud', 'ctl', 'mini', 'hint'].forEach((id) => { $(id).hidden = true; });
+  T.line.clear(); T.oldLine.clear(); T.beacon.hide(); T.warns.clear(); T.hazard.hide(); T.astro.group.visible = false;
+}
 function enterMap() {
+  if (!DEV) { enterTour(); return; }   // tur4:akis: oyunda Leaflet haritası yok
   if (document.pointerLockElement) document.exitPointerLock();
   T?.extras?.close(); wire?.stop(); paused = false; keys.clear();
   state = 'map'; $('mapwrap').hidden = false; $('gl').hidden = true; $('hud').hidden = true; $('ctl').hidden = true; $('mini').hidden = true; $('hint').hidden = true;
@@ -216,7 +237,7 @@ function enterMap() {
 addEventListener('keydown', (e) => {
   if (state === 'map' || paused || e.target.tagName === 'INPUT') return;
   keys.add(e.code);
-  if (e.code === 'KeyM') enterMap();
+  if (e.code === 'KeyM' && DEV) enterMap();
   if (e.code === 'KeyL') scanStart(e.shiftKey);
   if (e.code === 'KeyT') { view = view === 'tps' ? 'fps' : 'tps'; toast(view === 'tps' ? '3. şahıs görünüm (T: birinci şahıs)' : 'Birinci şahıs görünüm (T: 3. şahıs)'); }
   if (e.code === 'KeyF') { state = state === 'fly' ? 'walk' : 'fly'; toast(state === 'fly' ? 'Serbest uçuş (Space/C yukarı-aşağı)' : 'Yürüyüş'); }
@@ -233,7 +254,7 @@ addEventListener('keydown', (e) => {
 });
 addEventListener('keyup', (e) => keys.delete(e.code));
 addEventListener('blur', () => keys.clear());
-$('gl').addEventListener('click', () => { if (!document.pointerLockElement) $('gl').requestPointerLock?.(); });
+$('gl').addEventListener('click', () => { if (state !== 'tour' && !paused && !document.pointerLockElement) $('gl').requestPointerLock?.(); });
 let dragging = false;
 $('gl').addEventListener('pointerdown', () => { dragging = true; });
 addEventListener('pointerup', () => { dragging = false; });
@@ -252,15 +273,14 @@ function deviationCheck(now) {
   if (!routeRun || state === 'auto' || state === 'map') { if (offRoute) { offRoute = false; w.hidden = true; } return; }
   let best = Infinity; for (const p of routeRun.r.dense) { const d = Math.hypot(p[0] - P.x, p[1] - P.z); if (d < best) best = d; }
   if (!offRoute && best > 8) offRoute = true; else if (offRoute && best < 4) offRoute = false;
-  w.hidden = !offRoute; if (offRoute) w.textContent = `Rotadan saptın (${Math.round(best)} m) — R: rotaya dön`;
+  w.hidden = !offRoute; if (offRoute) w.textContent = t('alert.offroute', { d: Math.round(best) });
 }
 
 async function fireReplan(S) {
-  const R = routeRun; if (!R || R.r.source !== 'api') { toast('API yok: kum uyarısı gösterildi, yerel rotaya devam.'); return; }
+  const R = routeRun; if (!R || R.r.source !== 'api') { toast(t('flow.noapi'), true); return; }
   const oldGeneration = R;
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
   audio?.alert('sand');
-  toast('⚠ Kum tespit edildi (kırmızı bölge) — rota yeniden planlanıyor (POST /replan)…');
   try {
     const cur = worldToPx(geo, P.x, P.z).map(Math.floor).map((v) => clamp(v, 0, GRID.w - 1));
     const t0 = performance.now();
@@ -273,14 +293,33 @@ async function fireReplan(S) {
     T.oldLine.set(R.r.dense, R.r.segments); T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
     routeRun = { r: nr, cum, total: cum[cum.length - 1], s: 0, speed: SUIT_V, replanned: true, prev: { km: R.r.total.km, min: R.r.total.min } };
     wire?.setRoute(nr);
-    toast(`Yeni rota (${nr.computeMs} ms): ${nr.total.km} km · ${nr.total.min} dk · ${nr.total.status} — eski kalan ${oldLeft.toFixed(2)} km (gri). Kum bölgesi kaçınıldı.`);
-  } catch (e) { toast(`Yeniden planlama başarısız (${e.message}) — mevcut rotaya devam edilir.`); }
+    toast(t('flow.replan.toast', { ms: nr.computeMs, km: nr.total.km, min: nr.total.min, status: nr.total.status }), true);
+  } catch (e) { toast(t('flow.replan.fail', { why: e.message }), true); }
 }
 
 function stepPlayer(dt, t) {
   let moving = false;
+  if (state === 'tour') {
+    // Alçak, yavaş kamera süpürmesi: yükselen yamaca (Mount Sharp tarafı) bakar. Yüksek kamera gorsel'in yükseklik sisini kalınlaştırıp araziyi bulanıklaştırır.
+    const c = tourC ?? [geo.sizeX / 2, geo.sizeZ / 2];
+    if (tourDir == null) {
+      let best = -Infinity; tourDir = 0;
+      for (let k = 0; k < 24; k++) {
+        const ang = (k / 24) * Math.PI * 2; let sum = 0, cnt = 0;
+        for (const d of [250, 500, 900]) { const h = nav.heightAt(c[0] + Math.sin(ang) * d, c[1] - Math.cos(ang) * d); if (!Number.isNaN(h)) { sum += h; cnt++; } }
+        if (cnt === 3 && sum / 3 > best) { best = sum / 3; tourDir = ang; }
+      }
+    }
+    const yaw = tourDir + Math.sin(t * 0.07) * 0.45, drift = Math.sin(t * 0.035) * 70;
+    const x = c[0] - Math.sin(tourDir) * 40 + Math.sin(tourDir) * drift, z = c[1] + Math.cos(tourDir) * 40 - Math.cos(tourDir) * drift;
+    const gx = groundY(x, z) ?? groundY(c[0], c[1]) ?? 0, fx = x + Math.sin(yaw) * 420, fz = z - Math.cos(yaw) * 420, gf = groundY(fx, fz) ?? gx;
+    P.x = x; P.z = z; P.y = gx + 24 + Math.sin(t * 0.11) * 4; P.yaw = yaw;
+    T.camera.position.set(P.x, P.y, P.z); T.camera.lookAt(fx, Math.max(gf, gx + 6), fz); T.astro.group.visible = false;
+    return gx;
+  }
+  T.wf?.sense(P, dt, state !== 'fly');   // tur4:his
   if (state === 'auto' && routeRun) {
-    const R = routeRun; R.s = Math.min(R.total, R.s + R.speed * timeScale * dt);
+    const R = routeRun; R.s = Math.min(R.total, R.s + R.speed * timeScale * (T.wf?.speedMul ?? 1) * dt);   // tur4:his
     let i = 1; while (i < R.cum.length - 1 && R.cum[i] < R.s) i++;
     const u = (R.s - R.cum[i - 1]) / ((R.cum[i] - R.cum[i - 1]) || 1), a = R.r.dense[i - 1], b = R.r.dense[i];
     P.x = a[0] + (b[0] - a[0]) * u; P.z = a[1] + (b[1] - a[1]) * u;
@@ -298,7 +337,7 @@ function stepPlayer(dt, t) {
     const f = (keys.has('KeyW') ? 1 : 0) - (keys.has('KeyS') ? 1 : 0), r = (keys.has('KeyD') ? 1 : 0) - (keys.has('KeyA') ? 1 : 0);
     if (f || r) {
       const sl = state === 'fly' ? 0 : T.terrain.slopeDegAt(P.x, P.z) ?? 0;
-      sp *= state === 'fly' ? 1 : clamp(1 - sl / 48, 0.2, 1);
+      sp *= state === 'fly' ? 1 : T.wf ? T.wf.speedMul : clamp(1 - sl / 48, 0.2, 1);   // tur4:his
       const cp = state === 'fly' ? Math.cos(P.pitch) : 1;
       let vx = Math.sin(P.yaw) * f * cp + Math.cos(P.yaw) * r, vz = -Math.cos(P.yaw) * f * cp + Math.sin(P.yaw) * r;
       const n = Math.hypot(vx, vz) || 1; P.x += (vx / n) * sp * dt; P.z += (vz / n) * sp * dt;
@@ -308,6 +347,7 @@ function stepPlayer(dt, t) {
     if (state === 'fly') { if (keys.has('Space')) P.y += sp * dt; if (keys.has('KeyC')) P.y -= sp * dt; }
   }
   P.x = clamp(P.x, 1, geo.sizeX - 1); P.z = clamp(P.z, 1, geo.sizeZ - 1);
+  T.wf?.after(P, dt, state !== 'fly' && moving);   // tur4:his
   const gy = groundY(P.x, P.z);
   if (gy != null) {
     if (state === 'fly') P.y = Math.max(P.y, gy + 2);
@@ -331,9 +371,9 @@ function stepPlayer(dt, t) {
     T.camera.position.set(cx, cy, cz); T.camera.lookAt(tgt[0], tgt[1], tgt[2]);
   } else {
     aLastX = null;
-    const bob = bobOn && state !== 'fly' && moving ? Math.sin(t * 7.2) * 0.035 : 0;
-    T.camera.position.set(P.x, P.y + bob, P.z);
-    T.camera.rotation.set(P.pitch, -P.yaw, 0);
+    const wc = T.wf ? T.wf.cam(t, dt, bobOn && state !== 'fly', moving) : { dy: 0, pitch: 0, roll: 0 };   // tur4:his
+    T.camera.position.set(P.x, P.y + wc.dy, P.z);
+    T.camera.rotation.set(P.pitch + wc.pitch, -P.yaw, wc.roll);
   }
   return gy;
 }
@@ -355,8 +395,9 @@ function frame(now) {
   if (audio) {   // ses: gerçek yer değiştirmeden hız; efor eğim ve hızdan (görsel/işitsel sunum, tüketim modeli değil)
     const d = auX == null ? 0 : Math.hypot(P.x - auX, P.z - auZ); auX = P.x; auZ = P.z;
     const sp = d / Math.max(1e-3, dt), sl = state === 'fly' ? 0 : (T.terrain.slopeDegAt(P.x, P.z) ?? 0), mv = !paused && state !== 'fly' && sp > 0.05 && sp < 30;
-    audio.update(dt, { speed: sp, moving: mv, effort: mv ? clamp(0.3 + sl / 28, 0, 1) : 0.12, surface: sl > 18 ? 'bedrock' : 'soil' });
+    audio.update(dt, { speed: sp, moving: mv, effort: mv ? (T.wf ? T.wf.effort : clamp(0.3 + sl / 28, 0, 1)) : 0.12, surface: sl > 18 ? 'bedrock' : 'soil', externalSteps: !!T.wf });   // tur4:his
   }
+  T.wf?.update(dt, innerHeight * T.ratio); T.wf?.applyAstro(T.astro);   // tur4:his
   if (!paused) wire?.update(dt * timeScale, P);
   if (!paused) T.extras?.update(P);
   deviationCheck(now); scanUpdate(now / 1000);
@@ -385,6 +426,7 @@ function frame(now) {
 }
 
 function hud(gy, now) {
+  flow?.update(P, routeRun);   // tur4:akis
   if (hudHidden) return;
   const [lon, lat] = geo.worldToLonlat(P.x, P.z), sl = T.terrain.slopeDegAt(P.x, P.z);
   const s = T.terrain.stats;
@@ -447,7 +489,8 @@ const groundRow = () => {
   return `<div class="r"><span title="${(wire.texts.hud?.ground_model_hint ?? 'Planlayıcı katmanları (2 m hücre). Model tahmini: Navcam durak çıkarımının uzaklığa göre yayılması; ölçüm değildir. Belirsizlik yüksekse tahmine güvenme.').replace(/"/g, '&quot;')}">Zemin (model)</span></div><div class="tiny">eğim ${ground.slope[i].toFixed(0)}° · kum ${f(ground.p_sand[i])} · iri taş ${f(ground.p_bigrock[i])} · belirsizlik ${f(ground.entropy[i])}</div>`;
 };
 
-wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: value => { paused = value; keys.clear(); }, replan: fireReplan, toast });
+const pauseFn = (value) => { paused = value; keys.clear(); };
+wire = await initWire({ map: mapView, geo, manifest: man, enter3D, enterMap, pause: pauseFn, replan: fireReplan, toast, flow: flowHooks });
 
 void loadGroundLayers();
 ensureScanTex();
@@ -473,7 +516,7 @@ if (Q.get('perf')) { const s = document.createElement('script'); s.src = './tool
 // Test/otomasyon kancası
 window.__mm = {
   man, geo, nav, get mapView() { return mapView; }, get T() { return T; }, P,
-  enter3D, enterMap, get wire() { return wire; }, get routeRun() { return routeRun; },
+  enter3D, enterMap, enterTour, get flow() { return flow; }, get wire() { return wire; }, get routeRun() { return routeRun; },
   setTimeScale(value) { timeScale = clamp(value, 1, 2000); },
   teleport(x, z, yaw = 0, pitch = -0.1, st = 'walk', heightAbove) {
     if (!T) enter3D('walk');
@@ -481,10 +524,18 @@ window.__mm = {
     const gy = groundY(x, z); P.y = (gy ?? 0) + (heightAbove ?? EYE); T.snap = true;
   },
   setProgress(f) { if (routeRun) { routeRun.s = clamp(f, 0, 1) * routeRun.total; T.snap = true; } },
+  get wf() { return T?.wf; },   // tur4:his
   stats: () => ({ ...T.terrain.stats, fps, state, paused, scannerSource: scanner.source }),
   scan: (w) => { scanStart(!!w); },
   scanAt: (e) => { scanner.fix = e; },   // test: tarama zamanını sabitle
 };
 if (Q.get('mod') === '3d') enter3D('walk');
+else if (!DEV || Q.get('intro') === '1') {   // tur4:akis: oyun akışı (açılış → görev → brifing → rota → yürüyüş → karne)
+  flow = initFlow({ wire, root: document.body, getState: () => state, getPose: () => P, pause: pauseFn, enterMap, exitToTour: enterTour, audio, dev: DEV });
+  Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, autoWalk: true });
+  const m0 = wire.catalog.missions.find((m) => m.start_px && m.goal_px);
+  if (m0) { const a = wire.coords.cellToWorld(m0.start_px), b = wire.coords.cellToWorld(m0.goal_px); tourC = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; }
+  enterTour(); flow.showIntro();
+}
 
 addEventListener('corridor:stop', () => audio?.alert('stop'));

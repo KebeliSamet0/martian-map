@@ -7,8 +7,8 @@
     },
     "S2": {
       "title": "Kumlu kestirme",
-      "brief": "Son boxwork durağından Atacama sondaj alanına yaklaşık 0,4 km yürüyeceksin. En kısa yol kumlu bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir. Taramada kumu görürsen rota yeniden planlanacak.",
-      "objective": "Kumu dolaşarak Atacama sondaj alanına ulaş ve numune al."
+      "brief": "Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemden, Atacama sondaj durağının yaklaşık 56 m güneyindeki hedef noktasına yaklaşık 0,55 km yürüyeceksin. En kısa yol, ortofotoda kum adayı olarak işaretlenmiş bir alandan geçiyor; gevşek kum enerji ve süre bütçeni hızla tüketir. Zemin modeli bu kumu göremiyor, yani sürpriz olabilir; yola çıkarsa rota yeniden planlanır.",
+      "objective": "Kum adayını dolaşarak hedef noktaya, Atacama sondaj durağının güneyine ulaş ve numune al."
     },
     "S3": {
       "title": "Yarım O₂ tüpü",
@@ -53,5 +53,892 @@
     "actual": "Gerçekleşen",
     "retry": "Görevi tekrarla",
     "close": "Haritaya dön"
+  },
+  "ui": {
+    "intro.title": {
+      "tr": "MARTIAN MAP",
+      "en": "MARTIAN MAP"
+    },
+    "intro.subtitle": {
+      "tr": "EVA PROVASI",
+      "en": "EVA REHEARSAL"
+    },
+    "intro.tagline": {
+      "tr": "Gerçek Mars verisiyle bir yürüyüşü önce burada prova et: rotayı seç, oksijene ve doza bak, sürprize hazır ol.",
+      "en": "Rehearse a Mars walk on real data before you take it: pick your route, watch oxygen and dose, and be ready for surprises."
+    },
+    "intro.place": {
+      "tr": "GALE KRATERİ · MOUNT SHARP",
+      "en": "GALE CRATER · MOUNT SHARP"
+    },
+    "intro.start": {
+      "tr": "Görev seç",
+      "en": "Select mission"
+    },
+    "intro.free": {
+      "tr": "Serbest keşif",
+      "en": "Free explore"
+    },
+    "intro.sources": {
+      "tr": "VERİ: HiRISE DTM 1 m · HiRISE ortofoto · Curiosity Navcam · AI4Mars zemin modeli (tahmin) · NASA APACHE skafandr hızı",
+      "en": "DATA: HiRISE DTM 1 m · HiRISE orthophoto · Curiosity Navcam · AI4Mars terrain model (prediction) · NASA APACHE suit speed"
+    },
+    "intro.synthetic": {
+      "tr": "Taş ve regolit ayrıntısı sentetiktir; model çıktıları ölçüm değildir.",
+      "en": "Rock and regolith detail is synthetic; model outputs are not measurements."
+    },
+    "lang.switch": {
+      "tr": "EN",
+      "en": "TR"
+    },
+    "select.title": {
+      "tr": "GÖREV SEÇ",
+      "en": "SELECT MISSION"
+    },
+    "select.back": {
+      "tr": "Geri",
+      "en": "Back"
+    },
+    "select.difficulty": {
+      "tr": "ZORLUK",
+      "en": "DIFFICULTY"
+    },
+    "select.distance": {
+      "tr": "DÜZ HAT",
+      "en": "STRAIGHT LINE"
+    },
+    "select.time": {
+      "tr": "SÜRE LİMİTİ",
+      "en": "TIME LIMIT"
+    },
+    "select.o2": {
+      "tr": "OKSİJEN",
+      "en": "OXYGEN"
+    },
+    "select.go": {
+      "tr": "Brifinge geç",
+      "en": "Open briefing"
+    },
+    "select.loading": {
+      "tr": "Görevler yükleniyor…",
+      "en": "Loading missions…"
+    },
+    "diff.kolay": {
+      "tr": "KOLAY",
+      "en": "EASY"
+    },
+    "diff.orta": {
+      "tr": "ORTA",
+      "en": "MEDIUM"
+    },
+    "diff.zor": {
+      "tr": "ZOR",
+      "en": "HARD"
+    },
+    "unit.min": {
+      "tr": "dk",
+      "en": "min"
+    },
+    "unit.m": {
+      "tr": "m",
+      "en": "m"
+    },
+    "unit.km": {
+      "tr": "km",
+      "en": "km"
+    },
+    "mission.S1.title": {
+      "tr": "Boxwork'ten Atacama sondajına",
+      "en": "From the boxwork to the Atacama drill site"
+    },
+    "mission.S1.brief": {
+      "tr": "Curiosity'nin incelediği boxwork sırtlarından Atacama sondaj alanına yürüyeceksin. Bütçen rahat; rotanı seç ve numuneyi al.",
+      "en": "You'll walk from the boxwork ridges Curiosity studied to the Atacama drill site. The budget is comfortable — pick your route and collect the sample."
+    },
+    "mission.S1.objective": {
+      "tr": "Atacama sondaj alanına ulaş ve numune al.",
+      "en": "Reach the Atacama drill site and collect a sample."
+    },
+    "mission.S1.science": {
+      "tr": "Boxwork sırtları, yeraltı suyunun çatlaklarda bıraktığı minerallerin izini taşıyor. Numune, bu suyun geçmişini anlamaya yarar.",
+      "en": "The boxwork ridges carry traces of minerals left in fractures by groundwater. The sample helps reconstruct that water history."
+    },
+    "mission.S2.title": {
+      "tr": "Kumlu kestirme",
+      "en": "The sandy shortcut"
+    },
+    "mission.S2.brief": {
+      "tr": "Son boxwork durağının yaklaşık 100 m kuzeyindeki düzlemden, Atacama sondaj durağının yaklaşık 56 m güneyindeki hedef noktasına yürüyeceksin (~0,55 km). En kısa yol, ortofotoda kum adayı olarak işaretlenmiş bir alandan geçiyor; kum enerji ve süre bütçeni hızla tüketir. Zemin modeli bu kumu göremiyor, yani sürpriz olabilir.",
+      "en": "You'll walk about 0.55 km from the flat ground roughly 100 m north of the last boxwork stop to a target point roughly 56 m south of the Atacama drill stop. The shortest path crosses a spot flagged as a sand candidate in the orthophoto, and loose sand burns through your energy and time. The terrain model cannot see this sand, so it may come as a surprise."
+    },
+    "mission.S2.objective": {
+      "tr": "Kum adayını dolaşarak hedef noktaya, Atacama sondaj durağının güneyine ulaş ve numune al.",
+      "en": "Go around the sand candidate, reach the target point south of the Atacama drill stop and collect a sample."
+    },
+    "mission.S2.science": {
+      "tr": "Gevşek kum, rover ve astronot için en büyük kayma ve batma riskidir. Buradaki kum noktası ortofotodan çıkarılmış bir adaydır (kanıt: kesin değil). Zemin modeli bu bölgede kumu neredeyse hiç tahmin etmiyor (bu rotalarda p_kum en çok 0,14); rotayı bu yüzden kayalık/yüzlek zeminden uzak tutar, kumdan değil. Kumu tarayıcı ya da sürpriz olayı ortaya çıkarır.",
+      "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. The sand spot here is a candidate read from orthophotos (not confirmed). The terrain model almost never predicts sand in this area (p_sand at most 0.14 on these routes), so it steers the route away from rocky/outcrop ground, not from sand. The scanner or the surprise event reveals the sand."
+    },
+    "mission.S3.title": {
+      "tr": "Yarım O₂ tüpü",
+      "en": "Half an oxygen tank"
+    },
+    "mission.S3.brief": {
+      "tr": "Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedefe varmak garanti değil. Oksijeni izle; dönüş noktasını kaçırma.",
+      "en": "A faulty tank leaves you just 80 L of oxygen for this walk. Reaching the goal isn't guaranteed — watch the oxygen and don't miss your turn-back point."
+    },
+    "mission.S3.objective": {
+      "tr": "Oksijen yeterse Atacama'ya ulaş; yetmezse zamanında geri dön.",
+      "en": "Reach Atacama if the oxygen allows; otherwise turn back in time."
+    },
+    "mission.S3.science": {
+      "tr": "Gerçek EVA planlarında asıl sınır oksijen ve dönüş payıdır. Bu görev, \"gitmek mümkün mü\" değil \"dönmek mümkün mü\" sorusunu prova ettirir.",
+      "en": "In real EVA planning the binding limits are oxygen and the return margin. This mission rehearses \"can I get back?\", not just \"can I get there?\"."
+    },
+    "briefing.title": {
+      "tr": "GÖREV BRİFİNGİ",
+      "en": "MISSION BRIEFING"
+    },
+    "briefing.start": {
+      "tr": "Rotaları hesapla",
+      "en": "Compute routes"
+    },
+    "briefing.back": {
+      "tr": "Görevlere dön",
+      "en": "Back to missions"
+    },
+    "briefing.objective": {
+      "tr": "HEDEF",
+      "en": "OBJECTIVE"
+    },
+    "briefing.limits": {
+      "tr": "LİMİTLER",
+      "en": "LIMITS"
+    },
+    "briefing.risks": {
+      "tr": "RİSKLER",
+      "en": "RISKS"
+    },
+    "briefing.science": {
+      "tr": "BİLİMSEL NEDEN",
+      "en": "WHY IT MATTERS"
+    },
+    "limit.time": {
+      "tr": "Süre",
+      "en": "Time"
+    },
+    "limit.kcal": {
+      "tr": "Enerji",
+      "en": "Energy"
+    },
+    "limit.o2": {
+      "tr": "Oksijen",
+      "en": "Oxygen"
+    },
+    "limit.dose": {
+      "tr": "Doz",
+      "en": "Dose"
+    },
+    "limit.reserve": {
+      "tr": "Dönüş yedeği",
+      "en": "Return reserve"
+    },
+    "risk.sand": {
+      "tr": "Rota üzerinde yaklaşık {r} m yarıçaplı bir kum cebi çıkabilir; çıkarsa rota yeniden hesaplanır.",
+      "en": "A sand pocket about {r} m across may turn up on the route; if it does, the route is recomputed."
+    },
+    "risk.o2": {
+      "tr": "Oksijen sınırlı: toplam {o2} L.",
+      "en": "Oxygen is limited: {o2} L in total."
+    },
+    "risk.slope": {
+      "tr": "Eğim sınırı aşan segmentler rota kartında işaretlenir (GO / NO-GO).",
+      "en": "Segments over the slope limit are flagged on the route card (GO / NO-GO)."
+    },
+    "risk.dose": {
+      "tr": "Radyasyon dozu bir bütçe kalemidir ({d} µGy limit). Doz değeri modeldir, ölçüm değildir.",
+      "en": "Radiation dose is a budget item ({d} µGy limit). The dose value is modeled, not measured."
+    },
+    "risk.sample": {
+      "tr": "Numune yükü: {kg} kg. Varışta yük taşırken harcama artar.",
+      "en": "Sample load: {kg} kg. Once you collect it, the extra mass raises your energy use."
+    },
+    "route.title": {
+      "tr": "ROTA SEÇ",
+      "en": "SELECT ROUTE"
+    },
+    "route.pick": {
+      "tr": "Bu rotayı seç",
+      "en": "Select this route"
+    },
+    "route.distance": {
+      "tr": "Mesafe",
+      "en": "Distance"
+    },
+    "route.time": {
+      "tr": "Süre",
+      "en": "Time"
+    },
+    "route.energy": {
+      "tr": "Enerji",
+      "en": "Energy"
+    },
+    "route.o2rt": {
+      "tr": "Oksijen (gidiş-dönüş)",
+      "en": "Oxygen (round trip)"
+    },
+    "route.hint": {
+      "tr": "Oksijen değeri gidiş-dönüş içindir; karnedeki \"planlanan\" ise yalnız gidiş (tek yön) yürüyüşü karşılaştırır. Tüm değerler planlayıcı modelinin çıktısıdır.",
+      "en": "The oxygen value is for the round trip; the \"planned\" figure on the report compares the one-way walk only. All values are planner-model outputs."
+    },
+    "route.caution": {
+      "tr": "DİKKAT",
+      "en": "CAUTION"
+    },
+    "route.fallback": {
+      "tr": "Yedek yerel rota (API yok)",
+      "en": "Local fallback route (no API)"
+    },
+    "hud.mission": {
+      "tr": "GÖREV",
+      "en": "MISSION"
+    },
+    "hud.next": {
+      "tr": "SIRADAKİ HEDEF",
+      "en": "NEXT OBJECTIVE"
+    },
+    "hud.remaining": {
+      "tr": "KALAN",
+      "en": "REMAINING"
+    },
+    "hud.free": {
+      "tr": "Serbest keşif",
+      "en": "Free explore"
+    },
+    "hud.o2": {
+      "tr": "OKSİJEN",
+      "en": "OXYGEN"
+    },
+    "hud.o2.unit": {
+      "tr": "L kaldı",
+      "en": "L left"
+    },
+    "hud.energy": {
+      "tr": "ENERJİ",
+      "en": "ENERGY"
+    },
+    "hud.dose": {
+      "tr": "DOZ (MODEL)",
+      "en": "DOSE (MODEL)"
+    },
+    "hud.time": {
+      "tr": "SÜRE",
+      "en": "TIME"
+    },
+    "hud.return": {
+      "tr": "DÖNÜŞ PAYI",
+      "en": "RETURN MARGIN"
+    },
+    "hud.load": {
+      "tr": "YÜK",
+      "en": "LOAD"
+    },
+    "hud.telemetry": {
+      "tr": "YAŞAM DESTEK",
+      "en": "LIFE SUPPORT"
+    },
+    "hud.o2.over": {
+      "tr": "sınır aşıldı",
+      "en": "over limit"
+    },
+    "tip.walk": {
+      "tr": "W A S D yürü · Fare bak · L tara · Esc menü · ? yardım",
+      "en": "W A S D move · Mouse look · L scan · Esc menu · ? help"
+    },
+    "tip.auto": {
+      "tr": "Rota kendiliğinden yürünür; W A S D ile devral, R ile rotaya dön · L tara · Esc menü · ? yardım",
+      "en": "Walking the route for you · W A S D to take over, R to rejoin · L scan · Esc menu · ? help"
+    },
+    "help.title": {
+      "tr": "KONTROLLER",
+      "en": "CONTROLS"
+    },
+    "help.close": {
+      "tr": "Kapat",
+      "en": "Close"
+    },
+    "help.rows": {
+      "tr": "W A S D|Yürü|Shift|Koş|Fare (tıkla)|Etrafa bak|R|Rotaya dön|L / Shift+L|Zemin tarayıcı / geniş tarama|T|3. şahıs / 1. şahıs|[ ]|Gösterim hızı|G|Navcam fotoğrafını büyüt|N|Ses aç/kapa|H|HUD aç/kapa|Esc|Duraklat menüsü|?|Bu yardım",
+      "en": "W A S D|Move|Shift|Run|Mouse (click)|Look around|R|Return to route|L / Shift+L|Terrain scan / wide scan|T|Third / first person|[ ]|Playback speed|G|Enlarge Navcam photo|N|Sound on/off|H|HUD on/off|Esc|Pause menu|?|This help"
+    },
+    "alert.sand.title": {
+      "tr": "KUM ALGILANDI",
+      "en": "SAND DETECTED"
+    },
+    "alert.sand.body": {
+      "tr": "Önündeki zemin planlanandan yumuşak. Rota yeniden hesaplanıyor.",
+      "en": "The ground ahead is softer than planned. Recomputing the route."
+    },
+    "alert.sand.replan": {
+      "tr": "Yeniden planla",
+      "en": "Replan"
+    },
+    "alert.sand.continue": {
+      "tr": "Devam et",
+      "en": "Continue"
+    },
+    "alert.limit.title": {
+      "tr": "SINIR YAKLAŞIYOR",
+      "en": "LIMIT APPROACHING"
+    },
+    "alert.limit.return": {
+      "tr": "Geri dön",
+      "en": "Turn back"
+    },
+    "alert.limit.continue": {
+      "tr": "Devam et",
+      "en": "Continue"
+    },
+    "alert.replan.done": {
+      "tr": "Yeni rota hazır; kum bölgesi dolaşılıyor.",
+      "en": "New route ready; going around the sand."
+    },
+    "alert.offroute": {
+      "tr": "Rotadan saptın ({d} m) · R: rotaya dön",
+      "en": "Off route ({d} m) · R: return to route"
+    },
+    "alert.arrived": {
+      "tr": "Hedefe ulaşıldı",
+      "en": "Goal reached"
+    },
+    "pause.title": {
+      "tr": "DURAKLATILDI",
+      "en": "PAUSED"
+    },
+    "pause.resume": {
+      "tr": "Devam",
+      "en": "Resume"
+    },
+    "pause.info": {
+      "tr": "Görev bilgisi",
+      "en": "Mission info"
+    },
+    "pause.layers": {
+      "tr": "Veri katmanları",
+      "en": "Data layers"
+    },
+    "pause.sound": {
+      "tr": "Ses",
+      "en": "Sound"
+    },
+    "pause.sound.on": {
+      "tr": "Açık",
+      "en": "On"
+    },
+    "pause.sound.off": {
+      "tr": "Kapalı",
+      "en": "Off"
+    },
+    "pause.language": {
+      "tr": "Dil",
+      "en": "Language"
+    },
+    "pause.exit": {
+      "tr": "Görevden çık",
+      "en": "Exit mission"
+    },
+    "pause.layers.empty": {
+      "tr": "Veri katmanları paneli bu sürümde yüklü değil.",
+      "en": "The data-layers panel is not loaded in this build."
+    },
+    "pause.confirm": {
+      "tr": "Görevden çıkılsın mı? İlerleme kaybolur.",
+      "en": "Exit the mission? Progress will be lost."
+    },
+    "report.title": {
+      "tr": "GÖREV KARNESİ",
+      "en": "MISSION REPORT"
+    },
+    "report.planned": {
+      "tr": "Planlanan (tek yön)",
+      "en": "Planned (one way)"
+    },
+    "report.actual": {
+      "tr": "Gerçekleşen",
+      "en": "Actual"
+    },
+    "report.diff": {
+      "tr": "Fark",
+      "en": "Diff"
+    },
+    "report.grade": {
+      "tr": "Derece",
+      "en": "Grade"
+    },
+    "report.retry": {
+      "tr": "Tekrar oyna",
+      "en": "Play again"
+    },
+    "report.other": {
+      "tr": "Başka görev",
+      "en": "Other mission"
+    },
+    "report.close": {
+      "tr": "Başka görev",
+      "en": "Other mission"
+    },
+    "report.insight": {
+      "tr": "VERİNİN ETKİSİ",
+      "en": "WHAT THE DATA CHANGED"
+    },
+    "report.insight.none": {
+      "tr": "Bu bölüm veri modülü yüklenince dolar.",
+      "en": "This section fills in once the data module loads."
+    },
+    "report.row.time": {
+      "tr": "Süre (dk)",
+      "en": "Time (min)"
+    },
+    "report.row.kcal": {
+      "tr": "Enerji (kcal)",
+      "en": "Energy (kcal)"
+    },
+    "report.row.o2": {
+      "tr": "Oksijen, tek yön (L)",
+      "en": "Oxygen, one way (L)"
+    },
+    "report.row.dose": {
+      "tr": "Doz, model (µGy)",
+      "en": "Dose, model (µGy)"
+    },
+    "report.missing": {
+      "tr": "Kaynak verisi eksik · derece hesaplanamadı",
+      "en": "Source data missing · grade not computed"
+    },
+    "report.note.A": {
+      "tr": "Plana çok yakın: süre ve enerji sapması %10’un altında.",
+      "en": "Very close to plan: time and energy deviation under 10%."
+    },
+    "report.note.B": {
+      "tr": "Plandan küçük sapma (%10–25).",
+      "en": "Small deviation from plan (10–25%)."
+    },
+    "report.note.C": {
+      "tr": "Plandan belirgin sapma (%25’ten fazla); rota gözden geçirilmeli.",
+      "en": "Notable deviation (over 25%); the route needs a rethink."
+    },
+    "report.note.D": {
+      "tr": "Bir sınır aşıldı: oksijen, enerji, süre ya da doz.",
+      "en": "A limit was exceeded: oxygen, energy, time or dose."
+    },
+    "report.note.F": {
+      "tr": "Görev tamamlanmadı. Bütçe yetmiyorsa geri dönmek doğru karardır.",
+      "en": "Mission not completed. If the budget doesn't cover it, turning back is the right call."
+    },
+    "label.synthetic": {
+      "tr": "sentetik",
+      "en": "synthetic"
+    },
+    "label.model": {
+      "tr": "model tahmini",
+      "en": "model prediction"
+    },
+    "dev.hint": {
+      "tr": "Geliştirici paneli: ?dev=1",
+      "en": "Developer panels: ?dev=1"
+    },
+    "alerts.limit_o2": {
+      "tr": "Oksijen sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Oxygen limit reached. Start heading back to base."
+    },
+    "alerts.limit_time": {
+      "tr": "Süre sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Time limit reached. Start heading back to base."
+    },
+    "alerts.limit_kcal": {
+      "tr": "Enerji sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Energy limit reached. Start heading back to base."
+    },
+    "alerts.limit_dose": {
+      "tr": "Doz sınırına ulaşıldı. Üsse dönüşe başla.",
+      "en": "Dose limit reached. Start heading back to base."
+    },
+    "alerts.turn_back": {
+      "tr": "Dönüş payı tükeniyor. Geri dönme zamanı.",
+      "en": "Return margin is running out. Time to turn back."
+    },
+    "alerts.data_missing": {
+      "tr": "Kaynak verisi eksik veya limit yaklaşıyor.",
+      "en": "Source data missing or a limit is near."
+    },
+    "flow.return.prep": {
+      "tr": "Üsse dönüş rotası hazırlanıyor; rotayı seçip yürüyüşü başlat.",
+      "en": "Preparing the return route; pick it and start walking."
+    },
+    "flow.noapi": {
+      "tr": "API yok: kum uyarısı gösterildi, yerel rotaya devam.",
+      "en": "No API: sand warning shown, continuing on the local route."
+    },
+    "flow.replan.toast": {
+      "tr": "Yeni rota ({ms} ms): {km} km · {min} dk · {status} — kum bölgesi kaçınıldı.",
+      "en": "New route ({ms} ms): {km} km · {min} min · {status} — sand area avoided."
+    },
+    "flow.replan.fail": {
+      "tr": "Yeniden planlama başarısız ({why}) — mevcut rota sürüyor.",
+      "en": "Replanning failed ({why}) — continuing on the current route."
+    }
+  },
+  "helmetcam": {
+      "hint": {
+          "tr": "C · kask kamerası: Curiosity burada sol {sol}'de durdu",
+          "en": "C · helmet camera: Curiosity stopped here on sol {sol}"
+      },
+      "title": {
+          "tr": "Kask kamerası",
+          "en": "Helmet camera"
+      },
+      "source_img": {
+          "tr": "Gerçek görüntü: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}",
+          "en": "Real image: NASA/JPL-Caltech, Curiosity Navcam, sol {sol}"
+      },
+      "source_model": {
+          "tr": "Model: AI4Mars ile eğitilmiş DeepLabv3+ (tahmin)",
+          "en": "Model: DeepLabv3+ trained on AI4Mars (prediction)"
+      },
+      "comment": {
+          "tr": "Önünde {list}; {sand}.",
+          "en": "Ahead of you: {list}; {sand}."
+      },
+      "part": {
+          "tr": "%{pct} {cls}",
+          "en": "{pct}% {cls}"
+      },
+      "class_bedrock": {
+          "tr": "ana kaya",
+          "en": "bedrock"
+      },
+      "class_soil": {
+          "tr": "toprak",
+          "en": "soil"
+      },
+      "class_sand": {
+          "tr": "kum",
+          "en": "sand"
+      },
+      "class_bigrock": {
+          "tr": "büyük kaya",
+          "en": "big rock"
+      },
+      "class_none": {
+          "tr": "belirgin bir sınıf yok",
+          "en": "no dominant class"
+      },
+      "sand_none": {
+          "tr": "kum yok denecek kadar az",
+          "en": "almost no sand"
+      },
+      "sand_some": {
+          "tr": "kum %{pct}",
+          "en": "sand {pct}%"
+      },
+      "certain_high": {
+          "tr": "Model bu durakta emin.",
+          "en": "The model is confident at this stop."
+      },
+      "certain_low": {
+          "tr": "Model emin değil; kanıt az.",
+          "en": "The model is not sure; there is little evidence."
+      },
+      "certainty_line": {
+          "tr": "Model kesinliği %{c} (1 − entropi). Düşük kesinlik 'kanıt az' demektir, 'yanlış' değil.",
+          "en": "Model certainty {c}% (1 − entropy). Low certainty means little evidence, not 'wrong'."
+      },
+      "warn": {
+          "tr": "Uyarı: bu durakta {what}; ileride benzer zemin olabilir.",
+          "en": "Warning: at this stop {what}; similar ground may lie ahead."
+      },
+      "warn_part": {
+          "tr": "{cls} %{pct}",
+          "en": "{cls} {pct}%"
+      },
+      "ahead_hit": {
+          "tr": "Rotan {m} m ileride benzer zeminden ({cls}) geçiyor.",
+          "en": "Your route crosses similar ground ({cls}) {m} m ahead."
+      },
+      "ahead_none": {
+          "tr": "Rotanın önündeki {m} m içinde benzer zemin görünmüyor (model tahmini).",
+          "en": "No similar ground on your route within the next {m} m (model estimate)."
+      },
+      "sand_note": {
+          "tr": "Not: model ince, koyu kumu eksik tahmin edebilir; kum yok demek kum yok anlamına gelmez.",
+          "en": "Note: the model can under-predict thin dark sand, so 'no sand' is not proof of none."
+      },
+      "nophoto": {
+          "tr": "Burada Curiosity fotoğrafı yok. Haritadaki zemin, en yakın durakların model sonucundan yayılmış bir tahmin.",
+          "en": "There is no Curiosity photo here. The ground on the map is an estimate spread from the model results at the nearest stops."
+      },
+      "nophoto_meta": {
+          "tr": "Model kesinliği %{c}; en yakın durak {d} m uzakta.",
+          "en": "Model certainty {c}%; the nearest stop is {d} m away."
+      },
+      "nophoto_near": {
+          "tr": "Bu durağın görüntüsü yüklenemedi (arşivde yok ya da indirilmedi).",
+          "en": "The image for this stop could not be loaded (not in the archive or not downloaded)."
+      },
+      "frame": {
+          "tr": "Kare {i}/{n} · ◀ ▶",
+          "en": "Frame {i}/{n} · ◀ ▶"
+      },
+      "close": {
+          "tr": "Kapat (C)",
+          "en": "Close (C)"
+      },
+      "mask_label": {
+          "tr": "Model maskesi (tahmin, yarı saydam)",
+          "en": "Model mask (prediction, semi-transparent)"
+      }
+  },
+  "insight": {
+    "foot_label": { "tr": "ZEMİN", "en": "GROUND" },
+    "foot_line": {
+      "tr": "kum {sand} % · ana kaya {bedrock} % · toprak {soil} % · büyük kaya {bigrock} % · model kesinliği (kalibre) {conf} %",
+      "en": "sand {sand} % · bedrock {bedrock} % · soil {soil} % · big rock {bigrock} % · model certainty (calibrated) {conf} %"
+    },
+    "foot_dominant": { "tr": "{cls} ağırlıklı", "en": "mostly {cls}" },
+    "foot_uncertain": { "tr": "belirsiz", "en": "uncertain" },
+    "foot_provisional": {
+      "tr": "geçici zemin katmanı (model çıktısı değil)",
+      "en": "provisional terrain layer (not model output)"
+    },
+    "foot_source": {
+      "tr": "Model tahmini (AI4Mars tabanlı), ölçüm değil",
+      "en": "Model prediction (AI4Mars-based), not a measurement"
+    },
+    "class_sand": { "tr": "kum", "en": "sand" },
+    "class_bedrock": { "tr": "ana kaya", "en": "bedrock" },
+    "class_soil": { "tr": "toprak", "en": "soil" },
+    "class_bigrock": { "tr": "büyük kaya", "en": "big rock" },
+    "seg_line": {
+      "tr": "Segment {id}: {cls} (p={p}) → zemin katsayısı ×{eta} → {extra} kcal",
+      "en": "Segment {id}: {cls} (p={p}) → terrain factor ×{eta} → {extra} kcal"
+    },
+    "seg_line_flat": {
+      "tr": "Segment {id}: {cls}, zemin etkisi küçük (katsayı ×{eta}, {extra} kcal)",
+      "en": "Segment {id}: {cls}, little terrain effect (factor ×{eta}, {extra} kcal)"
+    },
+    "seg_alt": { "tr": "alternatif: {alt}", "en": "alternative: {alt}" },
+    "seg_conf_low": {
+      "tr": "model kesinliği düşük ({conf} %): kanıt az, tahmin yanlış demek değil",
+      "en": "low model certainty ({conf} %): little evidence, not necessarily a wrong call"
+    },
+    "fog_button": { "tr": "Model kesinliği katmanı", "en": "Model certainty layer" },
+    "fog_hint": {
+      "tr": "Soluk alan = kanıt az (kesinlik = 1 − normalize entropi). Yanlış demek değil: entropi yanlış tahminleri ayırt etmiyor. Model tahmini, ölçüm değil.",
+      "en": "Faded area = little evidence (certainty = 1 − normalized entropy). It does not mean wrong: entropy cannot tell wrong predictions apart. Model prediction, not a measurement."
+    },
+    "seg_title": { "tr": "Segment açıklamaları (model rotası)", "en": "Segment notes (model route)" },
+    "hazard_button": {
+      "tr": "Yalnız eğim rotasının kayalık/yüzlek zemini (3B)",
+      "en": "Rocky/outcrop ground on the slope-only route (3D)"
+    },
+    "walk_title": { "tr": "Yürüdüğün zemin", "en": "The ground you walked" },
+    "walk_total": {
+      "tr": "Katettiğin {m} m boyunca model tahmini:",
+      "en": "Model prediction over the {m} m you covered:"
+    },
+    "walk_class": { "tr": "{cls} {pct} % ({m} m)", "en": "{cls} {pct} % ({m} m)" },
+    "walk_conf": {
+      "tr": "Ortalama model kesinliği {conf} %; yolun {low} % kadarında ({lowm} m) kanıt azdı (bu, tahminin yanlış olduğu anlamına gelmez).",
+      "en": "Average model certainty {conf} %; evidence was thin over {low} % of the path ({lowm} m) — which does not mean the prediction is wrong."
+    },
+    "walk_note": {
+      "tr": "Zemin sınıfı ve kesinlik model tahminidir (AI4Mars tabanlı), ölçüm değil; metre rota ilerlemesinden gelir.",
+      "en": "Terrain class and certainty are model predictions (AI4Mars-based), not measurements; meters come from route progress."
+    }
+  },
+  "compare": {
+    "title": { "tr": "Zemin modeli ne kazandırıyor?", "en": "What does the terrain model buy you?" },
+    "naive": { "tr": "Yalnız eğim", "en": "Slope only" },
+    "model": { "tr": "Zemin modeli + kaya", "en": "Terrain model + rock" },
+    "naive_sub": {
+      "tr": "DTM eğimi var; zemin ve kaya bilinmiyor",
+      "en": "DTM slope only; ground and rock unknown"
+    },
+    "model_sub": {
+      "tr": "AI4Mars zemin sınıfı + kaya yoğunluğu",
+      "en": "AI4Mars terrain class + rock density"
+    },
+    "row_dist": { "tr": "Mesafe", "en": "Distance" },
+    "row_kcal": { "tr": "Enerji", "en": "Energy" },
+    "row_o2": { "tr": "O₂", "en": "O₂" },
+    "row_risk": { "tr": "Risk", "en": "Risk" },
+    "row_hazard": { "tr": "Tehlikeli zemin", "en": "Hazardous ground" },
+    "unit_m": { "tr": "m", "en": "m" },
+    "unit_kcal": { "tr": "kcal", "en": "kcal" },
+    "unit_l": { "tr": "L", "en": "L" },
+    "unit_risk": { "tr": "puan", "en": "pts" },
+    "delta_better": { "tr": "model {v} {u} az", "en": "model {v} {u} less" },
+    "delta_worse": { "tr": "model {v} {u} fazla", "en": "model {v} {u} more" },
+    "delta_same": { "tr": "fark yok", "en": "no difference" },
+    "hazard_note": {
+      "tr": "Kırmızı: kayalık/yüzlek zemin segmenti (ort. kaya yoğunluğu ≥ 0,10; naif rota buradan geçiyor). Kaya yoğunluğu şişkin olabilir: koridordaki büyük tespitlerin %78'i yüzlek/gölge. Model kumu bu rotalarda görmüyor (p_sand ≤ 0,25).",
+      "en": "Red: rocky/outcrop segment (mean rock density ≥ 0.10; the naive route crosses it). Rock density may be inflated: 78% of the large detections in the corridor are outcrop or shadow. The model sees no sand on these routes (p_sand ≤ 0.25)."
+    },
+    "sentence_full": {
+      "tr": "Model bu görevde {kcal} kcal ve {o2} L O₂ kazandırdı, {sand} m kumdan kaçındı.",
+      "en": "On this mission the model saved {kcal} kcal and {o2} L O₂, and avoided {sand} m of sand."
+    },
+    "sentence_risk": {
+      "tr": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kayalık/yüzlek zeminden kaçındı, risk % {risk_pct} düştü.",
+      "en": "The model paid off in safety, not energy: it avoided {hazard} m of rocky/outcrop ground and cut risk by {risk_pct} %."
+    },
+    "sentence_risk_sand": {
+      "tr": "Model enerjiden değil güvenlikten kazandırdı: {hazard} m kumlu/kayalık zeminden kaçındı, risk % {risk_pct} düştü.",
+      "en": "The model paid off in safety, not energy: it avoided {hazard} m of sandy/rocky ground and cut risk by {risk_pct} %."
+    },
+    "sentence_same": {
+      "tr": "Bu görevde iki planlayıcı aynı yolu seçti; zemin modeli rotayı değiştirmedi.",
+      "en": "Both planners picked the same path here; the terrain model did not change the route."
+    },
+    "scope": {
+      "tr": "Tek yön, {kind} rota. Maliyet gerçek zemin katmanında ölçülür; zemin katmanı model tahminidir.",
+      "en": "One way, {kind} route. Cost is measured on the real terrain layer; that layer is a model prediction."
+    },
+    "loading": { "tr": "Karşılaştırma hesaplanıyor…", "en": "Computing the comparison…" },
+    "error": { "tr": "Karşılaştırma alınamadı ({why}).", "en": "Could not fetch the comparison ({why})." },
+    "provisional": {
+      "tr": "Zemin katmanı geçici (model çıktısı değil); karşılaştırma bunu yansıtır.",
+      "en": "The terrain layer is provisional (not model output); the comparison reflects that."
+    },
+    "sentence_risk_nohaz": {
+      "tr": "Model enerjiden değil güvenlikten kazandırdı: risk % {risk_pct} düştü.",
+      "en": "The model paid off in safety, not energy: risk dropped by {risk_pct} %."
+    },
+    "sentence_cost": { "tr": " Bedeli {cost} kcal ek enerji.", "en": " It costs {cost} kcal of extra energy." },
+    "sentence_other": {
+      "tr": "Model rotayı değiştirdi; bu görevde risk ve enerji farkı küçük.",
+      "en": "The model changed the route; on this mission the risk and energy difference is small."
+    },
+    "hazard3d_legend": {
+      "tr": "Kırmızı iz: yalnız eğim rotasının geçeceği kayalık/yüzlek zemin",
+      "en": "Red trail: rocky/outcrop ground the slope-only route would cross"
+    }
+  },
+  "bilim": {
+    "badge_crism": "Spektral: CRISM",
+    "badge_rad": "Radyasyon: RAD",
+    "note_title": "Saha notu",
+    "note_hint": "I: notu aç/kapat",
+    "note_close": "Kapat",
+    "sig_label": "Mineral imzası",
+    "why_label": "Neden önemli",
+    "src_label": "Kaynak",
+    "pixel_label": "Bu durağın CRISM pikseli (18 m, ham browse)",
+    "pixel_note": "Göreli 0–255 indeks, gözlem içinde gerilmiş; mutlak değil, gürültülü. Pikselin tamamı bir rota segmentinden büyüktür. Rover ölçümü değil, yörünge verisidir.",
+    "pixel_invalid": "Bu durak CRISM browse'ında geçersiz (nodata) piksele düşüyor.",
+    "unit_label": "Jeolojik birim",
+    "stops": {
+      "sci_1_sol4617": {
+        "title": "Boxwork sırtları, 1. durak",
+        "unit": "Katmanlı sülfat birimi (LSu) içinde boxwork",
+        "signature": "Hidratlı sülfat. CRISM HYD kompozitinde bu bölgede sülfat parametreleri (SINDEX2, BD2100_2, BD1900_2) görünür. Boxwork kayasının kendisi, çevresindeki sülfatlı kayaya göre Si ve Al'ce zengin, Mg ve S'ce fakir ince taneli bir çamurtaşıdır (GSA 2025).",
+        "why": "Sırtlar, yeraltı suyunun çatlaklarda bıraktığı minerallerle sertleşmiş olabilir. Kuru sülfat döneminde daha ıslak bir ara evreye işaret ediyor."
+      },
+      "sci_2_sol4635": {
+        "title": "Boxwork sırtları, 2. durak",
+        "unit": "Katmanlı sülfat birimi (LSu) içinde boxwork",
+        "signature": "Hidratlı sülfat. Aynı CRISM birimi; bu durağın pikselinde sülfat indeksleri 1. duraktan daha zayıf. 2 m DEM bu hücrede sırt kenarı eğimini abartıyor olabilir.",
+        "why": "Sırt ağının ikinci ucu: boxwork'ün tek bir nokta değil, kilometrelerce uzanan bir yapı olduğunu gösterir."
+      },
+      "sci_3_sol4668": {
+        "title": "Boxwork sırtları, 3. durak",
+        "unit": "Katmanlı sülfat birimi (LSu) içinde boxwork",
+        "signature": "Hidratlı sülfat. Bu durağın pikselinde SINDEX2 ve BD2100_2, kutudaki dört durak arasında ikinci en yüksek değerde. Kaya MAHLI ve ChemCam ile incelendi (sol 4668–4803).",
+        "why": "Kutudaki yakın inceleme görüntülerinin yaklaşık %19'u bu durağa ait (sol 4668–4803). Boxwork'ün bileşimini en çok bu durak anlatıyor."
+      },
+      "sci_4_sol4869": {
+        "title": "Atacama sondaj alanı",
+        "unit": "Katmanlı sülfat birimi (LSu), boxwork sonrası ilk ana kaya",
+        "signature": "Sülfat. Bu durağın pikselinde çok hidratlı sülfat indeksi (SINDEX2) kutudaki diğer duraklardan belirgin yüksek.",
+        "why": "Boxwork'ten ayrıldıktan sonra katmanlı sülfat birimindeki ilk sondaj. Yaklaşık 160 m aşağıdaki Mineral King örneğiyle karşılaştırılarak sülfatın yükseklikle nasıl değiştiği anlaşılacak."
+      }
+    },
+    "rad": {
+      "title": "Radyasyon (RAD)",
+      "dose": "Birikmiş doz",
+      "budget": "EVA doz bütçesi",
+      "budget_note": "Bütçe varsayımdır (planlayıcı demo sınırı); biyolojik güvenlik eşiği değil.",
+      "rate": "Yüzey doz hızı",
+      "rate_src": "Curiosity RAD, Hassler vd. 2014: 0,21 ± 0,04 mGy/gün (ölçüm), saatlik değere çevrildi.",
+      "range": "Belirsizlik bandı",
+      "equiv": "Doz eşdeğeri (türetilmiş)",
+      "equiv_note": "Hassler 2014'ün 0,64 mSv/gün değerinden türetildi; organ ya da etkin doz değildir.",
+      "caveat": "RAD rover içinde ölçülür; skafandr zırhı farklıdır. Veride arazi gölgelemesi ya da konuma bağlı doz haritası yok; doz yalnız süreye bağlıdır.",
+      "sep": "Güneş parçacığı olayı (SEP) bu hesapta yok; olay olursa doz hızı yükselir (Zeitlin vd. 2018).",
+      "no_run": "Yürüyüş başlayınca doz burada birikir.",
+      "compare_title": "Rotaların radyasyon farkı",
+      "compare_note": "Tek yön yürüyüş süresi × yüzey doz hızı. Uzun rota daha çok doz demektir.",
+      "compare_chosen": "seçilen",
+      "unit_ugy": "µGy",
+      "line_key": "Y: ayrıntı",
+      "line_hint": "Radyasyon (RAD) ayrıntısı: Y ya da tıkla. Grafik Esc menüsünde de var.",
+      "tab": "Radyasyon (RAD)"
+    },
+    "layers": {
+      "button": "Veri katmanları",
+      "title": "Bu ürünün kullandığı NASA verisi",
+      "intro": "Dört veri türü, beşinci katman model tahminidir. Her satırın kaynağı ve ekrandaki yeri yazılı.",
+      "toggle": "Göster",
+      "always": "Her zaman açık",
+      "info_only": "Bilgi",
+      "source": "Kaynak",
+      "where": "Ekranda",
+      "close": "Kapat",
+      "kind_measured": "ölçüm",
+      "kind_model": "model tahmini",
+      "kind_synth": "sentetik",
+      "dtm": {
+        "type": "Topografik",
+        "name": "HiRISE DTM, 1 m (USGS Gale birleşik)",
+        "where": "3B arazi ve eğim; planlayıcı 2 m ızgara.",
+        "kind": "ölçüm"
+      },
+      "optic": {
+        "type": "Optik",
+        "name": "HiRISE ortofoto 25 cm ve Curiosity Navcam",
+        "where": "Arazi dokusu, harita zemini, durak fotoğrafları.",
+        "kind": "ölçüm"
+      },
+      "crism": {
+        "type": "Spektral",
+        "name": "CRISM MTRDR FRT0000B6F1, HYD kompoziti, 18 m",
+        "where": "Haritada yarı saydam katman; 3B'de yalnız mineral imzalı pikseller (varsayılan kapalı, bilim durağına yaklaşınca çevresinde açılır); duraklarda saha notu.",
+        "kind": "ölçüm"
+      },
+      "rad": {
+        "type": "Radyasyon",
+        "name": "MSL RAD yüzey dozu (Hassler 2014)",
+        "where": "Yürürken HUD'da tek satır doz; Y ya da Esc menüsünde grafik; karnede rota farkı.",
+        "kind": "ölçüm (yayın ortalaması)"
+      },
+      "model": {
+        "type": "Model",
+        "name": "AI4Mars zemin sınıfı + kaya yoğunluğu (rock_cfa)",
+        "where": "Arazi tarayıcı (L), rota segment açıklamaları, güven (entropy).",
+        "kind": "model tahmini"
+      },
+      "crism_warn": "Ham browse: gürültülü, 18 m/piksel. Maliyet haritasına girmez; yalnız bağlam ve saha notu için.",
+      "crism_ctx": "Kutunun kuzeyinde kalan bağlam (haritalanmadı): hematit sırtı (Fraeman vd. 2013, 2016, 2020) ve kil–sülfat geçişi (Milliken vd. 2010; Sheppard vd. 2021)."
+    }
+  },
+  "walk": {
+    "stumble": "Gevşek kaya: ayağın kaydı, adım yavaşladı.",
+    "sand_drag": "Kumda her adım daha ağır ve daha yavaş.",
+    "layers_fallback": "Zemin katmanları alınamadı; yürüyüş hissi yalnız eğimden hesaplanıyor.",
+    "source_layers": "Zemin: API katmanları (model tahmini)",
+    "source_fallback": "Zemin: yedek (yalnız eğim)"
+  },
+  "offline": {
+    "badge": "Çevrimdışı yedek: önceden hesaplanmış rota (planlayıcı canlı değil)."
   }
 }

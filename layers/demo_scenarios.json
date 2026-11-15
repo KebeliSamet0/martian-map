@@ -82,28 +82,30 @@
   },
   {
    "id": "S2",
-   "title": "Son boxwork duragindan Atacama'ya",
+   "title": "Düzlemden Atacama yakınına, sand_11 üstünden",
    "start": {
     "id": "sci_3_sol4668",
     "px": [
-     470,
-     589
+     487,
+     542
     ],
     "stop_px": [
      470.5,
      589.1
-    ]
+    ],
+    "note": "Bilim durağı DEĞİL: sol 4668 boxwork durağının ~100 m kuzeyi; sand_11 üstünden geçen düzlem için seçildi (veri desk'i taraması, Samet onayı)"
    },
    "goal": {
     "id": "sci_4_sol4869",
     "px": [
-     491,
-     774
+     487,
+     802
     ],
     "stop_px": [
      491.3,
      774.6
-    ]
+    ],
+    "note": "Bilim durağı DEĞİL: Atacama sondaj durağının ~56 m güneyi; yol sondaj alanının yanından geçer"
    },
    "surprise_sand": {
     "px": [
@@ -114,46 +116,8 @@
     "cls": "sand",
     "source": "Bora layers/sand_hint.json sand_11 (PR #61, gozle dogrulanmis aday; px tam sayi hucre)"
    },
-   "curiosity_section": {
-    "path_idx": [
-     547,
-     701
-    ],
-    "length_m": 744
-   },
    "checked": {
-    "layers": "main (2026-11-14 17:29, PR #55/#58/#60/#61 sonrasi): Emre kaba katmanlar (1 epoch) + Samet planlayici guncellemesi",
-    "route_km": [
-     0.4,
-     0.41,
-     0.45
-    ],
-    "route_min": [
-     12.6,
-     12.9,
-     13.8
-    ],
-    "routes_distinct": 3,
-    "pairwise_divergence_m": [
-     3.0,
-     5.9,
-     6.2
-    ],
-    "replan_changed": [
-     true,
-     true,
-     true
-    ],
-    "replan_extra_min": [
-     0.3,
-     0.2,
-     0.7
-    ],
-    "curiosity_mean_deviation_m": [
-     32,
-     33,
-     31
-    ]
+    "method": "veri desk'i /compare taraması 2026-11-15; yeniden /route ile doğrulama export_missions.py içinde"
    }
   },
   {

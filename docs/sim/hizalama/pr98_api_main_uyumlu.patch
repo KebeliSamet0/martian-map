@@ -1,0 +1,137 @@
+diff --git a/api/main.py b/api/main.py
+index bc33c64..6a48e3c 100644
+--- a/api/main.py
++++ b/api/main.py
+@@ -59,6 +59,8 @@ class RouteInput(Input):
+     weights: Weights | None = None
+     budget: Budget | None = None
+     terrain_model: bool = True  # False: "yalnız eğim" naif rota (zemin modeli + kaya bilinmez; maliyet gerçek katmanda)
++    # DENEME (Emre): simülatörün "Azami eğim" ayarı. 25° üstü verilirse planlayıcının 25° kuralı geçerli kalır.
++    max_slope_deg: float | None = Field(default=None, ge=5, le=45)
+ 
+ 
+ class Observation(Input):
+@@ -102,7 +104,8 @@ def result(layers, body: RouteInput):
+     routes = planner.plan(layers, body.start, body.goal,
+                           weights=body.weights.model_dump() if body.weights else None,
+                           budget=body.budget.model_dump() if body.budget else None,
+-                          terrain_model=body.terrain_model)
++                          terrain_model=body.terrain_model,
++                          max_slope_deg=body.max_slope_deg)
+     info = layers.grid_info()
+     return {"grid": {k: info[k] for k in ("region", "width", "height", "res_m", "synthetic", "px_note")},
+             "routes": routes}
+diff --git a/api/planner/cost.py b/api/planner/cost.py
+index 70c5f57..81263a4 100644
+--- a/api/planner/cost.py
++++ b/api/planner/cost.py
+@@ -82,11 +82,48 @@ def risk_per_m(L: Layers) -> np.ndarray:
+     return 0.65 * slope_r + 0.25 * rock_r + 0.10 * ent_r
+ 
+ 
+-def cost_surface(L: Layers, w: dict, load_kg: float = 0.0) -> tuple[np.ndarray, dict]:
++def cost_surface(L: Layers, w: dict, load_kg: float = 0.0, max_slope_deg: float | None = None) -> tuple[np.ndarray, dict]:
+     v = speed_ms(L)
+     t = 1.0 / v
+     k = kcal_per_m(L, v, load_kg=load_kg)
+     r = risk_per_m(L)
+     c = w["t"] * t + w["k"] * k + w["r"] * r
+     c = np.where(L.slope >= P.SLOPE_NOGO_DEG, np.inf, c)
++    # DENEME (Emre, 2026-11-15): kullanıcının azami eğimi. 25° güvenlik sınırı her zaman geçerli; yalnız daha sıkı yapılabilir.
++    if max_slope_deg is not None and max_slope_deg < P.SLOPE_NOGO_DEG:
++        c = np.where(L.slope >= max_slope_deg, np.inf, c)
++    rb = rock_block_mask(L)
++    if rb is not None:
++        c = np.where(rb, np.inf, c)
+     return c, {"s_per_m": t, "kcal_per_m": k, "risk_per_m": r}
++
++
++# DENEME (Emre, 2026-11-15): sim'in 3B'de çizdiği tespit edilmiş kayalar (sim/data/rocks.json) rotada engel olsun.
++# MARTIAN_ROCK_BLOCK=1 ile açılır; kapalıyken davranış değişmez. Yarıçap sim'in çizdiğiyle aynı: min(d, 2,6 m)/2 + 0,5 m pay.
++_ROCK_CACHE: dict = {}
++
++
++def rock_block_mask(L: Layers):
++    import json, os
++    from pathlib import Path
++    # rocks.json gerçek ızgaranın (contracts/grid.json, 1000×1000, 2 m) piksel uzayında
++    if os.environ.get("MARTIAN_ROCK_BLOCK") != "1" or L.synthetic or L.slope.shape != (1000, 1000):
++        return None
++    key = (L.slope.shape, L.res_m)
++    if key not in _ROCK_CACHE:
++        f = Path(__file__).resolve().parents[2] / "sim" / "data" / "rocks.json"
++        m = np.zeros(L.slope.shape, bool)
++        h, w = m.shape
++        for rk in json.load(open(f, encoding="utf-8")):
++            if rk.get("kind", "rock") != "rock":
++                continue  # outcrop (sırt yüzleği) ve shadow (gölge artığı) tek kaya değil; sim shadow'u çizmiyor, görünmez engel olmasın
++            x, y = rk["px"]
++            rad = (min(rk["d_m"], 2.6) / 2 + 0.5) / L.res_m  # hücre
++            for yy in range(int(y - rad - 1), int(y + rad + 2)):
++                for xx in range(int(x - rad - 1), int(x + rad + 2)):
++                    if 0 <= yy < h and 0 <= xx < w and (xx + 0.5 - x) ** 2 + (yy + 0.5 - y) ** 2 <= rad ** 2:
++                        m[yy, xx] = True
++            if 0 <= int(y) < h and 0 <= int(x) < w:
++                m[int(y), int(x)] = True  # kayanın merkez hücresi her zaman
++        _ROCK_CACHE[key] = m
++    return _ROCK_CACHE[key]
+diff --git a/api/planner/route.py b/api/planner/route.py
+index 2623d94..53a88e2 100644
+--- a/api/planner/route.py
++++ b/api/planner/route.py
+@@ -36,9 +36,15 @@ def _check(L: Layers, px, snap: bool = True):
+     return y, x
+ 
+ 
+-def shortest_path(L: Layers, start, goal, w: dict):
+-    cost, terms = cost_surface(L, w)
++def shortest_path(L: Layers, start, goal, w: dict, max_slope_deg: float | None = None):
++    cost, terms = cost_surface(L, w, max_slope_deg=max_slope_deg)
+     s, g = _check(L, start), _check(L, goal)
++    if max_slope_deg is not None:
++        # Başlangıç/hedef hücresi kullanıcı sınırından dik olsa da bağlanabilsin (25° kuralı _check'te zaten uygulandı)
++        base, _ = cost_surface(L, w)
++        for q in (s, g):
++            if not np.isfinite(cost[q]):
++                cost[q] = base[q]
+     mcp = MCP_Geometric(cost)
+     acc, _ = mcp.find_costs([s], [g])
+     if not np.isfinite(acc[g]):
+@@ -48,6 +54,8 @@ def shortest_path(L: Layers, start, goal, w: dict):
+         rs, rg = ranks.get(cs, 0), ranks.get(cg, 0)
+         ss, sg = int(comp_sizes[rs]) if rs else 0, int(comp_sizes[rg]) if rg else 0
+         ps, pg = ss / total_cells * 100, sg / total_cells * 100
++        if max_slope_deg is not None:
++            raise PlanError(f"Azami eğim {max_slope_deg:g}° ile başlangıç ve hedef arasında yol yok; sınırı gevşet.")
+         raise PlanError(
+             f"Başlangıç ile hedef arasında geçilebilir yol yok: "
+             f"başlangıç {[int(start[0]), int(start[1])]} bileşen #{rs} ({ss} hücre, %{ps:.2f}), "
+@@ -252,12 +260,13 @@ def _budget(prof, segs, path, limits=None) -> dict:
+     }
+ 
+ 
+-def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None) -> dict:
++def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | None = None, budget: dict | None = None,
++             max_slope_deg: float | None = None) -> dict:
+     presets = P.PRESETS if L.synthetic else P.REAL_PRESETS
+     w = dict(presets.get(kind, presets["balanced"]))
+     if weights:
+         w.update(weights)
+-    path, terms = shortest_path(L, start, goal, w)
++    path, terms = shortest_path(L, start, goal, w, max_slope_deg)
+     prof = _profile(L, path, terms)
+     segs = _segments(L, path, prof)
+     return {
+@@ -338,10 +347,10 @@ def _contrast(chosen: dict, alt: dict, res_m: float, min_dev_m: float = 40.0):
+ 
+ 
+ def plan(L: Layers, start, goal, kinds=("shortest", "balanced", "safest"), weights: dict | None = None, budget: dict | None = None,
+-         terrain_model: bool = True) -> list[dict]:
++         terrain_model: bool = True, max_slope_deg: float | None = None) -> list[dict]:
+     """terrain_model=False: yol zemin sınıfı/kaya bilinmeden (yalnız eğim) aranır, maliyet gerçek katmanlarda ölçülür."""
+     if terrain_model:
+-        routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget) for k in kinds]
++        routes = [plan_one(L, start, goal, k, weights if k == "balanced" else None, budget, max_slope_deg) for k in kinds]
+     else:
+         from .insight import plan_one_naive
+         routes = [plan_one_naive(L, start, goal, k, budget) for k in kinds]

@@ -44,13 +44,17 @@ CRISM / jeoloji ──► bilim durakları ────────────�
 | Paz 16:00 | **Kapı 4 – Kod dondurma** | Sonrası yalnız video, slayt, proje sayfası |
 | Paz 22:00 | **Teslim** | Resmî son 23:59 |
 
-## Demo cihazında çalıştırma
+## Çalıştırma (herhangi bir makinede, 2 komut)
 
-Repo kökünden tüm servisleri (API `:8000`, Web `:5173`, Sim `:8001`) gerçek Gale katmanlarıyla tek komutla başlatmak için:
+Gereken: Python 3.10+ (web arayüzü için isteğe bağlı Node.js). 3B arazi karoları (`sim/data/tiles_fixed`) ve tüm katmanlar repoda.
 
 ```sh
-./scripts/dev.sh
+git clone https://github.com/KebeliSamet0/martian-map.git && cd martian-map
+bash scripts/setup.sh     # bir kez: .venv + API bağımlılıkları
+bash scripts/dev.sh       # API :8000 + Sim :8001 (+ Web :5173 varsa)
 ```
+
+Tarayıcıda: **http://127.0.0.1:8001/sim/** · İngilizce: `?lang=en` · geliştirici panelleri: `?dev=1`
 
 Gerçek katmanlarla uçtan uca duman testini (`/route` + kum gözlemiyle `/replan`) çalıştırmak için:
 
