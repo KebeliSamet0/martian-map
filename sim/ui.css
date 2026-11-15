@@ -220,6 +220,23 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 900px) { .mm-table th:last-child, .mm-table .mm-why { display: none; } }
 /* Görev kartı harita önizlemesi (#103 B.6) */
 .mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
+/* #125 A.1: hedefte "E ile numune al" — basılı tut, çubuk dolunca etkileşim tamam */
+.mm-hold {
+  position: fixed; left: 50%; bottom: 120px; transform: translateX(-50%); z-index: 2102;
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center;
+  width: min(420px, calc(100% - 32px)); padding: 10px 14px;
+  background: rgba(14, 8, 5, .82); border: 1px solid rgba(255, 200, 150, .22); border-left: 3px solid var(--mm-amber);
+  backdrop-filter: blur(4px); pointer-events: none;
+}
+.mm-hold .mm-key { grid-row: span 2; align-self: center; font-size: 16px; padding: 6px 12px; }
+.mm-hold-txt { display: flex; flex-direction: column; gap: 2px; }
+.mm-hold-txt strong { color: #fff; font-size: 14px; }
+.mm-hold-hint { color: var(--mm-muted); font-size: 12px; }
+.mm-hold-bar { grid-column: 2; height: 4px; background: rgba(255, 200, 150, .14); overflow: hidden; }
+.mm-hold-fill { height: 100%; width: 0; background: var(--mm-amber); }
+.mm-hold[data-held="1"] { border-color: var(--mm-amber); }
+.mm-hold[data-held="1"] .mm-key { background: var(--mm-amber); color: #1a1205; }
+
 /* #103 B.9: ayak altı satırı yaşam destek + radyasyon şeridiyle tek sağ alt kümede, hizalı.
    insight.js konumu satır içi veriyor (left:50%, bottom:46px), bu yüzden !important gerekiyor;
    #103 "veri/bilim modüllerinin görünümünü gerekirse CSS ile değiştir" diyor.

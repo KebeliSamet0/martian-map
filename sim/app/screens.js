@@ -158,6 +158,47 @@ export function showAlert(container, kind, { what = '', timeoutMs = 0, actions =
   });
 }
 
+// --- Basılı tut etkileşimi (#125 A.1): hedefte E ile numune alma ---
+// Dolunca true, dışarıdan iptal edilirse false döner. Bırakınca çubuk geri sayar.
+export function showHold(container, { title, hint, seconds = 6, code = 'KeyE', label = 'E' } = {}) {
+  ensureUiCss();
+  let cancel = () => {};
+  const p = new Promise((resolve) => {
+    const box = el('div', 'mm-ui mm-hold');
+    box.setAttribute('role', 'status');
+    const txt = el('div', 'mm-hold-txt');
+    txt.append(el('strong', null, title ?? ''), el('span', 'mm-hold-hint', hint ?? ''));
+    const bar = el('div', 'mm-hold-bar'), fill = el('div', 'mm-hold-fill');
+    bar.append(fill);
+    box.append(el('kbd', 'mm-key', label), txt, bar);
+    container.append(box);
+
+    let held = false, value = 0, last = performance.now(), raf = 0, done = false;
+    const onDown = (e) => { if (e.code === code && !e.repeat) { held = true; e.preventDefault(); } };
+    const onUp = (e) => { if (e.code === code) held = false; };
+    const onBlur = () => { held = false; };
+    addEventListener('keydown', onDown); addEventListener('keyup', onUp); addEventListener('blur', onBlur);
+    const finish = (ok) => {
+      if (done) return; done = true;
+      cancelAnimationFrame(raf);
+      removeEventListener('keydown', onDown); removeEventListener('keyup', onUp); removeEventListener('blur', onBlur);
+      box.remove(); resolve(ok);
+    };
+    cancel = () => finish(false);
+    const loop = (now) => {
+      const dt = Math.min(0.1, (now - last) / 1000); last = now;
+      value = Math.max(0, Math.min(1, value + (held ? dt / seconds : -dt / Math.max(0.5, seconds * 0.6))));
+      fill.style.width = `${(value * 100).toFixed(1)}%`;
+      box.dataset.held = held ? '1' : '';
+      if (value >= 1) return finish(true);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+  });
+  p.cancel = () => cancel();
+  return p;
+}
+
 // --- Karne ---
 // planned: seçilen rotanın tek yön özeti (walkPlan); actual: hud.js alan adlarıyla anlık görüntü.
 export function gradeMission(planned, actual, { completed = true } = {}) {

@@ -624,6 +624,30 @@
       "tr": "Tekrar dene",
       "en": "Try again"
     },
+    "sample.hold.title": {
+      "tr": "NUMUNE AL",
+      "en": "COLLECT SAMPLE"
+    },
+    "sample.hold.hint": {
+      "tr": "E tuşunu basılı tut",
+      "en": "Hold E"
+    },
+    "sample.done": {
+      "tr": "Numune alındı: +{kg} kg. Yük arttı, dönüş daha pahalı.",
+      "en": "Sample collected: +{kg} kg. The extra load makes the way back costlier."
+    },
+    "objective.return": {
+      "tr": "Üsse dön",
+      "en": "Return to base"
+    },
+    "return.ready": {
+      "tr": "Üsse dönüş rotası hazır. Oksijeni ve dönüş payını izle.",
+      "en": "Return route ready. Watch your oxygen and return margin."
+    },
+    "return.local": {
+      "tr": "Planlayıcıdan dönüş rotası alınamadı ({why}); yerel yedek rota kullanılıyor.",
+      "en": "No return route from the planner ({why}); using the local fallback route."
+    },
     "unit.hm": {
       "tr": "sa:dk",
       "en": "hh:mm"
