@@ -40,11 +40,12 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // Kararlı seçici: testid → yedek CSS
 const SEL = {
-  missionBtn: id => [`[data-testid="mission-${id}"]`, `[data-mission=${id}]`],
+  introStart: ['[data-testid="intro-start"]', '.mm-intro button'],
+  missionBtn: id => [`[data-testid="mission-${id}"]`, `.mm-mcard:has(.mm-mcard-id:text-is("${id}")) button`],
   briefingStart: ['[data-testid="briefing-start"]', '.mm-modal button.mm-btn-primary', '.mm-modal button'],
   routeCard: ['[data-testid="route-card"]', '.mm-route'],
   routePick: ['[data-testid="route-pick"]', '.mm-route button'],
-  walk: ['[data-testid="walk-3d"]', '#btn-walk'],
+  walk: ['[data-testid="walk-3d"]'],   // yeni akışta yürüyüş rota seçince kendiliğinden başlar
   alert: ['[data-testid="event-alert"]', '.mm-alert'],
   debrief: ['[data-testid="debrief"]', '.mm-table'],
   grade: ['[data-testid="debrief-grade"]', '.mm-grade-letter'],
@@ -89,9 +90,25 @@ async function runMission(browser, id) {
   });
   let alive = steps.at(-1).ok;
 
+  alive = alive && await step('intro', async () => {
+    await p.waitForFunction(() => window.__mm.flow?.screen === 'intro', null, { timeout: 30000 });
+    await sleep(1500);
+    await p.click(await waitAny(p, SEL.introStart));
+    await p.waitForFunction(() => window.__mm.flow.screen === 'select', null, { timeout: 10000 });
+    await sleep(1200);
+  });
   alive = alive && await step('mission-select', async () => {
-    const s = await waitAny(p, SEL.missionBtn(id)); await p.click(s);
+    // Arazi/nav hazır olmadan seçilirse sim "B noktası arazi dışında" ile seçime döner (akış yarışı, rapora yazıldı): hazır olana dek yeniden dene.
+    let tries = 0;
+    for (;;) {
+      const s = await waitAny(p, SEL.missionBtn(id)); await p.click(s); tries++;
+      const ok = await p.waitForFunction(() => window.__mm.flow.screen === 'briefing', null, { timeout: 5000 }).then(() => true, () => false);
+      if (ok) break;
+      if (tries >= 6) throw new Error('brifing açılmadı (6 deneme; arazi hazır değil?)');
+      await sleep(3000);
+    }
     await waitAny(p, SEL.briefingStart);
+    return tries > 1 ? `${tries}. denemede (arazi geç hazır oldu)` : '';
   });
   alive = alive && await step('briefing', async () => {
     const txt = await p.evaluate(() => document.querySelector('.mm-modal')?.innerText?.slice(0, 160) ?? '');
@@ -113,10 +130,10 @@ async function runMission(browser, id) {
     const s = await first(p, SEL.routePick); const cards = await p.$$(s);
     await cards[Math.min(2, cards.length - 1)].click();   // "en güvenli" son kart
     await sleep(800);
-    await p.click(await waitAny(p, SEL.walk));
+    if (SEL.walk.length && await first(p, SEL.walk)) await p.click(await first(p, SEL.walk));   // testid varsa tıkla; yoksa otomatik başlar
   });
   alive = alive && await step('walk-start', async () => {
-    await p.waitForFunction(() => window.__mm.routeRun && window.__mm.wire.machine, null, { timeout: 40000 });
+    await p.waitForFunction(() => window.__mm.flow?.screen === 'walk' && window.__mm.routeRun && window.__mm.wire.machine, null, { timeout: 40000 });
     await sleep(2500);
     return await p.evaluate(() => `toplam ${Math.round(window.__mm.routeRun.total)} m`);
   });
