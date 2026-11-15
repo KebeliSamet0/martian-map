@@ -1127,6 +1127,22 @@
     "scan.outcrop": {
       "tr": "yüzlek adayı (HiRISE gölge/şekil tespiti, doğrulanmadı, tahmini genişlik {d} m)",
       "en": "candidate outcrop (HiRISE shadow/shape detection, unverified, est. width {d} m)"
+    },
+    "custom.zoom.in": {
+      "tr": "Yakınlaştır",
+      "en": "Zoom in"
+    },
+    "custom.zoom.out": {
+      "tr": "Uzaklaştır",
+      "en": "Zoom out"
+    },
+    "custom.zoom.reset": {
+      "tr": "Tüm harita",
+      "en": "Full map"
+    },
+    "custom.zoom.hint": {
+      "tr": "Fare tekerleği ile yakınlaştır, sürükleyerek kaydır; yakınlaşınca HiRISE doku karoları yüklenir.",
+      "en": "Scroll to zoom, drag to pan; HiRISE texture tiles load when zoomed in."
     }
   },
   "helmetcam": {

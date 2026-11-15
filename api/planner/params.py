@@ -33,8 +33,10 @@ TERRAIN_ETA = {"bedrock": 1.0, "soil": 1.2, "sand": 2.1, "bigrock": 1.5}
 TERRAIN_SPEED = {"bedrock": 1.0, "soil": 0.95, "sand": 0.6, "bigrock": 0.5}  # VARSAYIM
 
 # Eğim sınırları (derece)
-SLOPE_RISKY_DEG = 15.0  # Artemis güney kutbu yürüyüş planlaması 15° sınır (Acta Astronautica 2023, ScienceDirect S0094576523005179)
-SLOPE_NOGO_DEG = 20.0  # NASA EVA lunar surface ConOps (EVA-EXP-0075): skafandrlı astronot ≤20° yokuş; Mars g (0,38) Ay'ın ~2,3 katı, 25° iyimser (Emre, #52)
+# Kaynak ve sınırı: docs/data/ekip/egim_esikleri_kaynak.md. Her ikisi de AY çalışmalarından alınan PLANLAMA eşikleridir;
+# Mars'ta skafandrlı insan için doğrulanmış bir eğim sınırı bulunamadı (mars_validated: False). Çekim farkı (0,17 g Ay / 0,38 g Mars) açıyı hesaplatmaz.
+SLOPE_RISKY_DEG = 15.0  # Ay güney kutbu rota planlaması: 15° üstü yasak değil, 'yüksek cezalı' (ihtiyatlı maliyet tercihi; Peña-Asensio vd., Acta Astronautica 214, 2024, §3.2, DOI 10.1016/j.actaastro.2023.10.010)
+SLOPE_NOGO_DEG = 20.0  # NASA EVA-EXP-0075 (2020, slayt 6): Artemis Ay xEVA sistemi 'yukarı/aşağı/enine 20°'ye kadar (araziye bağlı)' yürüyebilmeli. Ay kabiliyet hedefi; Mars için doğrulanmış sınır DEĞİL, projenin planlama varsayımı (Emre #52, Samet kararı). Eski 25° CLSE 'Ay'da <25° çok erişilebilir' sınıfından, geçilmezlik kanıtı değildi
 # Başlangıç/hedef NOGO hücresindeyse bu yarıçaptaki en yakın geçilebilir hücreye bağlanır.
 # VARSAYIM: 2 m DEM boxwork sırt kenarında eğimi tek hücrede abartıyor; rover tilt ≤17,5°,
 # DEM'in ≥25° gösterdiği 4 waypoint'in hepsinde 10 m içinde <25° hücre var (issue #19).
@@ -152,8 +154,8 @@ def assumptions(provisional_terrain: bool = False):
         {"name": "Bilim durağı süresi", "value": SCIENCE_STOP_MIN, "unit": "dk", "source": "VARSAYIM: hedefte bilim çalışması; GO kararındaki committed toplamına girer"},
         {"name": "Durak metabolik düzeyi", "value": STOP_METABOLIC_W, "unit": "W", "source": "VARSAYIM: durak/yedek metabolizması (şimdilik düz zemin düzeyine eşit)"},
         {"name": "Oksijen dönüşümü", "value": {"kcal_per_L_o2": KCAL_PER_L_O2, "g_per_L_o2": O2_G_PER_L}, "unit": "kcal/L, g/L", "source": "Dolaylı kalorimetri (4.8 kcal/L O₂) ve STP yoğunluğu (1.429 g/L)"},
-        {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "Artemis güney kutbu EVA yürüyüş planlaması 15° sınırı (Acta Astronautica 2023, https://www.sciencedirect.com/science/article/pii/S0094576523005179)"},
-        {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "NASA EVA Lunar Surface Concept of Operations (EVA-EXP-0075): skafandrlı astronot 20°'ye kadar yokuş; Ay için tanımlı, Mars'ta (0,38 g) daha temkinli olmak için doğrudan alındı. https://www.nasa.gov/wp-content/uploads/2020/01/topic_1-_eva_lunar_surface_concept_of_operations.pdf"},
+        {"name": "Riskli eğim", "value": SLOPE_RISKY_DEG, "unit": "°", "source": "Ay güney kutbu rota planlaması (Peña-Asensio vd., Acta Astronautica 214, 2024; https://doi.org/10.1016/j.actaastro.2023.10.010): 15° üstü yasak değil, yüksek cezalı; ihtiyatlı maliyet tercihi. Mars için doğrulanmış insan sınırı değildir", "mars_validated": False},
+        {"name": "Geçilmez eğim", "value": SLOPE_NOGO_DEG, "unit": "°", "source": "NASA EVA-EXP-0075 (2020, slayt 6): Artemis Ay xEVA sistemi 20°'ye kadar yukarı/aşağı/enine yürüyebilmeli (araziye bağlı). Ay kabiliyet hedefidir; Mars'ta (0,38 g) doğrulanmış sınır yoktur, projenin planlama varsayımı olarak alındı. https://www.nasa.gov/wp-content/uploads/2020/01/topic_1-_eva_lunar_surface_concept_of_operations.pdf", "mars_validated": False},
         {"name": "Tarayıcı sınıfı (scan_class) kuralı", "value": SCAN_RULE, "unit": "sınıf (0..3)", "source": "VARSAYIM: öncelik sırasıyla 2 geçilmez -> 3 bilinmiyor -> 1 dikkat -> 0 güvenli"},
         {"name": "Geçilmez hücreden bağlanma yarıçapı", "value": SNAP_RADIUS_M, "unit": "m", "source": "VARSAYIM: 2 m DEM sırt kenarında eğimi abartıyor (rover tilt karşılaştırması)"},
         {"name": "Segment uzunluk ve yumuşatma sınırları", "value": {"min_m": SEG_MIN_M, "max_m": SEG_MAX_M, "max_count": SEG_MAX_COUNT, "smooth_m": SEG_SMOOTH_M, "hysteresis_deg": SEG_HYSTERESIS_DEG}, "unit": "m / °", "source": "VARSAYIM: DEM hücre gürültüsünde 8–25 okunabilir segment hedefi"},

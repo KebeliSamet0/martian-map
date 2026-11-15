@@ -89,6 +89,9 @@
   border: 1px solid var(--mm-amber);
 }
 .mm-btn-primary { background: var(--mm-amber); color: #1a1205; }
+.mm-btn:disabled { opacity: .6; cursor: not-allowed; filter: grayscale(1); }
+.mm-btn:disabled:hover { filter: grayscale(1); }
+.mm-btn-primary:disabled { background: #3a3f49; color: #9aa1ad; border-color: #3a3f49; }
 .mm-btn-primary:hover { filter: brightness(1.08); }
 .mm-btn-ghost { background: transparent; color: var(--mm-amber); }
 .mm-btn-ghost:hover { background: var(--mm-amber-dim); }
