@@ -22,8 +22,9 @@ import { t } from './i18n.js';   // tur4:akis
 import './insight-ui.js';   // tur4:veri
 import './bilim.js'; // tur4:bilim
 import { createWalkFeel } from './walkfeel.js';   // tur4:his
+import { pickTiles } from './tiles-base.js';   // tur4:dogrula
 
-const BASE = './data/tiles';
+const BASE = await pickTiles(new URLSearchParams(location.search).get('tiles'));   // tur4:dogrula: varsayılan tiles_fixed, yedek tiles, ?tiles= ile seçilir
 const Q = new URLSearchParams(location.search);
 const quality = Q.get('q') || 'high';
 const DEV = Q.get('dev') === '1';   // tur4:akis: geliştirici panelleri yalnız ?dev=1

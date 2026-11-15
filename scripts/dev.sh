@@ -32,9 +32,9 @@ if [[ ! -d "$ROOT/web/node_modules" ]]; then
   exit 1
 fi
 
-if [[ ! -d "$ROOT/sim/data/tiles" ]]; then
-  echo "Uyarı: sim/data/tiles bulunamadı (3D arazi karoları bu makinede üretilmemiş)." >&2
-  echo "       Sim sunucusu yine de başlatılıyor; karoları üretmek isterseniz: $PYTHON -I sim/tools/build_tiles.py" >&2
+if [[ ! -d "$ROOT/sim/data/tiles_fixed" && ! -d "$ROOT/sim/data/tiles" ]]; then
+  echo "Uyarı: sim/data/tiles_fixed (ve yedek tiles) bulunamadı (3D arazi karoları bu makinede üretilmemiş)." >&2
+  echo "       Sim sunucusu yine de başlatılıyor; karoları üretmek isterseniz: $PYTHON -I sim/tools/build_tiles.py --out sim/data/tiles_fixed --work <ayrı klasör> --dtm-dcol 30 --dtm-drow 33" >&2
 fi
 
 PIDS=()
