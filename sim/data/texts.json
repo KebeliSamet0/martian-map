@@ -700,6 +700,34 @@
       "tr": "Mevcut rotada devam et (risk)",
       "en": "Stay on the current route (risk)"
     },
+    "route.committed": {
+      "tr": "BÜTÇEYE İŞLENEN",
+      "en": "CHARGED TO BUDGET"
+    },
+    "route.c.o2": {
+      "tr": "Oksijen",
+      "en": "Oxygen"
+    },
+    "route.c.time": {
+      "tr": "Süre",
+      "en": "Time"
+    },
+    "route.c.kcal": {
+      "tr": "Enerji",
+      "en": "Energy"
+    },
+    "route.c.dose": {
+      "tr": "Doz",
+      "en": "Dose"
+    },
+    "route.committed.note": {
+      "tr": "GO / NO-GO bu sayılara bakar: gidiş, dönüş, bilim durağı ve yedek dahil. Yukarıdaki yürüyüş değerlerinden yüksek olması normaldir.",
+      "en": "GO / NO-GO is decided on these: outbound, return, science stop and reserve included. They are higher than the walking figures above, as expected."
+    },
+    "report.replanned": {
+      "tr": "Plan görev sırasında değişti (yeniden planlama kabul edildi). Plan sütunu = o ana kadar gerçekleşen + yeni rotanın planı.",
+      "en": "The plan changed during the mission (a replan was accepted). The planned column = what you had spent by then + the new route's plan."
+    },
     "report.total": {
       "tr": "Gidiş + dönüş toplamı: {min} dk · {kcal} kcal · {o2} L O₂. Yukarıdaki tablo yalnız gidişi plana karşı ölçer.",
       "en": "Outbound + return total: {min} min · {kcal} kcal · {o2} L O₂. The table above compares the outbound leg against the plan only."
