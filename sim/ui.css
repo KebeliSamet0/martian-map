@@ -207,6 +207,8 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 @media (max-width: 760px) { .mm-brief-cols { grid-template-columns: 1fr; } .mm-mhud { max-width: 240px; } .mm-missions { top: 120px; transform: none; } }
 /* Jüri laptopu (#103 C.11): dar ekranda ortadaki açıklama bantları sol üstteki görev kartını kesiyordu */
 @media (max-width: 1200px) { .mm-mhud { max-width: 280px; } .mm-tip { white-space: normal; text-align: center; } }
+/* Görev kartı harita önizlemesi (#103 B.6) */
+.mm-mcard-map { display: block; width: 100%; height: auto; border: 1px solid var(--mm-line); background: #140d08; }
 @media (prefers-reduced-motion: reduce) { .mm-flow, .mm-modal, .mm-mcard, .mm-arrow, body.mm-event::after { transition: none; animation: none; } .mm-mcard { opacity: 1; transform: none; } }
 
 /* entegre yuvalar: rota ekranı küçük ekranda taşmasın, karşılaştırma sekmeleri konsol diline uysun */

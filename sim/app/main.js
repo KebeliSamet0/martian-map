@@ -587,7 +587,8 @@ window.__mm = {
 };
 if (Q.get('mod') === '3d') enter3D('walk');
 else if (!DEV || Q.get('intro') === '1') {   // tur4:akis: oyun akışı (açılış → görev → brifing → rota → yürüyüş → karne)
-  flow = initFlow({ wire, root: document.body, getState: () => state, getPose: () => P, pause: pauseFn, enterMap, exitToTour: enterTour, audio, dev: DEV });
+  flow = initFlow({ wire, root: document.body, getState: () => state, getPose: () => P, pause: pauseFn, enterMap, exitToTour: enterTour, audio, dev: DEV,
+    geo, overviewUrl: `${BASE}/overview.jpg` });   // görev kartı harita önizlemesi (#103 B.6)
   Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, autoWalk: true });
   const m0 = wire.catalog.missions.find((m) => m.start_px && m.goal_px);
   if (m0) { const a = wire.coords.cellToWorld(m0.start_px), b = wire.coords.cellToWorld(m0.goal_px); tourC = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; }

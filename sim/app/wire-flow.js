@@ -8,7 +8,7 @@ import { bearingRel, missionSummary, fmtDist } from './flow-logic.js';
 
 const emit = (screen, extra = {}) => window.dispatchEvent(new CustomEvent('mm:screen', { detail: { screen, ...extra } }));
 
-export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitToTour, audio, dev }) {
+export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitToTour, audio, dev, geo, overviewUrl }) {
   ensureUiCss();
   const layer = el('div', 'mm-ui mm-flow');
   layer.id = 'flow';
@@ -49,6 +49,48 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     go.focus();
   }
 
+  // ---------- Görev kartı harita önizlemesi (#103 B.6) ----------
+  // Ortofoto genel görünümünden başlangıç–hedef çevresini kırpar, üstüne rota doğrusunu çizer.
+  // Veri yoksa (geo/overview/px eksik) hiç çizilmez; uydurma görsel yok.
+  let overview = null;
+  function overviewImg() {
+    if (overview || !overviewUrl) return overview;
+    overview = new Image();
+    overview.src = overviewUrl;
+    return overview;
+  }
+  function missionPreview(m) {
+    const img = overviewImg();
+    if (!img || !geo || !wire.coords || !m.start_px || !m.goal_px) return null;
+    const cv = el('canvas', 'mm-mcard-map');
+    cv.width = 320; cv.height = 124;
+    cv.setAttribute('role', 'img');
+    cv.setAttribute('aria-label', `${m.id}: ${t('select.distance')}`);
+    const paint = () => {
+      if (!img.naturalWidth) return;
+      let a, b;
+      try { a = wire.coords.pxToWorld(m.start_px); b = wire.coords.pxToWorld(m.goal_px); } catch { return; }
+      const cx = (a[0] + b[0]) / 2, cz = (a[1] + b[1]) / 2;
+      const ar = cv.width / cv.height;
+      const halfW = Math.max(Math.abs(a[0] - b[0]) / 2, (Math.abs(a[1] - b[1]) / 2) * ar) * 1.35 + 40;
+      const halfH = halfW / ar;
+      const u = (x) => (x / geo.sizeX) * img.naturalWidth, v = (z) => (z / geo.sizeZ) * img.naturalHeight;
+      const g = cv.getContext('2d');
+      g.drawImage(img, u(cx - halfW), v(cz - halfH), u(2 * halfW), v(2 * halfH), 0, 0, cv.width, cv.height);
+      const px = (x) => ((x - (cx - halfW)) / (2 * halfW)) * cv.width;
+      const pz = (z) => ((z - (cz - halfH)) / (2 * halfH)) * cv.height;
+      g.strokeStyle = '#f2a93b'; g.lineWidth = 2; g.setLineDash([5, 4]);
+      g.beginPath(); g.moveTo(px(a[0]), pz(a[1])); g.lineTo(px(b[0]), pz(b[1])); g.stroke();
+      g.setLineDash([]);
+      g.lineWidth = 2;
+      g.beginPath(); g.arc(px(a[0]), pz(a[1]), 4, 0, 7); g.stroke();           // başlangıç: boş halka
+      g.fillStyle = '#f2a93b';
+      g.beginPath(); g.arc(px(b[0]), pz(b[1]), 4.5, 0, 7); g.fill();           // hedef: dolu
+    };
+    img.complete && img.naturalWidth ? paint() : img.addEventListener('load', paint, { once: true });
+    return cv;
+  }
+
   // ---------- Görev seçimi ----------
   function showSelect() {
     clearLayer(); hudLayer.hidden = true; setScreen('select');
@@ -73,7 +115,10 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
       }
       const go = button(t('select.go'), 'ghost'); go.dataset.testid = `mission-go-${m.id}`;
       go.onclick = () => { clearLayer(); layer.classList.remove('mm-in'); void wire.selectMission(m); };
-      card.append(top, el('h3', 'mm-mcard-title', wire.missionTitle(m)), el('p', 'mm-mcard-story', missionText(m.id, 'brief')), facts, go);
+      card.append(top, el('h3', 'mm-mcard-title', wire.missionTitle(m)));
+      const map = missionPreview(m);
+      if (map) card.append(map);
+      card.append(el('p', 'mm-mcard-story', missionText(m.id, 'brief')), facts, go);
       row.append(card);
     });
     layer.append(head, row, langButton());
