@@ -72,3 +72,22 @@ Ham TAB dosyaları (18 MB) repoya girmedi (CONTRIBUTING); manifest + özet JSON 
 | C (B + 352 W düz zemin referansı) | 19.9 (+6.4 %) | 122.0 (**+38.6 %**) | 51.0 (**+37.8 %**) | 10.2 | GO (farklı hücrelerden geçen yol) |
 
 Yorum: önerilen kütle/hız/süre değerlerini uygulamak S1 sonucunu **~%5–7** değiştiriyor ve GO'yu bozmuyor; asıl duyarlılık **metabolik referans gücünde** (352 W → enerji ve O₂ ~%38 artıyor). 420→370 L kararı bu senaryoda hiçbir durumu değiştirmiyor (taahhüt O₂ ≤99 L). Sınırlar: tek senaryo/ön ayar, eski commit, S2/S3 ve zemin katsayısı ±%20 (set D) koşulmadı. Sunumda "enerji tahmini alt sınır, 352 W ile ~%38 daha yüksek" denmeli (NASA tasarım ortalaması, Ogilvie 2026).
+
+## 11. Duyarlılık analizi S2 ve S3 (çalışan 2) (2026-11-15)
+`docs/data/ekip/duyarlilik_analizi_s2_s3.md`. Commit 42f60aa (güncel main'e git clone ağ hatası verdi; rapor bunu açıkça yazıyor). Parametre setleri S1 ile aynı (A mevcut kod, B araştırma önerileri, C = B + 352 W).
+
+| Senaryo | Set | dk | kcal | O₂ L | Durum |
+|---|---|---:|---:|---:|---|
+| S2 | A | 13.0 | 61 | 26 | GO |
+| S2 | B | 13.9 (+6.9 %) | 66 (+8.2 %) | 27 (+3.8 %) | GO |
+| S2 | C | 13.9 | 85 (**+39.3 %**) | 35 (**+34.6 %**) | GO |
+| S3 | A | 18.0 | 85 | 35 | GO |
+| S3 | B | 19.2 (+6.7 %) | 91 (+7.1 %) | 38 (+8.6 %) | GO |
+| S3 | C | 19.1 | 118 (**+38.8 %**) | 49 (**+40 %**) | GO |
+
+**S3, 80 L O₂ limitiyle (yarım tüp): üç sette de NO-GO** (`walkback_ok=true`). Neden: taahhüt O₂ (gidiş-dönüş + bilim + rezerv) 84–98 L > 80 L. İlk O₂ bütçe aşımı rotanın **490.5 m (A), 460.8 m (B), 345.4 m (C)** noktasında. Yorum: S3 senaryosunun hikâyesi (yarım tüp ile "dönüş kararı") planlayıcı çıktısıyla tutarlı; 352 W ile aşım ~145 m daha erken. Tek yön rota yalnız 35–49 L tüketiyor, yani sorun varış değil dönüş payı. Sunumda: "S3'te plan baştan NO-GO, çünkü dönüş dahil O₂ 80 L'yi aşıyor."
+Bulgular genel: kütle/hız/süre önerileri (B) sonucu %3–9, 352 W referansı (C) enerji/O₂'yi ~%35–40 değiştiriyor; üç senaryoda da GO↔NO-GO değişimi yalnız S3 80 L limitinden geliyor, parametre setinden değil.
+
+## 12. Güneş geometrisi ve sunum denetimi (2026-11-15)
+- **`gunes_geometri_dogrulama.md` (gercek 2):** HiRISE ESP_019698_1750_RED.LBL doğrudan indirildi (SHA-256 raporda). Sim'in güneş değerleri etiketle **birebir**: yükseklik 90° − INCIDENCE 57.493071° = **32.507°**; azimut (SUB_SOLAR_AZIMUTH 192.527174° − NORTH_AZIMUTH 270°) mod 360 = **282.527°** (kuzeyden saat yönü, çekim yerel saati 15:44, Ls 161.2°). Ortofotodaki gömülü gölgeler bu güneşe aittir; güneş kaydırıcısı değişince gölgeler değişmez. Çapraz kontrol (Allison & McEwen geometri hesabı): 32.508° / 282.571°. Güneş açısal çapı: çekim anı 21.20′, günberi **23.17′**, günöte **19.21′**, ortalama 21.00′ (önceki gercek 2 raporundaki 22.7′/19.5′ yanlıştı; doğrusu bu rapordaki).
+- **`sunum_denetimi.md` (gercek):** 110 benzersiz iddia: ~47 destekleniyor, ~51 abartılı, ~12 kaynaksız, ~8 yasak (sayılar dosyanın sonuç satırına göre). Öncelikli düzeltmeler: "her sayı NASA'dan" (varsayımlar var), "enerji alt sınırdır" (kesin değil), eski **2,26–2,30 km** rota sayısı, **144 noktada 0,0 m** (medyan farkı, her noktada değil), **829 gerçek kaya** (gölge tabanlı aday, ölçüm değil), **80 L = yarım tüp**, "yeniden planlama kum hatasını kapatır". Her satır için TR/EN düzeltme cümlesi dosyada. Sunum belgeleri (`docs/sunum_taslak.md`, `docs/submission/*`) Elif Nisa'nın alanı; düzeltme kararı onlarda.
