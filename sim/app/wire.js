@@ -7,6 +7,7 @@ import { initHud } from './hud.js';
 import { showBriefing, showRoutePicker, showAlert, showReport } from './screens.js';
 import { loadTexts, t, has, missionText } from './i18n.js';
 import { hudSnapshot, missionDefinition, walkPlan, uiTexts } from './wire-adapters.js';
+import { sandForRoute } from './custommission.js';   // batu:custom
 
 export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, replan, toast, flow = {} }) {
   const root = document.getElementById('mission-ui'), buttons = document.getElementById('missions');
@@ -27,6 +28,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   const api = { missions: () => available('/missions') ? call('/missions') : Promise.reject(new Error('Görev API yok')),
     debrief: data => available('/debrief') ? call('/debrief', data) : Promise.reject(new Error('Özet API yok')) };
   const catalog = await loadMissions({ api });
+  const sandZones = await fetch(new URL('../data/sand_zones.json', import.meta.url)).then(r => (r.ok ? r.json() : [])).catch(() => []);   // batu:custom: özel görevde kum olayı yalnız gerçek aday yakınında
   let observations = [];
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false;
   const sourceLabel = document.getElementById('vitals-source');
@@ -103,6 +105,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     planned = structuredClone(route?.raw?.total ?? route?.total ?? {}); limits = planned.budget?.limits ?? selected?.limits ?? {};
     vitals = createVitals({ assumptions, route, arrivalRadiusM: 10, api: available('/step') && route?.source === 'api' ? createStepAdapter({ call, coords, assumptions, observations: () => observations }) : undefined });
     if (route) {
+      if (selected?.custom) selected.sand = sandForRoute(route.dense, sandZones, p => coords.pxToWorld(p));   // batu:custom: rota gerçek kum adayına yaklaşmıyorsa olay yok
       machine = createMission({ definition: missionDefinition(selected ?? { id: 'free', sample_kg: 0 }, route), vitals, coords, api, source: selected ? catalog.source : 'free' });
       machine.plan(); machine.start(route);
       machine.on('event', async event => {

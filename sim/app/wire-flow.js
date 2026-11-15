@@ -5,6 +5,9 @@ import { el, button } from './screens.js';
 import { t, getLang, setLang, onLang, loadTexts, missionText } from './i18n.js';
 import { slotItems } from './slots.js';
 import { bearingRel, missionSummary, fmtDist } from './flow-logic.js';
+import { openMapPicker, loadPickerLayers } from './mappicker.js';   // batu:custom
+import { parseAB, buildCustomMission } from './custommission.js';   // batu:custom
+import { API_BASE, API_OFF } from './api.js';   // batu:custom
 
 const emit = (screen, extra = {}) => window.dispatchEvent(new CustomEvent('mm:screen', { detail: { screen, ...extra } }));
 
@@ -121,9 +124,33 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
       card.append(el('p', 'mm-mcard-story', missionText(m.id, 'brief')), facts, go);
       row.append(card);
     });
+    row.append(customCard());   // batu:custom
     layer.append(head, row, langButton());
     layer.classList.add('mm-in');
     row.querySelector('button')?.focus();
+  }
+
+  // ---------- Özel görev: 'Kendi rotanı planla' (#120, batu:custom) ----------
+  let pickerLayers = null;
+  function customCard() {
+    const card = el('article', 'mm-mcard'); card.dataset.testid = 'mission-custom'; card.dataset.mission = 'CUSTOM';
+    const top = el('div', 'mm-mcard-top'); top.append(el('span', 'mm-mcard-id mm-num', '+'), el('span', 'mm-diff', t('custom.badge')));
+    const go = button(t('custom.card.go'), 'ghost'); go.dataset.testid = 'mission-go-custom';
+    go.onclick = () => void openCustom();
+    card.append(top, el('h3', 'mm-mcard-title', t('custom.card.title')), el('p', 'mm-mcard-story', t('custom.card.text')), go);
+    if (API_OFF) { go.disabled = true; card.append(el('p', 'mm-fine', t('custom.err.api'))); }
+    return card;
+  }
+  async function openCustom(initial) {
+    clearLayer(); hudLayer.hidden = true; setScreen('picker');
+    if (!pickerLayers && !API_OFF) pickerLayers = await loadPickerLayers(API_BASE);
+    openMapPicker({ root: document.body, geo, coords: wire.coords, overviewUrl, grid: wire.grid, layers: pickerLayers ?? {}, initial,
+      onCompute: (m) => { layer.classList.remove('mm-in'); void wire.selectMission(m); }, onBack: () => showSelect() });
+  }
+  // ?a=col,row&b=col,row ile açılış: aynı özel görev doğrudan brifinge gelir.
+  function openCustomFromUrl() {
+    const ab = parseAB(location.search); if (!ab) return false;
+    try { void wire.selectMission(buildCustomMission({ ...ab, title: t('mission.CUSTOM.title') })); return true; } catch { return false; }
   }
 
   // ---------- Hesaplanıyor ekranı (#103 A.1) ----------
@@ -310,7 +337,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
 
   loadTexts();
   return {
-    showIntro, showSelect, showWalk, update, openPause, closePause, toggleHelp,
+    showIntro, showSelect, showWalk, update, openPause, closePause, toggleHelp, openCustom, openCustomFromUrl,
     get screen() { return screen; }, get paused() { return paused; }, dev,
     // wire.js kancaları
     onScreen: (name, m) => {
