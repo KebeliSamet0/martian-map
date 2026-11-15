@@ -82,11 +82,48 @@ def risk_per_m(L: Layers) -> np.ndarray:
     return 0.65 * slope_r + 0.25 * rock_r + 0.10 * ent_r
 
 
-def cost_surface(L: Layers, w: dict, load_kg: float = 0.0) -> tuple[np.ndarray, dict]:
+def cost_surface(L: Layers, w: dict, load_kg: float = 0.0, max_slope_deg: float | None = None) -> tuple[np.ndarray, dict]:
     v = speed_ms(L)
     t = 1.0 / v
     k = kcal_per_m(L, v, load_kg=load_kg)
     r = risk_per_m(L)
     c = w["t"] * t + w["k"] * k + w["r"] * r
     c = np.where(L.slope >= P.SLOPE_NOGO_DEG, np.inf, c)
+    # DENEME (Emre, 2026-11-15): kullanıcının azami eğimi. 25° güvenlik sınırı her zaman geçerli; yalnız daha sıkı yapılabilir.
+    if max_slope_deg is not None and max_slope_deg < P.SLOPE_NOGO_DEG:
+        c = np.where(L.slope >= max_slope_deg, np.inf, c)
+    rb = rock_block_mask(L)
+    if rb is not None:
+        c = np.where(rb, np.inf, c)
     return c, {"s_per_m": t, "kcal_per_m": k, "risk_per_m": r}
+
+
+# DENEME (Emre, 2026-11-15): sim'in 3B'de çizdiği tespit edilmiş kayalar (sim/data/rocks.json) rotada engel olsun.
+# MARTIAN_ROCK_BLOCK=1 ile açılır; kapalıyken davranış değişmez. Yarıçap sim'in çizdiğiyle aynı: min(d, 2,6 m)/2 + 0,5 m pay.
+_ROCK_CACHE: dict = {}
+
+
+def rock_block_mask(L: Layers):
+    import json, os
+    from pathlib import Path
+    # rocks.json gerçek ızgaranın (contracts/grid.json, 1000×1000, 2 m) piksel uzayında
+    if os.environ.get("MARTIAN_ROCK_BLOCK") != "1" or L.synthetic or L.slope.shape != (1000, 1000):
+        return None
+    key = (L.slope.shape, L.res_m)
+    if key not in _ROCK_CACHE:
+        f = Path(__file__).resolve().parents[2] / "sim" / "data" / "rocks.json"
+        m = np.zeros(L.slope.shape, bool)
+        h, w = m.shape
+        for rk in json.load(open(f, encoding="utf-8")):
+            if rk.get("kind", "rock") != "rock":
+                continue  # outcrop (sırt yüzleği) ve shadow (gölge artığı) tek kaya değil; sim shadow'u çizmiyor, görünmez engel olmasın
+            x, y = rk["px"]
+            rad = (min(rk["d_m"], 2.6) / 2 + 0.5) / L.res_m  # hücre
+            for yy in range(int(y - rad - 1), int(y + rad + 2)):
+                for xx in range(int(x - rad - 1), int(x + rad + 2)):
+                    if 0 <= yy < h and 0 <= xx < w and (xx + 0.5 - x) ** 2 + (yy + 0.5 - y) ** 2 <= rad ** 2:
+                        m[yy, xx] = True
+            if 0 <= int(y) < h and 0 <= int(x) < w:
+                m[int(y), int(x)] = True  # kayanın merkez hücresi her zaman
+        _ROCK_CACHE[key] = m
+    return _ROCK_CACHE[key]
