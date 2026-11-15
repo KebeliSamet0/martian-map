@@ -8,7 +8,7 @@ test('shadow engel değil; rock ve outcrop engel; kind yoksa rock', () => {
   const c = mk([{ x: 0, z: 0, d_m: 4, kind: 'shadow' }, { x: 50, z: 0, d_m: 4 }, { x: 90, z: 0, d_m: 6, kind: 'outcrop' }]);
   assert.equal(c.count, 2);
   const r = c.resolve([-3, 0], [3, 0]);
-  assert.equal(r.x, 3); assert.equal(r.hit, null);   // shadow'dan geçer
+  assert.ok(Math.abs(r.x - 3) < 1e-9); assert.equal(r.hit, null);   // shadow'dan geçer
 });
 
 test('kayaya girmez: iç hareket yüzeyde durur', () => {

@@ -53,8 +53,8 @@ export function createCollider(items, { now = () => (typeof performance !== 'und
     const px = prev.x ?? prev[0], pz = prev.z ?? prev[1], nx = next.x ?? next[0], nz = next.z ?? next[1];
     const dist = Math.hypot(nx - px, nz - pz), n = Math.max(1, Math.ceil(dist / SUBSTEP));
     const p = { x: px, z: pz }, hits = new Set();
-    for (let s = 1; s <= n; s++) { p.x = px + ((nx - px) * s) / n; p.z = pz + ((nz - pz) * s) / n; push(p, radius, hits); }
-    // Alt adım sürüklenmesinde son nokta hedefe göre kayadan çıkmış olmalı (kayma tamamlandı)
+    const sx = (nx - px) / n, sz = (nz - pz) / n;
+    for (let s = 0; s < n; s++) { p.x += sx; p.z += sz; push(p, radius, hits); }   // artımlı: itilen konumdan devam (orijinal çizgiye dönmez)
     let hit = null;
     for (const rk of hits) { hit = rk; break; }
     return { x: p.x, z: p.z, hit };
