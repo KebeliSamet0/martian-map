@@ -34,16 +34,52 @@ export function shareQuery({ a, b, o2 }) {
 export const straightMeters = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]) * RES_M;
 export const etaMinutes = (meters) => meters / SUIT_SPEED_MS / 60;
 
-/** Hücre eğimi (derece) dizisinden (Float32Array, satır-sütun) bir hücrenin durumu. */
-export function cellInfo(slope, [c, r]) {
-  if (!slope || !inGrid([c, r])) return { ok: false, outside: true, slope: null };
-  const s = slope[r * GRID_W + c];
-  return { ok: Number.isFinite(s) && s < IMPASSABLE_DEG, outside: false, slope: s };
+/**
+ * Ana geçilebilir bölge maskesi (Uint8Array, 1 = ana bileşen): planlayıcı layers.py ile aynı kural, 8 komşulukla bağlı
+ * geçilebilir (< IMPASSABLE_DEG) hücrelerin EN BÜYÜK bileşeni. Başlangıç ve hedef aynı bileşende değilse /route
+ * "geçilebilir yol yok" (422) verir; küçük ayrık adalar bu yüzden hedef/öneri olamaz. Bir kez hesaplanır, önbelleğe alınır.
+ */
+const maskCache = new WeakMap();
+export function mainComponentMask(slope) {
+  if (maskCache.has(slope)) return maskCache.get(slope);
+  const n = GRID_W * GRID_H, label = new Int32Array(n), stack = new Int32Array(n);
+  let best = 0, bestSize = 0, next = 0;
+  for (let i = 0; i < n; i++) {
+    if (label[i] || !(slope[i] < IMPASSABLE_DEG)) continue;
+    const id = ++next; let sp = 0, size = 0; stack[sp++] = i; label[i] = id;
+    while (sp) {
+      const j = stack[--sp]; size++;
+      const c = j % GRID_W, r = (j - c) / GRID_W;
+      for (let dr = -1; dr <= 1; dr++) {
+        const rr = r + dr; if (rr < 0 || rr >= GRID_H) continue;
+        for (let dc = -1; dc <= 1; dc++) {
+          const cc = c + dc; if ((!dr && !dc) || cc < 0 || cc >= GRID_W) continue;
+          const k = rr * GRID_W + cc;
+          if (!label[k] && slope[k] < IMPASSABLE_DEG) { label[k] = id; stack[sp++] = k; }
+        }
+      }
+    }
+    if (size > bestSize) { bestSize = size; best = id; }
+  }
+  const mask = new Uint8Array(n); if (best) for (let i = 0; i < n; i++) if (label[i] === best) mask[i] = 1;
+  maskCache.set(slope, mask); return mask;
 }
 
-/** En yakın geçilebilir (<20°) hücre (halka arama, ≤ maxCells hücre). {px:[c,r], m} ya da null. */
-export function nearestPassable(slope, [c, r], maxCells = 150) {
-  const ok = (cc, rr) => inGrid([cc, rr]) && slope[rr * GRID_W + cc] < IMPASSABLE_DEG;
+/**
+ * Hücre eğimi (derece) dizisinden (Float32Array, satır-sütun) bir hücrenin durumu.
+ * mask verilirse (mainComponentMask): eğimi uygun ama ana bölgeye bağlı olmayan hücre ok:false, island:true döner.
+ */
+export function cellInfo(slope, [c, r], mask = null) {
+  if (!slope || !inGrid([c, r])) return { ok: false, outside: true, slope: null };
+  const s = slope[r * GRID_W + c];
+  const flat = Number.isFinite(s) && s < IMPASSABLE_DEG;
+  const island = !!mask && flat && !mask[r * GRID_W + c];
+  return { ok: flat && !island, outside: false, slope: s, island };
+}
+
+/** En yakın geçilebilir (< IMPASSABLE_DEG) hücre (halka arama, ≤ maxCells hücre). mask verilirse yalnız ana bölgede. {px:[c,r], m} ya da null. */
+export function nearestPassable(slope, [c, r], maxCells = 150, mask = null) {
+  const ok = (cc, rr) => inGrid([cc, rr]) && slope[rr * GRID_W + cc] < IMPASSABLE_DEG && (!mask || mask[rr * GRID_W + cc] === 1);
   if (ok(c, r)) return { px: [c, r], m: 0 };
   let best = null;
   for (let d = 1; d <= maxCells; d++) {

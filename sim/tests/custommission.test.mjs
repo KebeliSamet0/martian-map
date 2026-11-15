@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseAB, shareQuery, straightMeters, etaMinutes, cellInfo, nearestPassable, buildCustomMission, sandForRoute, GRID_W, GRID_H, O2_LIMITED_L } from '../app/custommission.js';
+import { parseAB, shareQuery, straightMeters, etaMinutes, cellInfo, nearestPassable, mainComponentMask, buildCustomMission, sandForRoute, GRID_W, GRID_H, O2_LIMITED_L } from '../app/custommission.js';
 import { createMission } from '../app/mission.js';
 
 const flat = (deg = 5) => new Float32Array(GRID_W * GRID_H).fill(deg);
@@ -69,4 +69,19 @@ test('kum olayı mission.js ile uyumlu: yalnız sand tanımlıysa tetiklenir (uy
     events: [{ id: 'CUSTOM-sand', type: 'sand', world: [200, 200], radius_m: 20, trigger_m: 60 }] }, coords });
   withSand.plan(); withSand.start(route);
   assert.equal(withSand.update([0, 200]).state, 'walking'); assert.equal(withSand.update([150, 200]).state, 'event');
+});
+
+test('mainComponentMask: ayrik ada ana bolge degil; nearestPassable maskeyle adayi atlar, 8 komsuluk (capraz) baglar', () => {
+  const s = flat(40);
+  for (let c = 100; c < 200; c++) for (let r = 100; r < 200; r++) s[r * GRID_W + c] = 5;      // ana bölge 100×100
+  for (let c = 10; c < 13; c++) for (let r = 10; r < 13; r++) s[r * GRID_W + c] = 5;          // 3×3 ada
+  s[300 * GRID_W + 300] = 5; s[301 * GRID_W + 301] = 5;                                      // yalnız çapraz bağlı 2 hücre (ada)
+  const m = mainComponentMask(s);
+  assert.equal(m[150 * GRID_W + 150], 1); assert.equal(m[11 * GRID_W + 11], 0); assert.equal(m[300 * GRID_W + 300], 0);
+  const ci = cellInfo(s, [11, 11], m); assert.equal(ci.ok, false); assert.equal(ci.island, true);
+  assert.equal(cellInfo(s, [150, 150], m).ok, true);
+  assert.equal(nearestPassable(s, [11, 11], 150, null).px.join(), '11,11');                  // maskesiz: ada hücresi
+  const np = nearestPassable(s, [11, 11], 150, m); assert.equal(np.px.join(), '100,100');      // maskeli: ana bölge
+  const diag = flat(40); diag[50 * GRID_W + 50] = 5; diag[51 * GRID_W + 51] = 5;
+  assert.equal(mainComponentMask(diag)[51 * GRID_W + 51], 1);                                 // çapraz komşu aynı bileşen (API ile aynı kural)
 });
