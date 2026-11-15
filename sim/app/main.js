@@ -27,6 +27,7 @@ import { createWalkFeel } from './walkfeel.js';   // tur4:his
 import { initCollide } from './collide.js';   // tur4:fizik
 import { pickTiles } from './tiles-base.js';
 import { startPrefetch } from './prefetch.js';
+import { createLiveRoute } from './liveroute.js';   // tur5:canli
 import { createDynRoute, proposeVia, oneWay, deltaOf, budgetFor } from './dynroute.js';   // batu:dyn   // tur4:dogrula
 
 const BASE = await pickTiles(new URLSearchParams(location.search).get('tiles'));   // tur4:dogrula: varsayılan tiles_fixed, yedek tiles, ?tiles= ile seçilir
@@ -247,7 +248,7 @@ function groundY(x, z) {
 }
 
 function enter3D(kind) {
-  paused = false; keys.clear(); initThree(); dyn?.reset();   // batu:dyn
+  paused = false; keys.clear(); initThree(); dyn?.reset(); live?.reset?.();   // batu:dyn  tur5:canli
   $('mapwrap').hidden = true; $('gl').hidden = false; $('hud').hidden = hudHidden; $('ctl').hidden = false; $('mini').hidden = false; $('hint').hidden = false;
   const r = mapView.route;
   if (kind === 'auto' && r) {
@@ -347,6 +348,10 @@ async function fireReplan(S) {
   const oldGeneration = R;
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
   audio?.alert('sand');
+  if (LIVE) {   // tur5:canli kum bölgesi gözlem olur; canlı rota hemen ondan kaçınarak yeniden hesaplanır (kart yok)
+    live.observe({ px: S.px, radius_m: S.radius_m, cls: 'sand' }); live.force(performance.now() / 1000);
+    toast(t('live.sand'), true); return;
+  }
   try {
     // tur5:dyn kum olayı artık dynroute'ta: kalan bütçe + base_px ile /replan, karar kartı tek (wire.js)
     await dyn.sand({ ...S, t0: performance.now() });
@@ -371,6 +376,7 @@ dyn = createDynRoute({
     const R = routeRun, m = wire?.machine?.snapshot?.();
     if (!R || R.r.source !== 'api' || state === 'map' || state === 'tour' || !wire.selected) return null;
     if (!force && (paused || m?.state !== 'walking')) return null;
+    if (LIVE) return null;   // tur5:canli canlı rota açıkken sapma/periyodik/rezerv kartları yok
     const base = R.baseWorld ?? R.r.start?.world;
     return { route: { dense: R.r.dense, goalPx: R.r.goalPx, kind: R.r.kind }, pos: [P.x, P.z], px: curPxNow(), progressM: R.s,
       limits: wire.selected.limits ?? {}, snap: wire.vitals?.snapshot?.() ?? {}, basePx: base ? worldToPx(geo, base[0], base[1]).map(Math.floor) : null,
@@ -378,7 +384,46 @@ dyn = createDynRoute({
   },
 });
 // tur5:dyn HUD satırı + karne özeti. Sayılar yalnız dyn.state() (planlayıcı yanıtı); API yoksa dürüstçe kapalı.
+// tur5:canli — canlı rota: her ~3 m / 4 sn'de bulunduğun yerden hedefe planlayıcının en iyi yolu; çizgi sessizce güncellenir.
+const LIVE = !API_OFF && Q.get('canli') !== '0';
+const liveGen = () => routeRun ? `${routeRun.leg ?? 'out'}:${routeRun.r.goalPx?.join(',')}` : null;
+function installLive(rt, info) {
+  const R = routeRun; if (!R || state === 'map') return;
+  const limits = wire?.selected?.limits;   // vitals görevin TAM limitleriyle ölçmeye devam eder (istek kalan bütçeyle gider)
+  if (limits && rt.total) rt.total.budget = { ...(rt.total.budget ?? {}), limits: { ...(rt.total.budget?.limits ?? {}), ...limits } };
+  const nr = adaptRoute(rt, { geo, nav, suitSpeed: SUIT_V, kind: R.r.kind });
+  nr.goalPx = R.r.goalPx; nr.startPx = info.startPx; nr.start = { world: [P.x, P.z] }; nr.goal = R.r.goal; nr.source = 'api'; nr.computeMs = info.ms; nr.live = true;
+  const cum = [0]; for (let i = 1; i < nr.dense.length; i++) cum.push(cum[i - 1] + Math.hypot(nr.dense[i][0] - nr.dense[i - 1][0], nr.dense[i][1] - nr.dense[i - 1][1]));
+  if (!R.livePlan) { R.livePlan = { dense: R.r.dense, segments: R.r.segments }; T.oldLine.set(R.r.dense, R.r.segments); }   // gri: ilk plan
+  T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
+  routeRun = { ...R, r: nr, cum, total: cum[cum.length - 1], s: 0, replanned: true, livePlan: R.livePlan, baseWorld: R.baseWorld ?? R.r.start?.world };
+  wire?.setRoute(nr);
+}
+const live = createLiveRoute({
+  call: async (path, body) => { const r = await fetch(API_BASE + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) }); if (!r.ok) throw new Error(`API ${r.status}`); return r.json(); },
+  install: installLive,
+  ctx: () => {
+    const R = routeRun, m = wire?.machine?.snapshot?.();
+    if (!LIVE || !R || R.r.source !== 'api' || paused || state === 'map' || state === 'tour' || !wire?.selected || m?.state !== 'walking') return null;
+    const base = R.baseWorld ?? R.r.start?.world;
+    return { pos: [P.x, P.z], px: curPxNow(), goalPx: R.r.goalPx, kind: R.r.kind, gen: liveGen(),
+      budget: budgetFor(wire.selected.limits ?? {}, wire.vitals?.snapshot?.() ?? {}), basePx: base ? worldToPx(geo, base[0], base[1]).map(Math.floor) : null };
+  },
+});
+addEventListener('mm:camera-insight', (e) => {   // tur5:canli kask kamerası uyarısı: o durak çevresi canlı rotada kaçınılır
+  const d = e.detail ?? {}; if (!LIVE || !d.warn) return;
+  const stop = wire?.grid?.rover_stops?.find((s) => s.stop_id === d.stopId); if (!stop) return;
+  const kinds = d.kinds ?? [], cls = kinds.includes('sand') ? 'sand' : (kinds.includes('bigrock') || kinds.includes('rock')) ? 'bigrock' : null;
+  if (cls) { live.observe({ px: stop.px, radius_m: 20, cls }); live.force(performance.now() / 1000); }
+});
 function dynLineText() {
+  if (LIVE) {   // tur5:canli
+    const s = live.state(), l = s.last;
+    if (!routeRun || routeRun.r.source !== 'api') return t('hud.dyn.off');
+    if (!l) return t('live.wait');
+    const left = Math.round(routeRun.total - (routeRun.s ?? 0));
+    return t('live.on', { status: l.go === false ? 'NO-GO' : l.go === true ? 'GO' : '—', m: left, ms: l.ms, n: s.n }) + (s.obs.length ? t('live.obs', { n: s.obs.length }) : '') + (s.err ? ' · ' + t('live.err') : '');
+  }
   const R = routeRun; if (API_OFF || !R || R.r.source !== 'api') return t('hud.dyn.off');
   const s = dyn?.state?.(), l = s?.last; if (!l) return t('hud.dyn.wait', { m: 100, s: 60 });
   const ago = Math.max(0, Math.round(Date.now() / 1000 - l.at));
@@ -386,6 +431,7 @@ function dynLineText() {
   return t('hud.dyn.on', { status, s: ago, n: s.recalcs, why: t(`hud.dyn.why.${l.reason}`) });
 }
 function dynReportText() {
+  if (LIVE) { const n = live.state().n; return n ? t('live.report', { n }) : ''; }   // tur5:canli
   const s = dyn?.state?.(); if (!s || !s.recalcs) return API_OFF || routeRun?.r?.source !== 'api' ? t('report.dyn.off') : '';
   return t('report.dyn.n', { n: s.recalcs });
 }
@@ -549,6 +595,7 @@ function frame(now) {
   T.wf?.update(dt, innerHeight * T.ratio); T.wf?.applyAstro(T.astro);   // tur4:his
   if (!paused) wire?.update(dt * timeScale, P);
   if (dyn) { const nowS = performance.now() / 1000; dyn.update(Math.min(2, nowS - (dynLast ?? nowS)), nowS); dynLast = nowS; }   // batu:dyn: duvar saati (kare dt'si kısıtlı olabilir)
+  if (LIVE) live.update(performance.now() / 1000);   // tur5:canli
   if (!paused) T.extras?.update(P);
   deviationCheck(now); scanUpdate(now / 1000);
   T.terrain.update(T.camera.position);
@@ -687,6 +734,7 @@ window.__mm = {
   man, geo, nav, get mapView() { return mapView; }, get T() { return T; }, P,
   enter3D, enterMap, enterTour, get flow() { return flow; }, get wire() { return wire; }, get routeRun() { return routeRun; },
   dynState: () => dyn?.state?.(),   // test kancası (batu:dyn)
+  liveState: () => live.state(),   // test kancası (tur5:canli)
   setTimeScale(value) { timeScale = clamp(value, 1, 2000); },
   teleport(x, z, yaw = 0, pitch = -0.1, st = 'walk', heightAbove) {
     if (!T) enter3D('walk');

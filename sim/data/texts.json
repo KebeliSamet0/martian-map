@@ -1271,6 +1271,30 @@
     "custom.quick.hint": {
       "tr": "Hazır senaryolardan biriyle doğrudan brifinge geç.",
       "en": "Jump straight to the briefing with a ready-made scenario."
+    },
+    "live.on": {
+      "tr": "Canlı rota · {status} · hedefe {m} m · bulunduğun yerden {ms} ms'de yeniden hesaplandı",
+      "en": "Live route · {status} · {m} m to goal · recomputed from your position in {ms} ms"
+    },
+    "live.wait": {
+      "tr": "Canlı rota: ilk hesap yapılıyor…",
+      "en": "Live route: computing…"
+    },
+    "live.obs": {
+      "tr": " · {n} uyarılı bölgeden kaçınıyor",
+      "en": " · avoiding {n} flagged area(s)"
+    },
+    "live.err": {
+      "tr": "son hesap başarısız, önceki rota gösteriliyor",
+      "en": "last recompute failed, showing previous route"
+    },
+    "live.sand": {
+      "tr": "Kum adayı rotada: canlı rota bu bölgeden kaçınacak şekilde yeniden hesaplanıyor.",
+      "en": "Sand candidate on the route: the live route is being recomputed to avoid it."
+    },
+    "live.report": {
+      "tr": "Canlı rota yürüyüş boyunca {n} kez bulunduğun yerden yeniden hesaplandı (planlayıcı).",
+      "en": "The live route was recomputed {n} times from your position during the walk (planner)."
     }
   },
   "helmetcam": {
