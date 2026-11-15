@@ -52,6 +52,7 @@ Söylenmeyecekler (denetimde YASAK): "NASA onayladı", "güvenli rota garantisi"
   - Slope (DTM) + rocks (our shadow-based detector) + terrain class with uncertainty (AI4Mars-trained model).
   - Suited walking energy: Pandolf load-carriage equation, calibrated to Apollo EVA data (272 W).
   - The planner returns shortest / balanced / safest routes with per-segment reasons; mission limits and walk telemetry are computed in the simulator.
+- **Konuşmacı notu (15 Kasım, Emre #127):** Geçilmez eğim 20° olunca zemin modeli S1–S3 rotalarını değiştirmiyor: tam model ile "eğim + kaya" 9 durumun 9'unda aynı yolu buluyor, risk farkı %0–2. "Model rotayı değiştirdi" deme; modelin değerini kask kamerası (gerçek Navcam + maske), ayak altı zemin oranı ve dürüst belirsizlik üzerinden anlat.
 - **Görsel:** Akış şeması: DTM → eğim · HiRISE → kaya · Navcam → zemin → maliyet haritası → 3 rota → simülatör (HUD, tarayıcı, karne).
   Yardımcı: `docs/data/img/rock_abundance_detection.png`, `docs/figures/rover_terrain_examples.png`.
 
