@@ -349,7 +349,7 @@ async function fireReplan(S) {
   T.hazard.set(S.world[0], S.world[1], S.radius_m);
   audio?.alert('sand');
   if (LIVE) {   // tur5:canli kum bölgesi gözlem olur; canlı rota hemen ondan kaçınarak yeniden hesaplanır (kart yok)
-    live.observe({ px: S.px, radius_m: S.radius_m, cls: 'sand' }); live.force(performance.now() / 1000);
+    live.observe({ px: S.px, radius_m: S.radius_m, cls: 'sand' }); liveForced = true; live.force(performance.now() / 1000);
     toast(t('live.sand'), true); return;
   }
   try {
@@ -386,6 +386,7 @@ dyn = createDynRoute({
 // tur5:dyn HUD satırı + karne özeti. Sayılar yalnız dyn.state() (planlayıcı yanıtı); API yoksa dürüstçe kapalı.
 // tur5:canli — canlı rota: her ~3 m / 4 sn'de bulunduğun yerden hedefe planlayıcının en iyi yolu; çizgi sessizce güncellenir.
 const LIVE = !API_OFF && Q.get('canli') !== '0';
+let liveForced = false;   // otomatik rota yürüyüşünde yalnız yeni gözlemle (kum/kamera) yeniden hesap: karakter rotayı zaten izliyor
 const liveGen = () => routeRun ? `${routeRun.leg ?? 'out'}:${routeRun.r.goalPx?.join(',')}` : null;
 function installLive(rt, info) {
   const R = routeRun; if (!R || state === 'map') return;
@@ -397,7 +398,15 @@ function installLive(rt, info) {
   if (!R.livePlan) R.livePlan = { dense: R.r.dense, segments: R.r.segments };
   T.oldLine.clear();   // canlı modda tek çizgi: eski plan şeridi havada asılı görünüyordu (Samet: sabit çizgi istemiyor)
   T.line.set(nr.dense, nr.segments); T.warns.set(nr.dense, nr.segments);
-  routeRun = { ...R, r: nr, cum, total: cum[cum.length - 1], s: 0, replanned: true, livePlan: R.livePlan, baseWorld: R.baseWorld ?? R.r.start?.world };
+  // Geri sıçrama olmasın: ilerleme, oyuncunun yeni rotadaki izdüşümünden başlar (ilk ~40 m içinde en yakın nokta).
+  let s0 = 0, best = Infinity;
+  for (let i = 0; i + 1 < nr.dense.length && cum[i] < 40; i++) {
+    const a = nr.dense[i], b = nr.dense[i + 1], dx = b[0] - a[0], dz = b[1] - a[1], L2 = dx * dx + dz * dz || 1;
+    const u = Math.max(0, Math.min(1, ((P.x - a[0]) * dx + (P.z - a[1]) * dz) / L2)), d = Math.hypot(a[0] + dx * u - P.x, a[1] + dz * u - P.z);
+    if (d < best) { best = d; s0 = cum[i] + u * Math.sqrt(L2); }
+  }
+  routeRun = { ...R, r: nr, cum, total: cum[cum.length - 1], s: s0, replanned: true, livePlan: R.livePlan, baseWorld: R.baseWorld ?? R.r.start?.world };
+  liveForced = false;
   wire?.setRoute(nr);
 }
 const live = createLiveRoute({
@@ -406,6 +415,7 @@ const live = createLiveRoute({
   ctx: () => {
     const R = routeRun, m = wire?.machine?.snapshot?.();
     if (!LIVE || !R || R.r.source !== 'api' || paused || state === 'map' || state === 'tour' || !wire?.selected || m?.state !== 'walking') return null;
+    if (state === 'auto' && !liveForced) return null;
     const base = R.baseWorld ?? R.r.start?.world;
     return { pos: [P.x, P.z], px: curPxNow(), goalPx: R.r.goalPx, kind: R.r.kind, gen: liveGen(),
       budget: budgetFor(wire.selected.limits ?? {}, wire.vitals?.snapshot?.() ?? {}), basePx: base ? worldToPx(geo, base[0], base[1]).map(Math.floor) : null };
@@ -415,7 +425,7 @@ addEventListener('mm:camera-insight', (e) => {   // tur5:canli kask kamerası uy
   const d = e.detail ?? {}; if (!LIVE || !d.warn) return;
   const stop = wire?.grid?.rover_stops?.find((s) => s.stop_id === d.stopId); if (!stop) return;
   const kinds = d.kinds ?? [], cls = kinds.includes('sand') ? 'sand' : (kinds.includes('bigrock') || kinds.includes('rock')) ? 'bigrock' : null;
-  if (cls) { live.observe({ px: stop.px, radius_m: 20, cls }); live.force(performance.now() / 1000); }
+  if (cls) { live.observe({ px: stop.px, radius_m: 20, cls }); liveForced = true; live.force(performance.now() / 1000); }
 });
 function dynLineText() {
   if (LIVE) {   // tur5:canli
@@ -540,7 +550,7 @@ function stepPlayer(dt, t) {
     if (state === 'fly') { if (keys.has('Space')) P.y += sp * dt; if (keys.has('KeyC')) P.y -= sp * dt; }
   }
   P.x = clamp(P.x, 1, geo.sizeX - 1); P.z = clamp(P.z, 1, geo.sizeZ - 1);
-  if (T.collide && state !== 'fly') { const c = T.collide.step(pv, [P.x, P.z]); P.x = c.x; P.z = c.z; }   // tur4:fizik
+  if (T.collide && state !== 'fly' && state !== 'auto') { const c = T.collide.step(pv, [P.x, P.z]); P.x = c.x; P.z = c.z; }   // tur4:fizik  tur5:canli otomatik rota yürüyüşünde çarpışma yok: rota konumu ile itme her karede çekişip geri sıçratıyordu
   T.wf?.after(P, dt, state !== 'fly' && moving);   // tur4:his
   const gy = groundY(P.x, P.z);
   if (gy != null) {
