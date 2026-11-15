@@ -68,7 +68,7 @@ test('3B örtü yalnız mineral imzalı pikselleri boyar; yerel mod durak yarı�
   assert.equal(signalAlpha(SIGNAL_THRESHOLD - 1, 0), 0);
   assert.equal(signalAlpha(200, 0, false), 0);
   assert.ok(signalAlpha(164, 15) > signalAlpha(SIGNAL_THRESHOLD, 0));
-  assert.ok(signalAlpha(255, 255) <= 90);
+  assert.ok(signalAlpha(255, 255) <= 170);
   assert.ok(nearAnyStop(259, 370, [[259.16, 370.53]], 90));
   assert.ok(!nearAnyStop(300, 370, [[259.16, 370.53]], 90));
 });

@@ -154,12 +154,12 @@ export function addScienceMarkers(L, map, stops, onPick) {
 }
 
 // ---------------------------------------------------------------- THREE
-/** Mineral imzası pikseli: SINDEX2 ya da BD2100_2 (hidratlı sülfat) eşiğin üstündeyse alfa 40–90 (hafif), değilse 0. Eşik tasarım ayarıdır (göreli 0–255 indeks). */
+/** Mineral imzası pikseli: SINDEX2 ya da BD2100_2 (hidratlı sülfat) eşiğin üstündeyse alfa 90–170 (hafif), değilse 0. Eşik tasarım ayarıdır (göreli 0–255 indeks). */
 export const SIGNAL_THRESHOLD = 100;
 export function signalAlpha(r, g, valid = true, thr = SIGNAL_THRESHOLD) {
   const v = Math.max(r, g);
   if (!valid || v < thr) return 0;
-  return Math.round(40 + (50 * (v - thr)) / (255 - thr));
+  return Math.round(90 + (80 * (v - thr)) / (255 - thr));
 }
 
 /** CRISM piksel (i,j) durağa en çok maxM metre uzakta mı? (18 m piksel merkezine göre) */
