@@ -586,6 +586,22 @@
     "flow.replan.fail": {
       "tr": "Yeniden planlama başarısız ({why}) — mevcut rota sürüyor.",
       "en": "Replanning failed ({why}) — continuing on the current route."
+    },
+    "fatal.tiles.title": {
+      "tr": "3B KAROLAR BULUNAMADI",
+      "en": "3D TILES NOT FOUND"
+    },
+    "fatal.tiles.body": {
+      "tr": "Arazi karoları yüklenemedi: {dir}",
+      "en": "Could not load the terrain tiles: {dir}"
+    },
+    "fatal.tiles.hint": {
+      "tr": "Karolar bu makinede üretilmemiş olabilir. Takımdan karo klasörünü al ya da üret: python -I sim/tools/build_tiles.py",
+      "en": "The tiles may not be built on this machine. Get the tile folder from the team, or build it: python -I sim/tools/build_tiles.py"
+    },
+    "fatal.retry": {
+      "tr": "Tekrar dene",
+      "en": "Try again"
     }
   },
   "helmetcam": {
