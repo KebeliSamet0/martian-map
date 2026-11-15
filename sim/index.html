@@ -48,10 +48,6 @@
   #hint { max-width:calc(100% - 560px); }
   @media(max-height:650px) { #hud { left:275px; width:250px; max-height:130px; } }
   /* Navcam kartı: küçükken sol kenarda, üst görev HUD'u ile alttaki #hud arasında; büyükken ortada (G / tıkla) */
-  #stop-photo { position:fixed; z-index:2050; left:14px; bottom:200px; width:240px; margin:0; padding:6px; background:#14100df2; border:1px solid var(--line); border-radius:6px; }
-  #stop-photo img { display:block; width:100%; height:135px; object-fit:cover; cursor:zoom-in; border-radius:3px; }
-  #stop-photo figcaption { font-size:12px; margin-top:4px; color:var(--dim); }
-  #stop-photo button { position:absolute; top:4px; right:4px; padding:0 6px; font-size:12px; line-height:18px; }
   /* #103 B.8: yürüyüş HUD'uyla aynı görsel aile — ince çizgi, kehribar vurgu, köşesiz */
   #stop-photo { position:fixed; z-index:2050; left:14px; bottom:200px; width:240px; margin:0; padding:8px; background:rgba(14,8,5,.72); border:1px solid rgba(255,200,150,.16); border-left:3px solid #f2a93b; border-radius:0; backdrop-filter:blur(4px); }
   #stop-photo img { display:block; width:100%; height:135px; object-fit:cover; cursor:zoom-in; border-radius:0; }
