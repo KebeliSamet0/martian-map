@@ -22,5 +22,4 @@ dist/
 .DS_Store
 deploy/dist/
 
-# Kask kamerası: indirilen Navcam kareleri (sim/tools/fetch_navcam.py ile üretilir, git dışı)
-sim/data/navcam_all/
+# Kask kamerası Navcam kareleri repoda (NASA/JPL-Caltech, kamu malı); yeniden indirmek için sim/tools/fetch_navcam.py
