@@ -1,6 +1,6 @@
 # Martian Map: 7 slides (EN)
 
-Rules: max 7 slides, English, public links, a References field with at least one NASA dataset. Screenshot IDs (`[SHOT-…]`) are placeholders until the other desks deliver frames; the repo figures listed already exist.
+Rules: max 7 slides, English, public links, a References field with at least one NASA dataset. All `docs/figures/sim_*.png` frames are real screenshots from the simulator (see *Frames* at the end); no montage.
 Each number carries its source in `[brackets]`.
 
 ## 1. Problem
@@ -15,28 +15,28 @@ Each number carries its source in `[brackets]`.
 - Pick one of three routes; each has a time, energy, oxygen and dose budget.
 - Walk it in 3D on terrain built from HiRISE data where Curiosity drove; the gauges update model estimates as you walk.
 - The helmet scanner gives rule-based warnings and shows where the terrain model has little evidence.
-- **Image:** `[SHOT-HUD]` one frame: 3D terrain, four gauges (O₂, energy, time, dose), scanner overlay.
+- **Image:** `docs/figures/sim_01_intro.png` (opening screen) + `docs/figures/sim_04_walk_hud.png` (3D walk, life-support gauges O₂ / energy / time / dose, model ground readout).
 
 ## 3. Data
 **Title:** Built on NASA data from where Curiosity actually drove
 - Topographic + optical: USGS MSL Gale HiRISE DTM (1 m) and orthophoto (25 cm). [`docs/REFERENCES.md`]
 - Rover truth: Curiosity waypoints, 391 Navcam frames at 128 stops, AI4Mars labels. [`ml/rover_terrain/LAYERS.md`]
 - Radiation: Curiosity RAD, 0.210 ± 0.040 mGy/day (constant-rate gauge); spectral: CRISM for science-stop context. [Hassler et al. 2014; `docs/data/crism_geology.md`]
-- **Image:** `docs/data/img/gale_dtm_ortho_preview.png` + `layers/msl_proposed_path.json` overlay. Optional: `[SHOT-DATA-LAYERS]` four-tile figure (DTM, ortho, Navcam, radiation).
+- **Image:** `docs/data/img/gale_dtm_ortho_preview.png` + `layers/msl_proposed_path.json` overlay. Plus `docs/figures/sim_06_navcam_vs_sim.png`: real Curiosity Navcam frame (left) against the simulator view from the same stop and direction (right).
 
 ## 4. The chain (what is different)
 **Title:** From orbital pixels to an explained route
 - Learned terrain class (AI4Mars model) + rock abundance (our HiRISE detector) set each cell's terrain coefficient.
 - Pandolf walking-energy equation, calibrated to the Apollo EVA average of 272 W, gives cost per segment. [`docs/metabolic_model.md`; SP-368]
 - Every segment shows its reason and the model's confidence; where evidence is thin, the interface shows an uncertainty warning.
-- **Image:** flow diagram (DTM → slope · HiRISE → rocks · Navcam → terrain class → cost map → 3 routes → simulator) plus `[SHOT-SEGMENT-CARD]`. Support: `docs/figures/rover_terrain_examples.png`.
+- **Image:** flow diagram (DTM → slope · HiRISE → rocks · Navcam → terrain class → cost map → 3 routes → simulator) plus `docs/figures/sim_03_routes_compare.png` (three routes + "What does the terrain model buy you?": slope-only vs terrain model + rock). Support: `docs/figures/rover_terrain_examples.png`.
 
 ## 5. One mission, start to finish
 **Title:** Briefing, route, walk, scan, surprise, debrief
 - S1: boxwork ridges to the Atacama drill site, about 0.55 km; shortest / balanced / safest take 18.4 / 18.7 / 19.4 min and 87 / 88 / 91 kcal in the planner. [`ml/rover_terrain/LAYERS.md`, after column]
 - A sand patch defined in the scenario triggers a re-plan from the planner; S3 cuts the oxygen budget to 80 L, and the astronaut has to weigh turning back. [`sim/data/missions.json`]
 - The debrief compares plan with actual and gives a grade.
-- **Image:** `[SHOT-ROUTES]` route choice, `[SHOT-SCAN]` scanner with caution / no-go marks and low-evidence areas, `[SHOT-REPLAN]` sand and new route, `[SHOT-DEBRIEF]`. Live demo or video is the backup.
+- **Image:** `docs/figures/sim_02_missions.png` (mission cards with map preview), `docs/figures/sim_05_helmetcam.png` (helmet camera: real Navcam frame + model mask, a prediction), `docs/figures/sim_07_sand_warning.png` (sand warning, replan choice). Live demo or video is the backup.
 
 ## 6. Validation
 **Title:** Checked against reality, with the misses shown
@@ -51,7 +51,14 @@ Each number carries its source in `[brackets]`.
 - Astronauts and mission control can compare the cost and risk of routes before anyone steps out; measurements, model estimates and planning assumptions are labelled apart. Safety impact has not been measured.
 - Next: replace Earth-measured coefficients when Mars suit tests report; label the 2025 boxwork area; add RAD/REMS records with location and time as context.
 - Open code; data and asset licences listed per source. Limits are planning assumptions, not medical limits. An independent prototype using NASA data, without operational approval.
-- **Image:** `[SHOT-DEBRIEF]` debrief screen, plus QR to the repository and demo `[LINK-TO-FILL]`.
+- **Image:** `docs/figures/sim_08_debrief.png` (debrief: grade, planned vs actual, what the terrain model changed), plus QR to the repository and demo `[LINK-TO-FILL]`.
 
 ## Backup slide (not counted in the 7 if the form allows; otherwise speaker notes)
 Measured vs assumed: see `PROJECT.md` Limitations; full text in `docs/sunum_taslak.md` §4.
+
+## Frames (how the screenshots were taken)
+- Source: the simulator on `main` (f0431a9) plus this PR's text fixes (S3 title, sand warning), run locally with `bash scripts/dev.sh` (planner API live, not the offline fallback), Chrome on a real GPU, 1920 × 1080, `?lang=en`, mission S1, balanced route. Captured 2026-11-15 by Elif Nisa (#128).
+- The walk was not skipped: the route was walked with the time scale raised; the debrief numbers (`sim_08`) come from that walk. `sim_08` is a crop of the full 1920 × 1080 frame (top of the report card only).
+- The route-comparison box (`sim_03`) is the real `/compare` output of the local API. On this laptop `/compare` takes ~8 s, longer than the simulator's 8 s client timeout, so the response was cached and served on the second open. Same numbers, no edits.
+- Synthetic parts stay labelled in the frames (rocks and regolith detail are synthetic; model outputs are predictions).
+

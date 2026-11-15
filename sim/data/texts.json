@@ -185,12 +185,12 @@
       "en": "Loose sand is the biggest slip and sink risk for rovers and astronauts. The sand spot here is a candidate read from orthophotos (not confirmed). The terrain model almost never predicts sand in this area (p_sand at most 0.14 on these routes), so it steers the route away from rocky/outcrop ground, not from sand. The scanner or the surprise event reveals the sand."
     },
     "mission.S3.title": {
-      "tr": "Yarım O₂ tüpü",
-      "en": "Half an oxygen tank"
+      "tr": "Kısıtlı O₂ bütçesi",
+      "en": "Limited oxygen budget"
     },
     "mission.S3.brief": {
-      "tr": "Arızalı tüp nedeniyle bu yürüyüşte yalnız 80 L oksijenin var. Hedefe varmak garanti değil. Oksijeni izle; dönüş noktasını kaçırma.",
-      "en": "A faulty tank leaves you just 80 L of oxygen for this walk. Reaching the goal isn't guaranteed — watch the oxygen and don't miss your turn-back point."
+      "tr": "Bu senaryoda oksijen bütçen 80 L'ye düşürüldü. Hedefe varmak garanti değil. Oksijeni izle; dönüş kararını zamanında ver.",
+      "en": "In this scenario your oxygen budget is cut to 80 L. Reaching the goal isn't guaranteed — watch the oxygen and make the turn-back call in time."
     },
     "mission.S3.objective": {
       "tr": "Oksijen yeterse Atacama'ya ulaş; yetmezse zamanında geri dön.",
@@ -377,12 +377,12 @@
       "en": "W A S D|Move|Shift|Run|Mouse (click)|Look around|R|Return to route|L / Shift+L|Terrain scan / wide scan|T|Third / first person|[ ]|Playback speed|G|Enlarge Navcam photo|N|Sound on/off|H|HUD on/off|Esc|Pause menu|?|This help"
     },
     "alert.sand.title": {
-      "tr": "KUM ALGILANDI",
-      "en": "SAND DETECTED"
+      "tr": "KUM UYARISI",
+      "en": "SAND WARNING"
     },
     "alert.sand.body": {
-      "tr": "Önündeki zemin planlanandan yumuşak. Rota yeniden hesaplanıyor.",
-      "en": "The ground ahead is softer than planned. Recomputing the route."
+      "tr": "Rotada kum adayı var. Curiosity kum dalgalarını geçerken %77'ye varan kayma yaşadı (rover verisi, insan sınırı değil). Rota yeniden hesaplanabilir.",
+      "en": "A sand candidate lies on the route. Curiosity saw up to 77% wheel slip crossing sand ripples (rover data, not a human limit). The route can be recomputed."
     },
     "alert.sand.replan": {
       "tr": "Yeniden planla",
