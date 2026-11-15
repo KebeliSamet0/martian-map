@@ -15,7 +15,7 @@ const OUTCROP_K = 0.86;                // yüzlek ortalama yarıçap çarpanı (
 const SUBSTEP = 0.2;                   // tek adımda bu kadardan uzun hareket parçalanır (kayanın içinden "tünel" olmasın)
 const CONTACT_COOLDOWN_MS = 2000;
 export const BLOCKING = new Set(['rock', 'outcrop']);
-export const BLOCK_MIN_R = 0.25;       // sentetik taşın engel olması için asgari görsel yarıçap (m): diz altı çakıl engel değil
+export const BLOCK_MIN_R = 0.12;       // sentetik taşın engel olması için asgari görsel yarıçap (m): yumruk/top boyundan (çap ≥ ~24 cm) itibaren engel; ufak çakıl (r<12 cm) engel değil, üstünden adım atılır
 const SYN_SHRINK = 0.95;               // taş geometrisi köşe sapmasıyla birim kürenin ort. ~%97'si: engel yarıçapı = ölçek × 0,95
 
 /**
