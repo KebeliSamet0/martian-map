@@ -12,7 +12,7 @@ import { initWire } from './wire.js';
 import { initExtras } from './wire-extras.js';
 import { applyScanClasses } from './wire-scan.js';
 import { API_BASE, API_OFF } from './api.js';
-import { worldToPx, adaptRoute, GRID } from './api.js';
+import { worldToPx, pxToWorld, adaptRoute, GRID } from './api.js';
 import { RouteLine, Beacon, HazardDisc, WarnMarkers } from './routeline.js';
 import { createAstronaut } from './astronaut.js';
 import { initFx } from './fx.js';
@@ -24,7 +24,8 @@ import './insight-ui.js';   // tur4:veri
 import './helmetcam.js';   // tur4:veri
 import './bilim.js'; // tur4:bilim
 import { createWalkFeel } from './walkfeel.js';   // tur4:his
-import { pickTiles } from './tiles-base.js';   // tur4:dogrula
+import { pickTiles } from './tiles-base.js';
+import { startPrefetch } from './prefetch.js';   // tur4:dogrula
 
 const BASE = await pickTiles(new URLSearchParams(location.search).get('tiles'));   // tur4:dogrula: varsayılan tiles_fixed, yedek tiles, ?tiles= ile seçilir
 const Q = new URLSearchParams(location.search);
@@ -89,6 +90,8 @@ $('sun-src').textContent = SUN0.real
   : 'Güneş varsayılanı kaynaksız (params.json yüklenemedi).';
 const geo = new Geo(man);
 const nav = await Nav.load(BASE, man, geo);
+// Açılış ekranındayken görev başlangıç/hedef çevresindeki karoları arka planda ısıt (soğuk açılışta geç yükleme). ?prefetch=0 kapatır.
+if (Q.get('prefetch') !== '0') fetch('./data/missions.json').then((r) => (r.ok ? r.json() : null)).then((j) => startPrefetch({ base: BASE, man, geo, missions: j?.missions ?? j, toWorld: pxToWorld })).catch(() => {});
 nav.suitSpeed = SUIT_V;
 $('status').textContent = `HiRISE DTM ${man.W}×${man.H} @ ${man.res_p.toFixed(3)} m · ${(geo.sizeX / 1000).toFixed(1)}×${(geo.sizeZ / 1000).toFixed(1)} km · USGS/NASA`;
 
