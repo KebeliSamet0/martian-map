@@ -79,6 +79,12 @@ export function createMission({ definition = DEMO, vitals, coords, api, apiBase 
       if (!sampled) { vitals?.addLoad(def.sample_kg ?? 0); sampled = true; emit('sample', { kg: def.sample_kg ?? 0 }); }
       return snapshot();
     },
+    // #52-3: rota görev sırasında değişirse özet eski planı değil güncel planı anlatsın.
+    updatePlan(total) {
+      if (!total || typeof total !== 'object') return snapshot();
+      planned = structuredClone(total);
+      return snapshot();
+    },
     // #125 A.1: numune alındıktan sonra ikinci hedef — üsse dönüş. Gidişte tetiklenen olaylar tekrar açılmaz.
     beginReturn(target = {}) {
       requireState('arrived');

@@ -33,11 +33,12 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   let selected = null, vitals = null, machine = null, hud = null, planned = null, limits = {}, running = false, generation = 0, busy = false, hold = null;
   let decisions = [], pendingDecision = null, dynHandlesSand = false;   // #125 A.2
   let outboundActual = null;   // gidiş sonu anlık görüntüsü (karne karşılaştırması tek yön)
+  let plannedOverride = null, replanned = false;   // #52-3: replan sonrası güncel plan
   const sourceLabel = document.getElementById('vitals-source');
   Object.assign(map, { call, coords, onBusy(value) { document.getElementById('btn-walk').disabled = value || !map.route; } });
   function freeMode() { selected = null; map.mission = null; document.getElementById('mission-name').textContent = 'Serbest mod · Haritada A/B seç'; }
   map.onManual = freeMode;
-  function clearRun() { generation++; running = false; outboundActual = null; clearFeedback(); hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
+  function clearRun() { generation++; running = false; outboundActual = null; plannedOverride = null; replanned = false; clearFeedback(); hold?.cancel?.(); hold = null; pendingDecision?.close?.(); pendingDecision = null; decisions = []; hud?.destroy(); hud = null; machine = null; vitals = null; root.replaceChildren(); sourceLabel.hidden = true; }
 
   // #125 A.3: eşikler aşılınca görsel/işitsel geri bildirim. Eşikler bütçeden, değerler vitals'tan.
   let lowO2 = false, lowReturn = false;
@@ -213,8 +214,8 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (machine.snapshot().leg === 'return' && snapNow.returnPossible !== false) flow.tickObjective?.('return');
     const objectives = flow.objectiveState?.() ?? {};
     flow.onScreen?.('report', selected);
-    const action = await showReport(root, { planned: walkPlan(planned), actual: outboundActual ?? actual, total: outboundActual ? actual : null,
-      route: map.route, mission: selected, decisions: [...decisions], objectives });
+    const action = await showReport(root, { planned: plannedOverride ?? walkPlan(planned), actual: outboundActual ?? actual, total: outboundActual ? actual : null,
+      replanned, route: map.route, mission: selected, decisions: [...decisions], objectives });
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }
@@ -222,7 +223,23 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
   return { coords, grid, call, available, texts, selectMission, pickRoute, catalog, missionTitle, scanLocked,
     get vitals() { return vitals; }, get machine() { return machine; }, get selected() { return selected; },
     start, stop: clearRun,
-    setRoute(route) { vitals?.setRoute(route); },
+    // #52-3: replan kabul edilince karne eski planı ölçüyordu ve oyuncu cezalanıyordu.
+    // Yeni plan = buraya kadar gerçekleşen + yeni rotanın (tek yön) planı.
+    setRoute(route) {
+      vitals?.setRoute(route);
+      if (!running || !route || !vitals) return;
+      const s = vitals.snapshot();
+      const rest = walkPlan(structuredClone(route?.raw?.total ?? route?.total ?? {}));
+      const sum = (a, b) => (Number.isFinite(a) && Number.isFinite(b) ? a + b : null);
+      plannedOverride = {
+        eva_min: sum(s.elapsedSec == null ? null : s.elapsedSec / 60, rest.eva_min ?? rest.min),
+        eva_kcal: sum(s.kcal, rest.eva_kcal ?? rest.kcal),
+        o2_L: sum(s.o2UsedL, rest.o2_L),
+        dose_uGy: sum(s.doseUGy, rest.dose_uGy),
+      };
+      replanned = true;
+      machine?.updatePlan?.(route?.raw?.total ?? route?.total ?? {});
+    },
     setVisible(on) { hud?.setVisible(on); sourceLabel.hidden = !on; },
     update(dt, position) {
       if (!running || !vitals) return;
