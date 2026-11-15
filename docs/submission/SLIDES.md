@@ -29,6 +29,7 @@ Each number carries its source in `[brackets]`.
 - Learned terrain class (AI4Mars model) + rock abundance (our HiRISE detector) set each cell's terrain coefficient.
 - Pandolf walking-energy equation, calibrated to the Apollo EVA average of 272 W, gives cost per segment. [`docs/metabolic_model.md`; SP-368]
 - Every segment shows its reason and the model's confidence; where evidence is thin, the interface shows an uncertainty warning.
+- Honest result: with the 20° slope limit, the full terrain model and the slope + rock planner find the same S1–S3 paths (9 of 9); the risk difference is 0–2%. The model's value shows in the helmet camera, the ground readout and its uncertainty. [`#127`, Emre]
 - **Image:** flow diagram (DTM → slope · HiRISE → rocks · Navcam → terrain class → cost map → 3 routes → simulator) plus `docs/figures/sim_03_routes_compare.png` (three routes + "What does the terrain model buy you?": slope-only vs terrain model + rock). Support: `docs/figures/rover_terrain_examples.png`.
 
 ## 5. One mission, start to finish
