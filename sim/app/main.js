@@ -154,12 +154,18 @@ function ensureScanTex() {
   const tx = new THREE.DataTexture(d, nav.w, nav.h, THREE.RGBAFormat); tx.magFilter = THREE.LinearFilter; tx.minFilter = THREE.LinearFilter; tx.needsUpdate = true;
   SCAN_TEX.value = tx; SCAN_DIM.value.set(nav.w * nav.cx, nav.h * nav.cz);
 }
+// Taramada yakın GERÇEK (HiRISE tespitli) kaya/yüzlek etiketi (collide.nearest): 'kaya (HiRISE, d = X m) · uzaklık'. Sentetik taşlar etiketlenmez. batu:scan
+function updateScanRock() {
+  const el = document.getElementById('scan-rock'); if (!el) return;
+  const hit = T?.collide?.nearest?.(P.x, P.z, 60);
+  el.textContent = hit ? ` · ${t(hit.rock.kind === 'outcrop' ? 'scan.outcrop' : 'scan.rock', { d: hit.rock.d_m })} · ${Math.round(hit.dist)} m` : '';
+}
 function scanStart(wide = false) {
   const lock = wire?.scanLocked?.() ?? 0;   // #125 B.7: zor modda ilk tarama gecikir
   if (lock > 0) { toast(t('hard.scanlock', { s: Math.ceil(lock / 1000) }), true); return; }
   audio?.alert('scan');
   const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
-  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; dispatchEvent(new CustomEvent('mm:scan', { detail: { wide } }));   // #125 B.5
+  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; updateScanRock(); $('scanleg').hidden = false; dispatchEvent(new CustomEvent('mm:scan', { detail: { wide } }));   // #125 B.5
   toast(wide ? 'Geniş tarama (220 m) — rota parlar' : `Arazi tarayıcı: ${scanner.source ?? 'eğim yedeği'} · renkler ve çizgiler için lejant. Shift+L: geniş`); }
 function scanUpdate(now) {
   if (scanner.t0 < 0) { SCAN.value.w = 0; SCAN_E.value = 0; return; }
@@ -658,6 +664,7 @@ for (const [key, mark, color] of [['caution','═','#ff8a1f'], ['nogo','≡','#f
   const span = document.createElement('span'); span.style.color = color; span.textContent = `${mark} ${wire.texts.scan[key]}  `; legend.append(span);
 }
 legend.append(document.createTextNode(` · ${scanner.source}`));
+const scanRock = document.createElement('span'); scanRock.id = 'scan-rock'; legend.append(scanRock);   // batu:scan
 legend.title = 'API sınıfları model tahminidir; alan dışında 10°/20° eğim yedeği. İşaretin sönmesi güvenli demek değildir.';
 
 // ?perf=1: 30 sn FPS/performans ölçüm probu (sim/tools/qa/perf_probe.js; gerçek GPU'da demo cihazında çalıştır)
