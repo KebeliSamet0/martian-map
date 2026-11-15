@@ -851,6 +851,14 @@
     "dyn.applied.observation": {
       "tr": "Yeni rota: {km} km · {min} dk.",
       "en": "New route: {km} km · {min} min."
+    },
+    "scan.rock": {
+      "tr": "kaya (HiRISE, d = {d} m)",
+      "en": "rock (HiRISE, d = {d} m)"
+    },
+    "scan.outcrop": {
+      "tr": "yüzlek (HiRISE, d = {d} m)",
+      "en": "outcrop (HiRISE, d = {d} m)"
     }
   },
   "helmetcam": {
