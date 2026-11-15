@@ -40,9 +40,23 @@ _FLAT_RAW = float(_pandolf_raw(np.array(P.BASE_SPEED_MS), np.array(0.0), np.arra
 CALIBRATION = P.FLAT_REFERENCE_W / _FLAT_RAW
 
 
+class ModelDomainError(ValueError):
+    """Metabolik model geçerlilik alanı dışında (negatif ya da sonsuz güç). Sessiz clamp yok: çağıran karar verir."""
+
+
 def metabolic_w(v: np.ndarray, grade_pct: np.ndarray, eta_arr: np.ndarray, load_kg: float = 0.0) -> np.ndarray:
-    """Pandolf yapısı, düz ana kayada FLAT_REFERENCE_W'ye kalibre edilmiş (W)."""
-    return _pandolf_raw(v, grade_pct, eta_arr, load_kg=load_kg) * CALIBRATION
+    """Pandolf yapısı, düz ana kayada FLAT_REFERENCE_W'ye kalibre edilmiş (W).
+
+    Geçerlilik (F02): güç sonlu ve ≥ 0 olmalı. Pandolf'un negatif eğim terimi iniş için doğrulanmış değil;
+    dik inişte güç negatife düşebilir. Bu durumda hata verilir, sıfıra kesilmez."""
+    watts = _pandolf_raw(v, grade_pct, eta_arr, load_kg=load_kg) * CALIBRATION
+    arr = np.asarray(watts, dtype=float)
+    invalid = ~np.isfinite(arr) | (arr < 0)
+    if invalid.any():
+        bad = arr[invalid]
+        raise ModelDomainError(f"Metabolik güç geçerlilik alanı dışında ({bad.size} değer; ör. {bad.flat[0]:.1f} W): "
+                               "negatif/sonsuz/NaN güç; Pandolf iniş (negatif eğim) için doğrulanmadı")
+    return watts
 
 
 def kcal_per_m(L: Layers, v: np.ndarray | None = None, load_kg: float = 0.0) -> np.ndarray:

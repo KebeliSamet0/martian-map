@@ -29,6 +29,39 @@
         ]
       },
       "total": {
+        "consumption": {
+          "outbound": {
+            "min": 2.574,
+            "kcal": 12.844,
+            "o2_L": 2.676,
+            "dose_uGy": 0.375
+          },
+          "return": {
+            "min": 2.574,
+            "kcal": 12.844,
+            "o2_L": 2.676,
+            "dose_uGy": 0.375
+          },
+          "science": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "reserve": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "committed": {
+            "min": 65.148,
+            "kcal": 259.721,
+            "o2_L": 54.109,
+            "dose_uGy": 9.501
+          },
+          "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
+        },
         "km": 0.06,
         "min": 2.6,
         "eva_min": 35.1,
@@ -42,6 +75,7 @@
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
         "go": true,
+        "slope_limit_deg": 25.0,
         "status": "GO",
         "limit_exceeded_at_px": null,
         "limit_exceeded_at_index": null,
@@ -63,7 +97,36 @@
           "first_exceeded": [],
           "return_min": 2.574,
           "return_kcal": 12.844
-        }
+        },
+        "endpoints": {
+          "start": {
+            "requested": [
+              110,
+              235
+            ],
+            "used": [
+              110,
+              235
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 7.3
+          },
+          "goal": {
+            "requested": [
+              110,
+              227
+            ],
+            "used": [
+              110,
+              227
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 7.4
+          }
+        },
+        "snap_connector_cells": 0,
+        "slope_limit_violations": [],
+        "warnings": []
       },
       "segments": [
         {

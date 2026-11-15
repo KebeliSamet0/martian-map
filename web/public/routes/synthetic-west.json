@@ -29,6 +29,39 @@
         ]
       },
       "total": {
+        "consumption": {
+          "outbound": {
+            "min": 42.12,
+            "kcal": 193.612,
+            "o2_L": 40.336,
+            "dose_uGy": 6.142
+          },
+          "return": {
+            "min": 42.12,
+            "kcal": 193.612,
+            "o2_L": 40.336,
+            "dose_uGy": 6.142
+          },
+          "science": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "reserve": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "committed": {
+            "min": 144.24,
+            "kcal": 621.258,
+            "o2_L": 129.429,
+            "dose_uGy": 21.035
+          },
+          "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
+        },
         "km": 1.41,
         "min": 42.1,
         "eva_min": 114.2,
@@ -42,6 +75,7 @@
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
         "go": true,
+        "slope_limit_deg": 25.0,
         "status": "GO",
         "limit_exceeded_at_px": null,
         "limit_exceeded_at_index": null,
@@ -63,7 +97,36 @@
           "first_exceeded": [],
           "return_min": 42.12,
           "return_kcal": 193.612
-        }
+        },
+        "endpoints": {
+          "start": {
+            "requested": [
+              110,
+              235
+            ],
+            "used": [
+              110,
+              235
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 7.3
+          },
+          "goal": {
+            "requested": [
+              50,
+              87
+            ],
+            "used": [
+              50,
+              87
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 0.9
+          }
+        },
+        "snap_connector_cells": 0,
+        "slope_limit_violations": [],
+        "warnings": []
       },
       "segments": [
         {
@@ -1137,6 +1200,39 @@
         ]
       },
       "total": {
+        "consumption": {
+          "outbound": {
+            "min": 42.189,
+            "kcal": 194.079,
+            "o2_L": 40.433,
+            "dose_uGy": 6.153
+          },
+          "return": {
+            "min": 42.189,
+            "kcal": 194.079,
+            "o2_L": 40.433,
+            "dose_uGy": 6.153
+          },
+          "science": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "reserve": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "committed": {
+            "min": 144.378,
+            "kcal": 622.192,
+            "o2_L": 129.623,
+            "dose_uGy": 21.055
+          },
+          "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
+        },
         "km": 1.41,
         "min": 42.2,
         "eva_min": 114.4,
@@ -1150,6 +1246,7 @@
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
         "go": true,
+        "slope_limit_deg": 25.0,
         "status": "GO",
         "limit_exceeded_at_px": null,
         "limit_exceeded_at_index": null,
@@ -1171,7 +1268,36 @@
           "first_exceeded": [],
           "return_min": 42.189,
           "return_kcal": 194.079
-        }
+        },
+        "endpoints": {
+          "start": {
+            "requested": [
+              110,
+              235
+            ],
+            "used": [
+              110,
+              235
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 7.3
+          },
+          "goal": {
+            "requested": [
+              50,
+              87
+            ],
+            "used": [
+              50,
+              87
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 0.9
+          }
+        },
+        "snap_connector_cells": 0,
+        "slope_limit_violations": [],
+        "warnings": []
       },
       "segments": [
         {
@@ -2245,6 +2371,39 @@
         ]
       },
       "total": {
+        "consumption": {
+          "outbound": {
+            "min": 43.978,
+            "kcal": 202.562,
+            "o2_L": 42.2,
+            "dose_uGy": 6.413
+          },
+          "return": {
+            "min": 43.978,
+            "kcal": 202.562,
+            "o2_L": 42.2,
+            "dose_uGy": 6.413
+          },
+          "science": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "reserve": {
+            "min": 30.0,
+            "kcal": 117.017,
+            "o2_L": 24.379,
+            "dose_uGy": 4.375
+          },
+          "committed": {
+            "min": 147.956,
+            "kcal": 639.159,
+            "o2_L": 133.158,
+            "dose_uGy": 21.577
+          },
+          "note": "committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), dose_uGy=iki yön+bilim (rezerv hariç)."
+        },
         "km": 1.38,
         "min": 44.0,
         "eva_min": 118.0,
@@ -2258,6 +2417,7 @@
         "walkback_ok": true,
         "limit_exceeded_at_m": null,
         "go": true,
+        "slope_limit_deg": 25.0,
         "status": "GO",
         "limit_exceeded_at_px": null,
         "limit_exceeded_at_index": null,
@@ -2279,7 +2439,36 @@
           "first_exceeded": [],
           "return_min": 43.978,
           "return_kcal": 202.562
-        }
+        },
+        "endpoints": {
+          "start": {
+            "requested": [
+              110,
+              235
+            ],
+            "used": [
+              110,
+              235
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 7.3
+          },
+          "goal": {
+            "requested": [
+              50,
+              87
+            ],
+            "used": [
+              50,
+              87
+            ],
+            "snap_m": 0.0,
+            "requested_slope_deg": 0.9
+          }
+        },
+        "snap_connector_cells": 0,
+        "slope_limit_violations": [],
+        "warnings": []
       },
       "segments": [
         {

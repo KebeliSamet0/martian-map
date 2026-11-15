@@ -84,6 +84,11 @@ async def plan_error(request: Request, exc: planner.PlanError):
     return JSONResponse(status_code=422, content={"detail": str(exc)})
 
 
+@app.exception_handler(planner.ModelDomainError)
+async def model_domain_error(request: Request, exc: planner.ModelDomainError):
+    return JSONResponse(status_code=422, content={"detail": str(exc), "model_domain_error": True})
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}

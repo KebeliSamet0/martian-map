@@ -36,18 +36,88 @@ def _check(L: Layers, px, snap: bool = True):
     return y, x
 
 
-def shortest_path(L: Layers, start, goal, w: dict, max_slope_deg: float | None = None):
+_NEIGH = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+
+def _window_search(cost: np.ndarray, s, g, res_m: float, r0: int, r1: int, c0: int, c1: int):
+    """[r0:r1, c0:c1] penceresinde 8-komşuluk Dijkstra; çapraz adım yalnız iki yan hücre de geçilebilirse (F06: köşe kesme yok).
+    Kenar maliyeti MCP_Geometric ile aynı: (c_a + c_b) / 2 * adım uzunluğu."""
+    sub = cost[r0:r1, c0:c1]
+    h, w = sub.shape
+    ok = np.isfinite(sub)
+    idx = np.arange(h * w).reshape(h, w)
+    rows, cols, wts = [], [], []
+    for dr, dc in _NEIGH:
+        ra, rb = slice(max(0, -dr), h - max(0, dr)), slice(max(0, dr), h - max(0, -dr))
+        ca, cb = slice(max(0, -dc), w - max(0, dc)), slice(max(0, dc), w - max(0, -dc))
+        m = ok[ra, ca] & ok[rb, cb]
+        if dr and dc:  # çapraz: iki yan hücre (dr,0) ve (0,dc) de geçilebilir olmalı
+            # kaynak (y,x) -> yan1 (y+dr, x), yan2 (y, x+dc); kaynak dilimi ra×ca
+            y0 = ra.start; x0 = ca.start
+            hh, ww = m.shape
+            side1 = ok[y0 + dr:y0 + dr + hh, x0:x0 + ww]
+            side2 = ok[y0:y0 + hh, x0 + dc:x0 + dc + ww]
+            m &= side1 & side2
+        length = res_m * (math.sqrt(2.0) if dr and dc else 1.0)
+        wt = 0.5 * (sub[ra, ca] + sub[rb, cb]) * length
+        rows.append(idx[ra, ca][m]); cols.append(idx[rb, cb][m]); wts.append(wt[m])
+    from scipy.sparse import csr_matrix
+    from scipy.sparse.csgraph import dijkstra
+    graph = csr_matrix((np.concatenate(wts), (np.concatenate(rows), np.concatenate(cols))), shape=(h * w, h * w))
+    si, gi = (s[0] - r0) * w + (s[1] - c0), (g[0] - r0) * w + (g[1] - c0)
+    dist, pred = dijkstra(graph, directed=True, indices=si, return_predecessors=True)
+    if not np.isfinite(dist[gi]):
+        return None
+    seq, k = [gi], gi
+    while k != si:
+        k = int(pred[k]); seq.append(k)
+    seq = np.array(seq[::-1])
+    return np.stack([seq // w + r0, seq % w + c0], axis=1)
+
+
+def _search(L: Layers, cost: np.ndarray, s, g):
+    """Pencereli arama: yol pencere kenarına değiyorsa pencereyi büyütüp yeniden dener; pencere ızgarayı kaplayınca kesin."""
+    H, W = cost.shape
+    span = max(abs(s[0] - g[0]), abs(s[1] - g[1]), 1)
+    pad = max(40, 2 * span)
+    while True:
+        r0, r1 = max(min(s[0], g[0]) - pad, 0), min(max(s[0], g[0]) + pad + 1, H)
+        c0, c1 = max(min(s[1], g[1]) - pad, 0), min(max(s[1], g[1]) + pad + 1, W)
+        full = (r0, r1, c0, c1) == (0, H, 0, W)
+        path = _window_search(cost, s, g, L.res_m, r0, r1, c0, c1)
+        if full:
+            return path
+        if path is not None:
+            touches = (path[:, 0].min() == r0 and r0 > 0) or (path[:, 0].max() == r1 - 1 and r1 < H) \
+                or (path[:, 1].min() == c0 and c0 > 0) or (path[:, 1].max() == c1 - 1 and c1 < W)
+            if not touches:
+                return path
+        pad *= 2
+
+
+def _line_cells(a, b) -> np.ndarray:
+    from skimage.draw import line
+    rr, cc = line(int(a[0]), int(a[1]), int(b[0]), int(b[1]))
+    return np.stack([rr, cc], axis=1)
+
+
+def shortest_path_info(L: Layers, start, goal, w: dict, max_slope_deg: float | None = None):
+    """(yol, maliyet terimleri, bilgi). Yol, istenen uçtan başlar/biter: snap bağlantısı yola dahildir (F03).
+    Bilgi: istenen/kullanılan uç, snap_m, kullanıcı eğim sınırı ihlalleri (F04)."""
     cost, terms = cost_surface(L, w, max_slope_deg=max_slope_deg)
     s, g = _check(L, start), _check(L, goal)
+    req = [(math.floor(start[1]), math.floor(start[0])), (math.floor(goal[1]), math.floor(goal[0]))]
+    limit = P.SLOPE_NOGO_DEG if max_slope_deg is None else min(max_slope_deg, P.SLOPE_NOGO_DEG)
+    violations = []
     if max_slope_deg is not None:
-        # Başlangıç/hedef hücresi kullanıcı sınırından dik olsa da bağlanabilsin (25° kuralı _check'te zaten uygulandı)
+        # F04: uçlar kullanıcı sınırından dik olsa da bağlanabilir (aksi hâlde sim ucu sıfır yol olur), ama
+        # sessiz geçilmez: yanıtta uyarı ve go=false. Arama, yol sonrası doğrulama ve bütçe aynı sınırı kullanır.
         base, _ = cost_surface(L, w)
-        for q in (s, g):
+        for name, q in (("start", s), ("goal", g)):
             if not np.isfinite(cost[q]):
                 cost[q] = base[q]
-    mcp = MCP_Geometric(cost)
-    acc, _ = mcp.find_costs([s], [g])
-    if not np.isfinite(acc[g]):
+    path = _search(L, cost, s, g)
+    if path is None:
         raw_labels, comp_sizes, ranks, _ = L.connectivity()
         total_cells = L.width * L.height
         cs, cg = int(raw_labels[s]), int(raw_labels[g])
@@ -56,12 +126,45 @@ def shortest_path(L: Layers, start, goal, w: dict, max_slope_deg: float | None =
         ps, pg = ss / total_cells * 100, sg / total_cells * 100
         if max_slope_deg is not None:
             raise PlanError(f"Azami eğim {max_slope_deg:g}° ile başlangıç ve hedef arasında yol yok; sınırı gevşet.")
+        if cs and cs == cg:
+            raise PlanError("Başlangıç ile hedef aynı geçilebilir bölgede ama köşe kesmeden (iki yan hücre geçilebilir) bağlanamıyor")
         raise PlanError(
             f"Başlangıç ile hedef arasında geçilebilir yol yok: "
             f"başlangıç {[int(start[0]), int(start[1])]} bileşen #{rs} ({ss} hücre, %{ps:.2f}), "
             f"hedef {[int(goal[0]), int(goal[1])]} bileşen #{rg} ({sg} hücre, %{pg:.2f}) içinde kaldı"
         )
-    path = np.array(mcp.traceback(g))  # (satır, sütun)
+    # F03: snap bağlantısı. İstenen hücre geçilmezse (DEM abartısı) kullanılan hücreye düz hatla bağlanır;
+    # ara hücreler geçilebilir olmalı, aksi hâlde hata. Bağlantı yola eklenir, maliyeti toplamlara girer.
+    snap = {}
+    pieces = [path]
+    for name, q, r_ in (("start", s, req[0]), ("goal", g, req[1])):
+        d_m = float(np.hypot(q[0] - r_[0], q[1] - r_[1])) * L.res_m
+        snap[name] = {"requested": [int(r_[1]), int(r_[0])], "used": [int(q[1]), int(q[0])], "snap_m": round(d_m, 2),
+                      "requested_slope_deg": round(float(L.slope[r_]), 1)}
+        if d_m > 0:
+            cells = _line_cells(r_, q)
+            mid = cells[1:-1]
+            blocked = [tuple(c) for c in mid if L.slope[tuple(c)] >= P.SLOPE_NOGO_DEG]
+            if blocked:
+                raise PlanError(f"{name} noktası ({snap[name]['requested']}) ile bağlandığı hücre ({snap[name]['used']}) arasındaki "
+                                f"bağlantı geçilemez eğimden geçiyor ({len(blocked)} hücre); noktayı kaydır")
+            if name == "start":
+                pieces.insert(0, cells[:-1])
+            else:
+                pieces.append(cells[::-1][1:])
+    full_path = np.concatenate(pieces, axis=0) if len(pieces) > 1 else path
+    # kullanıcı eğim sınırı: uç hücreleri (kullanılan) ihlal ediyorsa kaydet
+    if max_slope_deg is not None:
+        for name, q in (("start", s), ("goal", g)):
+            if L.slope[q] >= limit:
+                violations.append({"point": name, "px": [int(q[1]), int(q[0])], "slope_deg": round(float(L.slope[q]), 1), "limit_deg": limit})
+    info = {"endpoints": snap, "slope_limit_violations": violations,
+            "snap_connector_cells": int(len(full_path) - len(path))}
+    return full_path, terms, info
+
+
+def shortest_path(L: Layers, start, goal, w: dict, max_slope_deg: float | None = None):
+    path, terms, _ = shortest_path_info(L, start, goal, w, max_slope_deg)
     return path, terms
 
 
@@ -213,7 +316,7 @@ def _segments(L: Layers, path: np.ndarray, prof) -> list[dict]:
     return segs
 
 
-def _budget(prof, segs, path, limits=None) -> dict:
+def _budget(prof, segs, path, limits=None, max_slope_deg: float | None = None, exempt=()) -> dict:
     out_min = float(prof["sec"].sum()) / 60
     kcal_out = float(prof["kcal"].sum())
     # Dönüş aynı yoldan; iniş/çıkış simetrik kabul (|eğim| modeli)
@@ -236,7 +339,29 @@ def _budget(prof, segs, path, limits=None) -> dict:
     walkback_ok = not bool(exceeded["time_min"][-1])
     exceeded_at = round(float(prof["cum_m"][first]), 1) if first is not None else None
     total_kcal = 2 * kcal_out
+    slope_limit = P.SLOPE_NOGO_DEG if max_slope_deg is None else min(float(max_slope_deg), P.SLOPE_NOGO_DEG)
+    keep = np.ones(len(prof["slope"]), bool)
+    keep[list(exempt)] = False
+    slope_ok = bool(prof["slope"][keep].max() < slope_limit) if keep.any() else True
+    # F05: tüketim kapsamı. Hepsi aynı birimde (dk, kcal, L O₂, µGy); mevcut alanlar uyumluluk için duruyor.
+    def _scope(minutes: float, kcal: float) -> dict:
+        return {"min": round(minutes, 3), "kcal": round(kcal, 3), "o2_L": round(kcal / P.KCAL_PER_L_O2, 3),
+                "dose_uGy": round(minutes / 60 * P.DOSE_UGY_PER_H, 3)}
+    stop_kcal = lambda m: m * 60 * P.STOP_METABOLIC_W / 4184
+    consumption = {
+        "outbound": _scope(out_min, kcal_out),
+        "return": _scope(out_min, kcal_out),  # VARSAYIM: aynı yoldan dönüş, |eğim| modeli iniş/çıkışı ayırmaz
+        "science": _scope(P.SCIENCE_STOP_MIN, stop_kcal(P.SCIENCE_STOP_MIN)),
+        "reserve": _scope(limits["reserve_min"], stop_kcal(limits["reserve_min"])),
+    }
+    # toplam yuvarlanmış parçaların değil, GO kararının kullandığı hesabın (usage) kendisi: parçalar ≤ yuvarlama farkıyla tutar
+    consumption["committed"] = {k: round(float(usage[src][-1]), 3)
+                                for k, src in (("min", "time_min"), ("kcal", "kcal"), ("o2_L", "o2_L"), ("dose_uGy", "dose_uGy"))}
+    consumption["note"] = ("committed = outbound + return + science + reserve = budget.used (GO kararının kullandığı toplam). "
+                           "Eski alanlar: kcal=yalnız gidiş, eva_kcal/o2_L=iki yön yürüyüş (bilim ve rezerv hariç), "
+                           "dose_uGy=iki yön+bilim (rezerv hariç).")
     return {
+        "consumption": consumption,
         "km": round(float(prof["cum_m"][-1]) / 1000, 2),
         "min": round(out_min, 1),
         "eva_min": round(eva_min, 1),
@@ -249,7 +374,8 @@ def _budget(prof, segs, path, limits=None) -> dict:
         "low_conf_m": round(sum(s["len_m"] for s in segs if s["conf"] == "low"), 0),
         "walkback_ok": bool(walkback_ok),
         "limit_exceeded_at_m": exceeded_at,
-        "go": bool(first is None and prof["slope"].max() < P.SLOPE_NOGO_DEG),
+        "go": bool(first is None and slope_ok),
+        "slope_limit_deg": slope_limit,
         "status": "GO" if first is None else "NO-GO",
         "limit_exceeded_at_px": path[first][::-1].tolist() if first is not None else None,
         "limit_exceeded_at_index": first,
@@ -266,16 +392,30 @@ def plan_one(L: Layers, start, goal, kind: str = "balanced", weights: dict | Non
     w = dict(presets.get(kind, presets["balanced"]))
     if weights:
         w.update(weights)
-    path, terms = shortest_path(L, start, goal, w, max_slope_deg)
+    path, terms, info = shortest_path_info(L, start, goal, w, max_slope_deg)
     prof = _profile(L, path, terms)
     segs = _segments(L, path, prof)
+    # F03: istenen ucun kendisi geçilmezse (snap) o hücre go kararından muaf; ama uyarıyla görünür
+    exempt = [i for i, name in ((0, "start"), (len(path) - 1, "goal"))
+              if info["endpoints"][name]["snap_m"] > 0 and L.slope[tuple(path[i])] >= P.SLOPE_NOGO_DEG]
+    total = _budget(prof, segs, path, budget, max_slope_deg=max_slope_deg, exempt=exempt)
+    total["endpoints"] = info["endpoints"]
+    total["snap_connector_cells"] = info["snap_connector_cells"]
+    total["slope_limit_violations"] = info["slope_limit_violations"]
+    warnings = []
+    for name, e in info["endpoints"].items():
+        if e["snap_m"] > 0:
+            warnings.append(f"{name}: istenen nokta geçilmez eğimde ({e['requested_slope_deg']}°); {e['snap_m']:.0f} m ötedeki hücreye bağlandı (maliyet toplamlara dahil)")
+    for v in info["slope_limit_violations"]:
+        warnings.append(f"{v['point']} hücresi eğim sınırını aşıyor ({v['slope_deg']}° ≥ {v['limit_deg']:g}°): uç istisnası, go=false")
+    total["warnings"] = warnings
     return {
         "kind": kind,
         "label": w.get("label", kind),
         "weights": {k: w[k] for k in ("t", "k", "r")},
         "start": {"px": [int(start[0]), int(start[1])]},
         "goal": {"px": [int(goal[0]), int(goal[1])]},
-        "total": _budget(prof, segs, path, budget),
+        "total": total,
         "segments": segs,
         "_path": path,
         "_prof": prof,
@@ -568,6 +708,9 @@ def evaluate_step(
             "kcal": round(kcal_dir, 2),
             "o2_L": round(kcal_dir / P.KCAL_PER_L_O2, 3),
             "o2_g": round((kcal_dir / P.KCAL_PER_L_O2) * P.O2_G_PER_L, 2),
+            # Açık bayrak (F02): iniş eğimi bu hesapta 0'a kesiliyor; doğrulanmış iniş modeli yok, değerler üst-alt sınır değil.
+            "descent_grade_clamped": True,
+            "descent_note": "Directional hesapta iniş (negatif eğim) 0 kabul edilir; Pandolf iniş için doğrulanmadı (mars_validated=false).",
         },
         "dominant_class": dom_overall,
         "terrain_classes": terrain_classes,
