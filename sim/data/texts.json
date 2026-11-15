@@ -700,6 +700,30 @@
       "tr": "Mevcut rotada devam et (risk)",
       "en": "Stay on the current route (risk)"
     },
+    "check.title": {
+      "tr": "GÖREV LİSTESİ",
+      "en": "CHECKLIST"
+    },
+    "check.scan": {
+      "tr": "Tarayıcıyı kullan (L)",
+      "en": "Use the scanner (L)"
+    },
+    "check.camera": {
+      "tr": "Kask kamerasıyla bir durak incele (C)",
+      "en": "Study a stop with the helmet camera (C)"
+    },
+    "check.sample": {
+      "tr": "Numuneyi al (E)",
+      "en": "Collect the sample (E)"
+    },
+    "check.return": {
+      "tr": "Rezervle üsse dön",
+      "en": "Return to base with reserve"
+    },
+    "report.bonus": {
+      "tr": "Mini hedef bonusu: +1 yıldız",
+      "en": "Checklist bonus: +1 star"
+    },
     "report.stars": {
       "tr": "YILDIZ",
       "en": "STARS"

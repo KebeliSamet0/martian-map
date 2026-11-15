@@ -159,6 +159,8 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     }
     vitals.on('warning', s => { if (id === generation && running) alertLimit(s.returnPossible === false ? t('alerts.turn_back') : t('alerts.data_missing')); });
     vitals.on('limit', e => { if (id === generation && running) alertLimit(limitText(e.resource)); });
+    // #125 B.5: yalnız gerçekten izlenebilen mini hedefler listelenir
+    flow.setObjectives?.(selected && (selected.sample_kg ?? 0) > 0 ? ['scan', 'camera', 'sample', 'return'] : ['scan', 'camera']);
     hud = initHud(root, { snapshot: () => hudSnapshot(vitals.snapshot(), limits) }, { position: 'br' });
     sourceLabel.hidden = false;
     vitals.update(0, position, coords.worldToPx([position.x, position.z]));
@@ -174,6 +176,7 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     const ok = await hold; hold = null;
     if (!ok || id !== generation || !running) return;
     machine.collectSample();
+    flow.tickObjective?.('sample');
     audio?.alert?.('arrive');
     toast(t('sample.done', { kg }), true);
     const back = await returnToBase();
@@ -191,8 +194,12 @@ export async function initWire({ map, geo, manifest, enter3D, enterMap, pause, r
     if (id !== generation) return;
     sourceLabel.textContent = `Kaynak: ${vitals.snapshot().source} · Görev tamamlandı`;
     const actual = hudSnapshot(vitals.snapshot(), limits);
+    // #125 B.5: rezervle üsse dönüş de bir mini hedef
+    const snapNow = vitals.snapshot();
+    if (machine.snapshot().leg === 'return' && snapNow.returnPossible !== false) flow.tickObjective?.('return');
+    const objectives = flow.objectiveState?.() ?? {};
     flow.onScreen?.('report', selected);
-    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected, decisions: [...decisions] });
+    const action = await showReport(root, { planned: walkPlan(planned), actual, route: map.route, mission: selected, decisions: [...decisions], objectives });
     if (id !== generation) return;
     if (action === 'retry') enter3D('auto');
     else { enterMap(); if (flow.onReport) flow.onReport(action); }

@@ -276,7 +276,7 @@ export function showReport(container, opts = {}) {
 }
 export const reportOpen = () => !!activeReport;
 
-function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission, decisions = [] } = {}) {
+function buildReport(container, { planned = {}, actual = {}, completed = true, title, route, mission, decisions = [], objectives = {} } = {}) {
   return new Promise((resolve) => {
     const m = modal(container, title ?? t('report.title'), mission?.id);
     m.card.classList.add('mm-card-wide', 'mm-card-report');
@@ -317,6 +317,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
       actual: { o2_L: actual.o2_L, return_margin_min: actual.return_margin_min },
       limits: { o2_L: actual.o2_limit_L, reserve_min: actual.reserve_min },
       decisions, hazardM: null, completed,
+      bonus: Object.values(objectives).filter(Boolean).length,
     });
     const stars = el('div', 'mm-stars');
     stars.dataset.testid = 'debrief-stars';
@@ -330,6 +331,7 @@ function buildReport(container, { planned = {}, actual = {}, completed = true, t
       li.dataset.level = c.ok === null ? '' : c.ok ? 'ok' : 'warn';
       why.append(li);
     }
+    if (sc.bonusUsed) { const b = el('li', null, t('report.bonus')); b.dataset.level = 'ok'; why.append(b); }
     starWrap.append(why);
     const prev = readBest(mission?.id);
     const o2Left = Number.isFinite(actual.o2_limit_L) && Number.isFinite(actual.o2_L) ? actual.o2_limit_L - actual.o2_L : null;

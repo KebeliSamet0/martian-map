@@ -153,6 +153,42 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     try { void wire.selectMission(buildCustomMission({ ...ab, title: t('mission.CUSTOM.title') })); return true; } catch { return false; }
   }
 
+  // ---------- Görev içi mini hedefler (#125 B.5) ----------
+  // İsteğe bağlı; yıldıza bonus verir. Yalnız gerçekten izlenebilen maddeler listelenir.
+  let checkBox = null, checkState = new Map();
+  function setObjectives(keys = []) {
+    checkState = new Map(keys.map((k) => [k, false]));
+    renderChecklist();
+  }
+  // hudLayer her yeniden kurulduğunda (buildWalkHud) liste de yeniden çizilir, durum korunur.
+  function renderChecklist() {
+    checkBox?.remove(); checkBox = null;
+    const keys = [...checkState.keys()];
+    if (!keys.length) return;
+    checkBox = el('section', 'mm-checklist');
+    checkBox.setAttribute('aria-label', t('check.title'));
+    checkBox.append(el('div', 'mm-kicker', t('check.title')));
+    for (const k of keys) {
+      const row = el('div', 'mm-check');
+      row.dataset.key = k;
+      const done = checkState.get(k);
+      if (done) row.dataset.done = '1';
+      row.append(el('span', 'mm-check-box', done ? '●' : '○'), el('span', 'mm-check-txt', t(`check.${k}`)));
+      checkBox.append(row);
+    }
+    hudLayer.append(checkBox);
+  }
+  function tickObjective(key) {
+    if (!checkState.has(key) || checkState.get(key)) return false;
+    checkState.set(key, true);
+    const row = checkBox?.querySelector(`.mm-check[data-key="${key}"]`);
+    if (row) { row.dataset.done = '1'; row.firstChild.textContent = '●'; }
+    return true;
+  }
+  const objectiveState = () => Object.fromEntries(checkState);
+  addEventListener('mm:camera-insight', () => tickObjective('camera'));
+  addEventListener('mm:scan', () => tickObjective('scan'));
+
   // ---------- Hesaplanıyor ekranı (#103 A.1) ----------
   // Eskiden bu aşamada katman boşaltılıp hiçbir şey çizilmiyordu: yavaş API'de boş ekran.
   function showComputing(m) {
@@ -216,6 +252,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     title.textContent = m ? `${m.id} · ${wire.missionTitle(m)}` : t('hud.free');
     obj.textContent = m ? missionText(m.id, 'objective') : '';
     hudRefs = { arrow, dist, obj, title, tip: hudLayer.querySelector('.mm-tip') };
+    renderChecklist();   // #125 B.5: katman yeniden kurulunca liste geri gelsin
   }
   function showWalk(kind) {
     clearLayer(); layer.classList.remove('mm-in'); setScreen('walk');
@@ -347,6 +384,7 @@ export function initFlow({ wire, root, getState, getPose, pause, enterMap, exitT
     },
     // #125 A.1: dönüş ayağında HUD hedef satırı değişir
     setObjective: (text) => { if (hudRefs) hudRefs.obj.textContent = text; },
+    setObjectives, tickObjective, objectiveState,   // #125 B.5
     onError: showError,
     onBack: () => { exitToTour(); showSelect(); },
     onReport: (action) => { hudLayer.hidden = true; exitToTour(); showSelect(); },

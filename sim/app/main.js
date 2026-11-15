@@ -156,7 +156,8 @@ function ensureScanTex() {
 function scanStart(wide = false) {
   audio?.alert('scan');
   const nowS = performance.now() / 1000; if (scanner.t0 >= 0 && nowS - scanner.t0 < scanner.cool) return;   // bekleme
-  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; toast(wide ? 'Geniş tarama (220 m) — rota parlar' : `Arazi tarayıcı: ${scanner.source ?? 'eğim yedeği'} · renkler ve çizgiler için lejant. Shift+L: geniş`); }
+  scanner.fix = null; ensureScanTex(); scanner.R = wide ? 220 : 90; scanner.t0 = performance.now() / 1000; scanner.x = P.x; scanner.z = P.z; $('scanleg').hidden = false; dispatchEvent(new CustomEvent('mm:scan', { detail: { wide } }));   // #125 B.5
+  toast(wide ? 'Geniş tarama (220 m) — rota parlar' : `Arazi tarayıcı: ${scanner.source ?? 'eğim yedeği'} · renkler ve çizgiler için lejant. Shift+L: geniş`); }
 function scanUpdate(now) {
   if (scanner.t0 < 0) { SCAN.value.w = 0; SCAN_E.value = 0; return; }
   const e = scanner.fix ?? (now - scanner.t0), { R, ramp, hold, fade } = scanner, e0 = ramp + hold, Rmax = R + 8;
@@ -641,7 +642,8 @@ if (Q.get('mod') === '3d') enter3D('walk');
 else if (!DEV || Q.get('intro') === '1') {   // tur4:akis: oyun akışı (açılış → görev → brifing → rota → yürüyüş → karne)
   flow = initFlow({ wire, root: document.body, getState: () => state, getPose: () => P, pause: pauseFn, enterMap, exitToTour: enterTour, audio, dev: DEV,
     geo, overviewUrl: `${BASE}/overview.jpg` });   // görev kartı harita önizlemesi (#103 B.6)
-  Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, setObjective: flow.setObjective, autoWalk: true });
+  Object.assign(flowHooks, { onScreen: flow.onScreen, onBack: flow.onBack, onReport: flow.onReport, setObjective: flow.setObjective,
+    setObjectives: flow.setObjectives, tickObjective: flow.tickObjective, objectiveState: flow.objectiveState, autoWalk: true });
   const m0 = wire.catalog.missions.find((m) => m.start_px && m.goal_px);
   if (m0) { const a = wire.coords.cellToWorld(m0.start_px), b = wire.coords.cellToWorld(m0.goal_px); tourC = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; }
   enterTour(); if (!flow.openCustomFromUrl()) flow.showIntro();   // batu:custom: ?a=col,row&b=col,row

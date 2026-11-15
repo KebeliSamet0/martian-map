@@ -40,6 +40,19 @@ test('verisi olmayan ölçüt sayılmaz, ödüle de cezaya da çevrilmez', () =>
   assert.equal(s.criteria.find((c) => c.key === 'hazard').ok, null);
 });
 
+test('mini hedef bonusu: üçü birden tamamlanınca bir yıldız, üçü zaten varsa etkisiz', () => {
+  const base = { actual: { o2_L: 400, return_margin_min: 8 }, limits, hazardM: 180, decisions: [{ accept: false, delta: { risk: -9 } }] };
+  assert.equal(missionScore(base).stars, 1);
+  assert.equal(missionScore({ ...base, bonus: 2 }).stars, 1);
+  const bonused = missionScore({ ...base, bonus: 4 });
+  assert.equal(bonused.stars, 2);
+  assert.equal(bonused.bonusUsed, true);
+  const full = missionScore({ actual: { o2_L: 105, return_margin_min: 45 }, limits, hazardM: 10,
+    decisions: [{ accept: true, delta: { risk: -4 } }], bonus: 4 });
+  assert.equal(full.stars, 3);
+  assert.equal(full.bonusUsed, false);   // zaten 3 yıldız: bonus eklenmez
+});
+
 test('tamamlanmamış görev 0 yıldız', () => {
   assert.equal(missionScore({ actual: { o2_L: 1, return_margin_min: 99 }, limits, completed: false }).stars, 0);
 });

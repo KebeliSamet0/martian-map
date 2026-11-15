@@ -30,7 +30,7 @@ export function decisionQuality(decisions = []) {
  * Ölçütler: (1) O₂ ve süre rezervi, (2) riskli zeminde geçen metre, (3) karar kalitesi.
  * Verisi olmayan ölçüt sayılmaz; `counted` hangilerinin sayıldığını söyler.
  */
-export function missionScore({ actual = {}, limits = {}, decisions = [], hazardM = null, completed = true } = {}) {
+export function missionScore({ actual = {}, limits = {}, decisions = [], hazardM = null, completed = true, bonus = 0 } = {}) {
   const r = reserves({ actual, limits });
   const q = decisionQuality(decisions);
   const haz = num(hazardM);
@@ -47,8 +47,11 @@ export function missionScore({ actual = {}, limits = {}, decisions = [], hazardM
 
   const counted = criteria.filter((c) => c.ok !== null);
   const points = counted.filter((c) => c.ok).length;
-  const stars = !completed ? 0 : Math.max(1, Math.min(3, 1 + points));
-  return { stars, points, criteria, counted: counted.map((c) => c.key), reserves: r, decisions: q };
+  const base = !completed ? 0 : Math.max(1, Math.min(3, 1 + points));
+  // Mini hedefler isteğe bağlı: üçü birden tamamlandıysa bir yıldız bonus (#125 B.5).
+  const bonusUsed = completed && num(bonus) >= 3 && base < 3;
+  const stars = bonusUsed ? base + 1 : base;
+  return { stars, points, base, bonusUsed, criteria, counted: counted.map((c) => c.key), reserves: r, decisions: q };
 }
 
 const KEY = 'mm.best.v1';
