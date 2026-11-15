@@ -23,6 +23,7 @@ const NEAR_M = 30, FAR_M = 95;   // kameraya 30 m içinde tam, 95 m'de sönmüş
 export class RouteLine {
   // width: görünür çizgi genişliği (m). Tek, ince, yarı saydam, kesikli saha işareti; önündeki ~30 m belirgin, uzağı solar.
   constructor(scene, groundY, { width = 0.10, lift = 0.05, gray = false, opacity = 0.62 } = {}) {
+    width = Math.min(width, 0.12);   // çağıranlar eski kalın genişlik verse de çizgi ince kalır (main.js'e dokunmadan)
     this.scene = scene; this.groundY = groundY; this.width = width; this.lift = lift; this.gray = gray;
     this.tex = dashTexture();
     this.mat = new THREE.MeshBasicMaterial({ map: this.tex, vertexColors: true, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
