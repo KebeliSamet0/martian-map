@@ -697,16 +697,16 @@
       "en": "Plan your own route"
     },
     "custom.card.text": {
-      "tr": "Haritadan başlangıç ve hedefi seç; planlayıcı varsayımları altındaki rota seçeneklerini karşılaştır, sonra yürüyerek prova et.",
-      "en": "Choose a start and destination on the map; compare route options under the planner's assumptions, then rehearse the walk."
+      "tr": "Haritadan başlangıç ve hedefi seç; planlayıcının varsayımlarıyla üretilen rota seçeneklerini karşılaştır, sonra simülasyonda yürü.",
+      "en": "Choose a start and destination on the map; compare routes generated under the planner's assumptions, then walk the route in the simulation."
     },
     "custom.card.go": {
       "tr": "Haritayı aç",
       "en": "Open map"
     },
     "custom.err.api": {
-      "tr": "Planlayıcı API'si kapalı: özel rota hesaplanamaz.",
-      "en": "The planner API is off: a custom route cannot be computed."
+      "tr": "Planlayıcı API'sine ulaşılamıyor; özel rota hesaplanamadı.",
+      "en": "The planner API could not be reached; the custom route was not calculated."
     },
     "custom.title": {
       "tr": "Kendi rotanı planla",
@@ -721,16 +721,16 @@
       "en": "Start and goal selection on the HiRISE orthophoto"
     },
     "custom.layer.impassable": {
-      "tr": "Geçilmez alan (25° planlama varsayımı)",
-      "en": "Planner-excluded area (25° planning assumption)"
+      "tr": "Eşik üstü alan (25° planlama varsayımı)",
+      "en": "Above-threshold area (25° planning assumption)"
     },
     "custom.layer.rover": {
-      "tr": "Curiosity durakları (128)",
-      "en": "Curiosity stops (128)"
+      "tr": "Curiosity durakları",
+      "en": "Curiosity stops"
     },
     "custom.layer.science": {
-      "tr": "Bilim durakları (4)",
-      "en": "Science stops (4)"
+      "tr": "Bilim durakları",
+      "en": "Science stops"
     },
     "custom.layer.uncertainty": {
       "tr": "Model belirsizliği",
@@ -761,24 +761,24 @@
       "en": "Back"
     },
     "custom.eta": {
-      "tr": "Kuş uçuşu {m} m · tahmini süre ≈ {min} dk",
-      "en": "Straight line {m} m · estimated time ≈ {min} min"
+      "tr": "Kuş uçuşu {m} m · kaba süre tahmini ≈ {min} dk",
+      "en": "Straight line {m} m · rough time estimate ≈ {min} min"
     },
     "custom.eta.note": {
       "tr": "Süre, kuş uçuşu mesafenin 0,67 m/s (NASA APACHE, tek denek) referans hızına bölünmesiyle türetilen kaba tahmindir; planlayıcı rotasının süresi değildir.",
       "en": "The time is a rough estimate from straight-line distance divided by a 0.67 m/s reference speed (NASA APACHE, single subject); it is not the planner route's duration."
     },
     "custom.warn.steep": {
-      "tr": "Burası {slope}°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta {m} m uzakta; bu insan yürüyüş sınırı değildir.",
-      "en": "This cell is {slope}°; it exceeds the project's 25° planning threshold. The nearest point below it is {m} m away; this is not a human walking limit."
+      "tr": "Bu harita hücresinde hesaplanan eğim {slope}°; projenin 25° planlama eşiği aşılmış. Eşiğin altındaki en yakın nokta {m} m uzakta; bu insan yürüyüş sınırı değildir.",
+      "en": "The estimated slope in this map cell is {slope}°; it exceeds the project's 25° planning threshold. The nearest point below it is {m} m away; this is not a human walking limit."
     },
     "custom.warn.steep.none": {
-      "tr": "Burası {slope}°; projenin 25° planlama eşiği aşılmış ve yakında eşiğin altında nokta bulunamadı.",
-      "en": "This cell is {slope}°; it exceeds the project's 25° planning threshold and no point below it was found nearby."
+      "tr": "Bu harita hücresinde hesaplanan eğim {slope}°; projenin 25° planlama eşiği aşılmış ve yakında eşiğin altında nokta bulunamadı.",
+      "en": "The estimated slope in this map cell is {slope}°; it exceeds the project's 25° planning threshold and no point below it was found nearby."
     },
     "custom.warn.short": {
-      "tr": "A ile B arası çok kısa: en az 15 m uzaklıkta farklı noktalar seç.",
-      "en": "A and B are too close: choose points at least 15 m apart."
+      "tr": "A ve B en az 15 m uzakta olmalı (arayüz giriş kuralı).",
+      "en": "A and B must be at least 15 m apart (interface input rule)."
     },
     "custom.stop.science": {
       "tr": "Bilim durağı",
@@ -853,12 +853,12 @@
       "en": "New route: {km} km · {min} min."
     },
     "scan.rock": {
-      "tr": "kaya (HiRISE, d = {d} m)",
-      "en": "rock (HiRISE, d = {d} m)"
+      "tr": "kaya adayı (HiRISE gölge tespiti, doğrulanmadı, tahmini çap {d} m)",
+      "en": "candidate rock (HiRISE shadow detection, unverified, est. diameter {d} m)"
     },
     "scan.outcrop": {
-      "tr": "yüzlek (HiRISE, d = {d} m)",
-      "en": "outcrop (HiRISE, d = {d} m)"
+      "tr": "yüzlek adayı (HiRISE gölge/şekil tespiti, doğrulanmadı, tahmini genişlik {d} m)",
+      "en": "candidate outcrop (HiRISE shadow/shape detection, unverified, est. width {d} m)"
     }
   },
   "helmetcam": {
