@@ -74,6 +74,7 @@ export class Rocks {
       const edgeFade = 1 - Math.min(1, Math.max(0, (Math.sqrt(dd) - radius * 0.72) / (radius * 0.28)));   // yarıçap kenarında taşlar küçülerek kaybolur (ani belirme yok)
       if (edgeFade <= 0.02) continue;
       const size = edgeFade * Math.min(0.55, 0.04 + -Math.log(1 - 0.999 * hash(i, j, 4)) * 0.075);   // çoğu 4–15 cm, nadiren yarım metre
+      if (this.keepClear?.(cx, cz, size)) continue;   // tur5:canli sentetik taş rota koridoruna konmaz (planlayıcı bu süs taşlarını bilmez)
       e.set(hash(i, j, 5) * 6.28, hash(i, j, 6) * 6.28, hash(i, j, 8) * 0.8);
       q.setFromEuler(e);
       s.set(size * (0.8 + hash(i, j, 9) * 0.6), size * 0.8, size * (0.8 + hash(i, j, 10) * 0.6));

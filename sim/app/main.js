@@ -584,6 +584,32 @@ function stepPlayer(dt, t) {
   return gy;
 }
 
+// tur5:canli — sentetik (süs) taşlar rota çizgisinin ROUTE_CLEAR_M yakınına yerleşmez: planlayıcı onları bilmez, rota içlerinden geçmesin.
+const ROUTE_CLEAR_M = 1.5, CLEAR_CELL = 2;
+let clearFor = null, clearCells = null;
+function routeClearSync() {
+  const r = routeRun?.r ?? null; if (r === clearFor || !T?.rocks) return;
+  clearFor = r; clearCells = null;
+  if (r?.dense?.length) {
+    clearCells = new Set(); const k = (x, z) => `${Math.floor(x / CLEAR_CELL)},${Math.floor(z / CLEAR_CELL)}`;
+    for (let i = 0; i < r.dense.length; i++) {
+      const a = r.dense[i], b = r.dense[Math.min(r.dense.length - 1, i + 1)], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 1));
+      for (let t = 0; t <= n; t++) { const x = a[0] + (b[0] - a[0]) * t / n, z = a[1] + (b[1] - a[1]) * t / n; for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) clearCells.add(k(x + dx * CLEAR_CELL, z + dz * CLEAR_CELL)); }
+    }
+    const dense = r.dense;
+    T.rocks.keepClear = (x, z, size) => {
+      if (!clearCells.has(k(x, z))) return false;
+      const lim = ROUTE_CLEAR_M + size; let best = Infinity;
+      for (let i = 0; i + 1 < dense.length; i++) {
+        const a = dense[i], b = dense[i + 1]; if (Math.abs(a[0] - x) > 8 && Math.abs(b[0] - x) > 8) continue; if (Math.abs(a[1] - z) > 8 && Math.abs(b[1] - z) > 8) continue;
+        const dx = b[0] - a[0], dz = b[1] - a[1], L2 = dx * dx + dz * dz || 1, u = Math.max(0, Math.min(1, ((x - a[0]) * dx + (z - a[1]) * dz) / L2));
+        best = Math.min(best, Math.hypot(a[0] + dx * u - x, a[1] + dz * u - z)); if (best < lim) return true;
+      }
+      return false;
+    };
+  } else T.rocks.keepClear = null;
+  T.rocks.last?.set?.(1e9, 0, 1e9);   // taşları yeni koridora göre hemen yeniden yerleştir
+}
 let lastT = performance.now(), hudT = 0, miniT = 0, fpsAcc = 0, fpsN = 0, fps = 0;
 function frame(now) {
   if (state === 'map' || !T) return;
@@ -613,6 +639,7 @@ function frame(now) {
   if (window.__trace) window.__trace.push({ dt: rdt, y: P.y, gy, yaw: P.yaw, pitch: P.pitch, x: P.x, z: P.z, swaps: T.terrain.swaps, loading: T.terrain.stats.loading, built: T.terrain.builtLast || 0 });
   const nearGround = gy != null && P.y - gy < 80;
   T.rocks.setEnabled(nearGround && !T.rocks.userOff);
+  routeClearSync();   // tur5:canli
   T.rocks.update(T.camera.position, T.terrain.version);
   if (T.collide && T.collideRev !== T.rocks.blockersRev) { T.collide.setDynamic(T.rocks.blockers); T.collideRev = T.rocks.blockersRev; }   // batu:tas: görünen büyük sentetik taşlar da engel
   T.line.update(dt, T.terrain.version); T.oldLine.update(dt, T.terrain.version); T.beacon.update(now / 1000);

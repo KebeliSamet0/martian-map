@@ -100,6 +100,7 @@ export class RocksRich {
         const fade = 1 - smooth(radius * 0.7, radius, Math.sqrt(dd));
         if (fade <= 0.03) continue;
         const u = hash(i, j, seed + 4), size = fade * (lo + (hi - lo) * Math.min(1, -Math.log(1 - 0.96 * u) / 3.2));
+        if (this.keepClear?.(cx, cz, size)) continue;   // tur5:canli sentetik taş rota koridoruna konmaz (planlayıcı bu süs taşlarını bilmez)
         e.set(hash(i, j, seed + 5) * 6.28, hash(i, j, seed + 6) * 6.28, hash(i, j, seed + 8) * 6.28); q.setFromEuler(e);
         s.set(size * (0.8 + hash(i, j, seed + 9) * 0.6), size * yScale * (0.8 + hash(i, j, seed + 10) * 0.5), size * (0.8 + hash(i, j, seed + 11) * 0.6));
         pos.set(cx, y + size * (yScale * 0.5 - 0.35), cz);   // kısmen gömülü
