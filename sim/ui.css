@@ -213,3 +213,10 @@ body.mm-event::after { content: ''; position: fixed; inset: 0; pointer-events: n
 .mm-pausemenu .mm-card-menu { max-height: calc(100vh - 32px); overflow: auto; }
 .mm-card-layers { width: min(760px,100%); }
 .mm-card-layers a, .mm-layer-panel a { overflow-wrap: anywhere; word-break: break-all; color: var(--mm-amber); }
+
+/* Hesaplanıyor ekranı (#103 A.1): belirsiz ilerleme şeridi */
+.mm-card-busy { width: min(460px, 100%); }
+.mm-progress { height: 3px; margin: 14px 0 10px; background: rgba(255, 200, 150, .14); overflow: hidden; }
+.mm-progress-fill { height: 100%; width: 34%; background: var(--mm-amber); animation: mm-slide 1.25s var(--mm-ease) infinite; }
+@keyframes mm-slide { from { transform: translateX(-110%); } to { transform: translateX(320%); } }
+@media (prefers-reduced-motion: reduce) { .mm-progress-fill { animation: none; width: 100%; opacity: .55; } }

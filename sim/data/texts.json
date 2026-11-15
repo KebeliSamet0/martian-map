@@ -602,6 +602,42 @@
     "fatal.retry": {
       "tr": "Tekrar dene",
       "en": "Try again"
+    },
+    "computing.title": {
+      "tr": "ROTALAR HESAPLANIYOR",
+      "en": "COMPUTING ROUTES"
+    },
+    "computing.hint": {
+      "tr": "Planlayıcı üç rotayı değerlendiriyor: en kısa, dengeli ve en güvenli.",
+      "en": "The planner is working out three routes: shortest, balanced and safest."
+    },
+    "computing.step.route": {
+      "tr": "Eğim, zemin sınıfı ve kaya yoğunluğu okunuyor",
+      "en": "Reading slope, terrain class and rock density"
+    },
+    "error.title": {
+      "tr": "BİR ŞEY TERS GİTTİ",
+      "en": "SOMETHING WENT WRONG"
+    },
+    "error.route": {
+      "tr": "Rotalar hesaplanamadı. Planlayıcı API'sine ulaşılamıyor olabilir.",
+      "en": "The routes could not be computed. The planner API may be unreachable."
+    },
+    "error.noroute": {
+      "tr": "Bu görev için rota bulunamadı.",
+      "en": "No route could be found for this mission."
+    },
+    "route.kind.shortest": {
+      "tr": "En kısa",
+      "en": "Shortest"
+    },
+    "route.kind.balanced": {
+      "tr": "Dengeli",
+      "en": "Balanced"
+    },
+    "route.kind.safest": {
+      "tr": "En güvenli",
+      "en": "Safest"
     }
   },
   "helmetcam": {
